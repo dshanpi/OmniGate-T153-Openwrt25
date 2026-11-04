@@ -107,7 +107,7 @@ report={
  'default_boot':'FEL script or boot.scr from boot MMC first; 3 second console delay',
  'fel_tool_commit':'660d7e08edd025c8f84ab8eba3d8a903a5b81ae0',
  'fel_tool_archive_sha256':'8279709da499dd8100f6f071075ab9cfda0f1b068240fcbee1fe99116b745637',
- 'host_model_tests':'logs/ddr-source-1g-tests.log and logs/ddr-source-512-regression.log (ASan/UBSan)',
+ 'host_model_tests':'scripts/test-ddr-source.sh checks 512/1024 MiB with ASan/UBSan; see build-run ddr-model.log',
  'arm_dt_fixup_test':'tests/ddr/test-uboot-dt.py',
  'limitations':['hardware bring-up pending','CPU0 only; PSCI/SMP not implemented',
   'SD/eMMC only; no SPI flash loader','Linux installer and card cold boot require hardware validation'],
