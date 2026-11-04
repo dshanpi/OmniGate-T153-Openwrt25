@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "source": "T153 Tina V1.0 device/config/chips/t153/configs/omnigate/sys_config.fex [dram_para]",
+  "profile": "omnigate-1g-ddr933-ram-only",
+  "purpose": "RAM-only vendor FES bootstrap; not persistent source DDR",
+  "expected_output_sha256": "0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873",
+  "parameters": [
+    {
+      "name": "dram_clk",
+      "value": 933
+    },
+    {
+      "name": "dram_type",
+      "value": 4
+    },
+    {
+      "name": "dram_dx_odt",
+      "value": 2056
+    },
+    {
+      "name": "dram_dx_dri",
+      "value": 3084
+    },
+    {
+      "name": "dram_ca_dri",
+      "value": 789516
+    },
+    {
+      "name": "dram_para0",
+      "value": 24672
+    },
+    {
+      "name": "dram_para1",
+      "value": 24826
+    },
+    {
+      "name": "dram_para2",
+      "value": 1
+    },
+    {
+      "name": "dram_mr0",
+      "value": 1312
+    },
+    {
+      "name": "dram_mr1",
+      "value": 257
+    },
+    {
+      "name": "dram_mr2",
+      "value": 8
+    },
+    {
+      "name": "dram_mr3",
+      "value": 0
+    },
+    {
+      "name": "dram_mr4",
+      "value": 0
+    },
+    {
+      "name": "dram_mr5",
+      "value": 1024
+    },
+    {
+      "name": "dram_mr6",
+      "value": 2074
+    },
+    {
+      "name": "dram_mr11",
+      "value": 0
+    },
+    {
+      "name": "dram_mr12",
+      "value": 0
+    },
+    {
+      "name": "dram_mr13",
+      "value": 0
+    },
+    {
+      "name": "dram_mr14",
+      "value": 0
+    },
+    {
+      "name": "dram_mr16",
+      "value": 0
+    },
+    {
+      "name": "dram_mr17",
+      "value": 0
+    },
+    {
+      "name": "dram_mr22",
+      "value": 0
+    },
+    {
+      "name": "dram_tpr0",
+      "value": 0
+    },
+    {
+      "name": "dram_tpr1",
+      "value": 0
+    },
+    {
+      "name": "dram_tpr2",
+      "value": 0
+    },
+    {
+      "name": "dram_tpr3",
+      "value": 0
+    },
+    {
+      "name": "dram_tpr6",
+      "value": 16384
+    },
+    {
+      "name": "dram_tpr10",
+      "value": 9472
+    },
+    {
+      "name": "dram_tpr11",
+      "value": 20560
+    },
+    {
+      "name": "dram_tpr12",
+      "value": 8224
+    },
+    {
+      "name": "dram_tpr13",
+      "value": 4208
+    },
+    {
+      "name": "dram_tpr14",
+      "value": 2164719861
+    }
+  ]
+}

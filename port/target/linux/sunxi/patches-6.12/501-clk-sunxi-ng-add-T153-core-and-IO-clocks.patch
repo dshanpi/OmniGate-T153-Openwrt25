@@ -1,0 +1,18 @@
+--- a/drivers/clk/sunxi-ng/Kconfig
++++ b/drivers/clk/sunxi-ng/Kconfig
+@@ -119,3 +119,7 @@
+ 	depends on MACH_SUN8I || ARM64 || COMPILE_TEST
+ 
+ endif
++
++config SUN8I_T153_CCU
++	bool "Support for the Allwinner T153 CCU"
++	depends on MACH_SUN8I || COMPILE_TEST
+--- a/drivers/clk/sunxi-ng/Makefile
++++ b/drivers/clk/sunxi-ng/Makefile
+@@ -73,3 +73,5 @@
+ sun9i-a80-ccu-y			+= ccu-sun9i-a80.o
+ sun9i-a80-de-ccu-y		+= ccu-sun9i-a80-de.o
+ sun9i-a80-usb-ccu-y		+= ccu-sun9i-a80-usb.o
++
++obj-$(CONFIG_SUN8I_T153_CCU) += ccu-sun8i-t153.o

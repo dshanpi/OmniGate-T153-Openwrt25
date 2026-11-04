@@ -1,0 +1,67 @@
+T153 OmniGate DDR4 源码移植说明
+==============================
+
+当前推荐：dshanpi_t153_source_1g_defconfig，1GiB、x16、单rank、10列16行。
+本板源码DDR/SPL训练及eMMC主线U-Boot/OpenWrt启动已实际跑通；仍属实验性
+移植，DDR长期可靠性未通过。U-Boot/Linux只开放384MiB窗口、CPU0-only。
+512MiB/15行的dshanpi_t153_source_defconfig仅保留为旧实验profile。
+这不是上游 U-Boot 已合并的 T153 驱动。
+
+固件内容
+--------
+port/uboot/files/board/dshanpi/t153/ddr.c 和 ddr.h 是完整的 DDR 初始化
+及训练源码。最终固件没有链接 libdram、没有内嵌厂商指令字节数组，
+也不需要在 DDR 初始化前运行厂商 boot0、FES、OP-TEE 或 monitor。
+SoC 自带 BootROM 属于芯片本身，由它装载 SRAM SPL。
+
+支持固定 DDR4 profile：本板1GiB/16行，以及保留512MiB/15行；均x16、
+单rank、10列、4 bank、2 bank group。其他封装、DDR3/LPDDR、容量、
+多 rank、动态调频均未实现。供电沿用这块板的固定 DDR 电源。
+
+实现步骤
+--------
+1. SRAM 执行，关闭数据缓存，设置 DDR 门控、复位、24 MHz 参考 PLL。
+2. 写入 480/933 MHz 的 DDRC 时序、固定几何地址映射、DFI/MR 配置。
+3. 设置 T153 PHY 的 CA 映射、驱动强度、ODT、Vref、初始逐位延迟。
+4. 执行硬件 RXEN 训练，读取实际完成/错误标志和训练结果。
+5. 480 MHz 下建立可读写基准和固定测试数据，再切换到 933 MHz。
+6. 每个字节通道扫描读 Vref/读延迟，选择有宽度和高度余量的通过窗口。
+7. 扫描 rank 共用的 DDR4 MR6 写 Vref 和两个通道的写延迟。
+8. 对 16 个 DQ 分别扫描读写偏斜，拒绝没有足够宽度的窗口。
+9. 重新应用训练结果，重新 RXEN，检查地址别名和分布于所选512MiB/1GiB容量的
+   八个区域（每区 64 KiB）的 walking-one/zero 和地址相关读写。
+
+握手等待均有上限；校准失败不会报告 DDR 成功，也不会进入 U-Boot。
+测试会破坏 SDRAM 内容，只能从冷启动/FEL 的 SRAM SPL 路径使用，
+不能在运行中的原系统、厂商 U-Boot 或 RAM-chainload U-Boot 中调用。
+
+参考与来源
+----------
+- U-Boot 2026.07 官方源码；主线 sunxi eGON、SPL、FEL 交接、MMC 框架。
+- DshanPI-T113xMainlineLinux，固定提交
+  4cf32f0f6fa386c4c3941a78a8d2884a75b2c79b：借鉴 SPL/FEL 的组织及校验。
+  https://github.com/dshanpi/DshanPI-T113xMainlineLinux
+  T113S3 的 DDR3 寄存器实现没有直接套用于 T153 DDR4。
+- OmniGate sys_config.fex 的板级 DDR 参数和 SDK 公开寄存器地址定义。
+- SDK sun8iw22p1/spl_libdram/libdram 的寄存器行为分析、反汇编及主机仿真，
+  用于确认硬件编程接口；参考对象 SHA256：
+  0b5092b133536f8ff49240db6456437151295ba47dff74b0da1cffd988572055
+  参考 ELF、反编译输出只在 u-boot-work/ddr-analysis 中用于分析，
+  不属于交付源码/构建输入，不会链接、复制到固件或源码包。
+  本实现按固定板型重新组织为 C 驱动，并实现独立的有界眼图选择算法。
+- T153 FEL 工具参考 linux-sunxi/sunxi-tools RFC #252：
+  https://github.com/linux-sunxi/sunxi-tools/pull/252
+
+软件检查
+--------
+scripts/test-ddr-source.sh：实际驱动源码编入主机模型，以 ASan/UBSan 检查。
+覆盖成功训练、8 类握手/训练错误、没有读写窗口、窗口过窄、地址别名。
+模型没有模拟模拟电路、信号完整性、实际 PHY 状态机或温度电压变化。
+
+开发期对照检查：480/933 MHz × 3 种寄存器初始值 × 5 个初始化阶段，
+共 30 组最终寄存器状态与 SDK 参考一致（包含非零初始值的 RMW 保留位）。
+此对照不证明初始化可以在硬件上成功，且不能替代真实训练/压力测试。
+
+源码编译和交付不需要 SDK 对象、Ghidra、Unicorn 或网络反编译服务。
+目前去掉厂商 monitor 后，源码 U-Boot 对内核 DT 做 CPU0-only 修正；
+T153 PSCI/SMP、重启/电源控制仍未完成，不能宣称整板软件适配已经完成。

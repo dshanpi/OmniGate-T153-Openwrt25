@@ -1,0 +1,141 @@
+--- a/drivers/mmc/host/sunxi-mmc.c
++++ b/drivers/mmc/host/sunxi-mmc.c
+@@ -67,6 +67,8 @@
+ #define SDXC_REG_CHDA	(0x90)
+ #define SDXC_REG_CBDA	(0x94)
+ 
++#define SDXC_REG_VERS		0x300 /* T153 controller hardware version */
++
+ /* New registers introduced in A64 */
+ #define SDXC_REG_A12A		0x058 /* SMC Auto Command 12 Register */
+ #define SDXC_REG_SD_NTSR	0x05C /* SMC New Timing Set Register */
+@@ -264,6 +266,12 @@
+ 
+ 	/* clock hardware can switch between old and new timing modes */
+ 	bool ccu_has_timings_switch;
++
++	/* T153 v5.3x has a fixed divide-by-two before the card clock. */
++	bool fixed_divide_by_two;
++
++	/* Some controllers require a literal length, including the segment cap. */
++	bool idma_des_size_literal;
+ };
+ 
+ struct sunxi_mmc_host {
+@@ -368,7 +376,9 @@
+ 					     SDXC_IDMAC_DES0_OWN |
+ 					     SDXC_IDMAC_DES0_DIC);
+ 
+-		if (data->sg[i].length == max_len)
++		/* T153 limits segments to 4 KiB but encodes 4096 literally. */
++		if (data->sg[i].length == max_len &&
++		    !host->cfg->idma_des_size_literal)
+ 			pdes[i].buf_size = 0; /* 0 == max_len */
+ 		else
+ 			pdes[i].buf_size = cpu_to_le32(data->sg[i].length);
+@@ -588,6 +598,20 @@
+ 			host->wait_dma = false;
+ 
+ 		host->int_sum |= msk_int;
++
++		if (host->cfg->idma_des_size_literal && mrq->data &&
++		    (host->int_sum & SDXC_INTERRUPT_ERROR_BIT)) {
++			struct sunxi_idma_des *des = host->sg_cpu;
++
++			dev_err_ratelimited(mmc_dev(host->mmc),
++				"cmd %u data error: irq=%#x idma=%#x blocks=%u clock=%u desc0=%#x/%#x/%#x/%#x\n",
++				mrq->cmd->opcode, host->int_sum, idma_int,
++				mrq->data->blocks, host->mmc->actual_clock,
++				le32_to_cpu(des[0].config),
++				le32_to_cpu(des[0].buf_size),
++				le32_to_cpu(des[0].buf_addr_ptr1),
++				le32_to_cpu(des[0].buf_addr_ptr2));
++		}
+ 
+ 		/* Wait for COMMAND_DONE on RESPONSE_TIMEOUT before finalize */
+ 		if ((host->int_sum & SDXC_RESP_TIMEOUT) &&
+@@ -791,6 +815,10 @@
+ 		clock <<= 1;
+ 	}
+ 
++	/* This divider is present in SDR as well as DDR on T153. */
++	if (host->cfg->fixed_divide_by_two)
++		clock <<= 1;
++
+ 	if (host->use_new_timings && host->cfg->ccu_has_timings_switch) {
+ 		ret = sunxi_ccu_set_mmc_timing_mode(host->clk_mmc, true);
+ 		if (ret) {
+@@ -823,8 +851,10 @@
+ 	rval |= div - 1;
+ 	mmc_writel(host, REG_CLKCR, rval);
+ 
+-	/* update card clock rate to account for internal divider */
++	/* Account for both the programmable and T153 fixed dividers. */
+ 	rate /= div;
++	if (host->cfg->fixed_divide_by_two)
++		rate /= 2;
+ 
+ 	/*
+ 	 * Configure the controller to use the new timing mode if needed.
+@@ -1207,7 +1237,22 @@
+ 	.needs_new_timings = true,
+ };
+ 
++/* T153 SMHC blocks use at most 4 KiB per descriptor buffer. The address
++ * unit is selected from the controller version after its bus clock is on.
++ * High-speed modes still need board-specific timing qualification.
++ */
++static const struct sunxi_mmc_cfg sun8i_t153_mmc_cfg = {
++	.fixed_divide_by_two = true,
++	.idma_des_size_literal = true,
++	.idma_des_size_bits = 12,
++	.can_calibrate = true,
++	.needs_new_timings = true,
++	.mask_data0 = true,
++};
++
+ static const struct of_device_id sunxi_mmc_of_match[] = {
++	{ .compatible = "allwinner,sun8i-t153-emmc", .data = &sun8i_t153_mmc_cfg },
++	{ .compatible = "allwinner,sun8i-t153-mmc", .data = &sun8i_t153_mmc_cfg },
+ 	{ .compatible = "allwinner,sun4i-a10-mmc", .data = &sun4i_a10_cfg },
+ 	{ .compatible = "allwinner,sun5i-a13-mmc", .data = &sun5i_a13_cfg },
+ 	{ .compatible = "allwinner,sun7i-a20-mmc", .data = &sun7i_a20_cfg },
+@@ -1348,6 +1393,22 @@
+ 	ret = sunxi_mmc_enable(host);
+ 	if (ret)
+ 		return ret;
++
++	if (host->cfg == &sun8i_t153_mmc_cfg) {
++		struct sunxi_mmc_cfg *cfg;
++		u32 version = mmc_readl(host, REG_VERS) & 0xffffff;
++
++		cfg = devm_kmemdup(&pdev->dev, host->cfg, sizeof(*cfg), GFP_KERNEL);
++		if (!cfg) {
++			ret = -ENOMEM;
++			goto error_disable_mmc;
++		}
++		/* See the v4p6x/v5p3x address-unit rules in the T153 BSP. */
++		cfg->idma_des_shift = (version == 0x40502 || version >= 0x50300) ? 2 : 0;
++		host->cfg = cfg;
++		dev_info(&pdev->dev, "SMHC version %#x, DMA address shift %u\n",
++			 version, cfg->idma_des_shift);
++	}
+ 
+ 	host->irq = platform_get_irq(pdev, 0);
+ 	if (host->irq < 0) {
+@@ -1457,6 +1518,15 @@
+ 		mmc->caps2 &= ~MMC_CAP2_HS200;
+ 	}
+ 
++	if (of_device_is_compatible(pdev->dev.of_node, "allwinner,sun8i-t153-emmc") ||
++	    of_device_is_compatible(pdev->dev.of_node, "allwinner,sun8i-t153-mmc")) {
++		mmc->caps &= ~(MMC_CAP_MMC_HIGHSPEED | MMC_CAP_SD_HIGHSPEED |
++			       MMC_CAP_3_3V_DDR | MMC_CAP_1_8V_DDR |
++			       MMC_CAP_1_2V_DDR | MMC_CAP_UHS);
++		mmc->caps2 &= ~(MMC_CAP2_HS200 | MMC_CAP2_HS400);
++		mmc->f_max = min(mmc->f_max, 25000000U);
++	}
++
+ 	/* TODO: This driver doesn't support HS400 mode yet */
+ 	mmc->caps2 &= ~MMC_CAP2_HS400;
+ 

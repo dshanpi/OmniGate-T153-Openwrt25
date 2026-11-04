@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "status": "OpenWrt userspace boot demonstrated; final acceptance incomplete",
+  "image_sha256": "6ea18915b817e77c2a57ab7a68b8bc51e92e9d965e22fa23b1b7217379e39e98",
+  "image_bytes": 306184192,
+  "flash": {
+    "fes_verification": "success",
+    "uboot_readback_sectors": 598016,
+    "uboot_readback_sha256": "6ea18915b817e77c2a57ab7a68b8bc51e92e9d965e22fa23b1b7217379e39e98",
+    "readback_match": true,
+    "boot_path": "FES post-reboot -> source SPL/DDR -> mainline U-Boot"
+  },
+  "runtime": {
+    "kernel": "6.12.113",
+    "openwrt": "25.12-SNAPSHOT t153-6c57f7cd04",
+    "root_partition": "mmcblk0p2",
+    "root_filesystem": "ext4",
+    "root_mounted_rw": true,
+    "shell_reached": true,
+    "cpu_count": 1,
+    "linux_physical_window_mib": 384,
+    "reported_memtotal_kib": 375580,
+    "emmc": "AJTD4R 14.6 GiB",
+    "sdio_enumerated": true,
+    "can_devices_registered": [
+      "can0",
+      "can1"
+    ],
+    "eth1_link": "100Mbps/Full",
+    "wan_dhcp_obtained": true,
+    "network_validation": {
+      "speed": "100Mbps/Full",
+      "condition": "RTL8211F RX delay enabled at runtime on installed 6ea image",
+      "gateway_ping_sent": 10,
+      "gateway_ping_received": 10,
+      "http_download_bytes": 16777216,
+      "http_download_sha256": "2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9",
+      "rx_crc_counter_before_transfer": 646,
+      "rx_crc_counter_after_transfer": 646,
+      "gigabit": "renegotiated 1Gbps then link down and downshift to 100Mbps; not qualified",
+      "persistent_rgmiirxid_candidate_booted": false
+    },
+    "emmc_file_test": {
+      "bytes": 16777216,
+      "method": "write random file; sync; drop_caches=3; SHA256 readback and cmp",
+      "sha256": "85da29037c640af84c42db2e69b9235d0e3cb0419a41460b1e97b8f48e0036ad",
+      "result": "pass"
+    }
+  },
+  "not_verified": [
+    "Persistent rgmii-rxid setting in new image",
+    "Stable 1Gbps Ethernet",
+    "eth0 LAN",
+    "Native normal reboot and kexec",
+    "CAN bus traffic",
+    "Wi-Fi operation despite SDIO enumeration",
+    "Software efex entry",
+    "Power/reset hardware GPIO",
+    "Long-term DDR/storage reliability",
+    "Clean configuration/build/flash acceptance rerun after publication"
+  ],
+  "previous_mmc_failure": "Earlier b114 image data-error/NULL panic; current image fixes literal 4096-byte IDMA descriptor encoding.",
+  "evidence": [
+    "fes-flash-status.json",
+    "t153_mmc_literal_reboot_boot.log",
+    "t153_mmc_literal_readback.log",
+    "t153_mmc_literal_linux.log",
+    "t153_mmc_literal_runtime.log",
+    "serial-log-provenance.json",
+    "t153_emmc_io_test.log",
+    "t153_network_transfer_test.log",
+    "t153_phy_diagnostics.log",
+    "t153_eth1_diagnostics.log",
+    "t153_reconnect_recovery.json",
+    "network-storage-provenance.json"
+  ],
+  "current_hardware_state": "board/debugger disconnected; awaiting reconnection; MCP power GPIO recovery failed",
+  "software_candidate": {
+    "image_sha256": "43a54935f6bc3f80cd810b95f6fbbb1c6310418521a0d410336c8d5aceb47049",
+    "software_verify_only": "passed",
+    "flashed_or_booted": false,
+    "changes": [
+      "native Linux reboot mode and mode-aware userspace",
+      "persistent WAN rgmii-rxid"
+    ]
+  }
+}

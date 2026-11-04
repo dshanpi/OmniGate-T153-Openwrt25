@@ -1,0 +1,22 @@
+{
+  "t153_mmc_literal_linux.log": {
+    "source_sha256": "6022790dc8b5b93966f995148c4b18067013a74cd7fb12b8ad7090964d4ae28d",
+    "published_sha256": "b349bcbfdeff74a994cd1af704cdca578b4a0e8bb66eb3160929742930a2e99a",
+    "normalization": "CR and ANSI display escapes removed; text content retained"
+  },
+  "t153_mmc_literal_runtime.log": {
+    "source_sha256": "102959a1408ec18d4633080641b780e09e87a3fc9fdc368fea71f12a408390e1",
+    "published_sha256": "7643c98f5bb36780b42a9814b92163eaf1ee29944a1ef2f04e7793e85a9bcceb",
+    "normalization": "CR and ANSI display escapes removed; text content retained"
+  },
+  "t153_mmc_literal_readback.log": {
+    "source_sha256": "bc561766675f17af0ca0453a7b86cf0630fe8672f4fb4e94cc48b284e3471134",
+    "published_sha256": "1553124c382eb618b1b17d1f0fbe5f766606ea0c0adc8a98f6a4b1ded9af31c8",
+    "normalization": "CR and ANSI display escapes removed; text content retained"
+  },
+  "t153_mmc_literal_reboot_boot.log": {
+    "source_sha256": "528f2252a94271f9fa0a5d60a66bff3fddb69129a8a90ed1a920708ab115fe81",
+    "published_sha256": "a8c2fede33c701741525395baba0e20f593b7480ce9cb8b20c600293011be278",
+    "normalization": "CR and ANSI display escapes removed; text content retained"
+  }
+}

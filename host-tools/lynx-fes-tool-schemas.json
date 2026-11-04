@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "source": "LYNX MCP tools/list schema observed in this integration; no device/session data",
+  "tools": [
+    {
+      "name": "lynx_download_firmware",
+      "description": "Download a firmware artifact selected by the remote AI from the saved SDK channel's Linux host into LYNX's automatic per-channel firmware cache through SFTP. Pass remotePath as the exact absolute Linux file path. LYNX always verifies SHA-256, reuses a matching cached file, and writes new content through a .part file before atomic rename.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "projectId": {
+            "description": "Saved SDK channel project ID. May be omitted for a device-scoped Gateway\nwhen exactly one saved project belongs to that device.",
+            "format": "int64",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "remotePath": {
+            "description": "Absolute firmware path selected by the remote AI on the SDK host.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "remotePath"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "lynx_flash_capabilities",
+      "description": "Describe the chip vendor, flasher backend, target binding, and validated flash options for this LYNX board channel.",
+      "inputSchema": {
+        "properties": {},
+        "type": "object"
+      }
+    },
+    {
+      "name": "lynx_inspect_firmware",
+      "description": "Inspect a firmware image with the current board channel's vendor adapter. This is read-only.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "image_path": {
+            "description": "Absolute path to a vendor firmware image on the LYNX host.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "image_path"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "lynx_scan_flash_devices",
+      "description": "Scan the board-scoped vendor flasher for connected devices. Supports Allwinner FEL/FES, Rockchip Maskrom/Loader, NXP i.MX SDP/Fastboot, Canaan Kendryte K230 BROM/U-Boot, and STM32 USB DFU/DfuSe.",
+      "inputSchema": {
+        "properties": {},
+        "type": "object"
+      }
+    },
+    {
+      "name": "lynx_start_flash",
+      "description": "DESTRUCTIVE: flash this channel's bound board through its configured vendor adapter. Allwinner loaderPath is RAM-only: use a component package with mode=full_erase for initial NAND/SPI NAND layout creation, or raw=true and mode=command for SPI NOR, SD/SD NAND, eMMC and UFS. Query lynx_flash_capabilities first.",
+      "inputSchema": {
+        "$defs": {
+          "AllwinnerFelMethod": {
+            "enum": [
+              "adb_reboot_efex",
+              "uboot_serial_efex",
+              "serial_shell_reboot_efex"
+            ],
+            "type": "string"
+          },
+          "AllwinnerFelTransitionRequest": {
+            "properties": {
+              "allowUnverifiedSerialShell": {
+                "default": false,
+                "description": "Pass the same explicit fixed-recipe override as lynx_allwinner_enter_fel.",
+                "type": "boolean"
+              },
+              "handle": {
+                "description": "Handle returned by lynx_serial_open. Required for either serial recipe.",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "method": {
+                "$ref": "#/$defs/AllwinnerFelMethod",
+                "description": "Fixed transition recipe. No caller-provided command text is accepted."
+              },
+              "preserveSerialMonitor": {
+                "default": false,
+                "description": "Keep the bound serial reader open while the flash worker boots vendor\nU-Boot/FES so the caller can collect boot diagnostics. Opt-in only.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "method"
+            ],
+            "type": "object"
+          },
+          "FlashOptionsRequest": {
+            "properties": {
+              "mode": {
+                "description": "Backend-defined flash mode advertised by lynx_flash_capabilities.",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "postFlashAction": {
+                "description": "Backend-defined post-flash action advertised by lynx_flash_capabilities.",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "vendorOptions": {
+                "description": "Backend-specific object validated against lynx_flash_capabilities.vendorOptions.\nRockchip raw eMMC: {\"raw\":true,\"loaderPath\":\"/local/loader.bin\",\"medium\":\"emmc\"}; firmwarePath accepts .img/.img.xz/.img.gz. Requires full_erase and verification."
+              },
+              "verify": {
+                "description": "Enable vendor verification when supported.",
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "RockchipLoaderMethod": {
+            "enum": [
+              "adb_reboot_loader",
+              "serial_shell_reboot_loader"
+            ],
+            "type": "string"
+          },
+          "RockchipLoaderTransition": {
+            "additionalProperties": false,
+            "properties": {
+              "handle": {
+                "description": "A current lynx_serial_open handle belonging to this board; serial recipe only.",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "method": {
+                "$ref": "#/$defs/RockchipLoaderMethod"
+              }
+            },
+            "required": [
+              "method"
+            ],
+            "type": "object"
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "allowFullSpeedLargeImage": {
+            "default": false,
+            "description": "Explicitly allow a large Allwinner image over a USB Full Speed FEL link.\nThis is intentionally separate from confirmDestructive because the transfer\nmay be slow or time out even when the selected target and image are correct.",
+            "type": "boolean"
+          },
+          "allwinnerEnterFel": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AllwinnerFelTransitionRequest"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optional fixed Allwinner transition recipe. When present, LYNX enters\nFEL and starts flashing under one uninterrupted hardware guard."
+          },
+          "confirmDestructive": {
+            "description": "The AI's in-band acknowledgement that the selected operation is destructive.",
+            "type": "boolean"
+          },
+          "firmwarePath": {
+            "description": "Absolute path to the vendor firmware package on the LYNX host.",
+            "type": "string"
+          },
+          "options": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/FlashOptionsRequest"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optional backend-neutral and vendor-specific choices. Query lynx_flash_capabilities first."
+          },
+          "rockchipEnterLoader": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/RockchipLoaderTransition"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Fixed Rockchip normal-to-Loader recipe; shares the flash hardware guard."
+          }
+        },
+        "required": [
+          "firmwarePath",
+          "confirmDestructive"
+        ],
+        "type": "object"
+      }
+    },
+    {
+      "name": "lynx_workbench_task_status",
+      "description": "Read the current status of an asynchronous LYNX workbench task such as an SFTP firmware download.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "taskId": {
+            "description": "Task ID returned by lynx_download_firmware.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "taskId"
+        ],
+        "type": "object"
+      }
+    }
+  ]
+}

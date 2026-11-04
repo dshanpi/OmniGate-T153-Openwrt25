@@ -1,0 +1,56 @@
+--- a/drivers/power/reset/reboot-mode.c
++++ b/drivers/power/reset/reboot-mode.c
+@@ -19,24 +19,23 @@
+ 	struct list_head list;
+ };
+ 
+-static unsigned int get_reboot_mode_magic(struct reboot_mode_driver *reboot,
+-					  const char *cmd)
++/* A configured zero is a valid normal-mode value, not a missing mode. */
++static bool get_reboot_mode_magic(struct reboot_mode_driver *reboot,
++				 const char *cmd, u32 *magic)
+ {
+-	const char *normal = "normal";
+-	int magic = 0;
+ 	struct mode_info *info;
+ 
+ 	if (!cmd)
+-		cmd = normal;
++		cmd = "normal";
+ 
+ 	list_for_each_entry(info, &reboot->head, list) {
+ 		if (!strcmp(info->mode, cmd)) {
+-			magic = info->magic;
+-			break;
++			*magic = info->magic;
++			return true;
+ 		}
+ 	}
+ 
+-	return magic;
++	return false;
+ }
+ 
+ static int reboot_mode_notify(struct notifier_block *this,
+@@ -46,8 +45,7 @@
+ 	unsigned int magic;
+ 
+ 	reboot = container_of(this, struct reboot_mode_driver, reboot_notifier);
+-	magic = get_reboot_mode_magic(reboot, cmd);
+-	if (magic)
++	if (get_reboot_mode_magic(reboot, cmd, &magic))
+ 		reboot->write(reboot, magic);
+ 
+ 	return NOTIFY_DONE;
+--- a/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
++++ b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
+@@ -17,7 +17,8 @@
+ 
+   All mode properties are vendor specific, it is a indication to tell
+   the bootloader what to do when the system reboots, and should be named
+-  as mode-xxx = <magic> (xxx is mode name, magic should be a non-zero value).
++  as mode-xxx = <magic> (xxx is the mode name). A zero value is valid,
++  for example to clear a bootloader request on a normal reboot.
+ 
+   For example, modes common Android platform are:
+     - normal: Normal reboot mode, system reboot with command "reboot".

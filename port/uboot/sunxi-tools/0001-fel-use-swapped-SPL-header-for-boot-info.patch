@@ -1,0 +1,60 @@
+From: T153 OpenWrt source port
+Subject: [PATCH] fel: follow the SPL header through the SRAM swap on return
+
+The T153 swap table covers the SPL header. After the thunk restores BootROM
+workspace, pass_fel_information must inspect and write the header in its
+backup region, as the SPL status check already does. Derive this from the
+swap table so platforms whose header is not swapped retain their behavior.
+
+--- a/fel.c
++++ b/fel.c
+@@ -1069,6 +1069,27 @@
+ }
+ 
+ /*
++ * The thunk restores BootROM SRAM by swapping the buffers back before FEL
++ * resumes. If a swap contains the SPL header, that header now lives at buf2,
++ * not at its execution address. T153 swaps its entire first 0x1400 bytes.
++ * Mirror the address mapping already used for spl_status_addr above instead
++ * of overwriting the restored BootROM workspace with script information.
++ */
++static uint32_t spl_header_address(const soc_info_t *soc_info)
++{
++	const sram_swap_buffers *swap = soc_info->swap_buffers;
++	uint32_t address = soc_info->spl_addr;
++
++	if (swap) {
++		for (; swap->size; swap++) {
++			if (address >= swap->buf1 && address - swap->buf1 < swap->size)
++				return swap->buf2 + (address - swap->buf1);
++		}
++	}
++	return address;
++}
++
++/*
+  * Pass information to U-Boot via specialized fields in the SPL header
+  * (see "boot_file_head" in ${U-BOOT}/arch/arm/include/asm/arch-sunxi/spl.h),
+  * providing the boot script address (DRAM location of boot.scr).
+@@ -1076,10 +1097,10 @@
+ void pass_fel_information(feldev_handle *dev,
+ 			  uint32_t script_address, uint32_t uEnv_length)
+ {
+-	soc_info_t *soc_info = dev->soc_info;
++	uint32_t header_addr = spl_header_address(dev->soc_info);
+ 
+ 	/* write something _only_ if we have a suitable SPL header */
+-	if (have_sunxi_spl(dev, soc_info->spl_addr)) {
++	if (have_sunxi_spl(dev, header_addr)) {
+ 		pr_info("Passing boot info via sunxi SPL: "
+ 			"script address = 0x%08X, uEnv length = %u\n",
+ 			script_address, uEnv_length);
+@@ -1088,7 +1109,7 @@
+ 			htole32(uEnv_length)
+ 		};
+ 		aw_fel_write(dev, transfer,
+-			soc_info->spl_addr + 0x18, sizeof(transfer));
++			header_addr + 0x18, sizeof(transfer));
+ 	}
+ }
+ 

@@ -1,0 +1,70 @@
+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/net/allwinner,sun8i-t153-dwmac.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: Allwinner T153 GMAC-211
+
+maintainers:
+  - Chen-Yu Tsai <wens@csie.org>
+  - Maxime Ripard <mripard@kernel.org>
+
+allOf:
+  - $ref: snps,dwmac.yaml#
+
+properties:
+  compatible:
+    const: allwinner,sun8i-t153-dwmac
+  reg:
+    items:
+      - description: DWMAC controller registers
+      - description: RGMII clock and delay configuration registers
+  interrupts:
+    maxItems: 1
+  interrupt-names:
+    const: macirq
+  clocks:
+    maxItems: 6
+  clock-names:
+    items:
+      - const: stmmaceth
+      - const: pclk
+      - const: ptp_ref
+      - const: phy
+      - const: ahb-sw
+      - const: mbus-sw
+  resets:
+    maxItems: 2
+  reset-names:
+    items:
+      - const: stmmaceth
+      - const: ahb
+  allwinner,tx-delay-taps:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    description: RGMII transmit delay-chain taps from board signal qualification.
+    maximum: 31
+  allwinner,rx-delay-taps:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    description: RGMII receive delay-chain taps from board signal qualification.
+    maximum: 31
+  allwinner,external-rgmii-clock:
+    type: boolean
+    description: Select the external RGMII transmit clock source.
+  allwinner,provide-phy-clock:
+    type: boolean
+    description: Enable the CCU clock output used as the external PHY reference.
+
+required:
+  - compatible
+  - reg
+  - interrupts
+  - interrupt-names
+  - clocks
+  - clock-names
+  - resets
+  - reset-names
+  - phy-mode
+  - phy-handle
+
+unevaluatedProperties: false

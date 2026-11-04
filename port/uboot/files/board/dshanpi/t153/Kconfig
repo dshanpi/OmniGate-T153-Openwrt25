@@ -1,0 +1,22 @@
+if TARGET_DSHANPI_T153_RAM || TARGET_DSHANPI_T153_SOURCE
+
+config SYS_BOARD
+	default "t153"
+
+config SYS_VENDOR
+	default "dshanpi"
+
+config SYS_CONFIG_NAME
+	default "dshanpi_t153_ram"
+
+config T153_DDR_SIZE_MIB
+	int "Physical T153 DDR4 capacity in MiB"
+	depends on TARGET_DSHANPI_T153_SOURCE
+	default 512
+	range 512 1024
+	help
+	  Fixed single-rank x16 geometry. Only 512 (15 rows) and 1024
+	  (16 rows) are implemented. Usable U-Boot/Linux RAM remains capped
+	  at 384 MiB in both bring-up profiles. This is not a size probe.
+
+endif

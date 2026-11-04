@@ -1,0 +1,113 @@
+从配置到验收的复现说明（整理中，未作最终发布验收）
+==================================================
+
+本文件记录现有源码流程和发布前还需补齐的步骤。只有实际生成的日志和
+镜像hash能作为执行证据。最终“干净配置→完整编译→烧录→运行验收”尚未复跑。
+当前实机已用MMC literal-4096修复镜像挂载eMMC ext4并进入OpenWrt shell，
+运行时RX delay修正后100Mbps WAN DHCP及16MiB HTTP SHA已通过，
+但持久rxid、原生回FEL及1Gbps稳定性仍待验证；最终干净全流程复跑尚未完成。
+
+一、源码边界和版本
+------------------
+正常OpenWrt/U-Boot构建输入为port/、configs/和scripts/，不依赖Tina目录。
+上游源码按固定版本下载并校验，不提交其展开目录和构建缓存：
+- OpenWrt openwrt-25.12：6c57f7cd04028d370f9360de71f5d59412046194。
+- Linux：6.12.113，由固定OpenWrt基线提供。
+- U-Boot：2026.07；build-uboot-source-1g.sh内固定archive SHA256。
+- packages、LuCI：configs/feeds.lock。
+- sunxi-tools：660d7e08edd025c8f84ab8eba3d8a903a5b81ae0，build-fel-tool.sh。
+所有来源及许可见SOURCES.txt、COPYING和LICENSES/。
+最终发布commit/tag、完整配置hash和验收镜像hash：待最终复跑后填写。
+
+二、构建主机
+------------
+实测构建主机Ubuntu 24.04。按README安装OpenWrt编译依赖，另需
+Python 3、device-tree-compiler、u-boot-tools、e2fsprogs、dosfstools、
+mtools及libusb-1.0开发包；ddr/ARM模型分析另用pyelftools、Unicorn。
+Ubuntu 24.04依赖安装命令（仅安装主机依赖，不访问板卡）：
+  sudo apt-get update
+  sudo apt-get install build-essential clang flex bison gawk gcc-multilib \
+    g++-multilib gettext git libncurses-dev libssl-dev python3 python3-setuptools \
+    python3-venv rsync swig unzip zlib1g-dev file wget curl xz-utils zstd time \
+    subversion device-tree-compiler u-boot-tools e2fsprogs dosfstools mtools \
+    libusb-1.0-0-dev pkg-config bzip2
+  sh scripts/bootstrap.sh --check-only
+具体主机包版本和工具版本待最终复跑时采集。
+不要求在Windows保存源码。源码和输出可全部位于Linux构建服务器。
+独立干净checkout的下载缓存链接、feeds自动校验/解包及空间估计见REBUILD-CACHE.txt。
+
+三、当前1GiB源码构建路径（已审查入口，最终干净复跑待执行）
+----------------------------------------------------------
+新统一入口（已通过语法、依赖及干净目录保护检查；完整执行尚待最终复跑）：
+  bash scripts/build-release.sh --jobs 4
+同时复现FES，提供用户拥有的原厂镜像：
+  bash scripts/build-release.sh --jobs 4 --with-fes --factory-image /path/to/factory.img
+默认拒绝已有build_dir/staging_dir/tmp/bin/.config及1g U-Boot目标目录；
+最终验收使用干净目录。开发增量才用--incremental。
+每步日志/exit和最终软件build-report保存在logs/rebuild-*，不访问USB或自动烧板。
+以下是同一流程的底层入口，均在仓库根目录执行：
+  mkdir -p logs
+  sh scripts/prepare-source.sh
+  JOBS=4 sh scripts/build.sh "$PWD/openwrt"
+  JOBS=4 sh scripts/build-uboot-source-1g.sh
+  python3 scripts/package-uboot-source-1g.py
+  sh scripts/package-artifacts.sh "$PWD/openwrt" --openwrt-only
+  python3 scripts/package-disk-image.py --profile 1g
+  python3 scripts/package-disk-image.py --profile 1g --verify-only
+
+OpenWrt配置入口configs/t153mx-omnigate.config，经make defconfig展开。
+1GiB板的U-Boot入口dshanpi_t153_source_1g_defconfig。
+不要将512MiB默认profile或旧RAM-chainload目标代入本板冷启动镜像。
+本次整盘输入是普通FIT+ext4 rootfs；initramfs FIT为独立RAM验证用途。
+新build-release.sh已显式串联1g/FES步骤并在最后刷新SHA256SUMS；
+旧package-artifacts.sh单独调用仍不足以完成1g流程。硬件验收记录独立保存，
+不能让软件脚本输出“烧录或运行成功”。
+
+四、软件检查
+------------
+  sh scripts/test-ddr-source.sh
+  python3 tests/clock/test-t153-mmc-clock.py
+  python3 tests/reboot/test-command.py
+  python3 tests/reboot/test_kernel_reboot.py
+  T153_DISK_PROFILE=1g python3 tests/flash/test-disk-image.py
+  python3 scripts/package-disk-image.py --profile 1g --verify-only
+
+verify-only检查MBR、引导区、FIT、启动脚本、FAT/ext4及整盘压缩往返SHA。
+1g磁盘12项反例回归已支持显式T153_DISK_PROFILE=1g并纳入统一入口；
+其余旧FEL安装器及ARM仿真测试仍属512MiB实验profile，不作为1g入口依赖。
+package-artifacts的--openwrt-only跳过旧RAM/512目标的条件打包；统一入口
+显式构建1g核心，不依赖旧产物、FEL安装器或kexec工具。
+不能只读取源码来证明修复进入镜像：应解出FIT实际内核/DT核对符号及代码，
+本轮范例证据为logs/bringup-fix-binary-verification.json。
+
+五、FES构建/烧录复现
+------------------------
+当前有效RAM临时loader为t153-fes-ddr933-ram-loader.img；它使用厂商
+FES1 DDR二进制，持久镜像中的DDR/SPL/U-Boot则全部来自本工程源码。
+不能将“主线持久固件全部源码”扩写成“整个FES临时loader全部源码”。
+prepare-fes-stock.py已能直接从SHA锁定的用户原厂镜像提取六payload并重建
+stock RAM容器；package-fes-ddr933.py再用纯Python修改频率和eGON checksum。
+无需update_fes1、dragon、T113本地目录或SDK中的主机可执行文件。
+在仅有两脚本和三JSON元数据的隔离目录实跑，与两个原候选逐字节一致。
+详见FES-REPRODUCE.txt和logs/fes-portable-reproduction-audit.json。
+厂商二进制仍由用户供给，许可标LicenseRef-NOASSERTION，不放入源码仓库；
+源码化的是提取、组包、参数修改和验证过程，不能冒充FES1 DDR源码。
+
+raw写盘地址须使用当前OpenixCLI/MCP的stock映射：主机已补偿+40960扇区，
+保留loader原MMC偏移；不要使用已禁用physical0 loader再做一次抵消。
+通用MCP完整JSON请求、下载/任务轮询与结果判据已在host-tools/README.txt
+及mcp-fes-workflow.example.json中提供，无私人会话。完整步骤见FLASH-SOURCE.txt。
+工具当前版本/能力以连接时capabilities为准；原生回FEL实机验证尚待重连。
+
+六、最终验收（待执行；任何一项未达标均不得写“完成”）
+----------------------------------------------------
+1. 记录最终源码commit、配置、依赖锁和工具版本。
+2. 从干净源码/配置完整构建；允许复用已校验下载缓存，不复用旧目标文件。
+3. 保存构建exit、软件验证、产物大小及SHA256，确认发布产物来自该次构建。
+4. 按文档进入FEL、加载FES并写入匹配的1g磁盘，记录操作任务和写入字节数。
+5. 冷启动源码DDR/SPL/U-Boot，完整读取磁盘全部598016扇区并比对SHA256。
+6. 启动Linux，确认eMMC rootfs挂载及OpenWrt用户空间启动；检查dmesg错误。
+7. 验证LAN管理、WAN链路及用户要求的外设；未具备现场条件的项目如实列未验证。
+8. 重启/再次进入FEL路径按实现实际验证，避免把编译通过当硬件可用。
+9. 将公开源码、说明、经筛选的验收记录推送目标仓库后，再按用户要求完整复跑；
+   若复跑引入修复，必须更新仓库和证据，使最终提交与最后一次通过的固件一致。

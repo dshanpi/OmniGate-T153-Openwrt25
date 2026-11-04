@@ -1,0 +1,108 @@
+--- a/drivers/watchdog/sunxi_wdt.c
++++ b/drivers/watchdog/sunxi_wdt.c
+@@ -44,10 +44,14 @@
+ 	u8 wdt_ctrl;
+ 	u8 wdt_cfg;
+ 	u8 wdt_mode;
++	u8 wdt_out_cfg;
+ 	u8 wdt_timeout_shift;
+ 	u8 wdt_reset_mask;
+ 	u8 wdt_reset_val;
+ 	u32 wdt_key_val;
++	u32 wdt_out_mask;
++	u32 wdt_out_val;
++	bool wdt_restart_single_shot;
+ };
+ 
+ struct sunxi_wdt_dev {
+@@ -79,6 +83,23 @@
+ };
+ 
+ 
++/* T153 has a separate reset-output selection register. Older variants do
++ * not have it, so leave their register programming unchanged.
++ */
++static void sunxi_wdt_set_output(struct sunxi_wdt_dev *sunxi_wdt)
++{
++	const struct sunxi_wdt_reg *regs = sunxi_wdt->wdt_regs;
++	u32 val;
++
++	if (!regs->wdt_out_mask)
++		return;
++
++	val = readl(sunxi_wdt->wdt_base + regs->wdt_out_cfg);
++	val &= ~regs->wdt_out_mask;
++	val |= regs->wdt_out_val | regs->wdt_key_val;
++	writel(val, sunxi_wdt->wdt_base + regs->wdt_out_cfg);
++}
++
+ static int sunxi_wdt_restart(struct watchdog_device *wdt_dev,
+ 			     unsigned long action, void *data)
+ {
+@@ -86,6 +107,8 @@
+ 	void __iomem *wdt_base = sunxi_wdt->wdt_base;
+ 	const struct sunxi_wdt_reg *regs = sunxi_wdt->wdt_regs;
+ 	u32 val;
++
++	sunxi_wdt_set_output(sunxi_wdt);
+ 
+ 	/* Set system reset function */
+ 	val = readl(wdt_base + regs->wdt_cfg);
+@@ -109,6 +132,9 @@
+ 
+ 	while (1) {
+ 		mdelay(5);
++		/* The T153 BSP arms MODE/CTRL once, then only waits. */
++		if (regs->wdt_restart_single_shot)
++			continue;
+ 		val = readl(wdt_base + regs->wdt_mode);
+ 		val |= WDT_MODE_EN;
+ 		val |= regs->wdt_key_val;
+@@ -207,6 +233,8 @@
+ 			sunxi_wdt->wdt_dev.timeout);
+ 	if (ret < 0)
+ 		return ret;
++
++	sunxi_wdt_set_output(sunxi_wdt);
+ 
+ 	/* Set system reset function */
+ 	reg = readl(wdt_base + regs->wdt_cfg);
+@@ -268,10 +296,28 @@
+ 	.wdt_key_val = 0x16aa0000,
+ };
+ 
++/* T153 watchdog v103: offsets/key from the Linux SDK, reset-output
++ * mask/value from the T153 U-Boot watchdog node.
++ */
++static const struct sunxi_wdt_reg sun8i_t153_wdt_reg = {
++	.wdt_ctrl = 0x0c,
++	.wdt_cfg = 0x10,
++	.wdt_mode = 0x14,
++	.wdt_out_cfg = 0x18,
++	.wdt_timeout_shift = 4,
++	.wdt_reset_mask = 0x03,
++	.wdt_reset_val = 0x01,
++	.wdt_key_val = 0x16aa0000,
++	.wdt_out_mask = 0x00000fff,
++	.wdt_out_val = 0x0000003f,
++	.wdt_restart_single_shot = true,
++};
++
+ static const struct of_device_id sunxi_wdt_dt_ids[] = {
+ 	{ .compatible = "allwinner,sun4i-a10-wdt", .data = &sun4i_wdt_reg },
+ 	{ .compatible = "allwinner,sun6i-a31-wdt", .data = &sun6i_wdt_reg },
+ 	{ .compatible = "allwinner,sun20i-d1-wdt", .data = &sun20i_wdt_reg },
++	{ .compatible = "allwinner,sun8i-t153-wdt", .data = &sun8i_t153_wdt_reg },
+ 	{ .compatible = "allwinner,suniv-f1c100s-wdt", .data = &sun6i_wdt_reg },
+ 	{ /* sentinel */ }
+ };
+--- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
+@@ -17,6 +17,7 @@
+   compatible:
+     oneOf:
+       - const: allwinner,sun4i-a10-wdt
++      - const: allwinner,sun8i-t153-wdt
+       - const: allwinner,sun6i-a31-wdt
+       - items:
+           - enum:

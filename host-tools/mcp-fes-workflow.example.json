@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "purpose": "Reusable JSON-RPC request examples, not an auto-executing flasher",
+  "endpoint_example": "http://127.0.0.1:8771/mcp",
+  "transport": "Use a normally initialized MCP client; no session IDs, tokens or SSH passwords are stored here.",
+  "substitution": "Replace angle-bracket placeholders with values from this run. Each poll must use a new JSON-RPC id.",
+  "project_binding": "For a device-scoped endpoint with exactly one saved SDK project, projectId may be omitted; otherwise supply the intended projectId to download requests.",
+  "steps": [
+    {
+      "label": "capabilities",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "tools/call",
+        "params": {
+          "name": "lynx_flash_capabilities",
+          "arguments": {}
+        }
+      },
+      "check": "Bound board is the intended T153; backend permits raw + command + verification."
+    },
+    {
+      "label": "scan",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "tools/call",
+        "params": {
+          "name": "lynx_scan_flash_devices",
+          "arguments": {}
+        }
+      },
+      "check": "Exactly the bound T153 is online in FEL/FES. Do not infer chip from the saved channel label."
+    },
+    {
+      "label": "download_loader",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {
+          "name": "lynx_download_firmware",
+          "arguments": {
+            "remotePath": "<REMOTE_ROOT>/artifacts/t153-fes-ddr933-ram-loader.img"
+          }
+        }
+      },
+      "save": "response taskId as <LOADER_DOWNLOAD_TASK_ID>"
+    },
+    {
+      "label": "poll_loader",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tools/call",
+        "params": {
+          "name": "lynx_workbench_task_status",
+          "arguments": {
+            "taskId": "<LOADER_DOWNLOAD_TASK_ID>"
+          }
+        }
+      },
+      "repeat_until_terminal": true,
+      "require": {
+        "state": "success",
+        "sha256": "0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873",
+        "totalBytes": 1154048
+      },
+      "save": "response localPath as <LOCAL_LOADER_PATH>"
+    },
+    {
+      "label": "inspect_loader",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "method": "tools/call",
+        "params": {
+          "name": "lynx_inspect_firmware",
+          "arguments": {
+            "image_path": "<LOCAL_LOADER_PATH>"
+          }
+        }
+      },
+      "check": "RAM-only loader; exactly six validated roles; no persistent kernel/rootfs payload."
+    },
+    {
+      "label": "download_disk",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "tools/call",
+        "params": {
+          "name": "lynx_download_firmware",
+          "arguments": {
+            "remotePath": "<REMOTE_ROOT>/artifacts/t153-openwrt25-source-1g-disk.img"
+          }
+        }
+      },
+      "save": "response taskId as <DISK_DOWNLOAD_TASK_ID>"
+    },
+    {
+      "label": "poll_disk",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "tools/call",
+        "params": {
+          "name": "lynx_workbench_task_status",
+          "arguments": {
+            "taskId": "<DISK_DOWNLOAD_TASK_ID>"
+          }
+        }
+      },
+      "repeat_until_terminal": true,
+      "require": {
+        "state": "success",
+        "sha256": "<DISK_SHA256_FROM_MATCHING_MANIFEST>",
+        "totalBytes": 306184192
+      },
+      "save": "response localPath as <LOCAL_DISK_PATH>"
+    },
+    {
+      "label": "start_flash",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 8,
+        "method": "tools/call",
+        "params": {
+          "name": "lynx_start_flash",
+          "arguments": {
+            "firmwarePath": "<LOCAL_DISK_PATH>",
+            "confirmDestructive": true,
+            "options": {
+              "mode": "command",
+              "verify": true,
+              "postFlashAction": "reboot",
+              "vendorOptions": {
+                "raw": true,
+                "loaderPath": "<LOCAL_LOADER_PATH>"
+              }
+            }
+          }
+        }
+      },
+      "save": "response taskId as <FLASH_TASK_ID>"
+    },
+    {
+      "label": "poll_flash",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 9,
+        "method": "tools/call",
+        "params": {
+          "name": "lynx_workbench_task_status",
+          "arguments": {
+            "taskId": "<FLASH_TASK_ID>"
+          }
+        }
+      },
+      "repeat_until_terminal": true,
+      "require": {
+        "state": "success",
+        "exitCode": 0,
+        "verifyState": "success",
+        "writtenBytes": 306184192,
+        "committedBytes": 306184192
+      },
+      "next": "Save status and the source-SPL/U-Boot boot log from FES post-reboot. Verify the whole-disk SHA256 in mainline U-Boot, then validate Linux/rootfs/network. This is not a physical power-cycle test."
+    }
+  ],
+  "post_flash_action": "This example uses reboot, the tested path when external power control is unavailable. Confirm reboot is advertised by current capabilities. none leaves the board in FES; use it only with a verified subsequent boot/recovery method."
+}

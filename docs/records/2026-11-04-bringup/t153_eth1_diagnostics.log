@@ -1,0 +1,613 @@
+ethtool eth1; ethtool -S eth1; ethtool -k eth1
+Settings for eth1:
+	Supported ports: [ TP MII ]
+	Supported link modes:   10baseT/Half 10baseT/Full 
+	                        100baseT/Half 100baseT/Full 
+	                        1000baseT/Half 1000baseT/Full 
+	                        1000baseX/Full 
+	Supported pause frame use: Symmetric Receive-only
+	Supports auto-negotiation: Yes
+	Supported FEC modes: Not reported
+	Advertised link modes:  10baseT/Half 10baseT/Full 
+	                        100baseT/Half 100baseT/Full 
+	                        1000baseT/Half 1000baseT/Full 
+	                        1000baseX/Full 
+	Advertised pause frame use: Symmetric Receive-only
+	Advertised auto-negotiation: Yes
+	Advertised FEC modes: Not reported
+	Link partner advertised link modes:  10baseT/Half 10baseT/Full 
+	                                     100baseT/Half 100baseT/Full 
+	                                     1000baseT/Full 
+	Link partner advertised pause frame use: Symmetric Receive-only
+	Link partner advertised auto-negotiation: Yes
+	Link partner advertised FEC modes: Not reported
+	Speed: 100Mb/s
+	Duplex: Full
+	Port: Twisted Pair
+	PHYAD: 1
+	Transceiver: external
+	Auto-negotiation: on
+	MDI-X: Unknown
+	Supports Wake-on: d
+	Wake-on: d
+	Current message level: 0x0000003f (63)
+			       drv probe link timer ifdown ifup
+	Link detected: yes
+NIC statistics:
+     mmc_tx_octetcount_gb: 30228
+     mmc_tx_framecount_gb: 97
+     mmc_tx_broadcastframe_g: 79
+     mmc_tx_multicastframe_g: 18
+     mmc_tx_64_octets_gb: 0
+     mmc_tx_65_to_127_octets_gb: 6
+     mmc_tx_128_to_255_octets_gb: 12
+     mmc_tx_256_to_511_octets_gb: 79
+     mmc_tx_512_to_1023_octets_gb: 0
+     mmc_tx_1024_to_max_octets_gb: 0
+     mmc_tx_unicast_gb: 0
+     mmc_tx_multicast_gb: 18
+     mmc_tx_broadcast_gb: 79
+     mmc_tx_underflow_error: 0
+     mmc_tx_singlecol_g: 0
+     mmc_tx_multicol_g: 0
+     mmc_tx_deferred: 0
+     mmc_tx_latecol: 0
+     mmc_tx_exesscol: 0
+     mmc_tx_carrier_error: 0
+     mmc_tx_octetcount_g: 30228
+     mmc_tx_framecount_g: 97
+     mmc_tx_excessdef: 0
+     mmc_tx_pause_frame: 0
+     mmc_tx_vlan_frame_g: 0
+     mmc_tx_oversize_g: 0
+     mmc_tx_lpi_usec: 0
+     mmc_tx_lpi_tran: 0
+     mmc_rx_framecount_gb: 107
+     mmc_rx_octetcount_gb: 29472
+     mmc_rx_octetcount_g: 0
+     mmc_rx_broadcastframe_g: 0
+     mmc_rx_multicastframe_g: 0
+     mmc_rx_crc_error: 107
+     mmc_rx_align_error: 0
+     mmc_rx_run_error: 0
+     mmc_rx_jabber_error: 0
+     mmc_rx_undersize_g: 0
+     mmc_rx_oversize_g: 0
+     mmc_rx_64_octets_gb: 11
+     mmc_rx_65_to_127_octets_gb: 14
+     mmc_rx_128_to_255_octets_gb: 4
+     mmc_rx_256_to_511_octets_gb: 78
+     mmc_rx_512_to_1023_octets_gb: 0
+     mmc_rx_1024_to_max_octets_gb: 0
+     mmc_rx_unicast_g: 0
+     mmc_rx_length_error: 0
+     mmc_rx_autofrangetype: 0
+     mmc_rx_pause_frames: 0
+     mmc_rx_fifo_overflow: 0
+     mmc_rx_vlan_frames_gb: 0
+     mmc_rx_watchdog_error: 0
+     mmc_rx_error: 0
+     mmc_rx_lpi_usec: 0
+     mmc_rx_lpi_tran: 0
+     mmc_rx_discard_frames_gb: 0
+     mmc_rx_discard_octets_gb: 0
+     mmc_rx_align_err_frames: 0
+     mmc_rx_ipv4_gd: 4
+     mmc_rx_ipv4_hderr: 80
+     mmc_rx_ipv4_nopay: 0
+     mmc_rx_ipv4_frag: 0
+     mmc_rx_ipv4_udsbl: 0
+     mmc_rx_ipv4_gd_octets: 192
+     mmc_rx_ipv4_hderr_octets: 25988
+     mmc_rx_ipv4_nopay_octets: 0
+     mmc_rx_ipv4_frag_octets: 0
+     mmc_rx_ipv4_udsbl_octets: 0
+     mmc_rx_ipv6_gd_octets: 0
+     mmc_rx_ipv6_hderr_octets: 0
+     mmc_rx_ipv6_nopay_octets: 0
+     mmc_rx_ipv6_gd: 0
+     mmc_rx_ipv6_hderr: 0
+     mmc_rx_ipv6_nopay: 0
+     mmc_rx_udp_gd: 0
+     mmc_rx_udp_err: 0
+     mmc_rx_tcp_gd: 0
+     mmc_rx_tcp_err: 0
+     mmc_rx_icmp_gd: 4
+     mmc_rx_icmp_err: 2
+     mmc_rx_udp_gd_octets: 0
+     mmc_rx_udp_err_octets: 0
+     mmc_rx_tcp_gd_octets: 0
+     mmc_rx_tcp_err_octets: 0
+     mmc_rx_icmp_gd_octets: 112
+     mmc_rx_icmp_err_octets: 56
+     mmc_sgf_pass_fragment_cntr: 0
+     mmc_sgf_fail_fragment_cntr: 0
+     mmc_tx_fpe_fragment_cntr: 0
+     mmc_tx_hold_req_cntr: 0
+     mmc_tx_gate_overrun_cntr: 0
+     mmc_rx_packet_assembly_err_cntr: 0
+     mmc_rx_packet_smd_err_cntr: 0
+     mmc_rx_packet_assembly_ok_cntr: 0
+     mmc_rx_fpe_fragment_cntr: 0
+     tx_underflow: 0
+     tx_carrier: 0
+     tx_losscarrier: 0
+     vlan_tag: 0
+     tx_deferred: 0
+     tx_vlan: 0
+     tx_jabber: 0
+     tx_frame_flushed: 0
+     tx_payload_error: 0
+     tx_ip_header_error: 0
+     rx_desc: 0
+     sa_filter_fail: 0
+     overflow_error: 0
+     ipc_csum_error: 0
+     rx_collision: 0
+     rx_crc_errors: 0
+     dribbling_bit: 0
+     rx_length: 0
+     rx_mii: 0
+     rx_multicast: 0
+     rx_gmac_overflow: 0
+     rx_watchdog: 0
+     da_rx_filter_fail: 0
+     sa_rx_filter_fail: 0
+     rx_missed_cntr: 0
+     rx_overflow_cntr: 0
+     rx_vlan: 0
+     rx_split_hdr_pkt_n: 0
+     tx_undeflow_irq: 0
+     tx_process_stopped_irq: 0
+     tx_jabber_irq: 0
+     rx_overflow_irq: 0
+     rx_buf_unav_irq: 0
+     rx_process_stopped_irq: 0
+     rx_watchdog_irq: 0
+     tx_early_irq: 0
+     fatal_bus_error_irq: 0
+     rx_early_irq: 0
+     threshold: 1
+     irq_receive_pmt_irq_n: 0
+     mmc_tx_irq_n: 0
+     mmc_rx_irq_n: 0
+     mmc_rx_csum_offload_irq_n: 0
+     irq_tx_path_in_lpi_mode_n: 0
+     irq_tx_path_exit_lpi_mode_n: 0
+     irq_rx_path_in_lpi_mode_n: 0
+     irq_rx_path_exit_lpi_mode_n: 0
+     phy_eee_wakeup_error_n: 0
+     ip_hdr_err: 0
+     ip_payload_err: 0
+     ip_csum_bypassed: 0
+     ipv4_pkt_rcvd: 0
+     ipv6_pkt_rcvd: 0
+     no_ptp_rx_msg_type_ext: 0
+     ptp_rx_msg_type_sync: 0
+     ptp_rx_msg_type_follow_up: 0
+     ptp_rx_msg_type_delay_req: 0
+     ptp_rx_msg_type_delay_resp: 0
+     ptp_rx_msg_type_pdelay_req: 0
+     ptp_rx_msg_type_pdelay_resp: 0
+     ptp_rx_msg_type_pdelay_follow_up: 0
+     ptp_rx_msg_type_announce: 0
+     ptp_rx_msg_type_management: 0
+     ptp_rx_msg_pkt_reserved_type: 0
+     ptp_frame_type: 0
+     ptp_ver: 0
+     timestamp_dropped: 0
+     av_pkt_rcvd: 0
+     av_tagged_pkt_rcvd: 0
+     vlan_tag_priority_val: 0
+     l3_filter_match: 0
+     l4_filter_match: 0
+     l3_l4_filter_no_match: 0
+     irq_pcs_ane_n: 0
+     irq_pcs_link_n: 0
+     irq_rgmii_n: 0
+     mtl_tx_status_fifo_full: 0
+     mtl_tx_fifo_not_empty: 0
+     mmtl_fifo_ctrl: 0
+     mtl_tx_fifo_read_ctrl_write: 0
+     mtl_tx_fifo_read_ctrl_wait: 0
+     mtl_tx_fifo_read_ctrl_read: 0
+     mtl_tx_fifo_read_ctrl_idle: 0
+     mac_tx_in_pause: 0
+     mac_tx_frame_ctrl_xfer: 0
+     mac_tx_frame_ctrl_idle: 0
+     mac_tx_frame_ctrl_wait: 0
+     mac_tx_frame_ctrl_pause: 0
+     mac_gmii_tx_proto_engine: 0
+     mtl_rx_fifo_fill_level_full: 0
+     mtl_rx_fifo_fill_above_thresh: 0
+     mtl_rx_fifo_fill_below_thresh: 0
+     mtl_rx_fifo_fill_level_empty: 0
+     mtl_rx_fifo_read_ctrl_flush: 0
+     mtl_rx_fifo_read_ctrl_read_data: 0
+     mtl_rx_fifo_read_ctrl_status: 0
+     mtl_rx_fifo_read_ctrl_idle: 0
+     mtl_rx_fifo_ctrl_active: 0
+     mac_rx_frame_ctrl_fifo: 0
+     mac_gmii_rx_proto_engine: 0
+     mtl_est_cgce: 0
+     mtl_est_hlbs: 0
+     mtl_est_hlbf: 0
+     mtl_est_btre: 0
+     mtl_est_btrlm: 0
+     rx_pkt_n: 0
+     rx_normal_irq_n: 0
+     tx_pkt_n: 97
+     tx_normal_irq_n: 3
+     tx_clean: 100
+     tx_set_ic_bit: 3
+     tx_tso_frames: 0
+     tx_tso_nfrags: 0
+     normal_irq_n: 3
+     napi_poll: 100
+     q0_tx_pkt_n: 97
+     q0_tx_irq_n: 3
+     q0_rx_pkt_n: 0
+     q0_rx_irq_n: 0
+Features for eth1:
+rx-checksumming: on
+tx-checksumming: on
+	tx-checksum-ipv4: on
+	tx-checksum-ip-generic: off [fixed]
+	tx-checksum-ipv6: on
+	tx-checksum-fcoe-crc: off [fixed]
+	tx-checksum-sctp: off [fixed]
+scatter-gather: on
+	tx-scatter-gather: on
+	tx-scatter-gather-fraglist: off [fixed]
+tcp-segmentation-offload: off
+	tx-tcp-segmentation: off [fixed]
+	tx-tcp-ecn-segmentation: off [fixed]
+	tx-tcp-mangleid-segmentation: off [fixed]
+	tx-tcp6-segmentation: off [fixed]
+generic-segmentation-offload: on
+generic-receive-offload: on
+large-receive-offload: off [fixed]
+rx-vlan-offload: on
+tx-vlan-offload: on [fixed]
+ntuple-filters: off [fixed]
+receive-hashing: off [fixed]
+highdma: on [fixed]
+rx-vlan-filter: on [fixed]
+vlan-challenged: off [fixed]
+tx-gso-robust: off [fixed]
+tx-fcoe-segmentation: off [fixed]
+tx-gre-segmentation: off [fixed]
+tx-gre-csum-segmentation: off [fixed]
+tx-ipxip4-segmentation: off [fixed]
+tx-ipxip6-segmentation: off [fixed]
+tx-udp_tnl-segmentation: off [fixed]
+tx-udp_tnl-csum-segmentation: off [fixed]
+tx-gso-partial: off [fixed]
+tx-tunnel-remcsum-segmentation: off [fixed]
+tx-sctp-segmentation: off [fixed]
+tx-esp-segmentation: off [fixed]
+tx-udp-segmentation: off [fixed]
+tx-gso-list: off [fixed]
+tx-nocache-copy: off
+loopback: off [fixed]
+rx-fcs: off [fixed]
+rx-all: off [fixed]
+tx-vlan-stag-hw-insert: on [fixed]
+rx-vlan-stag-hw-parse: on [fixed]
+rx-vlan-stag-filter: on [fixed]
+l2-fwd-offload: off [fixed]
+hw-tc-offload: on
+esp-hw-offload: off [fixed]
+esp-tx-csum-hw-offload: off [fixed]
+rx-udp_tunnel-port-offload: off [fixed]
+tls-hw-tx-offload: off [fixed]
+tls-hw-rx-offload: off [fixed]
+rx-gro-hw: off [fixed]
+tls-hw-record: off [fixed]
+rx-gro-list: on
+macsec-hw-offload: off [fixed]
+rx-udp-gro-forwarding: off
+hsr-tag-ins-offload: off [fixed]
+hsr-tag-rm-offload: off [fixed]
+hsr-fwd-offload: off [fixed]
+hsr-dup-offload: off [fixed]
+root@OpenWrt:~# ethtool -d eth1; cat /sys/kernel/debug/clk/clk_summary | grep -E
+ "gmac|phy|pll-periph|cpu"; command -v phytool; command -v mii-tool
+Offset		Values
+------		------
+0x0000:		03 e2 07 08 00 00 20 00 04 04 01 00 00 00 00 00 
+0x0010:		22 00 40 00 01 00 00 01 00 00 00 00 00 00 00 00 
+0x0020:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0030:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0040:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0050:		3c 00 61 03 00 00 00 00 01 00 00 00 00 00 00 00 
+0x0060:		00 00 1a 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0070:		02 00 ff ff 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0080:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0090:		01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x00a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x00b0:		01 00 04 00 20 10 00 00 00 00 00 00 00 00 00 00 
+0x00c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x00d0:		00 00 02 00 00 00 e8 03 00 00 00 00 00 00 01 00 
+0x00e0:		11 00 08 00 01 0c 08 00 00 00 00 00 00 00 00 00 
+0x00f0:		00 20 cc 4a 00 00 00 00 00 00 ac 4a 30 2a cc 4a 
+0x0100:		00 00 00 00 10 00 ac 4a ff 01 00 00 ff 01 00 00 
+0x0110:		41 d0 00 00 a0 00 00 00 00 00 00 00 00 00 00 00 
+0x0120:		30 2a cc 4a 00 00 00 00 10 00 ac 4a 00 00 00 00 
+0x0130:		02 4a 95 4a 00 00 00 00 00 d0 ef 4a 84 04 00 00 
+0x0140:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0150:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0160:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0170:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0180:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0190:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x01a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x01b0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x01c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x01d0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x01e0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x01f0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0200:		04 04 3f 00 42 0a 00 00 00 00 00 00 00 00 00 00 
+0x0210:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0220:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0230:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0240:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0250:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0260:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0270:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0280:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0290:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x02a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x02b0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x02c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x02d0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x02e0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x02f0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0300:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0310:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0320:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0330:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0340:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0350:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0360:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0370:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0380:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0390:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x03a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x03b0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x03c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x03d0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x03e0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x03f0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0400:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0410:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0420:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0430:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0440:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0450:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0460:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0470:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0480:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0490:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x04a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x04b0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x04c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x04d0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x04e0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x04f0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0500:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0510:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0520:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0530:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0540:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0550:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0560:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0570:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0580:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0590:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x05a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x05b0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x05c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x05d0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x05e0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x05f0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0600:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0610:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0620:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0630:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0640:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0650:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0660:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0670:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0680:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0690:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x06a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x06b0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x06c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x06d0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x06e0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x06f0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0700:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0710:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0720:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0730:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0740:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0750:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0760:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0770:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0780:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0790:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x07a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x07b0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x07c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x07d0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x07e0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x07f0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0800:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0810:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0820:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0830:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0840:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0850:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0860:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0870:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0880:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0890:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x08a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x08b0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x08c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x08d0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x08e0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x08f0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0900:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0910:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0920:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0930:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0940:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0950:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0960:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0970:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0980:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0990:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x09a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x09b0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x09c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x09d0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x09e0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x09f0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0a00:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0a10:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0a20:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0a30:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0a40:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0a50:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0a60:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0a70:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0a80:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0a90:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0aa0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ab0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ac0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ad0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ae0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0af0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0b00:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0b10:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0b20:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0b30:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0b40:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0b50:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0b60:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0b70:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0b80:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0b90:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ba0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0bb0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0bc0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0bd0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0be0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0bf0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0c00:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0c10:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0c20:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0c30:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0c40:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0c50:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0c60:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0c70:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0c80:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0c90:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ca0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0cb0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0cc0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0cd0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ce0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0cf0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0d00:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0d10:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0d20:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0d30:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0d40:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0d50:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0d60:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0d70:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0d80:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0d90:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0da0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0db0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0dc0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0dd0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0de0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0df0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0e00:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0e10:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0e20:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0e30:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0e40:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0e50:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0e60:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0e70:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0e80:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0e90:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ea0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0eb0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ec0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ed0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ee0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ef0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0f00:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0f10:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0f20:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0f30:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0f40:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0f50:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0f60:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0f70:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0f80:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0f90:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0fa0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0fb0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0fc0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0fd0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0fe0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0ff0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x1000:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x1010:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x1020:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x1030:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x1040:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x1050:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x1060:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x1070:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x1080:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x1090:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x10a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x10b0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x10c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x10d0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x10e0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x10f0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x1100:		00 00 01 00 11 00 08 00 01 0c 08 00 00 00 00 00 
+0x1110:		00 00 00 00 00 20 cc 4a 00 00 00 00 00 00 ac 4a 
+0x1120:		30 2a cc 4a 00 00 00 00 10 00 ac 4a ff 01 00 00 
+0x1130:		ff 01 00 00 41 d0 00 00 a0 00 00 00 00 00 00 00 
+0x1140:		00 00 00 00 30 2a cc 4a 00 00 00 00 10 00 ac 4a 
+0x1150:		00 00 00 00 02 4a 95 4a 00 00 00 00 00 d0 ef 4a 
+0x1160:		84 04 00 00 00 00 00 00 00 00 00 00 
+    gmac1-ahb-bus                    1       1        0        24000000    0          0     50000      Y      4510000.ethernet                stmmaceth                
+    gmac1-ptp-ref                    1       1        0        24000000    0          0     50000      Y      4510000.ethernet                ptp_ref                  
+    gmac0-ahb-bus                    1       1        0        24000000    0          0     50000      Y      4500000.ethernet                stmmaceth                
+    gmac0-ptp-ref                    1       1        0        24000000    0          0     50000      Y      4500000.ethernet                ptp_ref                  
+                                                                                                              4100000.phy                     bus                      
+    usb2p0-sys-phy-ref-bus           1       1        0        24000000    0          0     50000      Y      4100000.phy                     ref                      
+    gmac-mbus-sw-cfg-bus             1       1        0        24000000    0          0     50000      Y      deviceless                      no_connection_id         
+    gmac0-mbus-sw-cfg-bus            1       1        0        24000000    0          0     50000      Y      4500000.ethernet                mbus-sw                  
+    gmac1-mbus-sw-cfg-bus            1       1        0        24000000    0          0     50000      Y      4510000.ethernet                mbus-sw                  
+    gmac0-mbus-bus                   1       1        0        24000000    0          0     50000      Y      4500000.ethernet                pclk                     
+    gmac1-mbus-bus                   1       1        0        24000000    0          0     50000      Y      4510000.ethernet                pclk                     
+    gmac0-ahb-sw-cfg-bus             1       1        0        24000000    0          0     50000      Y      4500000.ethernet                ahb-sw                   
+    gmac1-ahb-sw-cfg-bus             1       1        0        24000000    0          0     50000      Y      4510000.ethernet                ahb-sw                   
+    usb2p0-sys-ahb-sw-cfg-bus        1       1        0        24000000    0          0     50000      Y      4100000.phy                     bus-cfg                  
+                   gmac1-phy         1       1        0        25000000    0          0     50000      Y                     4510000.ethernet                phy                      
+                   gmac0-phy         0       0        0        150000000   0          0     50000      N                     deviceless                      no_connection_id         
+root@OpenWrt:~# 

@@ -1,0 +1,115 @@
+T153 OmniGate / 主线 U-Boot 2026.07 内存版（实验性，未上板）
+================================================================
+
+本文件针对 artifacts/t153-uboot-2026.07-ram.itb。
+这是官方 U-Boot 2026.07 加本工程 T153 板级适配，不是 Tina U-Boot 改版本号。
+当前只是 U-Boot proper：原启动链仍负责 DDR4、供电和安全监控固件。
+不能直接写到 boot0、boot_package、eMMC 启动区或 SD 的 SPL 扇区。
+本 RAM-chainload 目标不含独立冷启动 SPL。另有全源码 source 目标、
+整盘实验镜像和 FEL 安装器，见 BOOT-UBOOT-SOURCE.txt / FLASH-SOURCE.txt。
+
+已编译的功能（均待实机确认）
+----------------------------
+- Cortex-A7 入口、缓存、重定位、ARM 通用计时器。
+- UART0：PB9/PB10，115200 8N1，DW8250 32 位寄存器访问。
+- SD0 / eMMC2：PIO 读取，24MHz 晶振派生，不改 PLL，SDR 最高12MHz。
+- FAT/ext4 读取、FIT SHA256 校验、bootm/bootz，串口 X/Ymodem 加载。
+- 默认停在 T153-RAM=> 提示符，不自动启动或保存环境。
+- U-Boot 本身未加入以太网、USB、Wi-Fi、CAN；这些与 Linux 驱动是不同层。
+- reset 命令暂不复位硬件，会停机提示重新上电。
+- 编译关闭 MMC 写入、分区配置、文件系统写入和 saveenv。
+
+地址与前提
+----------
+只针对已经确认是512MiB的OmniGate；不会通过破坏性写入探测DDR容量。
+原厂串口先记录 version、bdinfo、printenv、help bootm、help tftpboot。
+核实RAM为0x40000000..0x5fffffff，下面地址没有被原固件或设备占用。
+
+  原厂加载的U-Boot FIT     0x4c000000（不到2MiB）
+  新U-Boot链接/入口        0x4a000000（不到2MiB）
+  新U-Boot初始栈顶部       0x49f00000
+  OpenWrt initramfs FIT    0x50000000
+  OpenWrt内核load/entry    0x48008000
+
+新U-Boot只管理0x48000000..0x5fffffff，上方384MiB；重定位和16MiB堆
+在这段内存的顶部。低128MiB的DDR、OP-TEE/monitor、E907保留区不探测、
+不清零。新U-Boot向Linux修正后的memory节点也为上方384MiB。
+初次保留原固件的PSCI/monitor，不安装U-Boot自己的安全监控代码。
+
+首轮：原U-Boot预加载两份镜像，排除新MMC驱动的影响
+------------------------------------------------
+以下是待核实板上环境后使用的模板，目前没有执行过。
+在TFTP主机准备两个文件；OpenWrt文件可复制/改名为openwrt-t153-initramfs.itb，
+它的内容必须与SHA256SUMS中以-initramfs-kernel.bin结尾的文件完全一致。
+不要把ext4/rootfs.tar.gz或zImage改名冒充FIT。
+
+原厂U-Boot中临时设置测试网段的ipaddr/serverip，随后：
+
+  setenv bootm_low 0x48000000
+  setenv bootm_size 0x18000000
+  tftpboot 0x50000000 openwrt-t153-initramfs.itb
+  iminfo 0x50000000
+  tftpboot 0x4c000000 t153-uboot-2026.07-ram.itb
+  iminfo 0x4c000000
+  bootm 0x4c000000
+
+只有每一次加载和校验都成功才执行下一条。也可以用原U-Boot的fatload等
+读取同样的文件到同样地址。不要用go直接跳转：go通常不清理原启动器的
+缓存、MMU和设备状态。这份FIT使用ARM Linux bootm交接流程清理状态，
+因此mkimage显示其类型为Kernel/Linux；真实payload是新U-Boot，不是Linux。
+FIT附带的Linux DTB供原bootm交接，新U-Boot使用bin末尾自己的control DTB。
+
+看到U-Boot 2026.07及T153-RAM=>后记录：
+
+  version
+  bdinfo
+  printenv
+  iminfo 0x50000000
+  bootm 0x50000000
+
+新U-Boot的默认bootargs已经替换原厂root/A-B参数，启动OpenWrt initramfs。
+若没有出现提示符或iminfo失败，停止后续命令，保存完整日志并重新上电。
+不要直接尝试刷写来解决问题。
+
+第二轮：验证新U-Boot从SD/eMMC读取
+--------------------------------
+SD卡已有FAT/ext4分区、根目录有openwrt-t153-initramfs.itb时：
+
+  mmc list
+  mmc dev 0
+  mmc info
+  part list mmc 0
+  ls mmc 0:1 /
+  load mmc 0:1 0x50000000 openwrt-t153-initramfs.itb
+  hash sha256 0x50000000 ${filesize}
+  iminfo 0x50000000
+  bootm 0x50000000
+
+此新U-Boot的alias明确规定mmc0=SD0、mmc1=eMMC2，原厂U-Boot编号不一定相同。
+分区号1只是示例，按part list确认。eMMC只做mmc dev 1、mmc info、分区读取；
+不假设原厂分区已有可识别文件系统。自动读取SD的环境脚本是run bootsd，
+第一次仍逐步执行便于定位。
+串口loady 0x50000000可以作为不依赖MMC的备用方式，115200速率会较慢。
+
+复现与软件证据
+--------------
+工程根目录：
+  sh scripts/build-uboot.sh
+  sh scripts/package-artifacts.sh
+
+构建自动核对官方2026.07源码包SHA256，复用OpenWrt GCC 14.3.0工具链。
+依赖已有OpenWrt构建主机工具；安装完整构建依赖，含libssl-dev、bison、flex、
+swig、Python setuptools、dtc。正常构建不读取Tina SDK、不链接libdram。
+产物检查覆盖实际ARM ELF入口/段边界、实际链接符号、附加DTB、配置、
+FIT payload与SHA256、加载地址范围。软件检查不能代替上板验收。
+
+冷启动缺口
+----------
+OmniGate sys_config.fex配置为DDR4、933MHz，T113使用的D1 DDR驱动不适用。
+SDK的brandy/dramlib/sun8iw22p1/spl_libdram/libdram是ARM可重定位目标文件，
+不是C源码。它带调试信息，但并不等于已获得可维护、可验证的主线DDR驱动。
+公开sunxi-tools T153 PR #252只提供FEL相关支持，作者称U-Boot代码未公开：
+https://github.com/linux-sunxi/sunxi-tools/pull/252
+要去掉原boot0依赖，需要T153 DDR4控制器/PHY初始化、训练资料及源代码，
+实现并验证主线SPL，随后完成BootROM镜像封装、介质加载和安全监控交接。
+本交付没有把闭源DDR库包装后称为纯主线SPL。

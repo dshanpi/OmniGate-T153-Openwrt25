@@ -1,0 +1,11 @@
+dd if=/dev/urandom of=/tmp/t153-io-test.bin bs=1048576 count=16 
+&& sha256sum /tmp/t153-io-test.bin && cp /tmp/t153-io-test.bin /root/t153-io-tes
+t.bin && sync && echo 3 > /proc/sys/vm/drop_caches && sha256sum /root/t153-io-te
+st.bin && cmp /tmp/t153-io-test.bin /root/t153-io-test.bin && echo EMMC_IO_PASS
+16+0 records in
+16+0 records out
+85da29037c640af84c42db2e69b9235d0e3cb0419a41460b1e97b8f48e0036ad  /tmp/t153-io-test.bin
+[  200.374369] ash (2858): drop_caches: 3
+85da29037c640af84c42db2e69b9235d0e3cb0419a41460b1e97b8f48e0036ad  /root/t153-io-test.bin
+EMMC_IO_PASS
+root@OpenWrt:~# 

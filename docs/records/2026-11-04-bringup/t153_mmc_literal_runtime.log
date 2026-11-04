@@ -1,0 +1,169 @@
+[   49.929832] dwmac-sun8i-t153 4500000.ethernet eth0: Register MEM_TYPE_PAGE_POOL RxQ-0
+[   50.010867] dwmac-sun8i-t153 4500000.ethernet eth0: PHY [stmmac-0:01] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+[   50.100789] dwmac-sun8i-t153 4500000.ethernet eth0: No Safety Features support found
+[   50.118701] dwmac-sun8i-t153 4500000.ethernet eth0: IEEE 1588-2008 Advanced Timestamp supported
+[   50.127888] dwmac-sun8i-t153 4500000.ethernet eth0: registered PTP clock
+[   50.134719] dwmac-sun8i-t153 4500000.ethernet eth0: configuring for phy/rgmii link mode
+[   50.251215] 8021q: adding VLAN 0 to HW filter on device eth0
+[   50.280923] br-lan: port 1(eth0) entered blocking state
+[   50.286214] br-lan: port 1(eth0) entered disabled state
+[   50.291642] dwmac-sun8i-t153 4500000.ethernet eth0: entered allmulticast mode
+[   50.299301] dwmac-sun8i-t153 4500000.ethernet eth0: entered promiscuous mode
+[   50.448859] dwmac-sun8i-t153 4510000.ethernet eth1: Register MEM_TYPE_PAGE_POOL RxQ-0
+[   50.571126] dwmac-sun8i-t153 4510000.ethernet eth1: PHY [stmmac-1:01] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+[   50.581779] dwmac-sun8i-t153 4510000.ethernet eth1: No Safety Features support found
+[   50.599583] dwmac-sun8i-t153 4510000.ethernet eth1: IEEE 1588-2008 Advanced Timestamp supported
+[   50.608807] dwmac-sun8i-t153 4510000.ethernet eth1: registered PTP clock
+[   50.707216] dwmac-sun8i-t153 4510000.ethernet eth1: configuring for phy/rgmii link mode
+[   50.761535] 8021q: adding VLAN 0 to HW filter on device eth1
+[   63.291800] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[   63.304323] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+ 
+
+
+BusyBox v1.37.0 (2026-11-04 01:33:29 UTC) built-in shell (ash)
+
+  _______                     ________        __
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+ |_______||   __|_____|__|__||________||__|  |____|
+          |__| W I R E L E S S   F R E E D O M
+ -----------------------------------------------------
+ OpenWrt 25.12-SNAPSHOT, t153-6c57f7cd04 Dave's Guitar
+ -----------------------------------------------------
+
+ === WARNING! =====================================
+ There is no root password defined on this device!
+ Use the "passwd" command to set up a new password
+ in order to prevent unauthorized SSH logins.
+ --------------------------------------------------
+
+
+ OpenWrt recently switched to the "apk" package manager!
+
+ OPKG Command           APK Equivalent      Description
+ ------------------------------------------------------------------
+ opkg install <pkg>     apk add <pkg>       Install a package
+ opkg remove <pkg>      apk del <pkg>       Remove a package
+ opkg upgrade           apk upgrade         Upgrade all packages
+ opkg files <pkg>       apk info -L <pkg>   List package contents
+ opkg list-installed    apk info            List installed packages
+ opkg update            apk update          Update package lists
+ opkg search <pkg>      apk search <pkg>    Search for packages
+ ------------------------------------------------------------------
+
+For more information visit:
+https://openwrt.org/docs/guide-user/additional-software/opkg-to-apk-cheatsheet
+
+root@OpenWrt:~# uname -a; cat /etc/openwrt_release; mount; df -h; ip -br addr; c
+at /proc/meminfo | head -n 5; ubus call system board
+Linux OpenWrt 6.12.113 #0 SMP Wed Nov  4 01:33:29 2026 armv7l GNU/Linux
+DISTRIB_ID='OpenWrt'
+DISTRIB_RELEASE='25.12-SNAPSHOT'
+DISTRIB_REVISION='6c57f7cd04028d370f9360de71f5d59412046194'
+DISTRIB_TARGET='sunxi/cortexa7'
+DISTRIB_ARCH='arm_cortex-a7_neon-vfpv4'
+DISTRIB_DESCRIPTION='OpenWrt 25.12-SNAPSHOT t153-6c57f7cd04'
+DISTRIB_TAINTS='no-all'
+/dev/root on / type ext4 (rw,noatime)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+cgroup2 on /sys/fs/cgroup type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate)
+tmpfs on /tmp type tmpfs (rw,nosuid,nodev,noatime)
+tmpfs on /dev type tmpfs (rw,nosuid,noexec,noatime,size=512k,mode=755)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,noatime,mode=600,ptmxmode=000)
+debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,noatime)
+bpffs on /sys/fs/bpf type bpf (rw,nosuid,nodev,noexec,noatime,mode=700)
+Filesystem                Size      Used Available Use% Mounted on
+/dev/root               247.9M     16.2M    226.5M   7% /
+tmpfs                   183.4M    164.0K    183.2M   0% /tmp
+tmpfs                   512.0K         0    512.0K   0% /dev
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0             DOWN           
+eth1             UP             fe80::a890:93ff:fe6c:2e0e/64 
+can0             DOWN           
+can1             DOWN           
+br-lan           DOWN           192.168.153.1/24 fdbb:fe6e:5035::1/60 
+MemTotal:         375580 kB
+MemFree:          343888 kB
+MemAvailable:     325004 kB
+Buffers:             976 kB
+Cached:             7928 kB
+{
+	"kernel": "6.12.113",
+	"hostname": "OpenWrt",
+	"system": "ARMv7 Processor rev 5 (v7l)",
+	"model": "DshanPI T153MX OmniGate",
+	"board_name": "dshanpi,t153mx-omnigate",
+	"rootfs_type": "ext4",
+	"release": {
+		"distribution": "OpenWrt",
+		"version": "25.12-SNAPSHOT",
+		"firmware_url": "https://downloads.openwrt.org/",
+		"revision": "6c57f7cd04028d370f9360de71f5d59412046194",
+		"target": "sunxi/cortexa7",
+		"description": "OpenWrt 25.12-SNAPSHOT t153-6c57f7cd04",
+		"builddate": "1793756009"
+	}
+}
+root@OpenWrt:~# ifstatus wan; ip -s link show eth1; logread | tail -n 30; cat /s
+ys/kernel/debug/mmc0/ios
+{
+	"up": false,
+	"pending": true,
+	"available": true,
+	"autostart": true,
+	"dynamic": false,
+	"proto": "dhcp",
+	"device": "eth1",
+	"data": {
+		
+	}
+}
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether aa:90:93:6c:2e:0e brd ff:ff:ff:ff:ff:ff
+    RX:  bytes packets errors dropped  missed   mcast           
+             0       0      0       0       0       0 
+    TX:  bytes packets errors dropped carrier collsns           
+         15406      55      0       0       0       0 
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: started, version 2.93 cachesize 1000
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: DNS service limited to local subnets
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: compile time options: IPv6 GNU-getopt no-DBus UBus no-i18n no-IDN DHCP no-DHCPv6 no-Lua TFTP no-conntrack no-ipset no-nftset no-auth no-DNSSEC no-ID loop-detect inotify dumpfile
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: UBus support enabled: connected to system bus
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq-dhcp[1]: DHCP, IP range 192.168.153.100 -- 192.168.153.249, lease time 12h
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: using only locally-known addresses for test
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: using only locally-known addresses for onion
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: using only locally-known addresses for localhost
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: using only locally-known addresses for local
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: using only locally-known addresses for invalid
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: using only locally-known addresses for bind
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: using only locally-known addresses for lan
+Wed Nov  4 01:34:15 2026 daemon.warn dnsmasq[1]: no servers found in /tmp/resolv.conf.d/resolv.conf.auto, will retry
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: read /etc/hosts - 12 names
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq[1]: read /tmp/hosts/dhcp.cfg01411c - 4 names
+Wed Nov  4 01:34:15 2026 daemon.info dnsmasq-dhcp[1]: read /etc/ethers - 0 addresses
+Wed Nov  4 01:34:21 2026 kern.warn kernel: [   63.291800] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+Wed Nov  4 01:34:21 2026 kern.info kernel: [   63.304323] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+Wed Nov  4 01:34:21 2026 daemon.notice netifd: Network device 'eth1' link is up
+Wed Nov  4 01:34:21 2026 daemon.notice netifd: Interface 'wan' has link connectivity
+Wed Nov  4 01:34:21 2026 daemon.notice netifd: Interface 'wan' is setting up now
+Wed Nov  4 01:34:21 2026 daemon.notice netifd: Interface 'wan6' has link connectivity
+Wed Nov  4 01:34:21 2026 daemon.notice netifd: Interface 'wan6' is setting up now
+Wed Nov  4 01:34:22 2026 daemon.notice netifd: wan (2842): udhcpc: started, v1.37.0
+Wed Nov  4 01:34:22 2026 daemon.notice netifd: wan (2842): udhcpc: broadcasting discover
+Wed Nov  4 01:34:22 2026 daemon.notice netifd: wan6 (2851): Failed to send RS (Address not available)
+Wed Nov  4 01:34:22 2026 daemon.notice netifd: wan6 (2851): eth1: error connecting LLA socket
+Wed Nov  4 01:34:25 2026 daemon.notice netifd: wan (2842): udhcpc: broadcasting discover
+Wed Nov  4 01:34:28 2026 daemon.notice netifd: wan (2842): udhcpc: broadcasting discover
+Wed Nov  4 01:34:44 2026 auth.info login[2858]: root login on 'ttyS0'
+clock:		25000000 Hz
+actual clock:	25000000 Hz
+vdd:		21 (3.3 ~ 3.4 V)
+bus mode:	2 (push-pull)
+chip select:	0 (don't care)
+power mode:	2 (on)
+bus width:	3 (8 bits)
+timing spec:	0 (legacy)
+signal voltage:	0 (3.30 V)
+driver type:	0 (driver type B)
+root@OpenWrt:~# 

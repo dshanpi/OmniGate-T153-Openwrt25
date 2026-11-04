@@ -1,0 +1,51 @@
+T153 source U-Boot software reset and FEL entry
+
+Authoritative source: port/uboot/files/board/dshanpi/t153/reset.c
+Applied source: u-boot-work/u-boot-2026.07/board/dshanpi/t153/reset.c
+Offline cross-check: python3 scripts/check-uboot-reset.py
+
+Commands after rebuilding this source:
+  reset  : watchdog reset for a normal media boot; clears only an exact stale
+           0x5aa5a55a FEL request in RTC data word 2.
+  efex   : writes that FEL request and requests watchdog reset to BootROM USB FEL.
+
+SDK register evidence:
+  brandy/brandy-2.0/u-boot-bsp/arch/arm/mach-sunxi/rtc.c:
+    EFEX_FLAG=0x5aa5a55a, RTC_FEL_INDEX=2.
+  arch/arm/include/asm/arch/plat-sun8iw22p1/cpu_autogen.h and cpu_sun8iw22.h:
+    RTC base=0x07090000; data base=RTC+0x100; FEL word=0x07090108.
+  arch/arm/dts/sun8iw22p1.dtsi watchdog node and drivers/watchdog/sunxi_wdt.c:
+    WDT base=0x02050000; CTRL=0x0c, CFG=0x10, MODE=0x14, OUT_CFG=0x18.
+    Configuration key=0x16aa0000; reload key+restart=0x14af.
+    OUT_CFG low 12 bits=0x03f; CFG low two bits=1.
+    MODE interval bits[7:4]=0 (shortest interval), enable bit0=1.
+  Vendor probe stops watchdog; start writes OUT_CFG, CFG, MODE, then CTRL.
+  The SDK watchdog node has only the fixed osc24M clock and no CCU gate/reset
+  phandle. Its probe uses no clk_enable or reset_deassert. The T153 CCU tables
+  contain no watchdog gate. This implementation introduces no guessed CCU write.
+
+The board helper verifies OUT_CFG/CFG/MODE readback, uses DSB/ISB, and bounds
+RTC writes and watchdog wait. efex failures stop the watchdog, attempt to clear
+its exact FEL marker, restore previously enabled interrupts and return failure
+at the command prompt. Failure of the standard reset command prints the error
+and stops, consistent with reset_cpu's non-returning contract.
+
+FEL marker consumption is verified in the original stock FES1 machine code:
+  Image load base 0x48000; main 0x52054 calls checker 0x4ae28.
+  Checker compares RTC data index 2 with 0x5aa5a55a.
+  If present, main 0x5205a calls 0x4aea0, which passes index 2 to 0x4ae0c.
+  That helper writes zero and loops until readback is zero.
+The 933 MHz RAM loader changes only six frequency/checksum bytes elsewhere and
+preserves this flag-clearing code byte-for-byte. No assumption is made about
+whether the board's RTC backup power survives disconnecting its main power.
+BootROM marker consumption itself has not been independently proven.
+
+No DDR initialization, exposed RAM window, PLL, MMC data path, eMMC boot config,
+or persistent storage writes are part of this reset implementation. The generic
+mainline sun55i-a523 watchdog layout has the same CTRL/CFG/MODE offsets, but lacks
+the T153 SDK's explicit OUT_CFG reset-domain setup; this port therefore uses the
+board-local helper until a suitable common driver binding is implemented.
+
+Status at source review: offline checks passed. Compilation and actual efex USB
+FEL enumeration, FES restart, subsequent normal boot, and normal reset tests are
+separate validation steps; consult the later board run logs for their outcome.

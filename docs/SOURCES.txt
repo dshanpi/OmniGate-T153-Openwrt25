@@ -1,0 +1,52 @@
+来源与许可
+==========
+官方 OpenWrt：
+https://github.com/openwrt/openwrt/tree/openwrt-25.12
+固定提交 6c57f7cd04028d370f9360de71f5d59412046194
+archive SHA256 3444d6132465dc4c8442d6f3c946752c7d71701c6f0f52529aa2b0ecb32e2efe
+
+主线 Linux 6.12.113：
+https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.113.tar.xz
+SHA256 e09b6727e5c521253f0d41694900b9c38fb7604db7d35238a8197aa9f7de2428
+
+packages、LuCI 固定提交和 archive SHA256 见 configs/feeds.lock。
+正式构建使用 OpenWrt GCC 14.3.0 / binutils 2.44 / musl 工具链。
+独立内核烟测临时使用 SDK 已有 Linaro 11.3，仅用于早期编译检查。
+
+T113 参考：
+https://github.com/dshanpi/DshanPI-T113xMainlineLinux
+https://github.com/openwrt/openwrt/commit/716661d562443ce71fc8b302b98832d6923b4373
+后一个提交属于更新的 main/6.18 路线，不是直接能用于25.12/6.12的补丁。
+T153 的 GPIO 布局、UART/CCU/GMAC/CAN 寄存器并不与 T113 相同。
+
+硬件参考：用户提供的 T153 Tina SDK，尤其是
+bsp/ 的 sun8iw22 CCU/pinctrl/GMAC/MMC/USB/CAN GPL 源码，以及
+ device/config/chips/t153/configs/omnigate/board.dts。
+原 SDK 只读，不把整个 BSP 拷入 OpenWrt，不打包原厂 boot0/DDR blob。
+本次移植为未上游合并的新代码，不能以“主线内核”推导“全部驱动已在
+上游正式支持”。port/ 内驱动和 DTS 各自保留 SPDX 与来源版权声明。
+CAN glue 基于主线 m_can_platform.c，保留原作者版权。
+
+外部 AIC8800 驱动仓库仅调研，未采用/打包，不能视为无线功能已支持。
+
+归档源码没有 .git；prepare-source/apply 将真实固定提交写入 version，
+使 getver.sh 和 APK 包版本使用有效提交号，避免 unknown 版本。
+完整许可证文本见 LICENSES/，各文件原有 SPDX 声明优先。
+
+主线U-Boot 2026.07：
+https://ftp.denx.de/pub/u-boot/u-boot-2026.07.tar.bz2
+SHA256 78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e
+固定版本和校验在scripts/build-uboot-source-1g.sh及同版本目标构建脚本。
+保留上游许可及文件SPDX；本地覆盖层未声称获得上游合并。
+
+可选临时FES loader的外部二进制输入：
+用户原厂t153_linux_omnigate_uart0-default.img，1223225344字节，
+SHA256 4b990b5dcc2da6424e48502e89696b5f908584d173342389156d702338a3118c。
+FES1 DDR及厂商U-Boot仍为二进制，LicenseRef-NOASSERTION；本仓库不
+分发SDK镜像或payload、不宣称具有其再分发许可。脚本只读取用户拥有的输入。
+六payload哈希与角色：configs/fes-stock-loader.json；固定DDR参数：
+configs/fes-ddr933-profile.json；非执行容器元数据：fes-imagewty-layout.json。
+脚本复现边界见docs/FES-REPRODUCE.txt；持久SPL/DDR全部源码是另一条链。
+
+kexec-tools固定2.0.28归档与OpenWrt补丁hash：configs/kexec-tools.lock.json。
+sunxi-tools固定T153 RFC revision与归档SHA：scripts/build-fel-tool.sh。

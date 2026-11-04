@@ -1,0 +1,43 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/dts-v1/;
+
+/ {
+	model = "DshanPI T153MX OmniGate RAM U-Boot";
+	compatible = "dshanpi,t153mx-omnigate", "allwinner,sun8i-t153";
+	#address-cells = <1>;
+	#size-cells = <1>;
+	aliases {
+		serial0 = &uart0;
+		mmc0 = &mmc0;
+		mmc1 = &mmc2;
+	};
+	chosen { stdout-path = "serial0:115200n8"; };
+	memory@48000000 {
+		device_type = "memory";
+		reg = <0x48000000 0x18000000>;
+	};
+	uart0: serial@2600000 {
+		compatible = "snps,dw-apb-uart";
+		reg = <0x02600000 0x400>;
+		reg-shift = <2>;
+		reg-io-width = <4>;
+		clock-frequency = <24000000>;
+		bootph-all;
+	};
+	mmc0: mmc@4020000 {
+		compatible = "dshanpi,t153-ram-mmc";
+		bootph-all;
+		reg = <0x04020000 0x1000>;
+		bus-width = <4>;
+		max-frequency = <12000000>;
+		broken-cd;
+	};
+	mmc2: mmc@4022000 {
+		compatible = "dshanpi,t153-ram-mmc";
+		bootph-all;
+		reg = <0x04022000 0x1000>;
+		bus-width = <8>;
+		max-frequency = <12000000>;
+		non-removable;
+	};
+};

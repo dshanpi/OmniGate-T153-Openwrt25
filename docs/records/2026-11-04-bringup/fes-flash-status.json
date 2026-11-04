@@ -1,0 +1,15 @@
+{
+  "taskId": "flash-1793793870427023700",
+  "state": "success",
+  "exitCode": 0,
+  "verifyState": "success",
+  "verifyErrorCode": 0,
+  "writtenBytes": 306184192,
+  "committedBytes": 306184192,
+  "totalBytes": 306184192,
+  "postFlashAction": "none",
+  "postFlashState": "skipped",
+  "executableVersion": "openixcli 0.2.11",
+  "startedAt": 1793793870,
+  "finishedAt": 1793793900
+}

@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "standalone_source_files": 5,
+  "factory_input_sha256": "4b990b5dcc2da6424e48502e89696b5f908584d173342389156d702338a3118c",
+  "stock_output_sha256": "bae54486bacddc18c96e207ff4530560bfadb47db8f141dc08a6bb13f59981ba",
+  "ddr933_output_sha256": "0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873",
+  "no_sdk_host_binaries": true,
+  "no_t113_repository_runtime_dependency": true,
+  "output_byte_identity_with_existing_candidates": true,
+  "tests": 5,
+  "tests_passed": true,
+  "release_pipeline_executed": false,
+  "hardware_io_performed": false,
+  "release_clean_guard_passed": true,
+  "existing_loader_artifacts_unchanged": true
+}

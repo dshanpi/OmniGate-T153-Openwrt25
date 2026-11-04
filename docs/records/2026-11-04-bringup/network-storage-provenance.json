@@ -1,0 +1,32 @@
+[
+  {
+    "file": "t153_emmc_io_test.log",
+    "source_sha256": "8b2b0608ce6c06306aa146dee6bfdd47f7a27ad1cebe7f081f36e54eb4dbdad6",
+    "published_sha256": "8b2b0608ce6c06306aa146dee6bfdd47f7a27ad1cebe7f081f36e54eb4dbdad6",
+    "sanitization": "private host addresses replaced with roles; serial text otherwise unmodified"
+  },
+  {
+    "file": "t153_network_transfer_test.log",
+    "source_sha256": "7be026132825f59045542f2fa36a6e215266fc033ea3112077a1b2f72a13f2e0",
+    "published_sha256": "7236968b3bcbd294c18571a269ca45df5b157d5ee91bf26184174d07a66116de",
+    "sanitization": "private host addresses replaced with roles; serial text otherwise unmodified"
+  },
+  {
+    "file": "t153_phy_diagnostics.log",
+    "source_sha256": "d69ea3edf7bf57e73d88a4bfe29d3625a3ad7e764d3910591d931cb0b43a89a0",
+    "published_sha256": "8470092a048a9ca46ccc9bb25462bcc705911de6ec360b3adc9526fe25326236",
+    "sanitization": "private host addresses replaced with roles; serial text otherwise unmodified"
+  },
+  {
+    "file": "t153_eth1_diagnostics.log",
+    "source_sha256": "e365c9e23837a9c460181dd8ba1932e3c9b8443e8310d34aba46a18509ea9365",
+    "published_sha256": "e365c9e23837a9c460181dd8ba1932e3c9b8443e8310d34aba46a18509ea9365",
+    "sanitization": "private host addresses replaced with roles; serial text otherwise unmodified"
+  },
+  {
+    "file": "t153_reconnect_recovery.json",
+    "source_sha256": "2f76fe17c8f35db791d2c32f97975a792e8b65c808914044e68fe838968a069b",
+    "published_sha256": "2f76fe17c8f35db791d2c32f97975a792e8b65c808914044e68fe838968a069b",
+    "sanitization": "private host addresses replaced with roles; serial text otherwise unmodified"
+  }
+]

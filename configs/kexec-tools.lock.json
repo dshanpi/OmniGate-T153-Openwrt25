@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "package": "kexec-tools",
+  "version": "2.0.28",
+  "openwrt_release": 2,
+  "source_url": "https://cdn.kernel.org/pub/linux/utils/kernel/kexec/kexec-tools-2.0.28.tar.xz",
+  "source_sha256": "d2f0ef872f39e2fe4b1b01feb62b0001383207239b9f8041f98a95564161d053",
+  "license": "GPL-2.0-only",
+  "openwrt_commit": "6c57f7cd04028d370f9360de71f5d59412046194",
+  "package_makefile_sha256": "fe25a5ceff91b234243f919fef5674febbeb2d76f0de8dc01e753e04140ed49b",
+  "patches": {
+    "010-Fix-building-on-x86_64-with-binutils-2.41.patch": "eeab145b8974f39a5a3041517ad964548229fde6c8e8551268bb45f2c6d86ecd",
+    "020-i386-improve-basename-compatibility.patch": "c4924158e6904ec01c8502d8753483544c4dd65786b66ebc9152a1f87b5a9c84"
+  },
+  "configure": [
+    "--target=arm-linux-muslgnueabi",
+    "--host=arm-openwrt-linux-muslgnueabi",
+    "--prefix=/usr",
+    "--sbindir=/usr/sbin",
+    "--without-zlib",
+    "--without-lzma"
+  ],
+  "cflags": "-Os -pipe -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -ffunction-sections -fdata-sections",
+  "ldflags": "-static -Wl,--gc-sections",
+  "source_date_epoch": 1782864000,
+  "runtime_dependencies": "none (static musl); input unwrapped zImage/DTB, no gzip or xz wrapper support"
+}

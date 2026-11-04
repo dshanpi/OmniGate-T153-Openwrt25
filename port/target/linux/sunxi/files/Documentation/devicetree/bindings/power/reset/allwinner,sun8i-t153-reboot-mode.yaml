@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/power/reset/allwinner,sun8i-t153-reboot-mode.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: Allwinner T153 RTC BootROM reboot mode
+
+maintainers:
+  - Chen-Yu Tsai <wens@csie.org>
+  - Maxime Ripard <mripard@kernel.org>
+
+description: |
+  RTC data word 2 requests BootROM USB FEL mode. Only this four-byte
+  scratch register is owned by the reboot-mode driver; the RTC calendar
+  and the separate data word 6 boot-mode flag are unaffected. A watchdog
+  driver supplies the subsequent system reset.
+
+allOf:
+  - $ref: reboot-mode.yaml#
+
+properties:
+  compatible:
+    const: allwinner,sun8i-t153-reboot-mode
+  reg:
+    maxItems: 1
+  mode-normal:
+    const: 0
+  mode-efex:
+    const: 0x5aa5a55a
+
+required:
+  - compatible
+  - reg
+  - mode-normal
+  - mode-efex
+
+unevaluatedProperties: false
+
+examples:
+  - |
+    reboot-mode@7090108 {
+        compatible = "allwinner,sun8i-t153-reboot-mode";
+        reg = <0x07090108 0x4>;
+        mode-normal = <0>;
+        mode-efex = <0x5aa5a55a>;
+    };

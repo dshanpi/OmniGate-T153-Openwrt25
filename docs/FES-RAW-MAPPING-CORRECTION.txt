@@ -1,0 +1,26 @@
+FES raw 地址映射纠正（OpenixCLI 0.2.11）
+======================================
+
+之前提出“将厂商loader LOGICAL_OFFSET改为0后直接raw”的建议错误，现撤回。
+它只考虑板端SDK的+40960扇区逻辑映射，没有核实当前主机后端的补偿。
+
+实际MCP/OpenixCLI事件：
+  RAW_MBR_GENERATED startSector=4294926336 (0xffff6000)
+  wrapping_address=true
+SDK原厂read/write wrapper执行32位ARM add r1,r1,#0xa000，
+实际配置 # CONFIG_SYS_64BIT_LBA is not set。
+因此原厂映射：(0xffff6000 + 0xa000) & 0xffffffff = 0。
+自定义offset=0 loader则将0xffff6000保留为极大扇区地址，造成越界。
+
+禁止把 t153-fes-physical0-ram-loader.img 用于此后端的raw command。
+应保留已匹配板卡的stock T153 FES RAM loader及其+40960映射。
+不能仅凭FES ACK或传输字节认定介质未写/写入正确；失败任务报告过大量传输，
+需要后续完整读回验证，当前不宣称原存储未改变。
+
+失败任务：flash-1793790666412680500（已由父任务取消）。
+此说明只证明上述generated MBR寻址的回绕关系；整个raw镜像的分区、
+Boot0/proper安装位置还须依据后端各阶段行为和冷启动结果确认，不能由
+一个MBR事件推断全部写入都是逐字节物理镜像。
+
+此修正仅更新记录，没有修改、移动活动的stock loader或磁盘镜像。
+构建及纠正记录：logs/fes-physical-loader-build.json。

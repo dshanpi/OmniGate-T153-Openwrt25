@@ -1,0 +1,6 @@
+mmc dev 1; if mmc read 48000000 0 92000; then hash sha256 48000000 12400000; fi
+switch to partitions #0, OK
+mmc1(part 0) is current device
+MMC read: dev # 1, block # 0, count 598016 ... 598016 blocks read: OK
+sha256 for 48000000 ... 5a3fffff ==> 6ea18915b817e77c2a57ab7a68b8bc51e92e9d965e22fa23b1b7217379e39e98
+T153-SOURCE=> 

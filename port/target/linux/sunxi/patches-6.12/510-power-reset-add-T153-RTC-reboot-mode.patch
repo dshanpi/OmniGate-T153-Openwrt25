@@ -1,0 +1,28 @@
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -279,6 +279,15 @@
+ config REBOOT_MODE
+ 	tristate
+ 
++config SUN8I_T153_REBOOT_MODE
++	tristate "Allwinner T153 RTC reboot mode"
++	depends on OF && (ARCH_SUNXI || COMPILE_TEST)
++	select REBOOT_MODE
++	help
++	  Store the BootROM FEL request in the T153 RTC data bank on a
++	  requested reboot. Normal reboot clears the request. The actual
++	  system reset is supplied by the sunxi watchdog driver.
++
+ config SYSCON_REBOOT_MODE
+ 	tristate "Generic SYSCON regmap reboot mode driver"
+ 	depends on OF
+--- a/drivers/power/reset/Makefile
++++ b/drivers/power/reset/Makefile
+@@ -33,6 +33,7 @@
+ obj-$(CONFIG_POWER_RESET_SYSCON_POWEROFF) += syscon-poweroff.o
+ obj-$(CONFIG_POWER_RESET_RMOBILE) += rmobile-reset.o
+ obj-$(CONFIG_REBOOT_MODE) += reboot-mode.o
++obj-$(CONFIG_SUN8I_T153_REBOOT_MODE) += sun8i-t153-reboot-mode.o
+ obj-$(CONFIG_SYSCON_REBOOT_MODE) += syscon-reboot-mode.o
+ obj-$(CONFIG_POWER_RESET_SC27XX) += sc27xx-poweroff.o
+ obj-$(CONFIG_NVMEM_REBOOT_MODE) += nvmem-reboot-mode.o

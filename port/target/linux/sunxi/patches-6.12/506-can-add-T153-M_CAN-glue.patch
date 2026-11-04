@@ -1,0 +1,20 @@
+--- a/drivers/net/can/m_can/Kconfig
++++ b/drivers/net/can/m_can/Kconfig
+@@ -33,3 +33,9 @@
+ 	  SPI bus for communication.
+ 
+ endif
++
++config CAN_M_CAN_SUN8I_T153
++	tristate "Allwinner T153 M_CAN glue"
++	depends on ARCH_SUNXI || COMPILE_TEST
++	depends on OF && HAS_IOMEM && PM
++	select CAN_M_CAN
+--- a/drivers/net/can/m_can/Makefile
++++ b/drivers/net/can/m_can/Makefile
+@@ -11,3 +11,5 @@
+ tcan4x5x-objs :=
+ tcan4x5x-objs += tcan4x5x-core.o
+ tcan4x5x-objs += tcan4x5x-regmap.o
++
++obj-$(CONFIG_CAN_M_CAN_SUN8I_T153) += m_can_sun8i_t153.o

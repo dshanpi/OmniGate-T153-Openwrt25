@@ -1,0 +1,24 @@
+--- a/arch/arm/mach-sunxi/sunxi.c
++++ b/arch/arm/mach-sunxi/sunxi.c
+@@ -109,3 +109,13 @@
+ DT_MACHINE_START(SUNIV_DT, "Allwinner suniv Family")
+ 	.dt_compat	= suniv_board_dt_compat,
+ MACHINE_END
++
++/* T153 has a GIC and an architectural timer; use generic PSCI SMP. */
++static const char * const t153_board_dt_compat[] = {
++	"allwinner,sun8i-t153",
++	NULL,
++};
++
++DT_MACHINE_START(T153_DT, "Allwinner T153")
++	.dt_compat = t153_board_dt_compat,
++MACHINE_END
+--- a/arch/arm/boot/dts/allwinner/Makefile
++++ b/arch/arm/boot/dts/allwinner/Makefile
+@@ -272,3 +272,5 @@
+ 	suniv-f1c100s-licheepi-nano.dtb \
+ 	suniv-f1c200s-lctech-pi.dtb \
+ 	suniv-f1c200s-popstick-v1.1.dtb
++
++dtb-$(CONFIG_MACH_SUN8I) += sun8i-t153-dshanpi-omnigate.dtb

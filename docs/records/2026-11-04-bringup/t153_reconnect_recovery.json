@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "POWER_ADAPTER_CHANNEL:GPIO set failed"
+    }
+  ],
+  "isError": true
+}

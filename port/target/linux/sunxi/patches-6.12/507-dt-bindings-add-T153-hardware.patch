@@ -1,0 +1,154 @@
+--- a/Documentation/devicetree/bindings/arm/sunxi.yaml
++++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
+@@ -15,6 +15,11 @@
+     const: '/'
+   compatible:
+     oneOf:
++      - description: DshanPI T153MX OmniGate
++        items:
++          - const: dshanpi,t153mx-omnigate
++          - const: allwinner,sun8i-t153
++
+ 
+       - description: Allwinner A100 Perf1 Board
+         items:
+--- a/Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml
++++ b/Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml
+@@ -34,6 +34,7 @@
+       - allwinner,sun8i-v3-ccu
+       - allwinner,sun8i-v3s-ccu
+       - allwinner,sun9i-a80-ccu
++      - allwinner,sun8i-t153-ccu
+       - allwinner,sun20i-d1-ccu
+       - allwinner,sun20i-d1-r-ccu
+       - allwinner,sun50i-a64-ccu
+@@ -102,6 +103,7 @@
+     properties:
+       compatible:
+         enum:
++          - allwinner,sun8i-t153-ccu
+           - allwinner,sun20i-d1-ccu
+           - allwinner,sun50i-a100-ccu
+           - allwinner,sun50i-h6-ccu
+--- a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
+@@ -11,6 +11,9 @@
+   - Maxime Ripard <mripard@kernel.org>
+ 
+ properties:
++  "#address-cells":
++    const: 0
++
+   "#gpio-cells":
+     const: 3
+     description:
+@@ -46,6 +49,7 @@
+       - allwinner,sun8i-v3s-pinctrl
+       - allwinner,sun9i-a80-pinctrl
+       - allwinner,sun9i-a80-r-pinctrl
++      - allwinner,sun8i-t153-pinctrl
+       - allwinner,sun20i-d1-pinctrl
+       - allwinner,sun50i-a64-pinctrl
+       - allwinner,sun50i-a64-r-pinctrl
+@@ -64,7 +68,7 @@
+ 
+   interrupts:
+     minItems: 1
+-    maxItems: 8
++    maxItems: 9
+     description:
+       One interrupt per external interrupt bank supported on the
+       controller, sorted by bank number ascending order.
+@@ -91,7 +95,7 @@
+       bank found in the controller
+     $ref: /schemas/types.yaml#/definitions/uint32-array
+     minItems: 1
+-    maxItems: 8
++    maxItems: 9
+ 
+ patternProperties:
+   # It's pretty scary, but the basic idea is that:
+@@ -105,7 +109,7 @@
+   #     the pin numbers then,
+   #   - Finally, the name will end with either -pin or pins.
+ 
+-  "^([rs]-)?(([a-z0-9]{3,}|[a-oq-z][a-z0-9]*?)?-)+?(p[a-ilm][0-9]*?-)??pins?$":
++  "^([rs]-)?(([a-z0-9]{3,}|[a-oq-z][a-z0-9]*?)?-)+?(p[a-klm][0-9]*?-)??pins?$":
+     type: object
+ 
+     properties:
+@@ -125,7 +129,7 @@
+ 
+     additionalProperties: false
+ 
+-  "^vcc-p[a-ilm]-supply$":
++  "^vcc-p[a-klm]-supply$":
+     description:
+       Power supplies for pin banks.
+ 
+@@ -138,6 +142,24 @@
+   - gpio-controller
+ 
+ allOf:
++  - if:
++      properties:
++        compatible:
++          const: allwinner,sun8i-t153-pinctrl
++    then:
++      properties:
++        interrupts:
++          minItems: 9
++          maxItems: 9
++        input-debounce:
++          minItems: 9
++          maxItems: 9
++    else:
++      properties:
++        interrupts:
++          maxItems: 8
++        input-debounce:
++          maxItems: 8
+   # FIXME: We should have the pin bank supplies here, but not a lot of
+   # boards are defining it at the moment so it would generate a lot of
+   # warnings.
+--- a/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml
++++ b/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml
+@@ -19,6 +19,8 @@
+ 
+   compatible:
+     oneOf:
++      - const: allwinner,sun8i-t153-mmc
++      - const: allwinner,sun8i-t153-emmc
+       - const: allwinner,sun4i-a10-mmc
+       - const: allwinner,sun5i-a13-mmc
+       - const: allwinner,sun7i-a20-mmc
+--- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
++++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+@@ -38,6 +38,7 @@
+               - allwinner,sun8i-a83t-ehci
+               - allwinner,sun8i-h3-ehci
+               - allwinner,sun8i-r40-ehci
++              - allwinner,sun8i-t153-ehci
+               - allwinner,sun8i-v3s-ehci
+               - allwinner,sun9i-a80-ehci
+               - allwinner,sun20i-d1-ehci
+--- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
++++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+@@ -25,6 +25,7 @@
+               - allwinner,sun8i-a83t-ohci
+               - allwinner,sun8i-h3-ohci
+               - allwinner,sun8i-r40-ohci
++              - allwinner,sun8i-t153-ohci
+               - allwinner,sun8i-v3s-ohci
+               - allwinner,sun9i-a80-ohci
+               - allwinner,sun20i-d1-ohci
+--- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+@@ -52,6 +52,7 @@
+         - allwinner,sun8i-a83t-emac
+         - allwinner,sun8i-h3-emac
+         - allwinner,sun8i-r40-gmac
++        - allwinner,sun8i-t153-dwmac
+         - allwinner,sun8i-v3s-emac
+         - allwinner,sun50i-a64-emac
+         - amlogic,meson6-dwmac

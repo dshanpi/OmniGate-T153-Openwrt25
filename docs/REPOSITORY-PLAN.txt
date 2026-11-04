@@ -1,0 +1,39 @@
+公开仓库整理与发布范围
+==============================================
+
+目标：https://github.com/dshanpi/t153-openwrt。
+2026-11-04检查：仓库存在、公开、为空，无分支/提交，默认分支名main。
+连接账号及远端gh具备push权限，无需再向用户索取凭据。
+工程根使用Git并按明确allowlist暂存供review；提交/推送由主任务统一执行。
+上游openwrt/u-boot是校验过的源码归档展开目录。
+
+建议保留当前工作目录为轻量源码仓库，仅跟踪：
+README、COPYING、LICENSES/、configs/、port/、scripts/、tests/、docs/、host-tools/。
+新增FES纯Python提取/组包代码位于scripts/，固定参数、输入hash及
+IMAGEWTY非执行header元数据位于configs/；不复制T113工具或SDK二进制。
+host-tools/只含无私人数据的标准MCP请求、输入schema和使用说明，不含运行时会话。
+经挑选的机器可读验收记录与必要串口日志放docs/records/，按日期/镜像hash标识。
+
+不提交：openwrt/、u-boot-work/、kernel-work/、fes-work构建目录、
+feed-sources/、downloads/、prefetch/、artifacts/、.venv/、.tools/、
+reference/.reference/、SDK原始树、凭据、pycache和临时压缩包。
+现.gitignore已补齐上述路径；实际git add必须使用明确allowlist，不能git add .。
+完整磁盘292MiB和其它发布二进制应作为明确版本的release附件，不能混进源码历史。
+代码和构建保持在Linux服务器，不在Windows克隆整个工程。
+
+发布前缺口：
+- 已消除FES脚本工程外绝对路径/闭源主机工具依赖，保留用户SDK原厂镜像
+  作为SHA锁定输入；隔离目录已实测stock/933容器精确复现。
+- 不能把厂商FES1二进制称为全源码；持久SPL DDR和临时FES初始化分层说明。
+- build-release.sh已显式封装1g流程、native reboot回归与1g磁盘12项反例检查；
+  旧RAM/512/FEL安装器不作为该入口依赖。最终干净编译和实机验收须分别记录。
+- 当前软件检查metadata与硬件记录应分开：旧hardware_not_tested常量仅代表
+  打包器未访问硬件，最终验收记录按具体hash绑定，不一概改为全通过。
+- README、烧录步骤、架构、历史失败与修复、最终验收记录保持一致。
+- MMC数据路径已使rootfs启动；已加入原生Linux reboot-mode及WAN rgmii-rxid
+  软件修复；旧镜像运行时RX delay修正后的100Mbps DHCP/HTTP已通过，
+  新组合镜像、软件回FEL/复位和千兆稳定性仍待验证。
+- Git推送与全流程复跑依用户顺序进行；不得用之前增量构建顶替最终干净验收。
+
+当前已完成结构审查、复现脚本与FES隔离复现、原生reboot软件检查，
+软件候选整盘已更新并verify-only通过；独立完整重编与后续硬件复跑按实际记录验收。

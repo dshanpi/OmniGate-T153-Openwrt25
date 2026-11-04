@@ -1,0 +1,15 @@
+T153 OpenWrt port licensing
+
+Individual source files retain their SPDX identifiers and upstream copyright
+notices. Newly authored build and validation scripts are GPL-2.0-only unless
+otherwise noted. Device tree files retain their dual GPL/MIT terms.
+Full license texts are in LICENSES/. Source provenance is in docs/SOURCES.txt.
+The source overlay archive does not contain the Tina SDK or boot/DDR blobs.
+
+The persistent source SPL/DDR/U-Boot firmware does not link vendor DDR blobs.
+The optional temporary FES RAM loader is different: its user-supplied factory
+FES1/DDR and vendor U-Boot payloads are external binary inputs, currently marked
+LicenseRef-NOASSERTION. They are not included in this source repository/archive.
+Their availability here does not grant redistribution rights. The repository
+contains extraction/packaging code, fixed hashes and non-executable container
+metadata only; see docs/FES-REPRODUCE.txt and configs/fes-stock-loader.json.

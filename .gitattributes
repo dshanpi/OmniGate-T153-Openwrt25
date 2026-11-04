@@ -1,0 +1,3 @@
+# Patch context and captured evidence preserve their original whitespace.
+*.patch -whitespace
+docs/records/** -text -whitespace

@@ -1,0 +1,18 @@
+--- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
++++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+@@ -311,3 +311,7 @@
+ 
+ 	  If unsure, say N.
+ endif
++
++config DWMAC_SUN8I_T153
++	tristate "Allwinner T153 GMAC-211 support"
++	depends on STMMAC_PLATFORM && (ARCH_SUNXI || COMPILE_TEST)
+--- a/drivers/net/ethernet/stmicro/stmmac/Makefile
++++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+@@ -42,3 +42,5 @@
+ obj-$(CONFIG_DWMAC_INTEL)	+= dwmac-intel.o
+ obj-$(CONFIG_DWMAC_LOONGSON)	+= dwmac-loongson.o
+ stmmac-pci-objs:= stmmac_pci.o
++
++obj-$(CONFIG_DWMAC_SUN8I_T153) += dwmac-sun8i-t153.o

@@ -1,0 +1,73 @@
+T153 OmniGate 内存启动与实机验收（尚未执行）
+============================================
+
+软件构建和镜像校验完成后才执行本流程。当前未连接板子、未刷写。
+需要原厂 U-Boot 串口控制台、网络或 U-Boot 可读的移动存储。
+保留原厂启动链：此镜像不能替代 boot0/SPL/DDR 初始化。
+可选主线 U-Boot 内存版的串接流程见 BOOT-UBOOT-RAM.txt。
+
+一、先记录实际启动环境
+----------------------
+在串口 U-Boot 中记录 version、bdinfo、help bootm、help bootz、
+help tftpboot、help fatload 和当前 printenv。
+确认实际 DRAM 为 0x40000000..0x5fffffff（512MiB），确认 U-Boot
+搬移地址和保留区域。若与此不同，停止使用下面的示例地址并先调整。
+原 SDK 的 U-Boot 配置支持 FIT、bootm、bootz、TFTP、FAT/USB，
+但这不能代替对板上现有固件命令的确认。
+
+二、地址与初始内存限制
+----------------------
+FIT 本体计划加载到 0x50000000。
+FIT 中 gzip zImage 的 load/entry 为 0x48008000。
+ARM AUTO_ZRELADDR 按 128MiB 对齐，该启动地址使解压后的内核基址为
+0x48000000（设备树未设置 linux,usable-memory-range 时）。
+因此初始测试会舍弃最低 128MiB，Linux 最多使用上方约 384MiB，
+再扣除自身开销。这是避开原固件低地址保留区的临时方案，不代表板子
+只有 384MiB。后续启动链验证后才能优化内存布局。
+原 firmware 保留：0x42100000+0x004c5000、0x42900000+0x00100000、
+0x44000000+0x00200000，已经写入设备树。
+最终 zImage、FIT、解压后的内核边界需通过 verify-artifacts.py 检查。
+不要把 FIT 当作 zImage 直接交给 bootz。
+
+三、仅供核实环境后使用的 RAM 启动模板
+------------------------------------
+在测试主机提供产物中的 initramfs FIT，文件名以 SHA256SUMS 为准。
+根据直连网段设置临时 U-Boot ipaddr/serverip；不要保存环境变量。
+
+  setenv bootargs 'console=ttyS0,115200 earlycon=uart8250,mmio32,0x02600000,115200n8,24000000 loglevel=8 ignore_loglevel clk_ignore_unused'
+  setenv bootm_low 0x48000000
+  setenv bootm_size 0x18000000
+  tftpboot 0x50000000 <实际的-initramfs-kernel.bin文件名>
+  iminfo 0x50000000
+  bootm 0x50000000
+
+bootargs 完整替换旧的 root=、A/B 分区、init= 和内存参数，不追加旧值。
+不执行 saveenv，也不执行 mmc write、nand write、sf update、sysupgrade。
+如使用 fatload，先用只读命令确认实际介质编号，不假定 mmc 0 就是 SD。
+U-Boot 是否改写 DT 的内存和保留区需检查；无法保证这些命令在未见过
+的板上固件中可直接启动。若 bootm 报镜像尺寸限制，可在核实后使用
+从同一个 FIT 提取并校验的 zImage + DTB 配合 bootz，不能换用别板 DTB。
+
+四、分阶段验收
+--------------
+1. 保存从上电到登录的完整串口日志，核对 Linux 6.12.113、机型、
+   CPU 数、内存、PSCI、时钟、没有持续 probe deferred/超时。
+2. 核对 /proc/mounts，确认根文件系统在 RAM，原 eMMC 分区没有被挂载
+   为可写。列出 lsblk、/proc/partitions 和 /sys/block/mmc*/device/ 信息。
+   此阶段不做写盘、格式化、全盘速度或破坏性存储测试。
+3. 分别验证两个网口识别、PHY ID、100/1000Mbps 协商、DHCP、管理页面；
+   再在隔离测试网络验证 LAN/WAN 转发、NAT 和双向吞吐/长时间稳定性。
+4. USB1 设备枚举、高速/全速设备、USB 串口；分别核对 4G 模块的
+   QMI/MBIM 设备和复位/供电。拨号需要实际 SIM/APN，勿盲目套参数。
+5. 确认 can0/can1，先 loopback，再按实际收发器与终端电阻连接双节点。
+   CAN/CAN-FD 的 bitrate、dbitrate 按对端设置，检查错误帧和持续通信。
+6. eMMC/SD 先只读枚举和校验；高速模式待信号和时序验证后另开。
+7. 确认 sysupgrade 对本板拒绝操作；重启回原厂固件，核对原系统完好。
+
+Wi-Fi/BT、USB0 gadget、PSCI/SMP 等未实现项不能作为已经通过的功能。
+新增源码启动和整盘安装方案见 FLASH-SOURCE.txt；本文件仍只描述原厂链式 RAM 启动。
+
+进入 OpenWrt 后可运行：
+  t153-report > /tmp/t153-report.txt
+该命令只采集状态，不切换网口、不发起拨号、不读写磁盘测试数据。
+/tmp 位于 RAM；结合完整串口启动日志用于定位首轮启动和外设问题。

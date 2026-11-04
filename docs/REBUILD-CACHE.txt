@@ -1,0 +1,95 @@
+远端独立干净复跑与下载缓存复用（尚未启动完整复跑）
+====================================================
+
+只读空间盘点
+------------
+审查时可用171133337600字节，约159.38GiB。
+现工程OpenWrt build_dir占9113763840字节（约8.49GiB），其中：
+- host：1688522752字节；hostpkg：68509696字节；
+- toolchain：4009320448字节；target：3443531776字节。
+现staging_dir为721694720字节（约0.67GiB）。
+现1GiB U-Boot目标目录约28.7MB；另需上游源码展开目录。
+
+独立干净checkout预计新增约12–16GiB，建议预留20GiB以覆盖编译峰值、
+最终固件和日志。这是按当前工程用量估计，不是已完成复跑的测量值。
+无需复制整个当前工程，也无需在Windows保存源码副本。
+建议将验证checkout放当前工程build/full-rebuild-<最终commit>/，该父目录
+已被.gitignore排除；最终提交仍只纳入轻量源码、配置、说明及精选记录。
+
+可复用和不可复用
+----------------
+可以共享已经校验的下载归档：
+- 当前openwrt/dl：129个文件，616501005字节；
+- 当前downloads：包括固定OpenWrt源码、kexec、sunxi-tools及其它既有归档；
+- downloads/feeds中的两份feed tar.gz：共29379028字节；已从旧
+  feed-sources位置逐份验SHA后建立硬链接，inode相同，不复制归档数据。
+实际共享可用软链接，不重复占用归档空间。所有构建输出仍写新checkout。
+
+不得共享或复制旧openwrt/build_dir、staging_dir、tmp、bin、.config、
+U-Boot目标build目录或旧stamp文件。它们会跳过编译或掩盖缺失依赖。
+新OpenWrt源码从固定归档展开，配置由configs/t153mx-omnigate.config
+经make defconfig生成，工具链、host工具、内核和全部选包重新编译。
+feeds的源码也在新checkout独立展开，不共享已展开的可变源目录。
+
+缓存完整性和取源锁定
+--------------------
+已只读核对当前161个选包在.packageinfo中对应54个唯一源码归档，全部
+存在于当前dl。Git源归档文件名使用8位短revision（不是40位全SHA）。
+GCC14.3.0、binutils2.44、musl1.2.5和Linux6.12.113归档均存在。
+此外已实际重算并确认以下归档符合脚本/锁文件SHA256：
+- OpenWrt 6c57f7cd04028d370f9360de71f5d59412046194；
+- U-Boot2026.07；sunxi-tools 660d7e08...；kexec-tools2.0.28；
+- packages15af690c...、LuCIe969939b...。
+
+主机工具/toolchain其它源码来自该树此前完整成功构建留下的dl缓存；
+未在本次审查中运行全量make download或离线重建，不能声称已证明零网络请求。
+实际复跑仍由OpenWrt按锁定hash校验归档；缓存遗漏/损坏时只可重取同版本，
+不能改feed revision、跟踪最新分支或跳过hash检查来继续。
+固定版本由prepare-source.sh、configs/feeds.lock、OpenWrt包Makefile及
+U-Boot/FEL/kexec脚本/锁文件共同约束。
+
+feeds缓存缺口已修复
+------------------
+prepare-feeds.sh现在将归档放downloads/feeds（可用FEED_DOWNLOAD_CACHE覆盖），
+优先校验并使用已有固定归档；只有缺失才从锁定commit URL下载。
+已存在归档若SHA不符则明确失败，不回退到网络或其它版本。
+feed-sources展开目录仍独立，校验归档后才解包并写对应revision marker；
+已有marker不匹配或目录未标记时也明确拒绝，避免混入旧源文件。
+兼容旧feed-sources归档位置：验SHA后优先硬链接迁移至下载缓存。
+
+六项隔离测试已通过，使用模拟curl，未访问网络或改active feed源：缓存命中
+不下载、缺失仅取固定URL、坏缓存拒绝、坏下载不发布、错marker拒绝、旧缓存迁移。
+因此新checkout只需共享downloads及openwrt/dl，无需手工展开或共享feed源码。
+
+后续执行顺序示例（本次没有执行）
+--------------------------------
+先从已推送的dshanpi/t153-openwrt取得最终固定commit，确认HEAD等于验收
+commit后再做下面准备。SOURCE_ROOT为现有工程，VERIFY_ROOT为干净新checkout；
+二者必须是不同的明确绝对路径，且新checkout内没有既有build_dir/staging。
+以下变量只引用这两个工程，不会改变原Tina SDK：
+
+  SOURCE_ROOT=/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25
+  VERIFY_ROOT=/absolute/path/to/the/frozen-validation-checkout
+  test "$SOURCE_ROOT" != "$VERIFY_ROOT"
+  test ! -e "$VERIFY_ROOT/openwrt"
+  test ! -e "$VERIFY_ROOT/downloads"
+  ln -s "$SOURCE_ROOT/downloads" "$VERIFY_ROOT/downloads"
+  (cd "$VERIFY_ROOT" && sh scripts/prepare-source.sh)
+  test ! -e "$VERIFY_ROOT/openwrt/dl"
+  ln -s "$SOURCE_ROOT/openwrt/dl" "$VERIFY_ROOT/openwrt/dl"
+
+  cd "$VERIFY_ROOT"
+  bash scripts/build-release.sh --jobs 4 --with-fes \
+    --factory-image /home/ubuntu/T153MX/T153_Tina_V1.0/out/t153_linux_omnigate_uart0-default.img
+
+build-release默认拒绝已存在的目标build树，最终验收不可加--incremental。
+FES纯Python流程只读取同一份1.2GB原厂镜像，不复制到新checkout，也不调用SDK host工具。
+如验收还需重新构建RAM引导辅助工具，完整OpenWrt结束后运行：
+  python3 scripts/build-kexec-tools.py
+它复用新checkout刚编出的工具链；下载归档来自共享downloads，目标输出独立。
+
+完整构建通过后，按同一commit生成的manifest重新做FES烧录、重启整盘SHA、
+Linux/rootfs和网络验收；不得用之前增量生成的固件替换这轮产物。
+保存新checkout的logs/rebuild-*和最终实机记录，核实后再决定是否删除验证构建物。
+本次只修改缓存准备脚本/说明，完成六项隔离测试并给现有两个feed归档添加
+下载缓存硬链接；没有创建验证checkout、没有构建、没有推送。

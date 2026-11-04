@@ -1,0 +1,56 @@
+验证范围与证据
+==============
+
+实机与软件检查分开记录。build-report或打包器hardware_verified=false表示
+该次软件流程没有访问硬件；实机结果只绑定其实际运行的镜像hash和测试条件。
+
+已安装镜像实机结果
+------------------
+SHA256：6ea18915b817e77c2a57ab7a68b8bc51e92e9d965e22fa23b1b7217379e39e98。
+- FES写入292MiB通过；FES post-reboot后主线U-Boot全盘SHA精确匹配。
+- 源码1GiB DDR4/SPL、主线U-Boot/Linux、eMMC ext4读写根分区及OpenWrt shell。
+- 16MiB随机文件写入、sync、清页缓存，再读回SHA/cmp通过。
+- 运行时打开PHY RX delay后，eth1 100Mbps/Full DHCP、10/10网关ping及
+  16MiB HTTP文件SHA通过；该传输段RX CRC计数未增加。
+- 1Gbps重新协商后掉线降速，千兆稳定性未通过。
+
+原始/发布SHA和脱敏规则：docs/records/2026-11-04-bringup/中的
+serial-log-provenance.json、network-storage-provenance.json。
+机器可读状态：hardware-status.json。历史bit差异及MMC panic保留，不冒充当前结果。
+
+当前软件候选
+------------
+新原生reboot-mode/procd/BusyBox及WAN rgmii-rxid已编入软件候选；最新整盘
+SHA256为43a54935f6bc3f80cd810b95f6fbbb1c6310418521a0d410336c8d5aceb47049，
+离线verify-only通过，尚未烧录/启动。它与上述已安装6ea镜像不同。
+板卡/调试器已断开，正规reboot efex、普通reboot和持久rxid实机验证等待重连。
+没有实际执行kexec，不能记为通过。CAN、Wi-Fi、LAN和长期可靠性也仍待验收。
+
+完整软件入口
+------------
+  bash scripts/build-release.sh --jobs 4 --with-fes --factory-image /path/to/factory.img
+在干净checkout执行，允许复用下载归档，不复用对象/stamp。实际完整复跑尚未完成。
+流水线记录每步log/exit，任何一步失败立即停止；最终软件报告不宣称硬件通过。
+包含feeds缓存、DDR模型、MMC时钟、用户态reboot、原生内核reboot回归，以及
+1GiB U-Boot/OpenWrt、整盘校验和12项磁盘损坏反例测试。
+FES可选步骤用用户固定SHA镜像纯Python组包并运行五项测试。
+
+直接检查：
+  python3 scripts/verify-artifacts.py openwrt
+  python3 scripts/package-disk-image.py --profile 1g --verify-only
+  T153_DISK_PROFILE=1g python3 tests/flash/test-disk-image.py
+  python3 tests/reboot/test-command.py
+  python3 tests/reboot/test_kernel_reboot.py
+
+verify-artifacts读取真实bin/targets产物，检查FIT CRC/SHA、ARM内核及地址、
+内核配置、实际initramfs/rootfs、模块和软件包清单、升级保护及OpenWrt校验和。
+磁盘检查包括eGON、U-Boot、MBR布局、FAT文件、普通FIT、ext4、gzip往返SHA。
+内核reboot测试抽取实际C回调并以UBSan运行，不只搜索源码中的字符串。
+
+已有软件证据包括logs/artifact-validation.json、linux-reboot-source-validation.json、
+linux-reboot-kernel-tests.log、reboot-command-validation.json及各构建exit。
+exit文件缺失表示任务未确认结束；只有exit=0和产物验证均通过才记软件成功。
+旧openwrt-build-v6为早期完整构建，不替代最终干净配置完整复跑。
+
+旧512MiB/FEL安装器测试属于其自身profile，不能用其通过代替1GiB板验收。
+最终步骤见BUILD-REPRODUCE.txt和FLASH-SOURCE.txt。

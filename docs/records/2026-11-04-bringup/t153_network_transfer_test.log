@@ -1,0 +1,13 @@
+wget -O /tmp/t153-net-test.bin http://<BUILD_HOST>:8871/diagnos
+tics/net-test-16m.bin && sha256sum /tmp/t153-net-test.bin; ethtool -S eth1 | gre
+p -E "mmc_rx_(framecount|octetcount_g:|crc_error)"
+Downloading 'http://<BUILD_HOST>:8871/diagnostics/net-test-16m.bin'
+Connecting to <BUILD_HOST>:8871
+Writing to '/tmp/t153-net-test.bin'
+/tmp/t153-net-test.b 100% |*******************************| 16384k  0:00:00 ETA/tmp/t153-net-test.b 100% |*******************************| 16384k  0:00:00 ETA
+Download completed (16777216 bytes)
+2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9  /tmp/t153-net-test.bin
+     mmc_rx_framecount_gb: 12555
+     mmc_rx_octetcount_g: 17612656
+     mmc_rx_crc_error: 646
+root@OpenWrt:~# 

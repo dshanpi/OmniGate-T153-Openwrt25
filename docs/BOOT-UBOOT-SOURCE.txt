@@ -1,0 +1,73 @@
+T153 全源码 SPL / U-Boot 软件交付（待上板）
+==========================================
+
+工作目录：/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25
+全部代码、工具和产物位于 192.168.1.228 的独立 openwrt25 目录。
+
+区别
+----
+*-ram.*：旧内存链式启动版本，DDR/monitor 由原厂启动链提供。
+*-source-*：新增源码 SPL，包含 DDR4 初始化/训练，不链接厂商 libdram。
+源码版本目前 Linux 只启用 CPU0；PSCI/SMP 仍待补齐。
+没有实际连接、运行或刷写板卡，也没有宣称硬件已经正常启动。
+
+软件复现
+--------
+先按 README 构建 OpenWrt 工具链，再执行：
+  scripts/build-uboot.sh
+  scripts/test-ddr-source.sh
+  scripts/build-uboot-source.sh
+  scripts/build-fel-tool.sh
+  python3 scripts/package-uboot-source.py
+  scripts/package-artifacts.sh
+FEL 主机工具需要 libusb-1.0-0-dev、libfdt-dev、zlib1g-dev、pkg-config。
+U-Boot 源码固定为 2026.07，所有新增板级代码位于 port/uboot/files。
+
+新增文件
+--------
+t153-uboot-2026.07-source-spl.bin       eGON + SRAM SPL（DDR 全源码）
+t153-uboot-2026.07-source.bin           同一次构建的 U-Boot proper + DTB
+t153-uboot-2026.07-source.img           带 legacy 头和 CRC 的 proper
+t153-uboot-2026.07-source-fel.bin       标准 FEL 组合镜像
+t153-uboot-2026.07-source-sd-bootarea.bin  SD/eMMC 引导区候选，不是整盘镜像
+uboot-source.config / uboot-source-validation.json  配置与检查结果
+DDR-SOURCE.txt                        DDR 源码、训练和测试说明
+
+布局
+----
+SRAM 0x40000：96 字节 eGON 头；0x40060：SPL 入口。
+SPL 本体、BSS、附加 DT 均低于 0x5e000。
+初始栈 0x66000，早期堆 16 KiB，并为栈/GD 留足空间。
+FEL thunk 0x66a00，BootROM 保存区 0x66c00..0x67fff，不覆盖它们。
+U-Boot proper 入口 0x4a000000；内核 FIT 暂存 0x50000000。
+SD 候选引导区的起点对应整盘 8 KiB；其中 proper 对应整盘 128 KiB。
+SPL 只接受普通 SD0/eMMC2 启动源，暂不支持高偏移或 SPI NAND/NOR。
+U-Boot 自身 SD/eMMC 写入和 saveenv 关闭；3 秒后自动运行来源对应脚本。
+FEL 读取 header 指定的 0x4f100000 脚本；存储启动读取第一分区 boot.scr。
+
+最后硬件验证时使用的路径（现在不需要接板）
+----------------------------------------
+先进入 SoC 原生 FEL，从 SRAM SPL 开始；不能从已经运行的厂商 U-Boot
+直接跳到这份 SPL，因为它会重新训练并破坏整个 DDR 的内容。
+参考工具固定为 dlan17/sunxi-tools 提交：
+660d7e08edd025c8f84ab8eba3d8a903a5b81ae0（T153 RFC #252）。
+本地补丁将 USB 等待上限设为 180 秒，以允许软件 DDR 眼图训练。
+
+未来验证命令模板（没有在本次执行）：
+  FEL=./u-boot-work/sunxi-tools-660d7e08edd025c8f84ab8eba3d8a903a5b81ae0/sunxi-fel
+  sudo "$FEL" uboot artifacts/t153-uboot-2026.07-source-fel.bin \
+      write 0x50000000 artifacts/实际的OpenWrt-initramfs-kernel.bin
+
+观察 UART0 PB9/PB10，115200；DDR 成功返回 FEL 后才会上传 proper 和内核。
+进入 T153-SOURCE=> 后执行：
+  bootm 0x50000000
+U-Boot 会移除不存在的厂商 PSCI 服务并禁用 CPU1..3，明确显示单核限制。
+已新增整盘镜像和显式 eMMC 安装器；完整步骤见 FLASH-SOURCE.txt。
+上述手动 FEL 命令没有上传脚本，会停在提示符；推荐新的
+  sudo scripts/boot-fel-installer.sh --boot
+它只上传 RAM 并启动安装系统，不自动写盘。
+DDR 训练、FEL 返回、MMC 加载、Linux/网络等实际结果均须最后上板记录。
+
+T153 FEL header 交接补充：thunk 返回后将 SPL 头从 0x40000 换到 0x66c00。
+主机工具按 swap 表找到返回后的头，U-Boot 从 0x66c00 接收脚本地址；
+冷启动仍读 0x40000。未知启动来源停在提示符，不自动启动磁盘。

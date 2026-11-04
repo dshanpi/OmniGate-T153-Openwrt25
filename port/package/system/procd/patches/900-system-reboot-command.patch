@@ -1,0 +1,151 @@
+--- a/system.c
++++ b/system.c
+@@ -439,11 +439,39 @@
+ 	return UBUS_STATUS_OK;
+ }
+ 
++enum {
++	REBOOT_COMMAND,
++	__REBOOT_MAX
++};
++
++static const struct blobmsg_policy reboot_policy[__REBOOT_MAX] = {
++	[REBOOT_COMMAND] = { .name = "command", .type = BLOBMSG_TYPE_STRING },
++};
++
+ static int system_reboot(struct ubus_context *ctx, struct ubus_object *obj,
+ 			 struct ubus_request_data *req, const char *method,
+ 			 struct blob_attr *msg)
+ {
+-	procd_shutdown(RB_AUTOBOOT);
++	struct blob_attr *tb[__REBOOT_MAX] = { 0 };
++	struct blob_attr *cur;
++	const char *command = NULL;
++	int rem;
++
++	if (msg) {
++		/* A mistyped command must not silently turn into an ordinary reboot. */
++		blobmsg_for_each_attr(cur, msg, rem) {
++			if (!strcmp(blobmsg_name(cur), "command") &&
++			    blobmsg_type(cur) != BLOBMSG_TYPE_STRING)
++				return UBUS_STATUS_INVALID_ARGUMENT;
++		}
++		if (blobmsg_parse(reboot_policy, __REBOOT_MAX, tb, blob_data(msg), blob_len(msg)))
++			return UBUS_STATUS_INVALID_ARGUMENT;
++		if (tb[REBOOT_COMMAND])
++			command = blobmsg_get_string(tb[REBOOT_COMMAND]);
++	}
++
++	if (procd_shutdown_command(RB_AUTOBOOT, command))
++		return UBUS_STATUS_INVALID_ARGUMENT;
+ 	return 0;
+ }
+ 
+@@ -844,7 +872,7 @@
+ static const struct ubus_method system_methods[] = {
+ 	UBUS_METHOD_NOARG("board", system_board),
+ 	UBUS_METHOD_NOARG("info",  system_info),
+-	UBUS_METHOD_NOARG("reboot", system_reboot),
++	UBUS_METHOD("reboot", system_reboot, reboot_policy),
+ 	UBUS_METHOD("watchdog", watchdog_set, watchdog_policy),
+ 	UBUS_METHOD("signal", proc_signal, signal_policy),
+ 	UBUS_METHOD("validate_firmware_image", validate_firmware_image, validate_firmware_image_policy),
+--- a/state.c
++++ b/state.c
+@@ -12,7 +12,11 @@
+  * GNU General Public License for more details.
+  */
+ 
++#include <errno.h>
+ #include <fcntl.h>
++#include <linux/reboot.h>
++#include <string.h>
++#include <sys/syscall.h>
+ #include <pwd.h>
+ #include <sys/reboot.h>
+ #include <stdio.h>
+@@ -42,6 +46,7 @@
+ 
+ static int state = STATE_NONE;
+ static int reboot_event;
++static char reboot_command[256];
+ 
+ static void set_stdio(const char* tty)
+ {
+@@ -96,6 +101,15 @@
+ 		set_stdio(tty);
+ }
+ 
++static int perform_reboot(void)
++{
++	if (reboot_event == RB_AUTOBOOT && reboot_command[0])
++		return syscall(SYS_reboot, LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2,
++			       LINUX_REBOOT_CMD_RESTART2, reboot_command);
++
++	return reboot(reboot_event);
++}
++
+ static void perform_halt()
+ {
+ 	if (reboot_event == RB_POWER_OFF)
+@@ -107,7 +121,7 @@
+ 	sleep(1);
+ 
+ 	if (is_container()) {
+-		reboot(reboot_event);
++		perform_reboot();
+ 		exit(EXIT_SUCCESS);
+ 		return;
+ 	}
+@@ -116,7 +130,7 @@
+ 	 * in linux/kernel/sys.c, which can cause the machine to panic when
+ 	 * the init process exits... */
+ 	if (!vfork()) { /* child */
+-		reboot(reboot_event);
++		perform_reboot();
+ 		_exit(EXIT_SUCCESS);
+ 	}
+ 
+@@ -220,12 +234,28 @@
+ 		procd_state_next();
+ }
+ 
+-void procd_shutdown(int event)
+-{
++int procd_shutdown_command(int event, const char *command)
++{
++	size_t len = command ? strlen(command) : 0;
++
++	if (command && (event != RB_AUTOBOOT || !len || len >= sizeof(reboot_command)))
++		return -EINVAL;
+ 	if (state >= STATE_SHUTDOWN)
+-		return;
++		return 0;
++
++	/* Keep the command after the ubus message is released and throughout shutdown. */
++	if (command)
++		memcpy(reboot_command, command, len + 1);
++	else
++		reboot_command[0] = '\0';
+ 	DEBUG(2, "Shutting down system with event %x\n", event);
+ 	reboot_event = event;
+ 	state = STATE_SHUTDOWN;
+ 	state_enter();
+-}
++	return 0;
++}
++
++void procd_shutdown(int event)
++{
++	procd_shutdown_command(event, NULL);
++}
+--- a/procd.h
++++ b/procd.h
+@@ -48,6 +48,7 @@
+ void procd_state_next(void);
+ void procd_state_ubus_connect(void);
+ void procd_shutdown(int event);
++int procd_shutdown_command(int event, const char *command);
+ void procd_early(void);
+ void procd_preinit(void);
+ void procd_signal(void);

@@ -1,0 +1,203 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/dts-v1/;
+#include "sun8i-t153.dtsi"
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/leds/common.h>
+
+/ {
+	model = "DshanPI T153MX OmniGate";
+	compatible = "dshanpi,t153mx-omnigate", "allwinner,sun8i-t153";
+
+	aliases {
+		serial0 = &uart0;
+		serial5 = &uart5;
+		serial7 = &uart7;
+		ethernet0 = &gmac0;
+		ethernet1 = &gmac1;
+		mmc0 = &mmc2;
+		mmc1 = &mmc0;
+		mmc2 = &mmc3;
+		led-boot = &led_status;
+		led-failsafe = &led_status;
+		led-running = &led_status;
+		led-upgrade = &led_status;
+	};
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+	memory@40000000 {
+		device_type = "memory";
+		reg = <0x40000000 0x20000000>;
+	};
+
+	/* Preserve firmware-owned memory when booting from the existing monitor. */
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+		remoteproc@42100000 {
+			reg = <0x42100000 0x004c5000>;
+			no-map;
+		};
+		secure-monitor@42900000 {
+			reg = <0x42900000 0x00100000>;
+			no-map;
+		};
+		remoteproc@44000000 {
+			reg = <0x44000000 0x00200000>;
+			no-map;
+		};
+	};
+
+	reg_3v3: regulator-3v3 {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc-3v3";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-always-on;
+	};
+	wifi_pwrseq: wifi-pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		reset-gpios = <&pio 9 10 GPIO_ACTIVE_LOW>;
+		post-power-on-delay-ms = <200>;
+	};
+	leds {
+		compatible = "gpio-leds";
+		led_status: led-0 {
+			function = LED_FUNCTION_STATUS;
+			gpios = <&pio 9 9 GPIO_ACTIVE_LOW>;
+			default-state = "keep";
+		};
+	};
+};
+
+&pio {
+	vcc-pa-supply = <&reg_3v3>;
+	vcc-pb-supply = <&reg_3v3>;
+	/* PC I/O rail and voltage-select registers are retained from firmware. */
+	vcc-pe-supply = <&reg_3v3>;
+	vcc-pf-supply = <&reg_3v3>;
+	vcc-pg-supply = <&reg_3v3>;
+	vcc-pj-supply = <&reg_3v3>;
+};
+
+&uart0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_pb_pins>;
+	status = "okay";
+};
+
+&mmc2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc2_pins>;
+	vmmc-supply = <&reg_3v3>;
+	bus-width = <8>;
+	non-removable;
+	no-sd;
+	no-sdio;
+	/* Qualify higher transfer modes on hardware before enabling them. */
+	max-frequency = <25000000>;
+	status = "okay";
+};
+
+&gmac0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&rgmii0_pins>;
+	phy-mode = "rgmii";
+	phy-handle = <&phy0>;
+	allwinner,tx-delay-taps = <4>;
+	allwinner,rx-delay-taps = <6>;
+	allwinner,external-rgmii-clock;
+	status = "okay";
+};
+&gmac1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&rgmii1_pins>;
+	/* Keep the qualified MAC taps and add the PHY RX delay. */
+	phy-mode = "rgmii-rxid";
+	phy-handle = <&phy1>;
+	allwinner,tx-delay-taps = <9>;
+	allwinner,rx-delay-taps = <6>;
+	allwinner,external-rgmii-clock;
+	allwinner,provide-phy-clock;
+	assigned-clocks = <&ccu CLK_GMAC1_PHY>;
+	assigned-clock-rates = <25000000>;
+	status = "okay";
+};
+&mdio0 {
+	phy0: ethernet-phy@1 {
+		compatible = "ethernet-phy-id001c.c916";
+		reg = <1>;
+		reset-gpios = <&pio 9 2 GPIO_ACTIVE_LOW>;
+		reset-assert-us = <10000>;
+		reset-deassert-us = <30000>;
+	};
+};
+&mdio1 {
+	phy1: ethernet-phy@1 {
+		compatible = "ethernet-phy-id001c.c916";
+		reg = <1>;
+		reset-gpios = <&pio 9 3 GPIO_ACTIVE_LOW>;
+		reset-assert-us = <10000>;
+		reset-deassert-us = <30000>;
+	};
+};
+
+&mmc0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc0_pins>;
+	vmmc-supply = <&reg_3v3>;
+	bus-width = <4>;
+	broken-cd;
+	no-mmc;
+	no-sdio;
+	no-1-8-v;
+	max-frequency = <25000000>;
+	status = "okay";
+};
+
+/* The SDIO transport is available; no upstream AIC8800D80 WLAN driver exists. */
+&mmc3 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc3_pins>;
+	vmmc-supply = <&reg_3v3>;
+	mmc-pwrseq = <&wifi_pwrseq>;
+	bus-width = <4>;
+	non-removable;
+	no-mmc;
+	no-sd;
+	no-1-8-v;
+	cap-sdio-irq;
+	max-frequency = <25000000>;
+	status = "okay";
+};
+
+&uart5 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart5_pins>;
+	/* Only TX/RX are wired on PJ0/PJ1. */
+	status = "okay";
+};
+
+/* UART transport only; Bluetooth reset/firmware support needs its own driver. */
+&uart7 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart7_pins>;
+	uart-has-rtscts;
+};
+
+&usbphy { status = "okay"; };
+&ehci1 { status = "okay"; };
+&ohci1 { status = "okay"; };
+
+&can0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&can0_pins>;
+	status = "okay";
+};
+
+&can1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&can1_pins>;
+	status = "okay";
+};

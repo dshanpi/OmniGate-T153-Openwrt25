@@ -1,0 +1,42 @@
+#!/bin/sh
+# Read-only first-boot diagnostics. Does not write storage or change interfaces.
+board=$(cat /tmp/sysinfo/board_name 2>/dev/null)
+[ "$board" = dshanpi,t153mx-omnigate ] || {
+    echo "This report is for dshanpi,t153mx-omnigate only" >&2
+    exit 1
+}
+section() { printf '\n===== %s =====\n' "$1"; }
+section 'Build and board'
+date -u
+uname -a
+ubus call system board
+section 'CPU and memory'
+cat /proc/cpuinfo /proc/meminfo
+section 'Command line and mounts'
+cat /proc/cmdline /proc/mounts
+section 'Storage inventory (no disk I/O tests)'
+cat /proc/partitions
+[ ! -r /proc/mtd ] || cat /proc/mtd
+for dev in /sys/block/mmcblk[0-9]; do
+    [ -d "$dev/device" ] || continue
+    echo "$dev"
+    for key in type name cid; do
+        [ ! -r "$dev/device/$key" ] || { printf '%s: ' "$key"; cat "$dev/device/$key"; }
+    done
+done
+section 'Network interfaces'
+ip -details -statistics link show
+ip address show
+ip route show
+for dev in eth0 eth1; do
+    section "$dev PHY/link"
+    ethtool "$dev" 2>&1
+    ethtool -i "$dev" 2>&1
+done
+section 'USB topology'
+lsusb
+lsusb -t
+section 'Modules and interrupts'
+cat /proc/modules /proc/interrupts
+section 'Kernel log'
+dmesg

@@ -1,0 +1,72 @@
+--- a/init/halt.c
++++ b/init/halt.c
+@@ -84,15 +84,17 @@
+ //usage:     "\n	-f	Force (don't go through init)"
+ //usage:
+ //usage:#define reboot_trivial_usage
+-//usage:       "[-d DELAY] [-nf]"
++//usage:       "[-d DELAY] [-nf] [MODE]"
+ //usage:#define reboot_full_usage "\n\n"
+-//usage:       "Reboot the system\n"
++//usage:       "Reboot the system, optionally requesting MODE\n"
+ //usage:     "\n	-d SEC	Delay interval"
+ //usage:     "\n	-n	Do not sync"
+ //usage:     "\n	-f	Force (don't go through init)"
+ 
+ #include "libbb.h"
+ #include "reboot.h"
++#include <linux/reboot.h>
++#include <sys/syscall.h>
+ 
+ #if ENABLE_FEATURE_WTMP
+ #include <sys/utsname.h>
+@@ -173,6 +175,7 @@
+ 
+ 	int delay = 0;
+ 	int which, flags, rc;
++	const char *command = NULL;
+ 
+ 	/* Figure out which applet we're running */
+ 	if (ENABLE_HALT && !ENABLE_POWEROFF && !ENABLE_REBOOT)
+@@ -193,6 +196,14 @@
+ 	 * -i (shut down network interfaces) is ignored.
+ 	 */
+ 	flags = getopt32(argv, "d:+nfwi", &delay);
++	argv += optind;
++	if (argv[0]) {
++		/* Mode names are kernel reboot identifiers, not shell/JSON expressions. */
++		if (which != 2 || argv[1] || !argv[0][0] || strlen(argv[0]) > 255 ||
++		    strspn(argv[0], "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-") != strlen(argv[0]))
++			bb_show_usage();
++		command = argv[0];
++	}
+ 
+ 	sleep(delay);
+ 
+@@ -207,6 +218,13 @@
+ 	/* Perform action. */
+ 	rc = 1;
+ 	if (!(flags & 4)) { /* no -f */
++		if (command) {
++			char *request = xasprintf("{\"command\":\"%s\"}", command);
++
++			/* Let procd stop services and sync before the final RESTART2. */
++			execl("/bin/ubus", "ubus", "call", "system", "reboot", request, (char *)NULL);
++			bb_perror_msg_and_die("can't execute '/bin/ubus'");
++		}
+ //TODO: I tend to think that signalling linuxrc is wrong
+ // pity original author didn't comment on it...
+ 		if (ENABLE_LINUXRC) {
+@@ -240,7 +258,11 @@
+ 			}
+ 		}
+ 	} else {
+-		rc = reboot(magic[which]);
++		if (command)
++			rc = syscall(SYS_reboot, LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2,
++				     LINUX_REBOOT_CMD_RESTART2, command);
++		else
++			rc = reboot(magic[which]);
+ 	}
+ 
+ 	if (rc)

@@ -1,0 +1,53 @@
+FES RAM loader 纯Python复现
+==========================
+
+范围：生成烧录时驻留RAM的临时loader，不访问板卡，不写块设备。
+输入中的FES1/DDR和厂商U-Boot仍是厂商二进制；最终写入eMMC的主线
+SPL/DDR/U-Boot/Linux镜像是另一条全部源码构建链。不能把两层混为一谈。
+
+用户提供原厂SDK镜像，不提交该镜像或提取payload到公开仓库：
+  文件：T153_Tina_V1.0/out/t153_linux_omnigate_uart0-default.img
+  字节：1223225344
+  SHA256：4b990b5dcc2da6424e48502e89696b5f908584d173342389156d702338a3118c
+该输入目前标记LicenseRef-NOASSERTION；源码仓库只保存hash、参数和工具代码。
+
+从任意干净源码目录复现：
+  python3 scripts/prepare-fes-stock.py --factory-image /path/to/factory.img
+  python3 scripts/package-fes-ddr933.py
+也可SDK_ROOT=/path/to/T153_Tina_V1.0运行prepare-fes-stock.py，无需写死用户名路径。
+默认输出artifacts/；通过--output-dir指定隔离输出目录。
+933脚本的--stock-loader指定上一步的stock输入；--input-dir/--sdk-root为
+额外核对六个已提取文件和原SDK参数的可选入口，正常复现不依赖这些目录。
+
+固定结果（两个容器均1154048字节）：
+- t153-fes-ram-loader.img
+  bae54486bacddc18c96e207ff4530560bfadb47db8f141dc08a6bb13f59981ba
+- t153-fes-ddr933-ram-loader.img
+  0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873
+运行：python3 tests/fes/test-portable-loader.py。
+
+实现方式：
+1. 校验完整原厂镜像SHA，按IMAGEWTY类型选择且仅选择六个输入。
+2. 每个payload再按configs/fes-stock-loader.json逐个校验hash。
+3. configs/fes-imagewty-layout.json保存7个1024字节的非执行容器header、
+   对齐规则及固定输出hash；组包不借用完整厂商loader中间文件。
+4. configs/fes-ddr933-profile.json保留同板SDK的32个DDR参数；确认stock
+   的另31项完全相同，只修改1066→933和eGON加法checksum。
+5. stock到933整个容器只允许6字节变化，最终hash须匹配已审查候选。
+6. 与现候选逐字节比对的隔离测试已通过；不调用update_fes1或dragon，
+   不依赖本机T113源码树，仅Python标准库及用户供给原厂镜像。
+
+所选六角色：mbr-placeholder、sys-config、board-config、dtb-config、fes1、uboot。
+全部flash_to_media=false。六项之外的Boot0、boot_package、kernel/rootfs等
+原厂文件不提取入临时loader。容器不包含最终主线磁盘固件。
+
+当前OpenixCLI/MCP raw写入已补偿stock +40960扇区映射；因此保留stock
+U-Boot原映射，不能使用禁用的physical0路线。烧录时另提供主线1g磁盘镜像。
+本轮933 loader配合FES post-reboot后，主线U-Boot整盘SHA已通过；这是
+重启读回验证，不是新增物理断电测试。首次bit差异根因尚未确定，也不能
+代替Linux数据路径/网络及DDR长期可靠性验收。
+证据：logs/fes-portable-reproduction-audit.json、BRINGUP-1G-MCP.txt。
+
+通用MCP下载、烧录及任务轮询请求见host-tools/README.txt和
+host-tools/mcp-fes-workflow.example.json；其中所有路径/taskId均为占位符，
+不包含私人session或凭据。完整烧录与验收说明见docs/FLASH-SOURCE.txt。

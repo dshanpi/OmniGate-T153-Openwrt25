@@ -1,0 +1,30 @@
+# Upstream source archives, generated sources, compilers and caches.
+/openwrt/
+/u-boot-work/
+/kernel-work/
+/fes-work/
+/feed-sources/
+/downloads/
+/prefetch/
+/build/
+/artifacts/
+/logs/
+/reference/
+/.reference/
+/extra-mainline/
+/.venv/
+/.tools/
+/.uboot-build.lock
+*.tar.gz
+*.tar.xz
+*.tar.bz2
+__pycache__/
+*.py[cod]
+*.part
+# Credentials and local-only configuration must never enter the source archive.
+.env
+.env.*
+*.key
+*.pem
+id_rsa*
+id_ed25519*

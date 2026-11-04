@@ -1,0 +1,29 @@
+
+U-Boot SPL 2026.07 (Jul 01 2026 - 00:00:00 +0000)
+T153 source SPL: no vendor DDR library
+DDR4 source init: 1024 MiB physical x16; bootstrap 480 MHz
+DDR4: 933 MHz read eye and Vref training
+DDR lane 0: read Vref=56 delay=26
+DDR lane 1: read Vref=52 delay=28
+DDR4: write eye and Vref training
+DDR write Vref=22 delays=80,80
+DDR4: per-bit read/write deskew
+DDR4: geometry and memory checks
+DDR4: source initialization and memory checks passed
+Trying to boot from MMC2
+
+
+U-Boot 2026.07 (Jul 01 2026 - 00:00:00 +0000)
+
+Model: DshanPI T153MX OmniGate RAM U-Boot
+Board: T153 OmniGate (experimental source SPL/U-Boot)
+No vendor DDR/monitor. Linux bring-up is currently CPU0 only.
+DRAM:  384 MiB
+Core:  6 devices, 4 uclasses, devicetree: separate
+MMC:   mmc@4020000: 0, mmc@4022000: 1
+Loading Environment from <NULL>... OK
+In:    serial@2600000
+Out:   serial@2600000
+Err:   serial@2600000
+Hit any key to stop autoboot: 3Hit any key to stop autoboot: 0
+T153-SOURCE=> 

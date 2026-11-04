@@ -1,0 +1,97 @@
+T153 1GiB：FES烧录主线OpenWrt整盘固件
+===================================
+
+本板已通过FES写入 → 源码DDR4/SPL → 主线U-Boot → eMMC ext4 OpenWrt。
+已安装镜像6ea18915...的292MiB全盘SHA及100Mbps WAN测试有实机记录。
+新native reboot/rgmii-rxid组合镜像仍待烧录验证；板卡已断开，本轮只整理、
+检查和上传软件。以下是下次板卡可用时的操作说明，不代表本次已执行。
+
+1. 与T113参考工程的对应关系
+--------------------------
+https://github.com/dshanpi/DshanPI-T113xMainlineLinux/tree/4cf32f0f6fa386c4c3941a78a8d2884a75b2c79b
+参考工程同时有源码SPL返回FEL/RAM Linux安装和厂商FES RAM loader烧录两条路线。
+本板当前实际跑通的是第二条：BootROM FEL → 临时厂商FES1/DDR/U-Boot →
+FES raw写入主线完整磁盘。最终eMMC的SPL/DDR/U-Boot/Linux全部源码构建。
+临时loader仍含厂商二进制，不能称FES临时DDR也是源码实现。
+T113的SPI-NAND/UBI分区不适用于本板eMMC；不复用T113的DDR寄存器设置。
+
+2. 从同一构建取得输入
+--------------------
+在干净源码目录完成：
+  bash scripts/build-release.sh --jobs 4 --with-fes --factory-image /path/to/factory.img
+  python3 scripts/package-disk-image.py --profile 1g --verify-only
+详细依赖、缓存与构建见BUILD-REPRODUCE.txt和REBUILD-CACHE.txt。
+
+使用artifacts/中的：
+- t153-openwrt25-source-1g-disk.img：306184192字节，292MiB整盘。
+- t153-disk-1g-manifest.json：此次image.sha256、布局及组件校验值。
+- t153-fes-ddr933-ram-loader.img：1154048字节，RAM-only临时loader。
+  SHA256 0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873。
+不要使用旧512MiB disk/cpio、单独rootfs/FIT/bootarea替代整盘。
+FES loader提取及组包复现见FES-REPRODUCE.txt；用户SDK输入不上传仓库。
+
+布局（512字节扇区，MBR ID 15302512）：
+MBR LBA0；源码eGON SPL绝对8KiB；主线U-Boot legacy绝对128KiB；
+FAT16 boot LBA8192/65536扇区，含boot.scr和普通内核FIT；
+ext4 LBA73728/524288扇区，root PARTUUID=15302512-02。
+写入替换原厂分区表和前292MiB数据，不自动扩容剩余eMMC、不沿用原厂A/B。
+同PARTUUID的SD卡应移除，避免根分区识别歧义；先保留需要的原厂数据。
+
+3. MCP下载与FES写入
+------------------
+可复用完整请求：host-tools/mcp-fes-workflow.example.json。
+工具schema、客户端初始化与响应检查：host-tools/README.txt。
+所有taskId、远端目录与本地主机缓存路径均从本轮真实返回值取得。
+
+先查询当前capabilities并扫描绑定板卡，确认T153 BootROM FEL及raw/command/
+verify/reboot支持。历史实测SoC=0x1922，不凭通道旧名称猜芯片。
+下载loader并等任务成功，校验固定大小/SHA；inspect确认仅六个RAM角色。
+下载本轮磁盘并等任务成功，校验306184192字节和对应manifest SHA。
+然后调用lynx_start_flash，关键参数为：
+  firmwarePath: <本次下载返回的磁盘localPath>
+  confirmDestructive: true
+  options.mode: command
+  options.verify: true
+  options.postFlashAction: reboot
+  options.vendorOptions.raw: true
+  options.vendorOptions.loaderPath: <本次下载返回的loader localPath>
+
+保留stock FES +40960扇区映射，由当前host raw路径补偿；禁止再用physical0
+补丁叠加转换。错误路线记录见FES-RAW-MAPPING-CORRECTION.txt。
+reboot为已使用的FES后续启动路径，外部继电器坏时仍须以当前capabilities确认。
+none只停留在FES，须另有已验证后续引导/恢复方法，不能指望它自动启动主线。
+
+轮询同一taskId，失败/取消立即停止，不重复start_flash。
+成功必须同时满足state=success、exitCode=0、verifyState=success，以及
+writtenBytes=committedBytes=306184192。保存最终状态和本次manifest。
+这尚不等于整个主线系统和每个外设验收通过。
+
+4. 主线读回与启动验收
+--------------------
+FES post-reboot后从UART0 PB9/PB10、115200波特保留源码DDR/SPL/U-Boot日志。
+在U-Boot三秒倒计时内中断。确认本板U-Boot编号1确实为eMMC user area后：
+  mmc dev 1
+  if mmc read 48000000 0 92000; then hash sha256 48000000 12400000; fi
+92000为598016扇区，12400000为292MiB，均为十六进制。
+SHA必须等于本次manifest的image.sha256。此命令仅读盘到RAM，不写eMMC。
+FES加法校验不能代替这里的完整SHA；曾发生的首次bit差异保留在记录中。
+之后重新执行：
+  run t153boot
+核实Linux版本、eMMC ext4读写根分区、OpenWrt shell、配置持久化与网络。
+本板当前CPU0-only、Linux窗口384MiB；1Gbps稳定性和其它外设未通过。
+FES post-reboot不能写成物理断电测试；真正断电循环需另有现场记录。
+
+Linux标准reboot efex需要更新的内核/DT和新启动的procd/BusyBox共同工作，
+源码及软件检查见T153-LINUX-REBOOT.txt；它尚无成功实机记录。不得仅替换
+磁盘上的procd就认定当前PID1已更新，也不把未执行的kexec写成通过。
+
+5. 其它路线与升级边界
+--------------------
+源码FEL→SPL返回FEL→U-Boot→RAM Linux安装器是另一条实验路径；
+scripts/boot-fel-installer.sh默认只离线检查，--boot才访问USB，但当前默认
+包为512MiB profile且MCP曾拒绝T153 SRAM地址，不用于本次1GiB正式步骤。
+不能把T153地址伪装成T113来绕过检查。相关源码保留供后续适配/验证。
+SD整盘镜像使用同样布局，但SD实机启动仍需独立验证，不能据eMMC通过推断。
+当前sysupgrade三处拒绝T153写盘，提示指向本文件FES流程；未启用LuCI升级。
+
+当前记录见BRINGUP-1G-MCP.txt及records/2026-11-04-bringup/。

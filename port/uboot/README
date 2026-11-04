@@ -1,0 +1,35 @@
+当前推荐全源码目标：dshanpi_t153_source_1g_defconfig（1GiB、16行）。
+构建：scripts/build-uboot-source-1g.sh；打包：scripts/package-uboot-source-1g.py。
+本板源码DDR4初始化/训练、eMMC SPL→U-Boot→OpenWrt已实际通过，DDR长期
+可靠性仍未验收；CPU0-only，Linux/U-Boot地址窗口384MiB，复位/FEL待实测。
+512MiB/15行dshanpi_t153_source_defconfig是保留的旧实验profile，不用于本板。
+源码在files/board/dshanpi/t153/；详见../../docs/DDR-SOURCE.txt、
+../../docs/BOOT-UBOOT-SOURCE.txt及../../docs/FLASH-SOURCE.txt。
+源码目标支持FEL header脚本及SD/eMMC boot.scr；其持久启动不依赖厂商DDR库。
+
+以下保留原 RAM-chainload 目标的说明：
+
+T153 RAM-only port for upstream U-Boot 2026.07
+================================================
+Apply: python3 scripts/apply-uboot.py u-boot-work/u-boot-2026.07
+Build: sh scripts/build-uboot.sh
+Package: sh scripts/package-artifacts.sh (requires the OpenWrt build too)
+
+The overlay adds a separate experimental ARM target. It deliberately does not
+select ARCH_SUNXI: existing sunxi low-level setup and clock/GPIO layouts do not
+match T153. Common ARMv7 startup/cache/timer, NS16550, MMC core, filesystems and
+FIT code remain upstream. No vendor DDR object or vendor U-Boot tree is linked.
+
+board/dshanpi/t153/mmc.c adapts the PIO command engine from upstream 2026.07
+ drivers/mmc/sunxi_mmc.c (GPL-2.0+). sunxi_mmc.h derives from its companion header.
+T153 glue uses the oscillator only (12 MHz card clock maximum, hidden /2),
+CCU 0x02002000 + 0xd00/0x10 per host; gates/reset at +0xd0c, fabric +0x5c0.
+SD uses TM1 180-degree input/output; eMMC uses TM4, no delay taps and sample
+FIFO bypass at the conservative SDR clock. PIO avoids DMA descriptor changes.
+Register layout, pin mapping and initial timing references were read from the
+T153 SDK u-boot-bsp and the existing port; the SDK is not a build dependency.
+
+This is not upstream merged, a complete SoC enablement, or a cold-boot port.
+U-Boot has no network/USB support in this first profile. The factory loader
+must initialize DDR, power, monitor, and clean caches/MMU via bootm before
+handoff. See docs/BOOT-UBOOT-RAM.txt for exact scope and validation boundaries.

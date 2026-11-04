@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "build_exit": 0,
+  "fit": "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt/build_dir/target-arm_cortex-a7+neon-vfpv4_musl_eabi/linux-sunxi_cortexa7/dshanpi_t153mx-omnigate-kernel.bin",
+  "fit_sha256": "9411b68c477c90659e68bdc8932d23df832fbf2f7411abc5ba74cf1e65acb297",
+  "zimage_sha256": "b932aff39e36f1c27bf4dbc9ea43a59a8f1d904fc9067ca448e15e316ecbc480",
+  "uncompressed_kernel_sha256": "a06f0cacdda136ee662d97155a173725d91f9914fdd03d931d0b1c084b1c9e8f",
+  "actual_fit_equals_current_normal_zimage": true,
+  "t153_cfg_symbol": "0xc0ccc020",
+  "t153_cfg_bytes": "0c00000000000000000000000101010001010000",
+  "segment_bits": 12,
+  "fixed_divide_by_two": true,
+  "idma_des_size_literal": true,
+  "non_t153_literal_flag_unchanged": true,
+  "error_diagnostic_string_in_actual_fit": true,
+  "disk_packaging": "Not run; awaiting software-FEL U-Boot from parent",
+  "hardware_test": "Pending"
+}

@@ -1,0 +1,319 @@
+chmod 755 /tmp/phytool; /tmp/phytool print eth1/1; /tmp/phytool 
+read eth1/1/31
+ieee-phy: id:0x001cc916
+
+   ieee-phy: reg:BMCR(0x00) val:0x1040
+      flags:          -reset -loopback [1m+aneg-enable[0m -power-down -isolate -aneg-restart -collision-test
+      speed:          1000-half
+
+   ieee-phy: reg:BMSR(0x01) val:0x79ad
+      capabilities:   -100-b4 [1m+100-f[0m [1m+100-h[0m [1m+10-f[0m [1m+10-h[0m -100-t2-f -100-t2-h
+      flags:          [1m+ext-status[0m [1m+aneg-complete[0m -remote-fault [1m+aneg-capable[0m [1m+link[0m -jabber [1m+ext-register[0m
+0x0a42
+root@OpenWrt:~# /tmp/phytool write eth1/1/31 0xd08; /tmp/phytool read eth1/1/0x1
+1; /tmp/phytool read eth1/1/0x15; /tmp/phytool write eth1/1/31 0xa42; ethtool -S
+ eth1 | grep -E "mmc_rx_(framecount|octetcount_g:|crc_error)"
+0x0009
+0x0011
+     mmc_rx_framecount_gb: 614
+     mmc_rx_octetcount_g: 132
+     mmc_rx_crc_error: 612
+root@OpenWrt:~# /tmp/phytool write eth1/1/31 0xd08; /tmp/phytool write eth1/1/0x
+15 0x19; /tmp/phytool read eth1/1/0x15; /tmp/phytool write eth1/1/31 0xa42
+0x0019
+root@OpenWrt:~# ethtool -S eth1 | grep -E "mmc_rx_(framecount|octetcount_g:|crc_
+error)"; ifstatus wan; ip -br addr show eth1
+     mmc_rx_framecount_gb: 640
+     mmc_rx_octetcount_g: 894
+     mmc_rx_crc_error: 635
+{
+	"up": true,
+	"pending": false,
+	"available": true,
+	"autostart": true,
+	"dynamic": false,
+	"uptime": 59,
+	"l3_device": "eth1",
+	"proto": "dhcp",
+	"device": "eth1",
+	"updated": [
+		"addresses",
+		"routes",
+		"data"
+	],
+	"metric": 0,
+	"dns_metric": 0,
+	"delegation": true,
+	"ipv4-address": [
+		{
+			"address": "<WAN_IP>",
+			"mask": 24
+		}
+	],
+	"ipv6-address": [
+		
+	],
+	"ipv6-prefix": [
+		
+	],
+	"ipv6-prefix-assignment": [
+		
+	],
+	"route": [
+		{
+			"target": "0.0.0.0",
+			"mask": 0,
+			"nexthop": "<WAN_GATEWAY>",
+			"source": "<WAN_IP>/32"
+		}
+	],
+	"dns-server": [
+		"<WAN_GATEWAY>"
+	],
+	"dns-search": [
+		"lan"
+	],
+	"neighbors": [
+		
+	],
+	"inactive": {
+		"ipv4-address": [
+			
+		],
+		"ipv6-address": [
+			
+		],
+		"route": [
+			
+		],
+		"dns-server": [
+			
+		],
+		"dns-search": [
+			
+		],
+		"neighbors": [
+			
+		]
+	},
+	"data": {
+		"dhcpserver": "<WAN_GATEWAY>",
+		"hostname": "OpenWrt",
+		"leasetime": 43200
+	}
+}
+[1;36meth1             [0m[1;32mUP             [0m[1;35m<WAN_IP>[0m/24 [1;94mfe80::a890:93ff:fe6c:2e0e[0m/64 
+root@OpenWrt:~# 
+root@OpenWrt:~# ping -c 10 -W 1 <WAN_GATEWAY>; ethtool -S eth1 | grep -E "mmc_rx_(fra
+mecount|octetcount_g:|crc_error)"; ip -s link show eth1
+PING <WAN_GATEWAY> (<WAN_GATEWAY>): 56 data bytes
+64 bytes from <WAN_GATEWAY>: seq=0 ttl=64 time=0.947 ms
+64 bytes from <WAN_GATEWAY>: seq=1 ttl=64 time=0.717 ms
+64 bytes from <WAN_GATEWAY>: seq=2 ttl=64 time=0.654 ms
+64 bytes from <WAN_GATEWAY>: seq=3 ttl=64 time=0.671 ms
+64 bytes from <WAN_GATEWAY>: seq=4 ttl=64 time=0.766 ms
+64 bytes from <WAN_GATEWAY>: seq=5 ttl=64 time=0.706 ms
+64 bytes from <WAN_GATEWAY>: seq=6 ttl=64 time=0.692 ms
+64 bytes from <WAN_GATEWAY>: seq=7 ttl=64 time=0.656 ms
+64 bytes from <WAN_GATEWAY>: seq=8 ttl=64 time=0.668 ms
+64 bytes from <WAN_GATEWAY>: seq=9 ttl=64 time=0.644 ms
+
+--- <WAN_GATEWAY> ping statistics ---
+10 packets transmitted, 10 packets received, 0% packet loss
+round-trip min/avg/max = 0.644/0.712/0.947 ms
+     mmc_rx_framecount_gb: 653
+     mmc_rx_octetcount_g: 2220
+     mmc_rx_crc_error: 635
+3: [1;36meth1: [0m<BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state [1;32mUP [0mmode DEFAULT group default qlen 1000
+    link/ether [1;33maa:90:93:6c:2e:0e[0m brd [1;33mff:ff:ff:ff:ff:ff[0m
+    RX:  bytes packets errors dropped  missed   mcast           
+          2148      18      0       0       0       0 
+    TX:  bytes packets errors dropped carrier collsns           
+        185026     559      0       0       0       0 
+root@OpenWrt:~# /tmp/phytool write eth1/1/31 0xd08; /tmp/phytool write eth1/1/0x
+15 0x11; /tmp/phytool write eth1/1/31 0xa42; ping -c 5 -W 1 <WAN_GATEWAY>; ethtool -S
+ eth1 | grep -E "mmc_rx_(framecount|octetcount_g:|crc_error)"
+PING <WAN_GATEWAY> (<WAN_GATEWAY>): 56 data bytes
+
+--- <WAN_GATEWAY> ping statistics ---
+5 packets transmitted, 0 packets received, 100% packet loss
+     mmc_rx_framecount_gb: 664
+     mmc_rx_octetcount_g: 2692
+     mmc_rx_crc_error: 640
+root@OpenWrt:~# /tmp/phytool write eth1/1/31 0xd08; /tmp/phytool write eth1/1/0x
+15 0x19; /tmp/phytool write eth1/1/31 0xa42; ping -c 5 -W 1 <WAN_GATEWAY>; ping -c 2 
+-W 1 <BUILD_HOST>; ethtool -S eth1 | grep -E "mmc_rx_(framecount|octetcount_g:|
+crc_error)"
+PING <WAN_GATEWAY> (<WAN_GATEWAY>): 56 data bytes
+64 bytes from <WAN_GATEWAY>: seq=0 ttl=64 time=1.430 ms
+64 bytes from <WAN_GATEWAY>: seq=1 ttl=64 time=0.747 ms
+64 bytes from <WAN_GATEWAY>: seq=2 ttl=64 time=0.682 ms
+64 bytes from <WAN_GATEWAY>: seq=3 ttl=64 time=0.673 ms
+64 bytes from <WAN_GATEWAY>: seq=4 ttl=64 time=0.651 ms
+
+--- <WAN_GATEWAY> ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 0.651/0.836/1.430 ms
+PING <BUILD_HOST> (<BUILD_HOST>): 56 data bytes
+64 bytes from <BUILD_HOST>: seq=0 ttl=63 time=8.845 ms
+64 bytes from <BUILD_HOST>: seq=1 ttl=63 time=1.253 ms
+
+--- <BUILD_HOST> ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 1.253/5.049/8.845 ms
+     mmc_rx_framecount_gb: 678
+     mmc_rx_octetcount_g: 3470
+     mmc_rx_crc_error: 646
+root@OpenWrt:~# root@OpenWrt:~# /tmp/phytool write eth1/1/31 0xd08; /tmp/phytool write eth1/1/0x
+15 0x19; /tmp/phytool write eth1/1/31 0xa42; ping -c 5 -W 1 <WAN_GATEWAY>; ping -c 2 
+-W 1 <BUILD_HOST>; ethtool -S eth1 | grep -E "mmc_rx_(framecount|octetcount_g:|
+crc_error)"[Jcommand -v wget; command -v kexec; ethtool -S eth1 | grep -E "mmc_rx_
+(framecount|octetcount_g:|crc_error)"
+PING <WAN_GATEWAY> (<WAN_GATEWAY>): 56 data bytes
+64 bytes from <WAN_GATEWAY>: seq=0 ttl=64 time=0.946 ms
+64 bytes from <WAN_GATEWAY>: seq=1 ttl=64 time=0.661 ms
+64 bytes from <WAN_GATEWAY>: seq=2 ttl=64 time=0.683 ms
+64 bytes from <WAN_GATEWAY>: seq=3 ttl=64 time=0.603 ms
+^[[A^[[A^[[B64 bytes from <WAN_GATEWAY>: seq=4 ttl=64 time=0.746 ms
+
+--- <WAN_GATEWAY> ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 0.603/0.727/0.946 ms
+PING <BUILD_HOST> (<BUILD_HOST>): 56 data bytes
+64 bytes from <BUILD_HOST>: seq=0 ttl=63 time=1.401 ms
+64 bytes from <BUILD_HOST>: seq=1 ttl=63 time=1.221 ms
+
+--- <BUILD_HOST> ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 1.221/1.311/1.401 ms
+grep: wget: No such file or directory
+     mmc_rx_framecount_gb: 689
+     mmc_rx_octetcount_g: 4554
+     mmc_rx_crc_error: 646
+root@OpenWrt:~# root@OpenWrt:~# /tmp/phytool write eth1/1/31 0xd08; /tmp/phytool write eth1/1/0x
+15 0x19; /tmp/phytool write eth1/1/31 0xa42; ping -c 5 -W 1 <WAN_GATEWAY>; ping -c 2 
+-W 1 <BUILD_HOST>; ethtool -S eth1 | grep -E "mmc_rx_(framecount|octetcount_g:|
+crc_error)"command -v wget; command -v kexec; ethtool -S eth1 | grep -E "mmc_rx_
+(framecount|octetcount_g:|crc_error)"[J[4Aroot@OpenWrt:~# /tmp/phytool write eth1/1/31 0xd08; /tmp/phytool write eth1/1/0x
+15 0x19; /tmp/phytool write eth1/1/31 0xa42; ping -c 5 -W 1 <WAN_GATEWAY>; ping -c 2 
+-W 1 <BUILD_HOST>; ethtool -S eth1 | grep -E "mmc_rx_(framecount|octetcount_g:|
+crc_error)"[J[3Aroot@OpenWrt:~# /tmp/phytool write eth1/1/31 0xd08; /tmp/phytool write eth1/1/0x
+15 0x19; /tmp/phytool write eth1/1/31 0xa42; ping -c 5 -W 1 <WAN_GATEWAY>; ping -c 2 
+-W 1 <BUILD_HOST>; ethtool -S eth1 | grep -E "mmc_rx_(framecount|octetcount_g:|
+crc_error)"command -v wget; command -v kexec; ethtool -S eth1 | grep -E "mmc_rx_
+(framecount|octetcount_g:|crc_error)"[J^C
+
+root@OpenWrt:~# command -v wget; command -v kexec; ethtool -S eth1 | grep -E "mm
+c_rx_(framecount|octetcount_g:|crc_error)"
+/usr/bin/wget
+     mmc_rx_framecount_gb: 695
+     mmc_rx_octetcount_g: 5026
+     mmc_rx_crc_error: 646
+root@OpenWrt:~# ethtool -r eth1; sleep 15; ethtool eth1 | grep -E "Speed:|Duplex
+:|Link detected:"; ping -c 3 -W 1 <WAN_GATEWAY>; ethtool -S eth1 | grep -E "mmc_rx_(f
+ramecount|octetcount_g:|crc_error)"
+[ 2259.771015] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+[ 2261.852365] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+[ 2263.931294] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+	Speed: Unknown!
+	Duplex: Unknown! (255)
+	Link detected: no
+PING <WAN_GATEWAY> (<WAN_GATEWAY>): 56 data bytes
+ping: sendto: Network unreachable
+     mmc_rx_framecount_gb: 12562
+     mmc_rx_octetcount_g: 17614177
+     mmc_rx_crc_error: 646
+root@OpenWrt:~# [ 2276.411780] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[ 2276.424290] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+ethtool eth1 | grep -E "Speed:|Duplex:|Link detected:"; ethtool 
+--show-eee eth1; dmesg | tail -n 8; ifstatus wan
+	Speed: 100Mb/s
+	Duplex: Full
+	Link detected: yes
+EEE Settings for eth1:
+	EEE status: not supported
+[   63.291800] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[   63.304323] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+[  200.374369] ash (2858): drop_caches: 3
+[ 2259.771015] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+[ 2261.852365] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+[ 2263.931294] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+[ 2276.411780] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[ 2276.424290] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+{
+	"up": true,
+	"pending": false,
+	"available": true,
+	"autostart": true,
+	"dynamic": false,
+	"uptime": 145,
+	"l3_device": "eth1",
+	"proto": "dhcp",
+	"device": "eth1",
+	"updated": [
+		"addresses",
+		"routes",
+		"data"
+	],
+	"metric": 0,
+	"dns_metric": 0,
+	"delegation": true,
+	"ipv4-address": [
+		{
+			"address": "<WAN_IP>",
+			"mask": 24
+		}
+	],
+	"ipv6-address": [
+		
+	],
+	"ipv6-prefix": [
+		
+	],
+	"ipv6-prefix-assignment": [
+		
+	],
+	"route": [
+		{
+			"target": "0.0.0.0",
+			"mask": 0,
+			"nexthop": "<WAN_GATEWAY>",
+			"source": "<WAN_IP>/32"
+		}
+	],
+	"dns-server": [
+		"<WAN_GATEWAY>"
+	],
+	"dns-search": [
+		"lan"
+	],
+	"neighbors": [
+		
+	],
+	"inactive": {
+		"ipv4-address": [
+			
+		],
+		"ipv6-address": [
+			
+		],
+		"route": [
+			
+		],
+		"dns-server": [
+			
+		],
+		"dns-search": [
+			
+		],
+		"neighbors": [
+			
+		]
+	},
+	"data": {
+		"dhcpserver": "<WAN_GATEWAY>",
+		"hostname": "OpenWrt",
+		"leasetime": 43200
+	}
+}
+root@OpenWrt:~# 

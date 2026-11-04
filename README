@@ -1,0 +1,80 @@
+T153MX OmniGate / OpenWrt 25.12 主线适配
+======================================
+
+实验性本地适配，尚未合并OpenWrt/Linux上游。源码基线为官方OpenWrt
+openwrt-25.12固定提交6c57f7cd04028d370f9360de71f5d59412046194，
+Linux 6.12.113、U-Boot 2026.07。没有使用Tina 5.10内核替代主线内核。
+
+已验证的实机里程碑（2026-11-04）
+-------------------------------
+全源码1GiB DDR4 SPL → 主线U-Boot → Linux → eMMC ext4 → OpenWrt shell。
+实机已安装镜像SHA256：
+6ea18915b817e77c2a57ab7a68b8bc51e92e9d965e22fa23b1b7217379e39e98。
+FES写入校验通过；FES post-reboot后主线U-Boot读回全部292MiB，SHA精确匹配。
+16MiB随机文件写eMMC、sync、drop_caches后的读回SHA/cmp一致。
+eth1在运行时开启RTL8211F RX delay后，100Mbps全双工下取得DHCP，网关
+10次ping全通，16MiB HTTP下载SHA匹配，测试期间RX CRC计数未增加。
+重新协商1Gbps后掉线并降至100Mbps，千兆稳定性未通过。
+
+上述网络测试是在已安装镜像上临时调PHY完成；源码已将WAN设为rgmii-rxid，
+其持久设置及新增原生reboot/efex组合镜像仍待重新烧录验证。不能把旧镜像上
+临时PHY测试当作新组合固件已验收。板卡/调试器已断开，后续硬件验收等待重连。
+证据与历史故障：docs/records/2026-11-04-bringup/、docs/BRINGUP-1G-MCP.txt。
+
+当前限制
+--------
+- 物理DDR1GiB；仅CPU0，Linux地址窗口384MiB；PSCI/SMP尚未实现。
+- DDR/存储长期可靠性、千兆网络、eth0 LAN及其余外设仍需验收。
+- CAN0/1和SDIO已枚举，不代表CAN通信或Wi-Fi已通过。AIC8800D80 Wi-Fi/BT
+  没有本内核对应主线驱动，未加入私有驱动。
+- USB0 gadget、CPU DVFS、休眠、eMMC高速模式未启用/验证；4G模块需实测。
+- Linux原生reboot、reboot efex已有源码实现和软件检查，尚无实机成功证据。
+- sysupgrade三处拒绝T153写盘；使用完整磁盘FES流程，不通过LuCI升级。
+- 最终从干净配置完整编译、烧录、验收的复跑尚未完成。
+
+源码和FES的边界
+---------------
+最终写入eMMC的DDR初始化、SPL、U-Boot和Linux/OpenWrt来自源码构建，
+不链接厂商DDR对象，也不依赖厂商monitor。
+临时FES RAM loader仍含用户提供的厂商FES1 DDR和U-Boot二进制；它只用于
+烧录，提取/组包/参数更新工具为本仓库Python源码。不能称整个FES链全源码。
+SDK镜像及payload不上传仓库；固定hash与许可边界见docs/FES-REPRODUCE.txt。
+T113参考工程的两条烧录路径及T153对应实现见docs/FLASH-SOURCE.txt。
+
+构建（Ubuntu 24.04）
+-------------------
+依赖安装、固定来源及详细步骤：docs/BUILD-REPRODUCE.txt。
+在干净源码checkout根目录运行：
+  sh scripts/bootstrap.sh --check-only
+  bash scripts/build-release.sh --jobs 4
+同时准备FES RAM loader：
+  bash scripts/build-release.sh --jobs 4 --with-fes --factory-image /path/to/factory.img
+统一入口编译OpenWrt工具链/内核/选包和1GiB U-Boot，运行软件回归、打包并校验。
+默认拒绝旧build_dir/staging/tmp/bin/.config；仅开发增量可加--incremental。
+下载缓存可共享，构建对象不可共享，见docs/REBUILD-CACHE.txt。
+正常持久固件构建不依赖Tina；仅FES组包需要用户提供固定hash的原厂镜像。
+scripts/generate-port.py只供移植开发，不是正常复现步骤。
+
+产物与烧录
+----------
+artifacts/t153-openwrt25-source-1g-disk.img及.img.gz为本板完整292MiB镜像。
+t153-disk-1g-manifest.json绑定本次产物大小、布局和SHA，不用历史hash代替。
+它包含源码SPL/U-Boot、32MiB FAT boot和256MiB ext4，覆盖eMMC前292MiB，
+不沿用原厂A/B分区。rootfs.ext4.gz、FIT及bootarea不能单独当作整盘烧录。
+旧512MiB profile、RAM-chainload及默认FEL cpio为独立实验路径，不用于此板。
+
+完整烧录步骤：docs/FLASH-SOURCE.txt。
+无私人会话的MCP下载/烧录/轮询示例：host-tools/README.txt。
+实机FES后的整盘SHA、Linux启动、网络和外设必须与本次产物分别验收。
+默认LAN地址192.168.153.1/24；WAN DHCP；从eMMC CID派生MAC。
+
+目录
+----
+port/：Linux/OpenWrt及U-Boot源码覆盖层；configs/：配置与固定来源。
+scripts/：准备、构建、组包、检查；tests/：软件回归；host-tools/：通用MCP示例。
+docs/：架构、烧录、限制及精选实机记录。下载、上游展开树、编译对象、日志和
+固件产物均不加入源码历史。源码和编译只在Linux服务器，不在Windows复制工程。
+架构：docs/ARCHITECTURE.txt；状态：docs/STATUS.txt；检查：docs/VALIDATION.txt。
+
+目标源码仓库：https://github.com/dshanpi/t153-openwrt。
+独立干净完整编译由该仓库固定提交复跑，实际进度见构建记录；硬件验收待重连。

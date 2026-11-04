@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "isolated_output": "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/logs/mmc-literal4096-0l0488hz",
+  "changed_generated_files": [
+    "patches-6.12/504-mmc-sunxi-add-T153-SMHC2.patch"
+  ],
+  "patch_applies_to_pristine_reference": true,
+  "descriptor_checks": {
+    "lengths": [
+      4,
+      8,
+      512,
+      1024,
+      2048,
+      4096
+    ],
+    "T153_4096_encoding": "0x1000",
+    "legacy_4096_encoding": "0x0000",
+    "segment_limit": 4096,
+    "descriptor_address_shift": 2
+  },
+  "scope": "Modified generator and port MMC patch only; did not change build tree, phase, frequency, bus width, or artifacts; no compilation or hardware operations.",
+  "patch_sha256": "931a24cc51494f4d77dcc3a2f4a7a6e450de87bb1e1dcbe780567e8b71d78fd9",
+  "reason": "BSP v5p3x limits max_seg_size to 1<<12 but writes literal 4096 (sunxi-mmc.c:792); buffer size field is documented as bits 0..12. Mainline zero-max encoding can overrun a 4KiB DMA buffer on this controller.",
+  "diagnostics": "T153 data errors now log command, raw MMC/IDMA IRQ states before ack, blocks, actual clock and first descriptor words."
+}

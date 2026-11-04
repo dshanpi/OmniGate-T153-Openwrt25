@@ -1,0 +1,20 @@
+--- a/drivers/phy/allwinner/Kconfig
++++ b/drivers/phy/allwinner/Kconfig
+@@ -57,3 +57,9 @@
+ 	  part of Allwinner H6 SoC.
+ 
+ 	  This driver controls each individual USB 2+3 host PHY combo.
++
++config PHY_SUN8I_T153_USB
++	tristate "Allwinner T153 USB2 host PHY"
++	depends on ARCH_SUNXI || COMPILE_TEST
++	depends on OF && HAS_IOMEM
++	select GENERIC_PHY
+--- a/drivers/phy/allwinner/Makefile
++++ b/drivers/phy/allwinner/Makefile
+@@ -3,3 +3,5 @@
+ obj-$(CONFIG_PHY_SUN6I_MIPI_DPHY)	+= phy-sun6i-mipi-dphy.o
+ obj-$(CONFIG_PHY_SUN9I_USB)		+= phy-sun9i-usb.o
+ obj-$(CONFIG_PHY_SUN50I_USB3)		+= phy-sun50i-usb3.o
++
++obj-$(CONFIG_PHY_SUN8I_T153_USB) += phy-sun8i-t153-usb.o

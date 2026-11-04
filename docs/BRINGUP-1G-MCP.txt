@@ -1,0 +1,123 @@
+最新实机里程碑：eMMC rootfs和OpenWrt shell已启动（2026-11-04）
+==========================================================
+
+本轮镜像：6ea18915b817e77c2a57ab7a68b8bc51e92e9d965e22fa23b1b7217379e39e98
+292MiB；FES任务flash-1793793870427023700，exit0/verifyState=success。
+经FES post-reboot重新启动源码DDR/SPL/proper，主线U-Boot读取598016扇区，
+SHA256精确匹配。此次路径是重启验证，不把它写成另一次物理断电循环。
+
+T153 MMC IDMA描述符按硬件要求以literal 0x1000表示4096字节，修复先前
+用0表示最大段长度造成的数据路径问题。实际Linux识别eMMC分区p1/p2，
+EXT4-fs (mmcblk0p2) mounted，VFS Mounted root；随后进入BusyBox ash，
+/etc/openwrt_release报告OpenWrt 25.12-SNAPSHOT t153-6c57f7cd04。
+运行时/dev/root以ext4读写挂载，根分区可用226.5MiB。
+
+确认范围：CPU0，共1 CPU，Linux地址窗口384MiB；MemTotal 375580KiB。
+SDIO卡和can0/can1已注册；eth1经RTL8211F达到100Mbps/Full Link Up。
+后续运行时打开RTL8211F RX delay后，100Mbps DHCP、10/10网关ping及
+16MiB HTTP文件SHA通过，传输段CRC计数未增加；重新协商1Gbps掉线后降速，
+千兆稳定性未通过。对应持久rgmii-rxid修改尚待新镜像启动验证。
+16MiB随机文件写eMMC/sync/清缓存后SHA及cmp一致。CAN通信、无线及其它外设未验收。
+软件efex尚未实测；板卡/调试器现已断开。MCP电源硬件GPIO操作失败，本轮靠FES post-reboot起板，
+不把软件复位/进入FEL或断电控制记为通过。最终干净全流程复跑仍待执行。
+
+公开证据及各项状态：docs/records/2026-11-04-bringup/。
+以下保留此前尝试/失败记录，旧“rootfs未挂载”描述不代表当前本轮状态。
+
+T153 1 GiB 当前实机进展（2026-11-04）
+===================================
+
+已实际完成的启动链：
+- 全源码1GiB DDR4 SPL冷启动，初始化、训练和本轮内存测试完成。
+- SPL从eMMC读取并启动主线U-Boot proper。
+- U-Boot加载FIT并通过CRC/SHA检查，Linux 6.12.113开始启动。
+这些结果证明本板的该启动路径可运行，不代表DDR已完成长期可靠性验证。
+
+尚未完成：Linux eMMC根文件系统没有挂载。第一次启动中，MMC0/MMC2
+报error rounding clk to 400000: -22，MMC3报reset timeout，停在等待
+PARTUUID=15302512-02。尚未进入可用的OpenWrt系统，网络也未验证。
+
+已编译、重新打包并完成二次烧录的修复：
+- 注册遗漏的SMHC内部父时钟（原来只在ccu_clks，未在hw_clks注册）。
+- 按T153控制器固定/2计算MMC模块和卡时钟。
+- 两路GMAC补AHB reset控制及DT引用。
+- 启动参数earlycon补24MHz时钟。
+本次构建：logs/openwrt-bringup-fix.log / .exit，exit=0。
+打包及verify-only通过；实际FIT解压后的内核与ELF对应符号逐字节核对，
+确认CCU hws=226、新5个内部父时钟存在、MMC固定/2标志已开启、
+GMAC reset操作及FIT内两路DT的AHB reset均已编入。
+证据：logs/bringup-fix-binary-verification.json。
+
+新镜像：artifacts/t153-openwrt25-source-1g-disk.img
+大小：306184192 bytes（292 MiB）
+SHA256：b114c64ea76178959d1317ad2ca3d21d986980730575f8fa74e579cb8d4efd7b
+压缩镜像：同名.img.gz，10032233 bytes
+SHA256：46576b60df117dbc1382384fa9e46a333cb0b9b6910fbdb224198b78b0a9c953
+校验清单：artifacts/t153-disk-1g-manifest.json。
+MCP已下载新镜像并核实上述SHA256。第二次使用独立933MHz RAM-only
+FES loader完成写入，任务flash-1793792641278008100：state=success，
+exit=0，verifyState=success，writtenBytes=committedBytes=306184192。
+随后冷启动主线源码SPL/DDR933及U-Boot，读取全部598016个扇区成功，
+主线U-Boot计算的整盘SHA256精确匹配上述b114c64e...值。
+因此本次整盘烧录与冷启动后回读校验通过；这不同于仅依赖FES加法校验。
+随后启动新Linux，earlycon输出清晰；两路GMAC完成probe，三路SMHC报告
+version=0x50530；eMMC识别为mmc0:0001 AJTD4R 14.6GiB。
+但4022000.mmc随后出现data error/send stop command failed，错误恢复中
+mmc_hw_reset+0x10读取NULL+0x24，触发Kernel panic，rootfs仍未挂载。
+因此本轮MMC时钟注册修复带来枚举进展，数据路径仍未通过；GMAC probe不等于
+网络收发可用，也不能据此称OpenWrt正常启动或DDR可靠性充分验证。
+原始串口日志：t153_bringup_fix_linux.log，由主任务保存并归档。
+第二次写入成功不确定第一次bit差异的根因，也不能证明仅调低FES DDR频率便已解决原因。
+
+首次写盘的完整性问题（历史记录；该次不能标记flashverified）：
+旧镜像期望SHA256为905e6e629f7e9a7f81c43e4e97ab5e216969eab9c2681bbee5654247daf86d03，
+三次整盘回读均为a51e84895ede5b2162012dc40555ff1defb762ebda23ed9b33d53f4672a715ef。
+定位到两处持久单bit差异，均为0x00变0x02：
+  磁盘偏移104555584，LBA204210，扇区内偏移64；
+  磁盘偏移210826304，LBA411770，扇区内偏移64。
+仅在离线期望数据中修改这两字节即可精确复现回读SHA256。
+FES加法校验另有0x8000瞬态差异，根因尚未确定；诊断过程没有写盘。
+精确证据：logs/t153-flash-readback-1.json。
+旧镜像校验基线：logs/pre-bringup-fix-disk-baseline.json。
+该首次尝试没有通过写盘一致性验证；后续第二次整盘SHA通过见上文。
+仍不能称整板适配完成或DDR已充分验证。
+
+以下为早期MCP接口拒绝阶段的历史记录，已被上述实机结果更新：
+=================================================================
+
+T153 1 GiB 实机接入与 MCP 尝试记录
+=================================
+
+入口：http://127.0.0.1:8771/mcp，LYNX projectId/deviceId=8，COM19。
+通道旧名称为 T736 SDK，但当前原厂串口报告 sun8iw22，FEL 详细扫描
+返回 raw chip=0x00192200，对应 SoC 0x1922；用户指定为 T153。
+实机 BOOT0 日志：DDR4，1066MHz，1024MiB，para1=0x610a，
+para2=0x04000001，dram_tpr13=0x7071，eMMC 14910MB。
+
+新增独立1GiB试机profile：dshanpi_t153_source_1g_defconfig。
+构建 scripts/build-uboot-source-1g.sh；打包 scripts/package-uboot-source-1g.py。
+输出 artifacts/t153-uboot-2026.07-source-1g*，512MiB原镜像未覆盖。
+保持480→933MHz和U-Boot/Linux可见384MiB；已调整真实DDR行地址映射，
+测试物理1GiB。构建和离线检查通过，但没有执行到板上。
+
+实际 MCP 调用 lynx_allwinner_boot_mainline，confirmDestructive=true，
+SPL 地址0x40000，proper入口0x4a000000；全部文件先经MCP下载并校验SHA256。
+MCP直接返回：
+  MAINLINE_SPL_ADDRESS_INVALID:expected 0x00020000
+没有建立主线引导任务，没有执行SPL，没有写eMMC。
+请求后串口读取0字节、硬件任务busy=false、设备仍可扫描为FEL。
+证据：logs/mcp-t153-attempt.json。
+
+当前MCP输入schema限定R528/T113-S3，SPL地址校验固定0x20000。
+T153需要0x40000，不能伪装成T113或改错地址来绕过。
+MCP/后端需要支持T153的SoC/SRAM/profile，再继续源码DDR实机测试；
+仅删除一个地址检查还不足够，FEL thunk/swap必须采用对应T153参数：
+  SPL header 0x40000，entry0x40060
+  thunk0x66a00；swap 0x40000..0x413ff ↔ 0x66c00..0x67fff
+  返回后header位于0x66c00
+  USB等待需容纳源码DDR训练
+
+旧 t153-openwrt25-source-disk.img.gz 和 t153-fel-installer.cpio 中的
+引导区仍是512MiB版。本次1g文件只用于独立RAM试机；1g SPL启动通过后，
+必须重新生成1g磁盘/安装载荷及manifest，不能直接把旧disk写入此1GiB板。
+旧固件仍保留；没有用厂商FES二进制代替用户要求的全源码链。

@@ -1,0 +1,148 @@
+CURRENT MILESTONE: eMMC OpenWrt, storage and 100 Mbps WAN (2026-11-04)
+===================================================================
+Installed/tested image SHA256:
+6ea18915b817e77c2a57ab7a68b8bc51e92e9d965e22fa23b1b7217379e39e98.
+FES verified 306184192 bytes. After FES post-reboot, source DDR/SPL and mainline
+U-Boot started; whole-image readback of 598016 sectors matched exactly.
+The literal-4096 MMC descriptor fix permits ext4 root mounting and OpenWrt shell.
+A 16 MiB random file passed write/sync/cache-drop/readback SHA256 and cmp.
+
+After enabling RTL8211F RX delay at runtime, eth1 passed DHCP, 10/10 gateway
+pings and a hash-checked 16 MiB HTTP transfer at 100 Mbps/Full; the RX CRC
+counter did not rise during that transfer. Gigabit renegotiation dropped the
+link and downshifted to 100 Mbps; stable 1 Gbps operation is not established.
+The persisted WAN rgmii-rxid DT change and native Linux reboot-mode/userspace
+support are now in the source, but their combined new image is not boot-tested.
+Latest repackaged software candidate (verify-only passed; not flashed):
+43a54935f6bc3f80cd810b95f6fbbb1c6310418521a0d410336c8d5aceb47049.
+Do not attribute the installed image's runtime observations to this candidate.
+
+Limits: CPU0 only, 384 MiB Linux window, 1 GiB physical DDR. CAN0/CAN1 and SDIO
+are registered; bus traffic/wireless function remain unvalidated. Software
+reboot/efex, kexec, LAN, other peripherals and long-term DDR/storage qualification
+remain pending. The board/debugger is disconnected; hardware work awaits reconnection.
+MCP power-GPIO recovery failed. FES post-reboot is not a physical power-cycle test.
+Final clean build/configuration/flashing acceptance rerun remains pending.
+Evidence: docs/records/2026-11-04-bringup/hardware-status.json and published logs.
+
+Earlier records below are historical, including the prior rootfs failure.
+
+T153 OmniGate OpenWrt 25.12 - HARDWARE BRING-UP IN PROGRESS
+Updated 2026-11-04; the older records below are preserved as history.
+
+Hardware demonstrated on the 1 GiB board:
+- source-only DDR4 SPL cold boot, initialization/training and this-run RAM test;
+- eMMC loading of mainline U-Boot proper;
+- FIT validation and Linux 6.12.113 kernel startup.
+The OpenWrt eMMC root filesystem has NOT mounted. Initial Linux boot stalls
+waiting for PARTUUID=15302512-02 after MMC clock/reset failures.
+The second flash now passed full-image SHA256 readback; rootfs/networking and
+DDR reliability qualification remain open.
+
+The existing bring-up-fix build completed with exit 0. A new 1g disk includes
+SMHC internal-parent registration, fixed divide-by-two MMC timing, both GMAC
+AHB resets and the 24 MHz earlycon parameter. Packaging/verify-only passed;
+actual decompressed kernel symbols/code and FIT DT were checked, not only sources.
+Evidence: logs/bringup-fix-binary-verification.json.
+Build: logs/openwrt-bringup-fix.log / logs/openwrt-bringup-fix.exit.
+Disk: artifacts/t153-openwrt25-source-1g-disk.img, 306184192 bytes.
+SHA256: b114c64ea76178959d1317ad2ca3d21d986980730575f8fa74e579cb8d4efd7b.
+Manifest: artifacts/t153-disk-1g-manifest.json.
+Second flashing succeeded using a separate 933 MHz RAM-only FES loader.
+MCP task flash-1793792641278008100: state=success, exit=0,
+verifyState=success, writtenBytes=committedBytes=306184192.
+After a cold boot through the source DDR933/SPL and mainline U-Boot, all
+598016 sectors were read successfully. The U-Boot whole-image SHA256 exactly
+matched b114c64ea76178959d1317ad2ca3d21d986980730575f8fa74e579cb8d4efd7b.
+This second flash has passed full-image verification after cold boot.
+The new Linux boot has clear earlycon, both GMAC probes, SMHC version 0x50530
+on three controllers, and mmc0:0001 AJTD4R 14.6 GiB enumeration.
+The eMMC controller then reports data errors/failed stop commands; recovery
+panics at mmc_hw_reset+0x10 with NULL+0x24. Rootfs has NOT mounted.
+OpenWrt userspace and network traffic success are not established.
+Raw serial evidence: t153_bringup_fix_linux.log (saved by the main task).
+This result does not establish the cause of the first flash's bit differences
+or prove that changing the temporary loader DDR frequency alone resolves it.
+
+Historical first-flash integrity was NOT verified. The prior 905e6e62... disk read back
+three times as a51e8489..., with persistent 0x00 -> 0x02 changes at disk offsets
+104555584 and 210826304 (LBA 204210/411770, offset 64 in each sector).
+Those two byte changes exactly explain the full-image SHA256 mismatch.
+FES additive verification also had a separate transient 0x8000 difference;
+cause remains unknown. Diagnostic reads did not write storage.
+Evidence: logs/t153-flash-readback-1.json.
+Prior image baseline: logs/pre-bringup-fix-disk-baseline.json.
+The first attempt must not be labelled flashverified. The second attempt
+passed whole-image SHA256 as noted above. DDR is not fully qualified and the
+port is not complete.
+Current limitations still include CPU0-only boot, missing hardware reset,
+and unqualified peripheral functions. This is not an upstream-supported board.
+
+HISTORICAL OFFLINE / PRE-HARDWARE RECORDS (superseded where noted above)
+====================================================================
+
+T153 OmniGate mainline OpenWrt 25.12 port - FIRST HARDWARE TEST CANDIDATE
+
+Full official OpenWrt build completed successfully (exit 0).
+Log: logs/openwrt-build-v6.log and logs/openwrt-build-v6.exit.
+OpenWrt base: 6c57f7cd04028d370f9360de71f5d59412046194 (openwrt-25.12).
+Linux 6.12.113; official OpenWrt GCC 14.3.0 / binutils 2.44 / musl.
+This is an experimental local port, not upstream merged or officially supported.
+
+Software checks PASS:
+- all 37 requested profile settings retained by defconfig;
+- actual FIT CRC/hash, ARM zImage, load/entry 0x48008000;
+- actual embedded initramfs and rootfs contents, T153 drivers/modules;
+- 162-package manifest including LuCI SSL, CAN, USB/QMI/MBIM tools;
+- kernel payload/relocation fit within the RAM boot address budget;
+- final DTB schema validation: logs/final-dt-validation.log is empty;
+- SHA256 of all upstream-produced images;
+- upgrade guards, wiring/provider references, idempotent application,
+  eth0 LAN / eth1 WAN defaults: logs/port-check-final.log;
+- final network, upgrade and report scripts match the current source.
+Report: logs/artifact-validation.json. Delivery: artifacts/ after packaging.
+
+FIT: 7,973,168 bytes; zImage: 7,969,320 bytes.
+Uncompressed initramfs kernel: 30,278,720 bytes.
+LAN: 192.168.153.1/24; WAN: DHCP. Initial Linux RAM ceiling: 384 MiB.
+
+NO HARDWARE TEST HAS BEEN PERFORMED. No board was booted or flashed.
+Only openwrt25/ is modified. The parent Tina SDK is read-only reference data.
+Local Windows source copies were removed from the workspace at user request.
+
+Scope limits:
+- Source-only U-Boot 2026.07 SPL/DDR4 and FEL RAM installer are implemented,
+  compiled and checked offline; no DDR/FEL/storage/cold-boot hardware evidence.
+- Source boot is CPU0 only; PSCI/SMP and hardware reset are not implemented.
+- A 292 MiB SD/eMMC user-area image is available; no factory A/B installation
+  or FES protocol service. eMMC hardware boot configuration is checked, not changed.
+- AIC8800D80 Wi-Fi/BT has no upstream driver in this kernel and is not enabled.
+- USB0 gadget/OTG, high-speed eMMC, CPU DVFS and suspend are not qualified.
+- All implemented peripherals still need board-level validation.
+See docs/BOOT-RAM.txt before attempting the first RAM boot.
+
+U-Boot RAM port added:
+- Official upstream 2026.07 with local T153 overlay; no vendor DDR library.
+- Build logs/uboot-build-v3.exit = 0; logs/uboot-validation.json passed.
+- Actual ARM ELF, entry 0x4a000000, appended control DTB, FIT hashes checked.
+- UART0, architectural timer, cache/relocation, SD/eMMC PIO read <=12MHz,
+  FAT/ext4 read, bootm/bootz and serial X/Ymodem are compiled.
+- No network/USB or functional hardware reset in this U-Boot profile.
+- artifacts/t153-uboot-2026.07-ram.itb is only for RAM bootm handoff.
+- Not a replacement boot0/boot_package/SD install image; hardware NOT tested.
+See docs/BOOT-UBOOT-RAM.txt. Kernel/rootfs outputs are unchanged.
+
+Source installation delivery: docs/FLASH-SOURCE.txt.
+Disk/FEL bundle metadata: artifacts/t153-{disk,fel-installer}-manifest.json.
+No hardware access or device writing took place during packaging or testing.
+
+FEL/disk delivery checks: logs/flash-source-delivery.exit = 0.
+Source U-Boot build: logs/uboot-source-fel-swap.exit = 0.
+RAM target regression: logs/uboot-ram-flash-regression.exit = 0.
+Full delivery report: artifacts/flash-source-validation.json.
+
+Prepared next FES attempt (not executed):
+- Mainline source-1g disk SHA256 b114c64ea76178959d1317ad2ca3d21d986980730575f8fa74e579cb8d4efd7b; MCP download verified.
+- RAM-only loader t153-fes-ddr933-ram-loader.img SHA256 0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873; MCP download verified and IMAGEWTY inspection passed.
+- DDR933 comes from same-board SDK configuration. Only 6 bytes differ from stock loader; stock +40960 translation retained. This is an untested candidate, not proof of resolving the two persistent bit errors.
+- Board requires physical re-entry into FEL. Current source U-Boot has no validated software FEL/reset path. No write of the new b114c64e image has been started.

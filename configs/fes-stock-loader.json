@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "chip": "t153",
+  "soc_family": "sun8iw22p1",
+  "fel_device_id": "0x00192200",
+  "memory_type": "ddr4",
+  "memory_size_mib": 1024,
+  "dram_clock_mhz": 1066,
+  "storage_type": "emmc",
+  "storage_capacity_mib": 14910,
+  "product_name": "omnigate-1g",
+  "output_name": "t153-ddr4-emmc-omnigate-1g-loader.bin",
+  "expected_output_sha256": "bae54486bacddc18c96e207ff4530560bfadb47db8f141dc08a6bb13f59981ba",
+  "purpose": "ram-fes-bootstrap",
+  "flash_payload": false,
+  "container_format": "imagewty-v3",
+  "hardware_validation": "software-only",
+  "source_project": "Allwinner T153 Tina V1.0 existing user SDK",
+  "source_revision": "vendor IMAGEWTY sha256:4b990b5dcc2da6424e48502e89696b5f908584d173342389156d702338a3118c",
+  "source_url": "user-supplied:T153_Tina_V1.0/out/t153_linux_omnigate_uart0-default.img",
+  "license": "LicenseRef-NOASSERTION",
+  "entries": [
+    {
+      "role": "mbr-placeholder",
+      "path": "input/sunxi_mbr.fex",
+      "maintype": "12345678",
+      "subtype": "1234567890___MBR",
+      "sha256": "7981abc143428d8ea653e65a2fe08da96cb1b98c22dd271ac4a10ef4ff227197",
+      "packed_sha256": "7981abc143428d8ea653e65a2fe08da96cb1b98c22dd271ac4a10ef4ff227197",
+      "flash_to_media": false
+    },
+    {
+      "role": "sys-config",
+      "path": "input/config.fex",
+      "maintype": "COMMON",
+      "subtype": "SYS_CONFIG_BIN00",
+      "sha256": "b9f10077c815fbe6213ebaacb6c0082cbb557d27c58974187f1dda6452ad36e8",
+      "packed_sha256": "b9f10077c815fbe6213ebaacb6c0082cbb557d27c58974187f1dda6452ad36e8",
+      "flash_to_media": false
+    },
+    {
+      "role": "board-config",
+      "path": "input/board.fex",
+      "maintype": "COMMON",
+      "subtype": "BOARD_CONFIG_BIN",
+      "sha256": "ab1d5b1e29bc04511d1fc6942ae365f3202d5795fa06e3699acfae987fafb245",
+      "packed_sha256": "ab1d5b1e29bc04511d1fc6942ae365f3202d5795fa06e3699acfae987fafb245",
+      "flash_to_media": false
+    },
+    {
+      "role": "dtb-config",
+      "path": "input/sunxi.fex",
+      "maintype": "COMMON",
+      "subtype": "DTB_CONFIG000000",
+      "sha256": "3e93bac5d2fa95f26cc1dd67f6030e91abf03765a16467ce66915aeeebcd765f",
+      "packed_sha256": "3e93bac5d2fa95f26cc1dd67f6030e91abf03765a16467ce66915aeeebcd765f",
+      "flash_to_media": false
+    },
+    {
+      "role": "fes1",
+      "path": "input/fes1.fex",
+      "maintype": "FES",
+      "subtype": "FES_1-0000000000",
+      "sha256": "97644e703ac3d7f554c678171bec84949d5a71e043a73013b0ff7f83d834d21c",
+      "packed_sha256": "97644e703ac3d7f554c678171bec84949d5a71e043a73013b0ff7f83d834d21c",
+      "flash_to_media": false
+    },
+    {
+      "role": "uboot",
+      "path": "input/u-boot.fex",
+      "maintype": "12345678",
+      "subtype": "UBOOT_0000000000",
+      "sha256": "80bc0bc21d429677ca29d1eb3bc8437980dffc0a57c880a48b70a6b8725151c2",
+      "packed_sha256": "80bc0bc21d429677ca29d1eb3bc8437980dffc0a57c880a48b70a6b8725151c2",
+      "flash_to_media": false
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+T153 Linux normal reboot / BootROM FEL request
+=============================================
+
+This is persistent OpenWrt platform support. It does not change MCP policies,
+register shell aliases, expose arbitrary MMIO, or replace reboot with a wrapper.
+Hardware verification is still required. Only targeted software builds/tests
+have passed; this note is not evidence that an updated full image was booted.
+
+Supported interface after the updated kernel AND userspace are running
+--------------------------------------------------------------------
+reboot
+  Existing BusyBox -> PID 1 shutdown -> Linux normal restart path.
+reboot efex
+  Real BusyBox reboot applet -> ubus system reboot {"command":"efex"}
+  -> procd saves the command -> normal shutdown scripts, process termination
+  and sync -> RESTART2("efex") -> RTC reboot-mode notifier -> watchdog reset.
+reboot normal
+  Same clean mode-aware path, explicitly clearing RTC data[2].
+
+The normal mode is zero; the FEL mode is 0x5aa5a55a. Other strings have no
+T153 mode mapping. The RTC driver does not access data[6], DDR, flash, eMMC
+configuration or boot partitions. Do not confuse data[6]'s 0x5a boot-mode
+flag with data[2]'s BootROM FEL request.
+
+Kernel implementation
+---------------------
+508-watchdog-sunxi-add-T153-reset-output.patch adds a T153-only watchdog
+variant: base 0x02050000, CTRL/CFG/MODE/OUT offsets 0x0c/0x10/0x14/0x18,
+key 0x16aa0000, reset-output mask 0xfff/value 0x3f. It configures the output
+both for the watchdog start operation and the restart operation. Existing
+SoC variants retain a zero output mask and their previous behavior. T153
+arms MODE/CTRL only once and then waits, matching the T153 BSP; it does not
+repeat MODE writes while awaiting reset.
+
+509-reboot-mode-allow-explicit-zero-value.patch distinguishes a matched zero
+from an unmatched mode. This makes explicit mode-normal = <0> clear a previous
+request; an unknown mode does not perform an unintended zero write.
+
+510-power-reset-add-T153-RTC-reboot-mode.patch and the overlay driver use the
+standard reboot-mode framework. The DT resource is only 0x07090108+4 bytes.
+RTC writes are confirmed by read-back with a bounded 1000 x 1us retry. A failure
+is logged; the standard Linux reboot notifier API does not abort reboot when
+a mode write fails. Therefore USB BootROM enumeration must verify FEL entry.
+
+The watchdog IRQ is GIC_SPI 63, from the T153 Linux SDK DTS. The vendor U-Boot
+DTS lists 50 instead. The mainline watchdog driver does not request this IRQ;
+only its reset mode is used here. Interrupt mode has not been qualified.
+
+Deployment / kexec boundaries
+----------------------------
+Updating the procd file on disk does not update the running PID 1. The current
+PID 1 has no re-exec interface, and the running DT lacks the watchdog/RTC nodes.
+A new kernel with a correct DT AND a newly started userspace is required.
+Do not treat insmod of stock reboot-mode modules as sufficient.
+
+CONFIG_KEXEC is enabled on the current source kernel. Normal ARM kexec uses
+machine_kexec -> soft_restart, so it does not require a hardware reboot handler.
+Actual kexec execution remains unverified on this board. It must use the normal
+supported tool path; a tool-policy denial must not be bypassed.
+
+CRITICAL: kexec does not run U-Boot ft_board_setup. The raw board DTB still has
+the factory PSCI nodes, four enabled CPUs and a static 512MiB memory description.
+Before kexec, make an independent DTB with the same fixups as source U-Boot:
+- Remove /psci; remove CPU0 enable-method; disable CPU1, CPU2 and CPU3.
+- Use the existing safe RAM bank 0x48000000 + 0x18000000 (384MiB).
+- Preserve the UART chosen setting and the correct kernel/rootfs boot arguments.
+- Check all kexec segments are inside this bank and do not overlap the kernel
+  decompression space; do not put FIT bytes where a zImage is expected.
+The bare compiled DTB must not be handed directly to kexec. Existing source SPL
+DDR settings, capacity and layout are not changed by this reboot work.
+
+Software verification
+---------------------
+logs/linux-reboot-source-validation.json
+logs/linux-reboot-object-build.log (three ARM objects and board DTB; exit 0)
+logs/linux-reboot-kernel-tests.log (actual C callbacks compiled with UBSan)
+logs/reboot-command-validation.json (procd/BusyBox builds and nine host tests)
+
+Hardware acceptance still needed
+-------------------------------
+Boot the completed updated image. Confirm the watchdog and RTC mode driver
+bind, ordinary reboot cold-starts the source SPL/U-Boot and returns to Linux,
+and the fixed MCP serial_shell_reboot_efex recipe requests normal shutdown then
+obtains BootROM FEL USB enumeration. Continue FES only through the approved
+MCP workflow. Do not mark these hardware outcomes passed from software tests.

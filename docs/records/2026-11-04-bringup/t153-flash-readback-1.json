@@ -1,0 +1,28 @@
+{
+  "status": "Persistent two single-bit flash data differences exactly account for full-image SHA256 mismatch",
+  "image_bytes": 306184192,
+  "expected_sha256": "905e6e629f7e9a7f81c43e4e97ab5e216969eab9c2681bbee5654247daf86d03",
+  "observed_sha256": "a51e84895ede5b2162012dc40555ff1defb762ebda23ed9b33d53f4672a715ef",
+  "verification": "Three whole-image reads produced identical SHA256; 37 CRC32 windows inspected; differing zero windows bisected to sectors, both sectors reread to different RAM addresses; modifying only these two expected zero bytes offline reproduces observed SHA256 exactly.",
+  "differences": [
+    {
+      "disk_offset": 104555584,
+      "lba": 204210,
+      "offset_in_sector": 64,
+      "expected": 0,
+      "observed": 2
+    },
+    {
+      "disk_offset": 210826304,
+      "lba": 411770,
+      "offset_in_sector": 64,
+      "expected": 0,
+      "observed": 2
+    }
+  ],
+  "persistent_additive_delta": 4,
+  "fes_reported_additive_delta": 32772,
+  "cause": "Not yet established. FES verification has an additional transient discrepancy of 0x8000. No claim that flash is verified or DDR fully qualified.",
+  "rootfs_mounted": false,
+  "writes_during_diagnosis": false
+}
