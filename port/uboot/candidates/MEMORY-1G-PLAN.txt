@@ -1,0 +1,48 @@
+T153 full 1GiB Linux memory plan -- NOT APPLIED / NOT QUALIFIED
+
+The current source_1g SPL initializes physical 1GiB DDR4 using 16 row bits and
+performs address-line plus 64MiB-spaced sample tests. CPU0's production Linux
+usable range remains 384MiB because U-Boot advertises 0x48000000 + 0x18000000.
+The following coordinated change is separate from SMP and from the proven
+factory-loader/RAM-chainload rescue path. No listed change is applied here.
+Paths below are relative to openwrt25/ on 192.168.1.228.
+
+1. Leave source DDR setup in place:
+   port/uboot/files/configs/dshanpi_t153_source_1g_defconfig already sets
+   CONFIG_T153_DDR_SIZE_MIB=1024. No new destructive RAM probe is necessary.
+2. In a source-only isolated configuration, change CFG_SYS_SDRAM_BASE/SIZE in
+   port/uboot/files/include/configs/dshanpi_t153_ram.h to 0x40000000/0x40000000.
+   The existing board.c dram_init/dram_init_banksize pass these constants to
+   gd/bd directly. Preserve 0x48000000/384MiB for factory RAM-chainload.
+3. Keep memory nodes consistent in the source-only variants of:
+   port/uboot/files/arch/arm/dts/sun8i-t153-dshanpi-omnigate-uboot.dts
+   port/target/linux/sunxi/files/arch/arm/boot/dts/allwinner/sun8i-t153-dshanpi-omnigate.dts
+   Target reg=<0x40000000 0x40000000>. U-Boot bootm-fdt also rewrites the Linux
+   node from bd memory banks, so a DT-only edit cannot lift the U-Boot limit.
+4. Move source-only FIT load and kernel_addr_r from 0x48008000 to 0x40008000.
+   scripts/apply.sh sets KERNEL_LOADADDR. CONFIG_AUTO_ZRELADDR derives the
+   decompression base from the load address's 128MiB-aligned region. Retaining
+   the old address would frustrate reclaiming the lowest 128MiB.
+5. Set bootm_low=0x40000000, but retain bootm_size=0x18000000 (384MiB) as the
+   early boot allocation window. This does NOT limit the Linux memory bank.
+   Do not enlarge this blindly to 1GiB: DTB/initrd might be placed in highmem.
+   FIT staging at 0x50000000 and cpio at 0x54000000 can remain unchanged.
+6. Decide ownership of the current factory reserved-memory ranges:
+   0x42100000/0x4c5000, 0x42900000/0x100000, 0x44000000/0x200000 (sum 0x7c5000).
+   Pure source cold boot with no vendor monitor/remoteproc can use a separate
+   DTS removing them; retain them for factory chainload. Any future resident
+   source PSCI region must be reserved at its actual address independently.
+7. Update the source-only packaging/verification profile together:
+   scripts/verify-artifacts.py -- FIT load, DT range/reservations, reports.
+   scripts/package-fel-installer.py -- FIT load check.
+   scripts/package-uboot-source-1g.py -- linux_usable_mib and actual bank/control-DT.
+   scripts/package-disk-image.py -- currently hard-codes usable 384MiB.
+   scripts/package-kexec.py -- currently forces 384MiB DT and mem-min/mem-max;
+   preserve the proven rescue profile and create a separate test profile.
+
+No change required to current HIGHMEM/LPAE/VMSPLIT_3G kernel options, SPL SRAM
+addresses, U-Boot TEXT_BASE=0x4a000000, initial stack, or disk partition layout.
+Exposing 1GiB does not prove its sustained stability. Before promotion, test
+RAM across the full physical range, lowmem DTB/initrd placement, all drivers'
+DMA behavior, storage/network integrity and independent reset/FEL recovery.
+Keep CPU0-only first; diagnose capacity independently of SMP coherency.

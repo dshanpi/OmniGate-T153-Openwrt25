@@ -77,7 +77,9 @@ from pathlib import Path
 import hashlib,json,subprocess,sys
 root=Path.cwd();output=Path(sys.argv[1]);manifest=json.loads((root/'artifacts/t153-disk-1g-manifest.json').read_text())
 r=subprocess.run(['git','rev-parse','HEAD'],capture_output=True,text=True)
+worktree=subprocess.run(['git','status','--porcelain','--untracked-files=normal'],capture_output=True,text=True)
 report={'status':'software build passed; hardware acceptance is separate','source_commit':r.stdout.strip() if r.returncode==0 else None,
+        'source_worktree_status':worktree.stdout if worktree.returncode==0 else None,
         'incremental':sys.argv[2]=='true','hardware_validated_by_this_run':False,'disk':manifest['image'],
         'config_sha256':hashlib.sha256((root/'openwrt/.config').read_bytes()).hexdigest(),
         'uboot_config_sha256':hashlib.sha256((root/'u-boot-work/build-t153-source-1g/.config').read_bytes()).hexdigest(),

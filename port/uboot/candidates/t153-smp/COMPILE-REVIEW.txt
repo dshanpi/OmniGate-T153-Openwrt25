@@ -1,0 +1,32 @@
+Translation-unit review, 2026-11-04
+
+Status: PASS for independent C/assembly compilation only.
+NOT a full U-Boot build, link, configuration validation or hardware test.
+Compiler: OpenWrt arm-openwrt-linux-muslgnueabi GCC 14.3.0.
+Headers: current u-boot-work/u-boot-2026.07 plus generated headers from
+u-boot-work/build-t153-source-1g. The existing build headers were only read.
+Candidate defines injected: CONFIG_ARMV7_PSCI_0_1=1,
+CONFIG_ARMV7_PSCI_NR_CPUS=4. No production configuration was altered.
+
+Object audit:
+- C runtime ._secure.text size 0x224 and ._secure.data size 0x20.
+- Assembly ._secure.text size 0x38.
+- C psci_board_init is ordinary boot-only text (0x74), intentionally not resident.
+- Undefined names: psci_get_cpu_id, psci_save, t153_psci_cpu_entry, psci_cpu_entry.
+- No malloc/printf/udelay/compiler-runtime undefined references.
+- Runtime relocations target secure data, secure entry or generic PSCI helpers.
+- These object observations do not prove a final linked firmware has no veneers
+  or runtime references outside resident memory. Full-link map audit is required.
+
+Detailed commands and ELF diagnostics remain on the build host at:
+u-boot-work/host-tests/t153-smp-review/compile-report.txt
+
+Source SHA256:
+f402808430ca62ff5396c8f9ff0a6a5f1bb587bd6b86b70bdf1b71ad6da51ce6  psci-t153.c
+2087efcd34cdf319038f836c53480c5bd257d1acb023b9d45552896a5dfdea5e  psci-entry-t153.S
+
+Commands used (exit 0 for both):
+COMMAND /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt/staging_dir/toolchain-arm_cortex-a7+neon-vfpv4_gcc-14.3.0_musl_eabi/bin/arm-openwrt-linux-muslgnueabi-gcc -nostdinc -isystem /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt/staging_dir/toolchain-arm_cortex-a7+neon-vfpv4_gcc-14.3.0_musl_eabi/lib/gcc/arm-openwrt-linux-muslgnueabi/14.3.0/include -Iinclude -I/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/u-boot-2026.07/include -I/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/u-boot-2026.07/arch/arm/include -include /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/u-boot-2026.07/include/linux/kconfig.h -I/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/u-boot-2026.07/dts/upstream/include -D__KERNEL__ -D__UBOOT__ -Wall -Werror=strict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=implicit-function-declaration -Werror=implicit-int -Wno-format-security -std=gnu11 -ffreestanding -fno-builtin -fno-delete-null-pointer-checks -Wno-frame-address -Wno-format-truncation -Wno-format-overflow -Wno-int-in-bool-context -Wno-address-of-packed-member -Os -fno-stack-protector -fno-delete-null-pointer-checks -Wno-zero-length-bounds -Wno-array-bounds -Wno-stringop-overflow -Wno-maybe-uninitialized -fmacro-prefix-map=/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/u-boot-2026.07/= -gdwarf-4 -Wno-format-nonliteral -Wno-address-of-packed-member -Wno-unused-but-set-variable -Wno-unused-but-set-variable -Werror=date-time -Wno-packed-not-aligned -Wno-pointer-sign -Wno-stringop-truncation -fno-strict-overflow -D__ARM__ -marm -mno-thumb-interwork -mabi=aapcs-linux -mword-relocations -fno-pic -mno-unaligned-access -ffunction-sections -fdata-sections -fno-common -ffixed-r9 -msoft-float -pipe -march=armv7-a -D__LINUX_ARM_ARCH__=7 -mtune=generic-armv7-a -I /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/u-boot-2026.07/board/dshanpi/t153 -I ./board/dshanpi/t153 -DCONFIG_ARMV7_PSCI_0_1=1 -DCONFIG_ARMV7_PSCI_NR_CPUS=4 -c -o /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/host-tests/t153-smp-review/psci-t153.c.o /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/port/uboot/candidates/t153-smp/psci-t153.c
+EXIT 0
+COMMAND /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt/staging_dir/toolchain-arm_cortex-a7+neon-vfpv4_gcc-14.3.0_musl_eabi/bin/arm-openwrt-linux-muslgnueabi-gcc -nostdinc -isystem /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt/staging_dir/toolchain-arm_cortex-a7+neon-vfpv4_gcc-14.3.0_musl_eabi/lib/gcc/arm-openwrt-linux-muslgnueabi/14.3.0/include -Iinclude -I/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/u-boot-2026.07/include -I/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/u-boot-2026.07/arch/arm/include -include /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/u-boot-2026.07/include/linux/kconfig.h -I/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/u-boot-2026.07/dts/upstream/include -D__KERNEL__ -D__UBOOT__ -Wall -Werror=strict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=implicit-function-declaration -Werror=implicit-int -Wno-format-security -ffreestanding -fno-builtin -fno-delete-null-pointer-checks -Wno-frame-address -Wno-format-truncation -Wno-format-overflow -Wno-int-in-bool-context -Wno-address-of-packed-member -Os -fno-stack-protector -fno-delete-null-pointer-checks -Wno-zero-length-bounds -Wno-array-bounds -Wno-stringop-overflow -Wno-maybe-uninitialized -fmacro-prefix-map=/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/u-boot-2026.07/= -gdwarf-4 -Wno-format-nonliteral -Wno-address-of-packed-member -Wno-unused-but-set-variable -Wno-unused-but-set-variable -Werror=date-time -Wno-packed-not-aligned -Wno-pointer-sign -Wno-stringop-truncation -fno-strict-overflow -D__ARM__ -marm -mno-thumb-interwork -mabi=aapcs-linux -mword-relocations -fno-pic -mno-unaligned-access -ffunction-sections -fdata-sections -fno-common -ffixed-r9 -msoft-float -pipe -march=armv7-a -D__LINUX_ARM_ARCH__=7 -mtune=generic-armv7-a -I /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/u-boot-2026.07/board/dshanpi/t153 -I ./board/dshanpi/t153 -DCONFIG_ARMV7_PSCI_0_1=1 -DCONFIG_ARMV7_PSCI_NR_CPUS=4 -D__ASSEMBLY__ -c -o /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/host-tests/t153-smp-review/psci-entry-t153.S.o /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/port/uboot/candidates/t153-smp/psci-entry-t153.S
+EXIT 0
