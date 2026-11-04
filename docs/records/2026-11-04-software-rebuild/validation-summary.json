@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "software_validation": "passed",
+  "source_commit": "f16dc94a5ad509d9a951d657864d3b6ea2aa94e0",
+  "repository_at_record": "bd2b760d0486cb35fc325f77668499ae2aad8c2a",
+  "firmware_inputs_unchanged_since_build_commit": true,
+  "clean_target_build": true,
+  "old_target_or_toolchain_outputs_reused": false,
+  "shared_inputs": "SHA-verified source download archives only",
+  "pipeline_exit": 0,
+  "passed_pipeline_steps": 17,
+  "supplemental_checks": [
+    "512/1024 MiB DDR ASan/UBSan model",
+    "pinmux/clock/network/sysupgrade guard and idempotence",
+    "fresh static kexec and initramfs/driver/userspace/DT checks"
+  ],
+  "hardware_validation_this_run": "not performed; user disconnected board and requested software-only completion",
+  "installed_previous_hardware_tested_image_sha256": "6ea18915b817e77c2a57ab7a68b8bc51e92e9d965e22fa23b1b7217379e39e98",
+  "new_image": {
+    "file": "t153-openwrt25-source-1g-disk.img",
+    "bytes": 306184192,
+    "sha256": "42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8"
+  },
+  "new_image_hardware_verified": false,
+  "limits": [
+    "CPU0 only; Linux physical window 384 MiB of physical 1 GiB",
+    "native reset/FEL and persistent WAN rxid not yet hardware verified",
+    "gigabit unstable in previous hardware test",
+    "other peripherals and long-term DDR/storage reliability pending"
+  ],
+  "files": {
+    "openwrt.config": {
+      "sha256": "5422bb2f9db06acd6c1912c89cbedf6302d9a0f10df0157ab835b4b34eebe2c8",
+      "bytes": 155973
+    },
+    "kernel.config": {
+      "sha256": "51cb3e299b101d7b17f4ce059fb691902e740342199e4dc458ae75d97298dbc1",
+      "bytes": 159766
+    },
+    "uboot-source-1g.config": {
+      "sha256": "54b4cce4fb09758aa14ff1bd6a949551c09a39c627474048c7282ecc7af78ab6",
+      "bytes": 35571
+    },
+    "config.buildinfo": {
+      "sha256": "ff98836f192e809226d3ab96536826b644dceddc59374277f94b2e6712590122",
+      "bytes": 2936
+    },
+    "feeds.buildinfo": {
+      "sha256": "c6a380fe47e8e39eefe31fb6a4dd02ba94cbb0b93f202c051d8b25ab61e62d65",
+      "bytes": 252
+    },
+    "version.buildinfo": {
+      "sha256": "7f96c99848c0d6f31875a2dca62db5bd6270ffc59ce27e2ad2c507d6b93a03f2",
+      "bytes": 41
+    },
+    "build-report.json": {
+      "sha256": "f2fb758a11ab8b4d220329a006b63f883866d538cfdf1d0b594b12785d2d39b4",
+      "bytes": 974
+    },
+    "clean-start.json": {
+      "sha256": "81dcf392a1d319bd5838262a8a8d67cb971c9ef9374e0bc8c18ea0d7233a280b",
+      "bytes": 518
+    },
+    "build-inputs.json": {
+      "sha256": "0dc691f2c90e0cfa1aa0b0f9316d4b3a0ea6f0dcab6d1aa865e528b1b4bd2962",
+      "bytes": 17683
+    },
+    "host-environment.json": {
+      "sha256": "8b76d355160d881eaf7567272f95695bfa47141a882b93f9ef3c1ad9dbd480d4",
+      "bytes": 2389
+    },
+    "t153-disk-1g-manifest.json": {
+      "sha256": "b7db255729e3ee36de9b7e4d68dea22493efc6fefdf5643831ac39625b8c908e",
+      "bytes": 4173
+    },
+    "uboot-source-1g-validation.json": {
+      "sha256": "7559c904776c9c98fe9482dfbe739c944f9f5b247f1dec9e3cfadbfb76c15ea3",
+      "bytes": 2316
+    },
+    "artifact-validation.json": {
+      "sha256": "894ac73493c45c2fe74f80d434373def82ac114c9fb0bb1ff1319c9685379ad6",
+      "bytes": 497
+    },
+    "fes-ddr933-manifest.json": {
+      "sha256": "da9bbc9d8fcd4643706da0158cfc3c14018fc3173f224e27b97fd8f55b778ada",
+      "bytes": 3659
+    },
+    "ddr-both-profiles.log": {
+      "sha256": "b7e62471a5ede23a60b8b56347ff59473d4f6673a96b324faee683dc8dec30a6",
+      "bytes": 3464
+    },
+    "port-config-check.log": {
+      "sha256": "84e0b03811e3dde335aac52cab6f6dc01b7854d6f3d90c68bc9ef4ec3e67cb38",
+      "bytes": 426
+    },
+    "kexec-package-check.log": {
+      "sha256": "0169da448e757ca63ac20d5400a070d2590c0101d1973ca76d5aa36befda5e61",
+      "bytes": 172
+    },
+    "steps/prerequisites.log": {
+      "sha256": "7857c1aa9adc2b51d25fc94c52fbf99404608724713efbce7a6bc29dced49670",
+      "bytes": 41
+    },
+    "steps/fes-stock.log": {
+      "sha256": "a1b1bec302a221d64d0fda192e55d10a32bab1cff5af571196bd4615d6535e88",
+      "bytes": 228
+    },
+    "steps/package-common.log": {
+      "sha256": "90c6726cfabc9e9a9b916984c17641971141c28edcda4f092fd17ff00d855370",
+      "bytes": 813
+    },
+    "steps/package-uboot-source-1g.log": {
+      "sha256": "7559c904776c9c98fe9482dfbe739c944f9f5b247f1dec9e3cfadbfb76c15ea3",
+      "bytes": 2316
+    },
+    "steps/reboot-command.log": {
+      "sha256": "30ba643a0bed0a1b6575a0f30cc99df8d7c2a5a7b0c4f120bb9ee6edfffd89d0",
+      "bytes": 107
+    },
+    "steps/fes-ddr933.log": {
+      "sha256": "8ec50a98b12aa6838b4337766d4c3c46510aba250350ed58ff822723c709183d",
+      "bytes": 255
+    },
+    "steps/ddr-model.log": {
+      "sha256": "27e7fcb0b6230c777df593bcb1e8df32ab2086a8bd2fb77e9f4de9ce710ab349",
+      "bytes": 1558
+    },
+    "steps/verify-disk-1g.log": {
+      "sha256": "77ed1f50b6b519ad0db7b2994e789d95c2659569404e8223694be67fb0bc11e5",
+      "bytes": 86
+    },
+    "steps/disk-regression-1g.log": {
+      "sha256": "ff2cbb543b31911b8f65af9e57020a732bd734440ecfc96571ae93d72dbdc9fa",
+      "bytes": 1309
+    },
+    "steps/feed-cache.log": {
+      "sha256": "4544faed6891540be1d849d537d6c33ca84583875fbfa89695253b4149c80f26",
+      "bytes": 104
+    },
+    "steps/prepare-source.log": {
+      "sha256": "2cf9f8ea80823ea6e8d0a9ac7d250056e25aa5f442c77a2dc0e224523e16cc6e",
+      "bytes": 87
+    },
+    "steps/uboot-source-1g.log": {
+      "sha256": "a7e318e39111749aecc151ec3dbd3feac9727ad6b3e2a837a72b8d0350125d6e",
+      "bytes": 21243
+    },
+    "steps/reboot-kernel.log": {
+      "sha256": "ba5df1d9ac2fe66418a84e2359255770ac2338b8ed330915804384d9d2fe4d4b",
+      "bytes": 92
+    },
+    "steps/package-disk-1g.log": {
+      "sha256": "73d846f5de5e9bec8296409a64ff486f5c3a4599ebac2efd2d650095abf44bbb",
+      "bytes": 736
+    },
+    "steps/fes-tests.log": {
+      "sha256": "3f5a380af80da6074ffdd20535f676bf02840e54257dc08bf36f750a2d8ab62d",
+      "bytes": 103
+    },
+    "steps/mmc-clock.log": {
+      "sha256": "31f5f9dbd90fa9b1894ce16543b0c960c8bc96b9a7a7986a7758857cb142aebe",
+      "bytes": 731
+    },
+    "steps/uboot-source-1g.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/mmc-clock.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/prerequisites.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/openwrt.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/package-disk-1g.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/feed-cache.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/reboot-kernel.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/package-uboot-source-1g.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/disk-regression-1g.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/verify-disk-1g.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/prepare-source.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/reboot-command.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/fes-stock.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/ddr-model.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/fes-tests.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/package-common.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "steps/fes-ddr933.exit": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "openwrt-packages.manifest": {
+      "sha256": "7b17a1e360c73600ea654102fdbb3508bbc7b2e95f4b567025ee4038e6c39281",
+      "bytes": 4615
+    }
+  }
+}

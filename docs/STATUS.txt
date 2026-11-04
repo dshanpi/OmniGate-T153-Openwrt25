@@ -1,3 +1,10 @@
+2026-11-04软件复跑结果：已从GitHub固定提交f16dc94在独立目录完成完整
+OpenWrt/工具链/内核/U-Boot编译、FES组包及17阶段检查，全部exit 0。
+本次固件raw SHA256为42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8。
+展开配置、来源、工具版本及日志见docs/records/2026-11-04-software-rebuild/
+（从docs内阅读时去掉前缀docs/）。板卡已断开，本次未进行烧录/启动验证。
+下文提到尚未完成的“最终全流程”包含硬件验收，不能据软件构建通过宣称已完成。
+
 CURRENT MILESTONE: eMMC OpenWrt, storage and 100 Mbps WAN (2026-11-04)
 ===================================================================
 Installed/tested image SHA256:
@@ -13,8 +20,8 @@ counter did not rise during that transfer. Gigabit renegotiation dropped the
 link and downshifted to 100 Mbps; stable 1 Gbps operation is not established.
 The persisted WAN rgmii-rxid DT change and native Linux reboot-mode/userspace
 support are now in the source, but their combined new image is not boot-tested.
-Latest repackaged software candidate (verify-only passed; not flashed):
-43a54935f6bc3f80cd810b95f6fbbb1c6310418521a0d410336c8d5aceb47049.
+Latest clean-built software candidate (17 pipeline stages passed; not flashed):
+42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8.
 Do not attribute the installed image's runtime observations to this candidate.
 
 Limits: CPU0 only, 384 MiB Linux window, 1 GiB physical DDR. CAN0/CAN1 and SDIO
@@ -22,7 +29,7 @@ are registered; bus traffic/wireless function remain unvalidated. Software
 reboot/efex, kexec, LAN, other peripherals and long-term DDR/storage qualification
 remain pending. The board/debugger is disconnected; hardware work awaits reconnection.
 MCP power-GPIO recovery failed. FES post-reboot is not a physical power-cycle test.
-Final clean build/configuration/flashing acceptance rerun remains pending.
+The final clean configuration/full software build passed; flashing/boot acceptance of this image remains pending.
 Evidence: docs/records/2026-11-04-bringup/hardware-status.json and published logs.
 
 Earlier records below are historical, including the prior rootfs failure.

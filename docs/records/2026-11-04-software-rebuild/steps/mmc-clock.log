@@ -1,0 +1,38 @@
+{
+  "status": "pass",
+  "ccu_common_stages": 73,
+  "all_common_stages_registered": true,
+  "oscillator_only_identification_rates": [
+    {
+      "card_hz": 100000,
+      "module_hz": 200000,
+      "parent_hz": 24000000,
+      "m": 30,
+      "n": 4
+    },
+    {
+      "card_hz": 200000,
+      "module_hz": 400000,
+      "parent_hz": 24000000,
+      "m": 30,
+      "n": 2
+    },
+    {
+      "card_hz": 300000,
+      "module_hz": 600000,
+      "parent_hz": 24000000,
+      "m": 20,
+      "n": 2
+    },
+    {
+      "card_hz": 400000,
+      "module_hz": 800000,
+      "parent_hz": 24000000,
+      "m": 30,
+      "n": 1
+    }
+  ],
+  "oscillator_only_max_card_hz": 12000000,
+  "pll_600m_max_card_hz": 25000000,
+  "hardware_test": false
+}

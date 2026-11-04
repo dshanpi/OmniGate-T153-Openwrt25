@@ -1,0 +1,14 @@
+{
+  "started_utc": "2026-11-04T13:33:48.126605+00:00",
+  "source_commit": "f16dc94a5ad509d9a951d657864d3b6ea2aa94e0",
+  "checkout_status": "?? downloads\n",
+  "target_build_dir_preexisted": false,
+  "staging_dir_preexisted": false,
+  "uboot_build_dir_preexisted": false,
+  "cache_links": {
+    "downloads": "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/downloads",
+    "openwrt/dl": "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt/dl"
+  },
+  "jobs": 8,
+  "host": "Linux-7.0.0-28-generic-x86_64-with-glibc2.39"
+}

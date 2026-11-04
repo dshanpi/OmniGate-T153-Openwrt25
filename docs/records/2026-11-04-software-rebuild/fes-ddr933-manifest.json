@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "status": "software byte-for-byte reproduction passed; this invocation performs no hardware IO",
+  "purpose": "ram-fes-bootstrap",
+  "flash_payload": false,
+  "vendor_ddr_binary": true,
+  "filename": "t153-fes-ddr933-ram-loader.img",
+  "bytes": 1154048,
+  "sha256": "0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873",
+  "stock_sha256": "bae54486bacddc18c96e207ff4530560bfadb47db8f141dc08a6bb13f59981ba",
+  "license": "LicenseRef-NOASSERTION",
+  "profile_source": "T153 Tina V1.0 device/config/chips/t153/configs/omnigate/sys_config.fex [dram_para]",
+  "frequency_mhz": {
+    "before": 1066,
+    "after": 933
+  },
+  "other_31_dram_words_unchanged": true,
+  "stock_mmc_logical_offset_sectors": 40960,
+  "entire_container_byte_diff": [
+    {
+      "offset": "0x12e98",
+      "before": "0x2a",
+      "after": "0xa5"
+    },
+    {
+      "offset": "0x12e99",
+      "before": "0x4",
+      "after": "0x3"
+    },
+    {
+      "offset": "0x3180c",
+      "before": "0x1d",
+      "after": "0x98"
+    },
+    {
+      "offset": "0x3180d",
+      "before": "0xb8",
+      "after": "0xb7"
+    },
+    {
+      "offset": "0x31838",
+      "before": "0x2a",
+      "after": "0xa5"
+    },
+    {
+      "offset": "0x31839",
+      "before": "0x4",
+      "after": "0x3"
+    }
+  ],
+  "fes1_checksum_before": {
+    "bytes": 49504,
+    "stored": "0xa5b5b81d",
+    "calculated": "0xa5b5b81d"
+  },
+  "fes1_checksum_after": {
+    "bytes": 49504,
+    "stored": "0xa5b5b798",
+    "calculated": "0xa5b5b798"
+  },
+  "entries": [
+    {
+      "filename": "sunxi_mbr.fex",
+      "maintype": "12345678",
+      "subtype": "1234567890___MBR",
+      "offset": 7168,
+      "length": 65536,
+      "sha256": "7981abc143428d8ea653e65a2fe08da96cb1b98c22dd271ac4a10ef4ff227197",
+      "role": "mbr-placeholder",
+      "flash_to_media": false
+    },
+    {
+      "filename": "config.fex",
+      "maintype": "COMMON",
+      "subtype": "SYS_CONFIG_BIN00",
+      "offset": 72704,
+      "length": 5120,
+      "sha256": "f7c4bc23a57b276150ffe34cc05b9601e6ae31f247c7ee7c3331ec591259d1da",
+      "role": "sys-config",
+      "flash_to_media": false
+    },
+    {
+      "filename": "board.fex",
+      "maintype": "COMMON",
+      "subtype": "BOARD_CONFIG_BIN",
+      "offset": 77824,
+      "length": 1024,
+      "sha256": "ab1d5b1e29bc04511d1fc6942ae365f3202d5795fa06e3699acfae987fafb245",
+      "role": "board-config",
+      "flash_to_media": false
+    },
+    {
+      "filename": "sunxi.fex",
+      "maintype": "COMMON",
+      "subtype": "DTB_CONFIG000000",
+      "offset": 78848,
+      "length": 123904,
+      "sha256": "3e93bac5d2fa95f26cc1dd67f6030e91abf03765a16467ce66915aeeebcd765f",
+      "role": "dtb-config",
+      "flash_to_media": false
+    },
+    {
+      "filename": "fes1.fex",
+      "maintype": "FES",
+      "subtype": "FES_1-0000000000",
+      "offset": 202752,
+      "length": 49504,
+      "sha256": "d7e297807738760f5bff527770203e3c5a301bbdb51062ed989404d65e8e5e42",
+      "role": "fes1",
+      "flash_to_media": false
+    },
+    {
+      "filename": "u-boot.fex",
+      "maintype": "12345678",
+      "subtype": "UBOOT_0000000000",
+      "offset": 252928,
+      "length": 901120,
+      "sha256": "80bc0bc21d429677ca29d1eb3bc8437980dffc0a57c880a48b70a6b8725151c2",
+      "role": "uboot",
+      "flash_to_media": false
+    }
+  ],
+  "external_vendor_host_executables_used": false,
+  "limits": [
+    "Vendor RAM loader inputs remain binary; persistent source-only SPL is separate.",
+    "Exact output matches the second-flash loader; it does not establish the first-bit-error cause.",
+    "Use stock MMC translation with host raw compensation; never use physical0."
+  ]
+}

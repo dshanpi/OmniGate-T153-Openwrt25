@@ -1,0 +1,42 @@
+DDR timeout: 03130000 mask=10000000 expected=10000000 actual=a8000000
+DDR timeout: 03120324 mask=00000001 expected=00000001 actual=00000000
+DDR timeout: 031201bc mask=00000001 expected=00000001 actual=00000000
+DDR timeout: 03120004 mask=00000003 expected=00000001 actual=00000000
+DDR timeout: 03120018 mask=00000001 expected=00000000 actual=00000001
+DDR timeout: 03120010 mask=80000000 expected=00000000 actual=800000f0
+DDR timeout: 03131034 mask=80000000 expected=80000000 actual=01100301
+DDR4 source init: 512 MiB physical x16; bootstrap 480 MHz
+DDR4: 933 MHz read eye and Vref training
+
+DDR lane 0: read Vref=64 delay=30
+DDR lane 1: read Vref=64 delay=30
+DDR4: write eye and Vref training
+
+DDR write Vref=26 delays=104,104
+DDR4: per-bit read/write deskew
+
+DDR4: geometry and memory checks
+
+DDR4: source initialization and memory checks passed
+
+DDR4 source init: 512 MiB physical x16; bootstrap 480 MHz
+DDR4: 933 MHz read eye and Vref training
+
+DDR read eye missing/narrow on lane 0
+DDR4 source init: 512 MiB physical x16; bootstrap 480 MHz
+DDR4: 933 MHz read eye and Vref training
+
+DDR lane 0: read Vref=64 delay=30
+DDR lane 1: read Vref=64 delay=30
+DDR4: write eye and Vref training
+
+DDR write eye missing/narrow across the two lanes
+
+DDR4 source init: 512 MiB physical x16; bootstrap 480 MHz
+DDR low-frequency bootstrap failed
+
+DDR4 source init: 512 MiB physical x16; bootstrap 480 MHz
+DDR4: 933 MHz read eye and Vref training
+
+DDR read eye missing/narrow on lane 0
+PASS: source DDR algorithm, 8 handshake failures, missing/narrow eyes, alias rejection

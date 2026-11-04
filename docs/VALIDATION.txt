@@ -1,3 +1,10 @@
+2026-11-04软件复跑结果：已从GitHub固定提交f16dc94在独立目录完成完整
+OpenWrt/工具链/内核/U-Boot编译、FES组包及17阶段检查，全部exit 0。
+本次固件raw SHA256为42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8。
+展开配置、来源、工具版本及日志见docs/records/2026-11-04-software-rebuild/
+（从docs内阅读时去掉前缀docs/）。板卡已断开，本次未进行烧录/启动验证。
+下文提到尚未完成的“最终全流程”包含硬件验收，不能据软件构建通过宣称已完成。
+
 验证范围与证据
 ==============
 
@@ -20,8 +27,8 @@ serial-log-provenance.json、network-storage-provenance.json。
 
 当前软件候选
 ------------
-新原生reboot-mode/procd/BusyBox及WAN rgmii-rxid已编入软件候选；最新整盘
-SHA256为43a54935f6bc3f80cd810b95f6fbbb1c6310418521a0d410336c8d5aceb47049，
+新原生reboot-mode/procd/BusyBox及WAN rgmii-rxid已编入独立完整构建；最新整盘
+SHA256为42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8，
 离线verify-only通过，尚未烧录/启动。它与上述已安装6ea镜像不同。
 板卡/调试器已断开，正规reboot efex、普通reboot和持久rxid实机验证等待重连。
 没有实际执行kexec，不能记为通过。CAN、Wi-Fi、LAN和长期可靠性也仍待验收。
@@ -29,7 +36,7 @@ SHA256为43a54935f6bc3f80cd810b95f6fbbb1c6310418521a0d410336c8d5aceb47049，
 完整软件入口
 ------------
   bash scripts/build-release.sh --jobs 4 --with-fes --factory-image /path/to/factory.img
-在干净checkout执行，允许复用下载归档，不复用对象/stamp。实际完整复跑尚未完成。
+在干净checkout执行，允许复用下载归档，不复用对象/stamp。已完整执行通过17阶段。
 流水线记录每步log/exit，任何一步失败立即停止；最终软件报告不宣称硬件通过。
 包含feeds缓存、DDR模型、MMC时钟、用户态reboot、原生内核reboot回归，以及
 1GiB U-Boot/OpenWrt、整盘校验和12项磁盘损坏反例测试。
@@ -50,7 +57,7 @@ verify-artifacts读取真实bin/targets产物，检查FIT CRC/SHA、ARM内核及
 已有软件证据包括logs/artifact-validation.json、linux-reboot-source-validation.json、
 linux-reboot-kernel-tests.log、reboot-command-validation.json及各构建exit。
 exit文件缺失表示任务未确认结束；只有exit=0和产物验证均通过才记软件成功。
-旧openwrt-build-v6为早期完整构建，不替代最终干净配置完整复跑。
+旧openwrt-build-v6为早期记录；本次独立完整构建见records/2026-11-04-software-rebuild/。
 
 旧512MiB/FEL安装器测试属于其自身profile，不能用其通过代替1GiB板验收。
 最终步骤见BUILD-REPRODUCE.txt和FLASH-SOURCE.txt。

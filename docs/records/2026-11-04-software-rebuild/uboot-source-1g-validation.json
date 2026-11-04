@@ -1,0 +1,64 @@
+{
+  "status": "1GiB test profile; software checks passed; hardware NOT tested",
+  "upstream": "U-Boot 2026.07 with out-of-tree T153 source port",
+  "ddr_source": "port/uboot/files/board/dshanpi/t153/ddr.c",
+  "vendor_ddr_object_linked": false,
+  "factory_monitor_required": false,
+  "hardware_verified": false,
+  "linux_cpus_enabled": 1,
+  "psci_smp_implemented": false,
+  "ddr_mhz": [
+    480,
+    933
+  ],
+  "ddr_size_mib": 1024,
+  "ddr_rows": 16,
+  "linux_usable_mib": 384,
+  "ddr_bus_bits": 16,
+  "ddr_ranks": 1,
+  "spl_entry": "0x40060",
+  "spl_bss_end": "0x4abe0",
+  "spl_initial_stack": "0x66000",
+  "spl_heap_bytes": 16384,
+  "fel_thunk": "0x66a00",
+  "fel_swap": "0x66c00..0x67fff",
+  "fel_returned_header": "0x66c00",
+  "fel_script_address": "0x4f100000",
+  "uboot_entry": "0x4a000000",
+  "sd_spl_offset": 8192,
+  "sd_uboot_offset": 131072,
+  "media_write_enabled": false,
+  "default_boot": "FEL script or boot.scr from boot MMC first; 3 second console delay",
+  "fel_tool_commit": "660d7e08edd025c8f84ab8eba3d8a903a5b81ae0",
+  "fel_tool_archive_sha256": "8279709da499dd8100f6f071075ab9cfda0f1b068240fcbee1fe99116b745637",
+  "host_model_tests": "logs/ddr-source-1g-tests.log and logs/ddr-source-512-regression.log (ASan/UBSan)",
+  "arm_dt_fixup_test": "tests/ddr/test-uboot-dt.py",
+  "limitations": [
+    "hardware bring-up pending",
+    "CPU0 only; PSCI/SMP not implemented",
+    "SD/eMMC only; no SPI flash loader",
+    "Linux installer and card cold boot require hardware validation"
+  ],
+  "outputs": {
+    "t153-uboot-2026.07-source-1g-spl.bin": {
+      "bytes": 49152,
+      "sha256": "623051f91994ee88c7931df9e3ffcf1d097f0ab91f0420bbb71faebce2ecf147"
+    },
+    "t153-uboot-2026.07-source-1g.bin": {
+      "bytes": 267288,
+      "sha256": "3efa08b30aae60440b49cf09151013dd61ad5586d24e1573a5c1c49bef5f2c90"
+    },
+    "t153-uboot-2026.07-source-1g.img": {
+      "bytes": 267352,
+      "sha256": "5b666c0e1d63a0a9005bd0a87731ed931d4dd9b0aa9700b403092a4e773b9e3c"
+    },
+    "t153-uboot-2026.07-source-1g-fel.bin": {
+      "bytes": 316504,
+      "sha256": "2a0697c5d43851c6820902d09a367bd7ab63098e38c337e6b40267bac379af9d"
+    },
+    "t153-uboot-2026.07-source-1g-sd-bootarea.bin": {
+      "bytes": 390232,
+      "sha256": "f4df161cf1443981dbe97a4871cc7afbf9e7495dd19db2df1c962f534a7d5cd2"
+    }
+  }
+}

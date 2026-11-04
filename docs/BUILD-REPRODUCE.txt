@@ -1,8 +1,15 @@
-从配置到验收的复现说明（整理中，未作最终发布验收）
+2026-11-04软件复跑结果：已从GitHub固定提交f16dc94在独立目录完成完整
+OpenWrt/工具链/内核/U-Boot编译、FES组包及17阶段检查，全部exit 0。
+本次固件raw SHA256为42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8。
+展开配置、来源、工具版本及日志见docs/records/2026-11-04-software-rebuild/
+（从docs内阅读时去掉前缀docs/）。板卡已断开，本次未进行烧录/启动验证。
+下文提到尚未完成的“最终全流程”包含硬件验收，不能据软件构建通过宣称已完成。
+
+从配置到验收的复现说明（独立软件构建已通过，硬件复跑未执行）
 ==================================================
 
-本文件记录现有源码流程和发布前还需补齐的步骤。只有实际生成的日志和
-镜像hash能作为执行证据。最终“干净配置→完整编译→烧录→运行验收”尚未复跑。
+本文件记录可复现的软件流程和仍需进行的硬件步骤。独立干净配置与完整
+编译已完成；本次没有执行烧录和运行验收。日志及镜像hash见本页开头记录。
 当前实机已用MMC literal-4096修复镜像挂载eMMC ext4并进入OpenWrt shell，
 运行时RX delay修正后100Mbps WAN DHCP及16MiB HTTP SHA已通过，
 但持久rxid、原生回FEL及1Gbps稳定性仍待验证；最终干净全流程复跑尚未完成。
@@ -17,7 +24,7 @@
 - packages、LuCI：configs/feeds.lock。
 - sunxi-tools：660d7e08edd025c8f84ab8eba3d8a903a5b81ae0，build-fel-tool.sh。
 所有来源及许可见SOURCES.txt、COPYING和LICENSES/。
-最终发布commit/tag、完整配置hash和验收镜像hash：待最终复跑后填写。
+本次构建提交f16dc94、完整配置hash和软件镜像hash见records/2026-11-04-software-rebuild/。
 
 二、构建主机
 ------------
@@ -32,13 +39,13 @@ Ubuntu 24.04依赖安装命令（仅安装主机依赖，不访问板卡）：
     subversion device-tree-compiler u-boot-tools e2fsprogs dosfstools mtools \
     libusb-1.0-0-dev pkg-config bzip2
   sh scripts/bootstrap.sh --check-only
-具体主机包版本和工具版本待最终复跑时采集。
+实测主机包版本和工具版本已保存在软件复跑记录的host-environment.json。
 不要求在Windows保存源码。源码和输出可全部位于Linux构建服务器。
 独立干净checkout的下载缓存链接、feeds自动校验/解包及空间估计见REBUILD-CACHE.txt。
 
-三、当前1GiB源码构建路径（已审查入口，最终干净复跑待执行）
+三、当前1GiB源码构建路径（已独立完整执行通过）
 ----------------------------------------------------------
-新统一入口（已通过语法、依赖及干净目录保护检查；完整执行尚待最终复跑）：
+统一入口（已从GitHub固定提交完成17阶段检查）：
   bash scripts/build-release.sh --jobs 4
 同时复现FES，提供用户拥有的原厂镜像：
   bash scripts/build-release.sh --jobs 4 --with-fes --factory-image /path/to/factory.img
@@ -99,7 +106,7 @@ raw写盘地址须使用当前OpenixCLI/MCP的stock映射：主机已补偿+4096
 及mcp-fes-workflow.example.json中提供，无私人会话。完整步骤见FLASH-SOURCE.txt。
 工具当前版本/能力以连接时capabilities为准；原生回FEL实机验证尚待重连。
 
-六、最终验收（待执行；任何一项未达标均不得写“完成”）
+六、完整验收清单（软件步骤已完成；硬件步骤仍未执行）
 ----------------------------------------------------
 1. 记录最终源码commit、配置、依赖锁和工具版本。
 2. 从干净源码/配置完整构建；允许复用已校验下载缓存，不复用旧目标文件。

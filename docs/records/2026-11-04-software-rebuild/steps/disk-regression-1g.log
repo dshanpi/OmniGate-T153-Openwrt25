@@ -1,0 +1,17 @@
+test_changed_disk_id_breaks_root_contract (__main__.DiskImageTests.test_changed_disk_id_breaks_root_contract) ... ok
+test_corrupt_fit_rejected (__main__.DiskImageTests.test_corrupt_fit_rejected) ... ok
+test_corrupt_proper_rejected (__main__.DiskImageTests.test_corrupt_proper_rejected) ... ok
+test_corrupt_spl_rejected (__main__.DiskImageTests.test_corrupt_spl_rejected) ... ok
+test_layout_contract (__main__.DiskImageTests.test_layout_contract) ... ok
+test_normal_fit_has_only_empty_builtin_cpio (__main__.DiskImageTests.test_normal_fit_has_only_empty_builtin_cpio) ... ok
+test_overlong_spl_rejected (__main__.DiskImageTests.test_overlong_spl_rejected) ... ok
+test_rescue_fit_cannot_be_used_for_persistent_disk (__main__.DiskImageTests.test_rescue_fit_cannot_be_used_for_persistent_disk) ... ok
+test_root_partition_cannot_overlap_boot (__main__.DiskImageTests.test_root_partition_cannot_overlap_boot) ... ok
+test_truncated_disk_rejected (__main__.DiskImageTests.test_truncated_disk_rejected) ... ok
+test_valid_bootarea (__main__.DiskImageTests.test_valid_bootarea) ... ok
+test_wrong_proper_load_rejected_even_with_valid_crc (__main__.DiskImageTests.test_wrong_proper_load_rejected_even_with_valid_crc) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.626s
+
+OK

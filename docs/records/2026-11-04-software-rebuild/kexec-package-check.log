@@ -1,0 +1,1 @@
+PASS: ordinary initramfs, rebuilt userspace, linked reboot drivers, CPU0/no-PSCI/384MiB DTB; /home/ubuntu/T153MX/t153-openwrt-verify-20261104/artifacts/kexec-native-reboot

@@ -1,0 +1,12 @@
+{
+  "status": "software checks passed; hardware NOT tested",
+  "kernel": "6.12.113",
+  "fit": "/home/ubuntu/T153MX/t153-openwrt-verify-20261104/openwrt/bin/targets/sunxi/cortexa7/openwrt-25.12-snapshot-t153-6c57f7cd04-sunxi-cortexa7-dshanpi_t153mx-omnigate-initramfs-kernel.bin",
+  "fit_bytes": 7967544,
+  "zimage_bytes": 7963544,
+  "uncompressed_kernel_bytes": 30278848,
+  "kernel_load": "0x48008000",
+  "fit_staging": "0x50000000",
+  "initial_linux_memory_ceiling_MiB": 384,
+  "packages": 162
+}

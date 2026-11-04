@@ -1,0 +1,9 @@
+T153 port applied to /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt (no device was flashed)
+T153 port applied to /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt (no device was flashed)
+PASS upgrade guard: platform_check_image
+PASS upgrade guard: platform_copy_config
+PASS upgrade guard: platform_do_upgrade
+PASS DT pinmux groups
+PASS DT clock providers
+PASS idempotent application
+PASS eth0 LAN / eth1 WAN defaults

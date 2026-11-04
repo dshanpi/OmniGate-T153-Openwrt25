@@ -1,0 +1,24 @@
+{
+  "image": {
+    "file": "t153-openwrt25-source-1g-disk.img",
+    "bytes": 306184192,
+    "sha256": "42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8"
+  },
+  "compressed_image": {
+    "file": "t153-openwrt25-source-1g-disk.img.gz",
+    "bytes": 10028573,
+    "sha256": "76291858f55c74084c795e253d20e102ba5c85a3b66804f5b60a64968a1c7dce"
+  },
+  "checks": [
+    "MBR signature/partition geometry",
+    "eGON checksum/branch",
+    "U-Boot legacy header/data CRC",
+    "FAT16 fsck and file hashes",
+    "FIT payload CRC32/SHA1",
+    "boot script CRC/root PARTUUID",
+    "ext4 e2fsck -fn and /sbin/init",
+    "whole image SHA256"
+  ],
+  "hardware_verified": false
+}
+PASS: source-only disk image packaged; no device accessed

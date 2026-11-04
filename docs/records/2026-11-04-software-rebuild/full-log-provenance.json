@@ -1,0 +1,8 @@
+{
+  "raw_bytes": 39773657,
+  "raw_sha256": "618ef5b06dd7be638947a4dd64d9f155d52e48593d544f38f832636b927a3dfb",
+  "published_plain_sha256": "bb9c57b758a4245022e52651ca3f8fee31dfc0b9dcbfd839f55ac37da2b23e82",
+  "attachment": "openwrt-clean-build.log.gz",
+  "attachment_sha256": "a9032933595f604a30e40d4c0aaac959dc7b0249b0819614ff36dbd3918d1821",
+  "sanitization": "absolute build/source root replaced by role placeholders; otherwise byte-preserved"
+}

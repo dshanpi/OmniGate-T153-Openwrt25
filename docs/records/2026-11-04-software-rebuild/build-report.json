@@ -1,0 +1,32 @@
+{
+  "status": "software build passed; hardware acceptance is separate",
+  "source_commit": "f16dc94a5ad509d9a951d657864d3b6ea2aa94e0",
+  "incremental": false,
+  "hardware_validated_by_this_run": false,
+  "disk": {
+    "file": "t153-openwrt25-source-1g-disk.img",
+    "bytes": 306184192,
+    "sha256": "42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8"
+  },
+  "config_sha256": "5422bb2f9db06acd6c1912c89cbedf6302d9a0f10df0157ab835b4b34eebe2c8",
+  "uboot_config_sha256": "54b4cce4fb09758aa14ff1bd6a949551c09a39c627474048c7282ecc7af78ab6",
+  "steps": {
+    "ddr-model": 0,
+    "disk-regression-1g": 0,
+    "feed-cache": 0,
+    "fes-ddr933": 0,
+    "fes-stock": 0,
+    "fes-tests": 0,
+    "mmc-clock": 0,
+    "openwrt": 0,
+    "package-common": 0,
+    "package-disk-1g": 0,
+    "package-uboot-source-1g": 0,
+    "prepare-source": 0,
+    "prerequisites": 0,
+    "reboot-command": 0,
+    "reboot-kernel": 0,
+    "uboot-source-1g": 0,
+    "verify-disk-1g": 0
+  }
+}
