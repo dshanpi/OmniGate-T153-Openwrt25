@@ -1,3 +1,6 @@
+软件验证预览版下载：https://github.com/dshanpi/t153-openwrt/releases/tag/software-20261104
+推荐整盘文件：t153-openwrt25-source-1g-disk.img.gz；SHA256和使用说明随附件提供。
+
 2026-11-04软件复跑结果：已从GitHub固定提交f16dc94在独立目录完成完整
 OpenWrt/工具链/内核/U-Boot编译、FES组包及17阶段检查，全部exit 0。
 本次固件raw SHA256为42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8。
