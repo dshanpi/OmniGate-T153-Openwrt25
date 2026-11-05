@@ -1,0 +1,49 @@
+p=$(/tmp/phytool read eth1/1/31); /tmp/phytool write eth1/1/31 0
+xa43; /tmp/phytool write eth1/1/24 0x311e; /tmp/phytool read eth1/1/24; /tmp/phy
+tool write eth1/1/31 $p; ethtool -r eth1
+0x311e
+root@OpenWrt:~# [  495.763655] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+for i in 1 2 3 4 5; do sleep 3; echo SAMPLE=$i; cat /sys/class/n
+et/eth1/carrier; cat /sys/class/net/eth1/speed; done; ethtool -S eth1 | grep -E 
+"crc|rx_error"
+SAMPLE=1
+0
+-1
+[  508.244420] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[  508.256947] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+SAMPLE=2
+1
+100
+SAMPLE=3
+1
+100
+SAMPLE=4
+1
+100
+SAMPLE=5
+1
+100
+     mmc_rx_crc_error: 0
+     mmc_rx_error: 0
+     rx_crc_errors: 0
+root@OpenWrt:~# p=$(/tmp/phytool read eth1/1/31); /tmp/phytool write eth1/1/31 0
+xa43; /tmp/phytool write eth1/1/25 0x0863; /tmp/phytool read eth1/1/25; /tmp/phy
+tool write eth1/1/31 $p; ethtool -r eth1; sleep 15; ethtool eth1 | grep -E "Spee
+d|Link detected"
+0x0863
+[  623.683660] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+[  636.164420] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[  636.176943] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+	Speed: 100Mb/s
+	Link detected: yes
+root@OpenWrt:~# b=$(/tmp/phytool read eth1/1/0); /tmp/phytool write eth1/1/0 $((
+b|32768)); sleep 1; /tmp/phytool read eth1/1/0; ethtool -r eth1; sleep 15; ethto
+ol eth1 | grep -E "Speed|Duplex|Link detected"
+[  707.923621] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+0x1040
+[  720.404421] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[  720.416950] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+	Speed: 100Mb/s
+	Duplex: Full
+	Link detected: yes
+root@OpenWrt:~# 

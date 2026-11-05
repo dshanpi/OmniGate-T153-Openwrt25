@@ -1,0 +1,25 @@
+[  973.124433] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[  973.136946] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+ethtool -s eth1 autoneg on advertise 0x020; for i in 1 2 3 4 5 6
+ 7 8 9 10; do sleep 1; s=$(cat /sys/class/net/eth1/speed); echo SPEED=$s; [ "$s"
+ = 1000 ] && break; done; time wget -T 5 -O /tmp/net-test.bin http://192.168.1.2
+28:8871/net-test-16m.bin; sha256sum /tmp/net-test.bin
+[ 1156.221137] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+SPEED=-1
+SPEED=-1
+SPEED=-1
+SPEED=-1
+SPEED=-1
+SPEED=-1
+SPEED=-1
+SPEED=-1
+SPEED=-1
+SPEED=-1
+Downloading 'http://BUILD_HOST:8871/net-test-16m.bin'
+Failed to send request: Operation not permitted
+Command exited with non-zero status 4
+real	0m 0.10s
+user	0m 0.10s
+sys	0m 0.00s
+sha256sum: can't open '/tmp/net-test.bin': No such file or directory
+root@OpenWrt:~# 

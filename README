@@ -50,6 +50,8 @@ FES写入、校验和post-reboot成功，U-Boot读回整盘SHA精确匹配。
 - 物理DDR1GiB，Linux地址窗口仍384MiB。
 - 四核已完成启动、调度和共享数据一致性短测；没有完成长期负载/温控验证。
 - 四核仅实现PSCI 0.1 CPU_ON；CPU热插拔、休眠、多核kexec不支持。
+- 最新WAN时序对照记录：docs/records/2026-11-05-wan/。两组替代延迟配置仍
+  降速，尚无已证实修复；临时设置已通过正常启动恢复。
 - DDR/存储长期可靠性、eth0 LAN及其余外设仍需验收。WAN多次掉线重协商，
   正常重启测试中最终降至100Mbps Full；千兆稳定性问题仍未解决。
 - CAN0/1和SDIO已枚举，不代表CAN通信或Wi-Fi已通过。AIC8800D80 Wi-Fi/BT

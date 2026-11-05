@@ -1,0 +1,68 @@
+[
+  {
+    "file": "t153_rgmii_baseline_20261105.log",
+    "original_sha256": "211df7412d82240b9680f80ea3f91e94951fcc7d3cbe186bfe49a0c7390aa347",
+    "published_sha256": "4864579a494f6312d6ba875ec3a36a8592233bab994d0bee8815550748f957f2",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_rgmii_rx0_boot_20261105.log",
+    "original_sha256": "32b9f16de9edda754ce02e06cfeda780e8450684cca09a0cd737edb88262cf52",
+    "published_sha256": "32b9f16de9edda754ce02e06cfeda780e8450684cca09a0cd737edb88262cf52",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_rgmii_rx0_test_20261105.log",
+    "original_sha256": "4a29b74f529dda308cb5961775de35ad198d2cff8272e7621865f0ee4562309c",
+    "published_sha256": "4a29b74f529dda308cb5961775de35ad198d2cff8272e7621865f0ee4562309c",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_rgmii_id_boot_20261105.log",
+    "original_sha256": "169a5cd10f43b0df8fb5c6fc13caf5edb9441c56fb311e7b347c6cba3f494bcc",
+    "published_sha256": "169a5cd10f43b0df8fb5c6fc13caf5edb9441c56fb311e7b347c6cba3f494bcc",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_rgmii_id_test_20261105.log",
+    "original_sha256": "d10ab56fd72e6b678cd134db3a1af3df8da7c8c50f0e2f443779b51db8e9f6f7",
+    "published_sha256": "d2a49e54bd815bda7e4b8b9a76a770e17bf78a5ad1e0f57560f7fe61831ec57b",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_rgmii_aldps_test_20261105.log",
+    "original_sha256": "973b77095a1903e43c2d71854ecabf73dbbff4fef07fd4c4c5572086402c88ff",
+    "published_sha256": "973b77095a1903e43c2d71854ecabf73dbbff4fef07fd4c4c5572086402c88ff",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_rgmii_master_test_20261105.log",
+    "original_sha256": "ef2316e7997ce42c9790250575d5461479a56b28724129f4e7ba25656b4972f9",
+    "published_sha256": "ef2316e7997ce42c9790250575d5461479a56b28724129f4e7ba25656b4972f9",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_rgmii_id_transfer_20261105.log",
+    "original_sha256": "8a52976a02a126a706543fd240c546ccfbc1f8dd15ed6ff7fcaa578ef38fc2b1",
+    "published_sha256": "6276173b5cbc27958085bc98c4ec5b7ea03881d89e1c734f7435285405547264",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_rgmii_restore_20261105.log",
+    "original_sha256": "e923a99c701aa7ea3c7748174cbf308cf8475f697daac4867177384149aea9bd",
+    "published_sha256": "e923a99c701aa7ea3c7748174cbf308cf8475f697daac4867177384149aea9bd",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_rgmii_loopback_probe_20261105.log",
+    "original_sha256": "5720e9e2810acba1fb12a963f8a63519603bcbeecc8ba0898098c6e858c516f2",
+    "published_sha256": "20d8d9e1965c3ac3b1d318013e17f68acee6df62a9f59c8e3ca4b381705d635f",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_rgmii_final_state_20261105.log",
+    "original_sha256": "94724a834ab7d6fa3dca7d8a8020bd987ce2932c555983f9a9687bebcd32bd96",
+    "published_sha256": "94724a834ab7d6fa3dca7d8a8020bd987ce2932c555983f9a9687bebcd32bd96",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  }
+]

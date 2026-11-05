@@ -1,0 +1,163 @@
+hexdump -C /sys/firmware/devicetree/base/soc/ethernet@4510000/al
+lwinner,tx-delay-taps; ethtool --show-eee eth1; wget -T 5 -O /tmp/phytool http:/
+/BUILD_HOST:8871/phytool; sha256sum /tmp/phytool
+00000000  00 00 00 00                                       |....|
+00000004
+EEE Settings for eth1:
+	EEE status: not supported
+Downloading 'http://BUILD_HOST:8871/phytool'
+Connecting to BUILD_HOST:8871
+Writing to '/tmp/phytool'
+/tmp/phytool         100% |*******************************| 15016   0:00:00 ETA
+Download completed (15016 bytes)
+a09aea85ddb768d23b41c51787ea76ec2b227bb31288e38e94bcd2faa3e8bb8d  /tmp/phytool
+root@OpenWrt:~# chmod 755 /tmp/phytool; for r in 31 0 1 1 4 5 9 10 15; do echo R
+EG=$r; /tmp/phytool read eth1/1/$r; done; ethtool eth1 | grep -E "Speed|Duplex|L
+ink detected|master|slave"
+REG=31
+0x0a42
+REG=0
+0x1040
+REG=1
+0x79ad
+REG=1
+0x79ad
+REG=4
+0x0de1
+REG=5
+0xdde1
+REG=9
+0x0000
+REG=10
+0x0800
+REG=15
+0x2000
+	Speed: 100Mb/s
+	Duplex: Full
+	Link detected: yes
+root@OpenWrt:~# ethtool -s eth1 master-slave preferred-master; echo SET_EXIT=$?;
+ sleep 10; ethtool eth1 | grep -E "Speed|Duplex|Link detected|master|slave"; /tm
+p/phytool read eth1/1/9; /tmp/phytool read eth1/1/10
+ethtool: parameter 'master-slave' can be used only with netlink
+SET_EXIT=1
+	Speed: 100Mb/s
+	Duplex: Full
+	Link detected: yes
+0x0000
+0x0800
+root@OpenWrt:~# cat /sys/kernel/debug/clk/clk_summary | grep -E "gmac|pll-peri|p
+ll-periph|osc24|fanout"
+    gmac1-ahb-bus                    1       1        0        24000000    0          0     50000      Y      4510000.ethernet                stmmaceth                
+    gmac1-ptp-ref                    1       1        0        24000000    0          0     50000      Y      4510000.ethernet                ptp_ref                  
+    gmac0-ahb-bus                    1       1        0        24000000    0          0     50000      Y      4500000.ethernet                stmmaceth                
+    gmac0-ptp-ref                    1       1        0        24000000    0          0     50000      Y      4500000.ethernet                ptp_ref                  
+    gmac-mbus-sw-cfg-bus             1       1        0        24000000    0          0     50000      Y      deviceless                      no_connection_id         
+    gmac0-mbus-sw-cfg-bus            1       1        0        24000000    0          0     50000      Y      4500000.ethernet                mbus-sw                  
+    gmac1-mbus-sw-cfg-bus            1       1        0        24000000    0          0     50000      Y      4510000.ethernet                mbus-sw                  
+    gmac0-mbus-bus                   1       1        0        24000000    0          0     50000      Y      4500000.ethernet                pclk                     
+    gmac1-mbus-bus                   1       1        0        24000000    0          0     50000      Y      4510000.ethernet                pclk                     
+    gmac0-ahb-sw-cfg-bus             1       1        0        24000000    0          0     50000      Y      4500000.ethernet                ahb-sw                   
+    gmac1-ahb-sw-cfg-bus             1       1        0        24000000    0          0     50000      Y      4510000.ethernet                ahb-sw                   
+    pll-peri1                        1       1        0        2400000000  0          0     50000      Y      deviceless                      no_connection_id         
+       pll-peri1-480m                0       0        0        480000000   0          0     50000      Y         deviceless                      no_connection_id         
+          pll-peri1-160m             0       0        0        160000000   0          0     50000      Y            deviceless                      no_connection_id         
+       pll-peri1-800m                0       0        0        800000000   0          0     50000      Y         deviceless                      no_connection_id         
+       pll-peri1-2x                  0       0        0        1200000000  0          0     50000      Y         deviceless                      no_connection_id         
+          pll-peri1-400m             0       0        0        400000000   0          0     50000      Y            deviceless                      no_connection_id         
+             pll-peri1-200m          0       0        0        200000000   0          0     50000      Y               deviceless                      no_connection_id         
+          pll-peri1-600m             0       0        0        600000000   0          0     50000      Y            deviceless                      no_connection_id         
+             pll-peri1-300m          0       0        0        300000000   0          0     50000      Y               deviceless                      no_connection_id         
+                pll-peri1-150m       0       0        0        150000000   0          0     50000      Y                  deviceless                      no_connection_id         
+    pll-peri0                        4       4        0        2400000000  0          0     50000      Y      deviceless                      no_connection_id         
+       pll-peri0-480m                2       2        0        480000000   0          0     50000      Y         deviceless                      no_connection_id         
+          pll-peri0-160m             1       1        0        160000000   0          0     50000      Y            deviceless                      no_connection_id         
+       pll-peri0-800m                1       1        0        800000000   0          0     50000      Y         deviceless                      no_connection_id         
+       pll-peri0-2x                  3       3        0        1200000000  0          0     50000      Y         deviceless                      no_connection_id         
+          pll-peri0-400m             2       2        0        400000000   0          0     50000      Y            deviceless                      no_connection_id         
+             pll-peri0-200m          1       1        0        200000000   0          0     50000      Y               deviceless                      no_connection_id         
+          pll-peri0-600m             2       2        0        600000000   0          0     50000      Y            deviceless                      no_connection_id         
+             pll-peri0-300m          2       2        0        300000000   0          0     50000      Y               deviceless                      no_connection_id         
+                pll-peri0-150m       2       2        0        150000000   0          0     50000      Y                  deviceless                      no_connection_id         
+                   gmac1-phy         1       1        0        25000000    0          0     50000      Y                     4510000.ethernet                phy                      
+                   gmac0-phy         0       0        0        150000000   0          0     50000      N                     deviceless                      no_connection_id         
+root@OpenWrt:~# cat /sys/kernel/debug/clk/clk_summary | grep -E " ahb| apb| mbus
+| axi"; ethtool -d eth1 | head -45
+       can-mbus-gate                 0       0        0        24000000    0          0     50000      N         4541800.can                     mbus                     
+                                                                                                                 453c800.can                     mbus                     
+    smhc3-ahb-bus                    0       0        0        24000000    0          0     50000      N      4023000.mmc                     ahb                      
+    smhc2-ahb-bus                    0       0        0        24000000    0          0     50000      N      4022000.mmc                     ahb                      
+    smhc0-ahb-bus                    0       0        0        24000000    0          0     50000      N      4020000.mmc                     ahb                      
+    gmac0-mbus-sw-cfg-bus            1       1        0        24000000    0          0     50000      Y      4500000.ethernet                mbus-sw                  
+    gmac1-mbus-sw-cfg-bus            1       1        0        24000000    0          0     50000      Y      4510000.ethernet                mbus-sw                  
+    gmac0-ahb-sw-cfg-bus             1       1        0        24000000    0          0     50000      Y      4500000.ethernet                ahb-sw                   
+    gmac1-ahb-sw-cfg-bus             1       1        0        24000000    0          0     50000      Y      4510000.ethernet                ahb-sw                   
+    apb-uart                         1       1        0        24000000    0          0     50000      Y      deviceless                      no_connection_id         
+    apb1                             1       1        0        24000000    0          0     50000      Y      3604000.pinctrl                 apb                      
+             apb0                    0       0        0        100000000   0          0     50000      Y               deviceless                      no_connection_id         
+             ahb                     0       0        0        200000000   0          0     50000      Y               deviceless                      no_connection_id         
+Offset		Values
+------		------
+0x0000:		03 e2 07 08 00 00 20 00 04 04 01 00 00 00 00 00 
+0x0010:		22 00 40 00 01 00 00 01 00 00 00 00 00 00 00 00 
+0x0020:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0030:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0040:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0050:		3c 00 61 03 00 00 00 00 01 00 00 00 00 00 00 00 
+0x0060:		00 00 1a 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0070:		02 00 ff ff 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0080:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0090:		01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x00a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x00b0:		01 00 04 00 20 10 00 00 00 00 00 00 00 00 00 00 
+0x00c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x00d0:		00 00 02 00 00 00 e8 03 00 00 00 00 00 00 01 00 
+0x00e0:		11 00 08 00 01 0c 08 00 00 00 00 00 00 00 00 00 
+0x00f0:		00 20 ba 4a 00 00 00 00 00 e0 ab 4a f0 27 ba 4a 
+0x0100:		00 00 00 00 60 e3 ab 4a ff 01 00 00 ff 01 00 00 
+0x0110:		41 d0 00 00 a0 00 00 00 00 00 00 00 00 00 00 00 
+0x0120:		f0 27 ba 4a 00 00 00 00 60 e3 ab 4a 00 00 00 00 
+0x0130:		82 79 be 4a 00 00 00 00 00 60 15 4b 84 04 00 00 
+0x0140:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0150:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0160:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0170:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0180:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0190:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x01a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x01b0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x01c0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x01d0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x01e0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x01f0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0200:		04 04 3f 00 42 0a 00 00 00 00 00 00 00 00 00 00 
+0x0210:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0220:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0230:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0240:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0250:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0260:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0270:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0280:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x0290:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+0x02a0:		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+root@OpenWrt:~# /tmp/phytool read eth1/1/2; /tmp/phytool read eth1/1/3; p=$(/tmp
+/phytool read eth1/1/31); /tmp/phytool write eth1/1/31 0xd08; /tmp/phytool read 
+eth1/1/17; /tmp/phytool read eth1/1/21; /tmp/phytool write eth1/1/31 $p
+0x001c
+0xc916
+0x0109
+0x0019
+root@OpenWrt:~# p=$(/tmp/phytool read eth1/1/31); /tmp/phytool write eth1/1/31 0
+xa43; /tmp/phytool read eth1/1/24; /tmp/phytool read eth1/1/25; /tmp/phytool rea
+d eth1/1/18; /tmp/phytool write eth1/1/31 $p
+0x2118
+0x0843
+0x30de
+root@OpenWrt:~# ethtool -s eth1 autoneg on advertise 0x02f; sleep 15; ethtool et
+h1 | grep -E "Speed|Link detected"; cat /sys/devices/system/cpu/online
+[ 1312.324454] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[ 1312.336973] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control off
+	Speed: 100Mb/s
+	Link detected: yes
+0-3
+root@OpenWrt:~# 

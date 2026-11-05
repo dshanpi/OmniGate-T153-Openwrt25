@@ -1,0 +1,55 @@
+/tmp/phytool write eth1/1/9 0x0600; /tmp/phytool read eth1/1/9; 
+b=$(/tmp/phytool read eth1/1/0); /tmp/phytool write eth1/1/0 $((b|512)); sleep 1
+2; ethtool eth1 | grep -E "Speed|Link detected"; /tmp/phytool read eth1/1/9; /tm
+p/phytool read eth1/1/10
+0x0400
+[  799.443643] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+[  805.684470] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+[  809.843645] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+	Speed: Unknown!
+	Link detected: no
+0x0600
+0x0800
+root@OpenWrt:~# [  811.924518] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+[  814.008752] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+[  816.084506] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+[  853.523614] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+[  866.004412] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[  866.016995] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+ethtool eth1 | grep -E "Speed|Link detected"; ethtool -r eth1; f
+or i in 1 2 3 4 5 6 7 8 9 10; do sleep 1; echo SAMPLE=$i; /tmp/phytool read eth1
+/1/1; /tmp/phytool read eth1/1/10; done
+	Speed: 100Mb/s
+	Link detected: yes
+[  961.683617] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+SAMPLE=1
+0x7989
+0x0000
+SAMPLE=2
+0x7989
+0x0800
+SAMPLE=3
+0x7989
+0x4800
+SAMPLE=4
+0x7989
+0x0000
+SAMPLE=5
+0x7989
+0x0000
+SAMPLE=6
+0x7989
+0x4800
+SAMPLE=7
+0x7989
+0x0000
+SAMPLE=8
+0x7989
+0x0000
+SAMPLE=9
+0x7989
+0x4800
+SAMPLE=10
+0x7989
+0x0000
+root@OpenWrt:~# 

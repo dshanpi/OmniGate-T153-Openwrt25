@@ -1,0 +1,734 @@
+ca[   16.807553] dwmac-sun8i-t153 4500000.ethernet eth0: Register MEM_TYPE_PAGE_POOL RxQ-0
+[   16.883499] dwmac-sun8i-t153 4500000.ethernet eth0: PHY [stmmac-0:01] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+[   16.973400] dwmac-sun8i-t153 4500000.ethernet eth0: No Safety Features support found
+[   16.991334] dwmac-sun8i-t153 4500000.ethernet eth0: IEEE 1588-2008 Advanced Timestamp supported
+[   17.000662] dwmac-sun8i-t153 4500000.ethernet eth0: registered PTP clock
+[   17.007553] dwmac-sun8i-t153 4500000.ethernet eth0: configuring for phy/rgmii link mode
+[   17.043756] 8021q: adding VLAN 0 to HW filter on device eth0
+[   17.051834] br-lan: port 1(eth0) entered blocking state
+[   17.057202] br-lan: port 1(eth0) entered disabled state
+[   17.062554] dwmac-sun8i-t153 4500000.ethernet eth0: entered allmulticast mode
+[   17.070568] dwmac-sun8i-t153 4500000.ethernet eth0: entered promiscuous mode
+[   17.109884] dwmac-sun8i-t153 4510000.ethernet eth1: Register MEM_TYPE_PAGE_POOL RxQ-0
+t[   17.153373] dwmac-sun8i-t153 4510000.ethernet eth1: PHY [stmmac-1:01] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+[   17.164079] dwmac-sun8i-t153 4510000.ethernet eth1: No Safety Features support found
+[   17.181954] dwmac-sun8i-t153 4510000.ethernet eth1: IEEE 1588-2008 Advanced Timestamp supported
+[   17.191210] dwmac-sun8i-t153 4510000.ethernet eth1: registered PTP clock
+[   17.201225] dwmac-sun8i-t153 4510000.ethernet eth1: configuring for phy/rgmii-rxid link mode
+[   17.234599] 8021q: adding VLAN 0 to HW filter on device eth1
+[   29.684646] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[   29.697182] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+
+
+
+
+
+
+
+
+
+
+U-Boot SPL 2026.07 (Jul 01 2026 - 00:00:00 +0000)
+T153 source SPL: no vendor DDR library
+DDR4 source init: 1024 MiB physical x16; bootstrap 480 MHz
+DDR4: 933 MHz read eye and Vref training
+DDR lane 0: read Vref=56 delay=26
+DDR lane 1: read Vref=52 delay=28
+DDR4: write eye and Vref training
+DDR write Vref=22 delays=82,80
+DDR4: per-bit read/write deskew
+DDR4: geometry and memory checks
+DDR4: source initialization and memory checks passed
+Trying to boot from MMC2
+
+
+U-Boot 2026.07 (Jul 01 2026 - 00:00:00 +0000)
+
+Model: DshanPI T153MX OmniGate RAM U-Boot
+Board: T153 OmniGate (experimental source SPL/U-Boot)
+No vendor DDR/monitor. Four-core PSCI cold-boot profile.
+DRAM:  384 MiB
+Core:  6 devices, 4 uclasses, devicetree: separate
+MMC:   mmc@4020000: 0, mmc@4022000: 1
+Loading Environment from <NULL>... OK
+In:    serial@2600000
+Out:   serial@2600000
+Err:   serial@2600000
+[2KHit any key to stop autoboot: 3[2KHit any key to stop autoboot: 2[2KHit any key to stop autoboot: 1[2KHit any key to stop autoboot: 0
+469 bytes read in 1 ms (458 KiB/s)
+## Executing script at 4f100000
+4309532 bytes read in 392 ms (10.5 MiB/s)
+
+## Checking Image at 50000000 ...
+   FIT image found
+   FIT description: ARM OpenWrt FIT (Flattened Image Tree)
+    Image 0 (kernel-1)
+     Description:  ARM OpenWrt Linux-6.12.113
+     Type:         Kernel Image
+     Compression:  gzip compressed
+     Data Start:   0x500000e4
+     Data Size:    4296157 Bytes = 4.1 MiB
+     Architecture: ARM
+     OS:           Linux
+     Load Address: 0x48008000
+     Entry Point:  0x48008000
+     Hash algo:    crc32
+     Hash value:   6b5fbb60
+     Hash algo:    sha1
+     Hash value:   f6b5ac62f111621c4796b4c698add8dac5b1c97c
+    Image 1 (fdt-1)
+     Description:  ARM OpenWrt dshanpi_t153mx-omnigate device tree blob
+     Type:         Flat Device Tree
+     Compression:  uncompressed
+     Data Start:   0x50419008
+     Data Size:    11979 Bytes = 11.7 KiB
+     Architecture: ARM
+     Hash algo:    crc32
+     Hash value:   b59c1a82
+     Hash algo:    sha1
+     Hash value:   aaa902844064ff7f0bdecfe240c4ecc6db286a4c
+    Default Configuration: 'config-1'
+    Configuration 0 (config-1)
+     Description:  OpenWrt dshanpi_t153mx-omnigate
+     Kernel:       kernel-1
+     FDT:          fdt-1
+## Checking hash(es) for FIT Image at 50000000 ...
+   Hash(es) for Image 0 (kernel-1): crc32+ sha1+ 
+   Hash(es) for Image 1 (fdt-1): crc32+ sha1+ 
+## Loading kernel (any) from FIT Image at 50000000 ...
+   Using 'config-1' configuration
+   Trying 'kernel-1' kernel subimage
+     Description:  ARM OpenWrt Linux-6.12.113
+     Type:         Kernel Image
+     Compression:  gzip compressed
+     Data Start:   0x500000e4
+     Data Size:    4296157 Bytes = 4.1 MiB
+     Architecture: ARM
+     OS:           Linux
+     Load Address: 0x48008000
+     Entry Point:  0x48008000
+     Hash algo:    crc32
+     Hash value:   6b5fbb60
+     Hash algo:    sha1
+     Hash value:   f6b5ac62f111621c4796b4c698add8dac5b1c97c
+   Verifying Hash Integrity ... crc32+ sha1+ OK
+## Loading fdt (any) from FIT Image at 50000000 ...
+   Using 'config-1' configuration
+   Trying 'fdt-1' fdt subimage
+     Description:  ARM OpenWrt dshanpi_t153mx-omnigate device tree blob
+     Type:         Flat Device Tree
+     Compression:  uncompressed
+     Data Start:   0x50419008
+     Data Size:    11979 Bytes = 11.7 KiB
+     Architecture: ARM
+     Hash algo:    crc32
+     Hash value:   b59c1a82
+     Hash algo:    sha1
+     Hash value:   aaa902844064ff7f0bdecfe240c4ecc6db286a4c
+   Verifying Hash Integrity ... crc32+ sha1+ OK
+   Booting using the fdt blob at 0x50419008
+Working FDT set to 50419008
+   Uncompressing Kernel Image to 48008000
+   Loading Device Tree to 5df87000, end 5df8ceca ... OK
+Working FDT set to 5df87000
+Source boot: 4 Cortex-A7 CPUs; PSCI 0.1 CPU_ON; SRAM 0x50000..0x57fff.
+
+Starting kernel ...
+
+[    0.000000] Booting Linux on physical CPU 0x0
+[    0.000000] Linux version 6.12.113 (ubuntu@ubuntu2404) (arm-openwrt-linux-muslgnueabi-gcc (OpenWrt GCC 14.3.0 6c57f7cd04028d370f9360de71f5d59412046194) 14.3.0, GNU ld (GNU Binutils) 2.44) #0 SMP Wed Nov  4 01:33:29 2026
+[    0.000000] CPU: ARMv7 Processor [410fc075] revision 5 (ARMv7), cr=30c5387d
+[    0.000000] CPU: div instructions available: patching division code
+[    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
+[    0.000000] OF: fdt: Machine model: DshanPI T153MX OmniGate
+[    0.000000] earlycon: uart8250 at MMIO32 0x0000000002600000 (options '115200n8,24000000')
+[    0.000000] printk: legacy bootconsole [uart8250] enabled
+[    0.000000] Memory policy: Data cache writealloc
+[    0.000000] Zone ranges:
+[    0.000000]   Normal   [mem 0x0000000048000000-0x000000005fffffff]
+[    0.000000]   HighMem  empty
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000048000000-0x000000005fffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000048000000-0x000000005fffffff]
+[    0.000000] OF: reserved mem: 0x0000000042100000..0x00000000425c4fff (4884 KiB) nomap non-reusable remoteproc@42100000
+[    0.000000] OF: reserved mem: 0x0000000042900000..0x00000000429fffff (1024 KiB) nomap non-reusable secure-monitor@42900000
+[    0.000000] OF: reserved mem: 0x0000000044000000..0x00000000441fffff (2048 KiB) nomap non-reusable remoteproc@44000000
+[    0.000000] psci: probing for conduit method from DT.
+[    0.000000] psci: Using PSCI v0.1 Function IDs from DT
+[    0.000000] percpu: Embedded 14 pages/cpu s25612 r8192 d23540 u57344
+[    0.000000] Kernel command line: console=ttyS0,115200 earlycon=uart8250,mmio32,0x02600000,115200n8,24000000 root=PARTUUID=15302512-02 rootfstype=ext4 rootwait rw clk_ignore_unused
+[    0.000000] Dentry cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 32768 (order: 5, 131072 bytes, linear)
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 98304
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000] rcu: Hierarchical RCU implementation.
+[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
+[    0.000000] 	Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000] RCU Tasks Trace: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.000000] NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.000000] arch_timer: cp15 timer(s) running at 24.00MHz (virt).
+[    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0x588fe9dc0, max_idle_ns: 440795202592 ns
+[    0.000003] sched_clock: 56 bits at 24MHz, resolution 41ns, wraps every 4398046511097ns
+[    0.008812] Switching to timer-based delay loop, resolution 41ns
+[    0.015950] Console: colour dummy device 80x25
+[    0.020923] Calibrating delay loop (skipped), value calculated using timer frequency.. 48.00 BogoMIPS (lpj=240000)
+[    0.032338] CPU: Testing write buffer coherency: ok
+[    0.037774] pid_max: default: 32768 minimum: 301
+[    0.061176] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.069252] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.086749] /cpus/cpu@0 missing clock-frequency property
+[    0.092705] /cpus/cpu@1 missing clock-frequency property
+[    0.098576] /cpus/cpu@2 missing clock-frequency property
+[    0.104465] /cpus/cpu@3 missing clock-frequency property
+[    0.110319] CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+[    0.119051] Setting up static identity map for 0x48200000 - 0x48200060
+[    0.126540] rcu: Hierarchical SRCU implementation.
+[    0.131856] rcu: 	Max phase no-delay instances is 1000.
+[    0.138266] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    0.147471] dyndbg: Ignore empty _ddebug table in a CONFIG_DYNAMIC_DEBUG_CORE build
+[    0.156550] smp: Bringing up secondary CPUs ...
+[    0.163055] CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+[    0.164744] CPU2: thread -1, cpu 2, socket 0, mpidr 80000002
+[    0.166448] CPU3: thread -1, cpu 3, socket 0, mpidr 80000003
+[    0.166680] smp: Brought up 1 node, 4 CPUs
+[    0.189878] SMP: Total of 4 processors activated (192.00 BogoMIPS).
+[    0.196774] CPU: All CPU(s) started in SVC mode.
+[    0.203241] Memory: 372188K/393216K available (8746K kernel code, 929K rwdata, 2776K rodata, 2048K init, 261K bss, 19692K reserved, 0K cma-reserved, 0K highmem)
+[    0.228237] VFP support v0.3: implementor 41 architecture 2 part 30 variant 7 rev 5
+[    0.237208] futex hash table entries: 1024 (order: 4, 65536 bytes, linear)
+[    0.255879] pinctrl core: initialized pinctrl subsystem
+[    0.267739] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.275038] DMA: preallocated 256 KiB pool for atomic coherent allocations
+[    0.284730] thermal_sys: Registered thermal governor 'step_wise'
+[    0.285048] No ATAGs?
+[    0.298351] /soc/interrupt-controller@3401000: Fixed dependency cycle(s) with /soc/interrupt-controller@3401000
+[    0.339777] SCSI subsystem initialized
+[    0.344888] usbcore: registered new interface driver usbfs
+[    0.351087] usbcore: registered new interface driver hub
+[    0.357002] usbcore: registered new device driver usb
+[    0.363074] pps_core: LinuxPPS API ver. 1 registered
+[    0.368537] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    0.378650] PTP clock support registered
+[    0.383490] Advanced Linux Sound Architecture Driver Initialized.
+[    0.393002] clocksource: Switched to clocksource arch_sys_counter
+[    0.418612] NET: Registered PF_INET protocol family
+[    0.424450] IP idents hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    0.435023] tcp_listen_portaddr_hash hash table entries: 512 (order: 0, 4096 bytes, linear)
+[    0.444294] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.452827] TCP established hash table entries: 4096 (order: 2, 16384 bytes, linear)
+[    0.461454] TCP bind hash table entries: 4096 (order: 4, 65536 bytes, linear)
+[    0.469533] TCP: Hash tables configured (established 4096 bind 4096)
+[    0.477512] MPTCP token hash table entries: 512 (order: 1, 8192 bytes, linear)
+[    0.486063] UDP hash table entries: 256 (order: 1, 8192 bytes, linear)
+[    0.493321] UDP-Lite hash table entries: 256 (order: 1, 8192 bytes, linear)
+[    0.501976] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    0.511175] workingset: timestamp_bits=14 max_order=17 bucket_order=3
+[    0.539232] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+[    0.549957] jffs2: version 2.2 (NAND) (SUMMARY) (LZMA) (RTIME) (CMODE_PRIORITY) (c) 2001-2006 Red Hat, Inc.
+[    0.595364] Serial: 8250/16550 driver, 10 ports, IRQ sharing disabled
+[    0.623354] loop: module loaded
+[    0.634557] usbcore: registered new interface driver usb-storage
+[    0.642079] mousedev: PS/2 mouse device common for all mice
+[    0.648775] i2c_dev: i2c /dev entries driver
+[    0.655201] sunxi-wdt 2050000.watchdog: Watchdog enabled (timeout=16 sec, nowayout=0)
+[    0.669861] NET: Registered PF_INET6 protocol family
+[    0.678925] Segment Routing with IPv6
+[    0.683169] In-situ OAM (IOAM) with IPv6
+[    0.687687] NET: Registered PF_PACKET protocol family
+[    0.693840] can: controller area network core
+[    0.700576] NET: Registered PF_CAN protocol family
+[    0.705917] 8021q: 802.1Q VLAN Support v1.8
+[    0.710851] Registering SWP/SWPB emulation handler
+[    0.776903] gpio gpiochip0: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.810292] sun8i-t153-pinctrl 3604000.pinctrl: initialized sunXi PIO driver
+[    0.821930] printk: legacy console [ttyS0] disabled
+[    0.848594] 2600000.serial: ttyS0 at MMIO 0x2600000 (irq = 328, base_baud = 1500000) is a 16550A
+[    0.858400] printk: legacy console [ttyS0] enabled
+[    0.858400] printk: legacy console [ttyS0] enabled
+[    0.868503] printk: legacy bootconsole [uart8250] disabled
+[    0.868503] printk: legacy bootconsole [uart8250] disabled
+[    0.905700] 2605000.serial: ttyS5 at MMIO 0x2605000 (irq = 329, base_baud = 1500000) is a 16550A
+[    0.916640] dwmac-sun8i-t153 4500000.ethernet: IRQ eth_wake_irq not found
+[    0.923564] dwmac-sun8i-t153 4500000.ethernet: IRQ sfty not found
+[    0.930551] dwmac-sun8i-t153 4500000.ethernet: User ID: 0x20, Synopsys ID: 0x54
+[    0.938007] dwmac-sun8i-t153 4500000.ethernet: 	DWMAC4/5
+[    0.943406] dwmac-sun8i-t153 4500000.ethernet: DMA HW capability register supported
+[    0.951077] dwmac-sun8i-t153 4500000.ethernet: RX Checksum Offload Engine supported
+[    0.958822] dwmac-sun8i-t153 4500000.ethernet: TX Checksum insertion supported
+[    0.966116] dwmac-sun8i-t153 4500000.ethernet: Enable RX Mitigation via HW Watchdog Timer
+[    0.974371] dwmac-sun8i-t153 4500000.ethernet: device MAC address 06:8d:f6:12:a3:2b
+[    0.982047] dwmac-sun8i-t153 4500000.ethernet: Enabled RFS Flow TC (entries=10)
+[    0.989421] dwmac-sun8i-t153 4500000.ethernet: Using 32/40 bits DMA host/device width
+[    1.060847] dwmac-sun8i-t153 4510000.ethernet: IRQ eth_wake_irq not found
+[    1.067821] dwmac-sun8i-t153 4510000.ethernet: IRQ sfty not found
+[    1.074969] dwmac-sun8i-t153 4510000.ethernet: User ID: 0x20, Synopsys ID: 0x54
+[    1.082352] dwmac-sun8i-t153 4510000.ethernet: 	DWMAC4/5
+[    1.087801] dwmac-sun8i-t153 4510000.ethernet: DMA HW capability register supported
+[    1.095547] dwmac-sun8i-t153 4510000.ethernet: RX Checksum Offload Engine supported
+[    1.103256] dwmac-sun8i-t153 4510000.ethernet: TX Checksum insertion supported
+[    1.110492] dwmac-sun8i-t153 4510000.ethernet: Enable RX Mitigation via HW Watchdog Timer
+[    1.118759] dwmac-sun8i-t153 4510000.ethernet: device MAC address 16:b4:50:c6:7b:4f
+[    1.126468] dwmac-sun8i-t153 4510000.ethernet: Enabled RFS Flow TC (entries=10)
+[    1.133836] dwmac-sun8i-t153 4510000.ethernet: Using 32/40 bits DMA host/device width
+[    1.223748] clk: Not disabling unused clocks
+[    1.225858] ohci-platform 4300400.usb: Generic Platform OHCI controller
+[    1.226038] ehci-platform 4300000.usb: EHCI Host Controller
+[    1.226135] ehci-platform 4300000.usb: new USB bus registered, assigned bus number 1
+[    1.226372] ehci-platform 4300000.usb: irq 29, io mem 0x04300000
+[    1.226712] sunxi-mmc 4020000.mmc: SMHC version 0x50530, DMA address shift 2
+[    1.228100] ALSA device list:
+[    1.228800] sunxi-mmc 4023000.mmc: SMHC version 0x50530, DMA address shift 2
+[    1.230570] sun8i-t153-pinctrl 3604000.pinctrl: supply vcc-pc not found, using dummy regulator
+[    1.231544] sunxi-mmc 4022000.mmc: SMHC version 0x50530, DMA address shift 2
+[    1.232482] sunxi-mmc 4023000.mmc: allocated mmc-pwrseq
+[    1.234803] ohci-platform 4300400.usb: new USB bus registered, assigned bus number 2
+[    1.240384]   No soundcards found.
+[    1.243031] ehci-platform 4300000.usb: USB 2.0 started, EHCI 1.00
+[    1.243502] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.12
+[    1.243533] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    1.243555] usb usb1: Product: EHCI Host Controller
+[    1.243572] usb usb1: Manufacturer: Linux 6.12.113 ehci_hcd
+[    1.243588] usb usb1: SerialNumber: 4300000.usb
+[    1.244642] hub 1-0:1.0: USB hub found
+[    1.244878] hub 1-0:1.0: 1 port detected
+[    1.248487] ohci-platform 4300400.usb: irq 30, io mem 0x04300400
+[    1.253098] sunxi-mmc 4020000.mmc: initialized, max. request size: 1024 KB, uses new timings mode
+[    1.260034] sunxi-mmc 4022000.mmc: initialized, max. request size: 1024 KB, uses new timings mode
+[    1.317431] usb usb2: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 6.12
+[    1.368084] mmc0: new MMC card at address 0001
+[    1.371461] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    1.381853] mmcblk0: mmc0:0001 AJTD4R 14.6 GiB
+[    1.384194] usb usb2: Product: Generic Platform OHCI controller
+[    1.384217] usb usb2: Manufacturer: Linux 6.12.113 ohci_hcd
+[    1.393393]  mmcblk0: p1 p2
+[    1.395906] usb usb2: SerialNumber: 4300400.usb
+[    1.404234] mmcblk0boot0: mmc0:0001 AJTD4R 4.00 MiB
+[    1.408550] hub 2-0:1.0: USB hub found
+[    1.412547] mmcblk0boot1: mmc0:0001 AJTD4R 4.00 MiB
+[    1.414881] hub 2-0:1.0: 1 port detected
+[    1.466149] sunxi-mmc 4023000.mmc: initialized, max. request size: 1024 KB, uses new timings mode
+[    1.495422] mmc2: new SDIO card at address 390b
+[    1.506025] EXT4-fs (mmcblk0p2): recovery complete
+[    1.512100] EXT4-fs (mmcblk0p2): mounted filesystem ff313567-e9f1-5a5d-9895-3ba130b4a864 r/w with ordered data mode. Quota mode: disabled.
+[    1.523036] usb 1-1: new high-speed USB device number 2 using ehci-platform
+[    1.524780] VFS: Mounted root (ext4 filesystem) on device 179:2.
+[    1.543109] Freeing unused kernel image (initmem) memory: 2048K
+[    1.549518] Run /sbin/init as init process
+[    1.628138] init: Console is alive
+[    1.631999] init: - watchdog -
+[    1.719307] kmodloader: loading kernel modules from /etc/modules-boot.d/*
+[    1.723829] usb 1-1: New USB device found, idVendor=1a86, idProduct=8091, bcdDevice=13.20
+[    1.734391] usb 1-1: New USB device strings: Mfr=0, Product=2, SerialNumber=0
+[    1.739066] kmodloader: done loading kernel modules from /etc/modules-boot.d/*
+[    1.741558] usb 1-1: Product: USB HUB
+[    1.742690] hub 1-1:1.0: USB hub found
+[    1.756474] hub 1-1:1.0: 4 ports detected
+[    1.757637] init: - preinit -
+
+U-Boot SPL 2026.07 (Jul 01 2026 - 00:00:00 +0000)
+T153 source SPL: no vendor DDR library
+DDR4 source init: 1024 MiB physical x16; bootstrap 480 MHz
+DDR4: 933 MHz read eye and Vref training
+DDR lane 0: read Vref=56 delay=26
+DDR lane 1: read Vref=52 delay=24
+DDR4: write eye and Vref training
+DDR write Vref=22 delays=80,80
+DDR4: per-bit read/write deskew
+DDR4: geometry and memory checks
+DDR4: source initialization and memory checks passed
+Trying to boot from MMC2
+
+
+U-Boot 2026.07 (Jul 01 2026 - 00:00:00 +0000)
+
+Model: DshanPI T153MX OmniGate RAM U-Boot
+Board: T153 OmniGate (experimental source SPL/U-Boot)
+No vendor DDR/monitor. Four-core PSCI cold-boot profile.
+DRAM:  384 MiB
+Core:  6 devices, 4 uclasses, devicetree: separate
+MMC:   mmc@4020000: 0, mmc@4022000: 1
+Loading Environment from <NULL>... OK
+In:    serial@2600000
+Out:   serial@2600000
+Err:   serial@2600000
+[2KHit any key to stop autoboot: 3[2KHit any key to stop autoboot: 2[2KHit any key to stop autoboot: 1[2KHit any key to stop autoboot: 0
+469 bytes read in 1 ms (458 KiB/s)
+## Executing script at 4f100000
+4309532 bytes read in 391 ms (10.5 MiB/s)
+
+## Checking Image at 50000000 ...
+   FIT image found
+   FIT description: ARM OpenWrt FIT (Flattened Image Tree)
+    Image 0 (kernel-1)
+     Description:  ARM OpenWrt Linux-6.12.113
+     Type:         Kernel Image
+     Compression:  gzip compressed
+     Data Start:   0x500000e4
+     Data Size:    4296157 Bytes = 4.1 MiB
+     Architecture: ARM
+     OS:           Linux
+     Load Address: 0x48008000
+     Entry Point:  0x48008000
+     Hash algo:    crc32
+     Hash value:   6b5fbb60
+     Hash algo:    sha1
+     Hash value:   f6b5ac62f111621c4796b4c698add8dac5b1c97c
+    Image 1 (fdt-1)
+     Description:  ARM OpenWrt dshanpi_t153mx-omnigate device tree blob
+     Type:         Flat Device Tree
+     Compression:  uncompressed
+     Data Start:   0x50419008
+     Data Size:    11979 Bytes = 11.7 KiB
+     Architecture: ARM
+     Hash algo:    crc32
+     Hash value:   b59c1a82
+     Hash algo:    sha1
+     Hash value:   aaa902844064ff7f0bdecfe240c4ecc6db286a4c
+    Default Configuration: 'config-1'
+    Configuration 0 (config-1)
+     Description:  OpenWrt dshanpi_t153mx-omnigate
+     Kernel:       kernel-1
+     FDT:          fdt-1
+## Checking hash(es) for FIT Image at 50000000 ...
+   Hash(es) for Image 0 (kernel-1): crc32+ sha1+ 
+   Hash(es) for Image 1 (fdt-1): crc32+ sha1+ 
+## Loading kernel (any) from FIT Image at 50000000 ...
+   Using 'config-1' configuration
+   Trying 'kernel-1' kernel subimage
+     Description:  ARM OpenWrt Linux-6.12.113
+     Type:         Kernel Image
+     Compression:  gzip compressed
+     Data Start:   0x500000e4
+     Data Size:    4296157 Bytes = 4.1 MiB
+     Architecture: ARM
+     OS:           Linux
+     Load Address: 0x48008000
+     Entry Point:  0x48008000
+     Hash algo:    crc32
+     Hash value:   6b5fbb60
+     Hash algo:    sha1
+     Hash value:   f6b5ac62f111621c4796b4c698add8dac5b1c97c
+   Verifying Hash Integrity ... crc32+ sha1+ OK
+## Loading fdt (any) from FIT Image at 50000000 ...
+   Using 'config-1' configuration
+   Trying 'fdt-1' fdt subimage
+     Description:  ARM OpenWrt dshanpi_t153mx-omnigate device tree blob
+     Type:         Flat Device Tree
+     Compression:  uncompressed
+     Data Start:   0x50419008
+     Data Size:    11979 Bytes = 11.7 KiB
+     Architecture: ARM
+     Hash algo:    crc32
+     Hash value:   b59c1a82
+     Hash algo:    sha1
+     Hash value:   aaa902844064ff7f0bdecfe240c4ecc6db286a4c
+   Verifying Hash Integrity ... crc32+ sha1+ OK
+   Booting using the fdt blob at 0x50419008
+Working FDT set to 50419008
+   Uncompressing Kernel Image to 48008000
+   Loading Device Tree to 5df87000, end 5df8ceca ... OK
+Working FDT set to 5df87000
+Source boot: 4 Cortex-A7 CPUs; PSCI 0.1 CPU_ON; SRAM 0x50000..0x57fff.
+
+Starting kernel ...
+
+[    0.000000] Booting Linux on physical CPU 0x0
+[    0.000000] Linux version 6.12.113 (ubuntu@ubuntu2404) (arm-openwrt-linux-muslgnueabi-gcc (OpenWrt GCC 14.3.0 6c57f7cd04028d370f9360de71f5d59412046194) 14.3.0, GNU ld (GNU Binutils) 2.44) #0 SMP Wed Nov  4 01:33:29 2026
+[    0.000000] CPU: ARMv7 Processor [410fc075] revision 5 (ARMv7), cr=30c5387d
+[    0.000000] CPU: div instructions available: patching division code
+[    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
+[    0.000000] OF: fdt: Machine model: DshanPI T153MX OmniGate
+[    0.000000] earlycon: uart8250 at MMIO32 0x0000000002600000 (options '115200n8,24000000')
+[    0.000000] printk: legacy bootconsole [uart8250] enabled
+[    0.000000] Memory policy: Data cache writealloc
+[    0.000000] Zone ranges:
+[    0.000000]   Normal   [mem 0x0000000048000000-0x000000005fffffff]
+[    0.000000]   HighMem  empty
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000048000000-0x000000005fffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000048000000-0x000000005fffffff]
+[    0.000000] OF: reserved mem: 0x0000000042100000..0x00000000425c4fff (4884 KiB) nomap non-reusable remoteproc@42100000
+[    0.000000] OF: reserved mem: 0x0000000042900000..0x00000000429fffff (1024 KiB) nomap non-reusable secure-monitor@42900000
+[    0.000000] OF: reserved mem: 0x0000000044000000..0x00000000441fffff (2048 KiB) nomap non-reusable remoteproc@44000000
+[    0.000000] psci: probing for conduit method from DT.
+[    0.000000] psci: Using PSCI v0.1 Function IDs from DT
+[    0.000000] percpu: Embedded 14 pages/cpu s25612 r8192 d23540 u57344
+[    0.000000] Kernel command line: console=ttyS0,115200 earlycon=uart8250,mmio32,0x02600000,115200n8,24000000 root=PARTUUID=15302512-02 rootfstype=ext4 rootwait rw clk_ignore_unused
+[    0.000000] Dentry cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 32768 (order: 5, 131072 bytes, linear)
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 98304
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000] rcu: Hierarchical RCU implementation.
+[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
+[    0.000000] 	Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000] RCU Tasks Trace: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.000000] NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.000000] arch_timer: cp15 timer(s) running at 24.00MHz (virt).
+[    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0x588fe9dc0, max_idle_ns: 440795202592 ns
+[    0.000003] sched_clock: 56 bits at 24MHz, resolution 41ns, wraps every 4398046511097ns
+[    0.008812] Switching to timer-based delay loop, resolution 41ns
+[    0.015943] Console: colour dummy device 80x25
+[    0.020917] Calibrating delay loop (skipped), value calculated using timer frequency.. 48.00 BogoMIPS (lpj=240000)
+[    0.032329] CPU: Testing write buffer coherency: ok
+[    0.037765] pid_max: default: 32768 minimum: 301
+[    0.061173] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.069251] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.086713] /cpus/cpu@0 missing clock-frequency property
+[    0.092671] /cpus/cpu@1 missing clock-frequency property
+[    0.098541] /cpus/cpu@2 missing clock-frequency property
+[    0.104430] /cpus/cpu@3 missing clock-frequency property
+[    0.110283] CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+[    0.119017] Setting up static identity map for 0x48200000 - 0x48200060
+[    0.126510] rcu: Hierarchical SRCU implementation.
+[    0.131828] rcu: 	Max phase no-delay instances is 1000.
+[    0.138234] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    0.147434] dyndbg: Ignore empty _ddebug table in a CONFIG_DYNAMIC_DEBUG_CORE build
+[    0.156525] smp: Bringing up secondary CPUs ...
+[    0.163036] CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+[    0.164729] CPU2: thread -1, cpu 2, socket 0, mpidr 80000002
+[    0.166422] CPU3: thread -1, cpu 3, socket 0, mpidr 80000003
+[    0.166658] smp: Brought up 1 node, 4 CPUs
+[    0.189857] SMP: Total of 4 processors activated (192.00 BogoMIPS).
+[    0.196752] CPU: All CPU(s) started in SVC mode.
+[    0.203200] Memory: 372188K/393216K available (8746K kernel code, 929K rwdata, 2776K rodata, 2048K init, 261K bss, 19692K reserved, 0K cma-reserved, 0K highmem)
+[    0.228179] VFP support v0.3: implementor 41 architecture 2 part 30 variant 7 rev 5
+[    0.237153] futex hash table entries: 1024 (order: 4, 65536 bytes, linear)
+[    0.255871] pinctrl core: initialized pinctrl subsystem
+[    0.267742] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.275040] DMA: preallocated 256 KiB pool for atomic coherent allocations
+[    0.284734] thermal_sys: Registered thermal governor 'step_wise'
+[    0.285055] No ATAGs?
+[    0.298348] /soc/interrupt-controller@3401000: Fixed dependency cycle(s) with /soc/interrupt-controller@3401000
+[    0.339794] SCSI subsystem initialized
+[    0.344904] usbcore: registered new interface driver usbfs
+[    0.351103] usbcore: registered new interface driver hub
+[    0.357019] usbcore: registered new device driver usb
+[    0.363094] pps_core: LinuxPPS API ver. 1 registered
+[    0.368558] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    0.378669] PTP clock support registered
+[    0.383509] Advanced Linux Sound Architecture Driver Initialized.
+[    0.393016] clocksource: Switched to clocksource arch_sys_counter
+[    0.418631] NET: Registered PF_INET protocol family
+[    0.424467] IP idents hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    0.435037] tcp_listen_portaddr_hash hash table entries: 512 (order: 0, 4096 bytes, linear)
+[    0.444305] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.452840] TCP established hash table entries: 4096 (order: 2, 16384 bytes, linear)
+[    0.461467] TCP bind hash table entries: 4096 (order: 4, 65536 bytes, linear)
+[    0.469547] TCP: Hash tables configured (established 4096 bind 4096)
+[    0.477525] MPTCP token hash table entries: 512 (order: 1, 8192 bytes, linear)
+[    0.486071] UDP hash table entries: 256 (order: 1, 8192 bytes, linear)
+[    0.493330] UDP-Lite hash table entries: 256 (order: 1, 8192 bytes, linear)
+[    0.501982] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    0.511263] workingset: timestamp_bits=14 max_order=17 bucket_order=3
+[    0.539169] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+[    0.549888] jffs2: version 2.2 (NAND) (SUMMARY) (LZMA) (RTIME) (CMODE_PRIORITY) (c) 2001-2006 Red Hat, Inc.
+[    0.595830] Serial: 8250/16550 driver, 10 ports, IRQ sharing disabled
+[    0.621482] loop: module loaded
+[    0.632473] usbcore: registered new interface driver usb-storage
+[    0.640104] mousedev: PS/2 mouse device common for all mice
+[    0.646788] i2c_dev: i2c /dev entries driver
+[    0.653189] sunxi-wdt 2050000.watchdog: Watchdog enabled (timeout=16 sec, nowayout=0)
+[    0.668103] NET: Registered PF_INET6 protocol family
+[    0.677034] Segment Routing with IPv6
+[    0.681201] In-situ OAM (IOAM) with IPv6
+[    0.685776] NET: Registered PF_PACKET protocol family
+[    0.691622] can: controller area network core
+[    0.698409] NET: Registered PF_CAN protocol family
+[    0.703723] 8021q: 802.1Q VLAN Support v1.8
+[    0.708653] Registering SWP/SWPB emulation handler
+[    0.775246] gpio gpiochip0: Static allocation of GPIO base is deprecated, use dynamic allocation.
+[    0.808567] sun8i-t153-pinctrl 3604000.pinctrl: initialized sunXi PIO driver
+[    0.820193] printk: legacy console [ttyS0] disabled
+[    0.846845] 2600000.serial: ttyS0 at MMIO 0x2600000 (irq = 328, base_baud = 1500000) is a 16550A
+[    0.856651] printk: legacy console [ttyS0] enabled
+[    0.856651] printk: legacy console [ttyS0] enabled
+[    0.866758] printk: legacy bootconsole [uart8250] disabled
+[    0.866758] printk: legacy bootconsole [uart8250] disabled
+[    0.903985] 2605000.serial: ttyS5 at MMIO 0x2605000 (irq = 329, base_baud = 1500000) is a 16550A
+[    0.914946] dwmac-sun8i-t153 4500000.ethernet: IRQ eth_wake_irq not found
+[    0.921771] dwmac-sun8i-t153 4500000.ethernet: IRQ sfty not found
+[    0.928958] dwmac-sun8i-t153 4500000.ethernet: User ID: 0x20, Synopsys ID: 0x54
+[    0.936401] dwmac-sun8i-t153 4500000.ethernet: 	DWMAC4/5
+[    0.941739] dwmac-sun8i-t153 4500000.ethernet: DMA HW capability register supported
+[    0.949453] dwmac-sun8i-t153 4500000.ethernet: RX Checksum Offload Engine supported
+[    0.957172] dwmac-sun8i-t153 4500000.ethernet: TX Checksum insertion supported
+[    0.964441] dwmac-sun8i-t153 4500000.ethernet: Enable RX Mitigation via HW Watchdog Timer
+[    0.972672] dwmac-sun8i-t153 4500000.ethernet: device MAC address c6:a1:7c:f5:aa:eb
+[    0.980401] dwmac-sun8i-t153 4500000.ethernet: Enabled RFS Flow TC (entries=10)
+[    0.987764] dwmac-sun8i-t153 4500000.ethernet: Using 32/40 bits DMA host/device width
+[    1.071714] dwmac-sun8i-t153 4510000.ethernet: IRQ eth_wake_irq not found
+[    1.078700] dwmac-sun8i-t153 4510000.ethernet: IRQ sfty not found
+[    1.085858] dwmac-sun8i-t153 4510000.ethernet: User ID: 0x20, Synopsys ID: 0x54
+[    1.093274] dwmac-sun8i-t153 4510000.ethernet: 	DWMAC4/5
+[    1.098613] dwmac-sun8i-t153 4510000.ethernet: DMA HW capability register supported
+[    1.106311] dwmac-sun8i-t153 4510000.ethernet: RX Checksum Offload Engine supported
+[    1.113999] dwmac-sun8i-t153 4510000.ethernet: TX Checksum insertion supported
+[    1.121236] dwmac-sun8i-t153 4510000.ethernet: Enable RX Mitigation via HW Watchdog Timer
+[    1.129478] dwmac-sun8i-t153 4510000.ethernet: device MAC address e2:c0:3c:05:dc:68
+[    1.137175] dwmac-sun8i-t153 4510000.ethernet: Enabled RFS Flow TC (entries=10)
+[    1.144538] dwmac-sun8i-t153 4510000.ethernet: Using 32/40 bits DMA host/device width
+[    1.233661] clk: Not disabling unused clocks
+[    1.235696] ehci-platform 4300000.usb: EHCI Host Controller
+[    1.235849] ohci-platform 4300400.usb: Generic Platform OHCI controller
+[    1.235902] ohci-platform 4300400.usb: new USB bus registered, assigned bus number 1
+[    1.236122] ohci-platform 4300400.usb: irq 30, io mem 0x04300400
+[    1.236515] sunxi-mmc 4020000.mmc: SMHC version 0x50530, DMA address shift 2
+[    1.238012] ALSA device list:
+[    1.238027]   No soundcards found.
+[    1.239101] sunxi-mmc 4023000.mmc: SMHC version 0x50530, DMA address shift 2
+[    1.243747] ehci-platform 4300000.usb: new USB bus registered, assigned bus number 2
+[    1.251699] sunxi-mmc 4023000.mmc: allocated mmc-pwrseq
+[    1.252160] sun8i-t153-pinctrl 3604000.pinctrl: supply vcc-pc not found, using dummy regulator
+[    1.253269] sunxi-mmc 4022000.mmc: SMHC version 0x50530, DMA address shift 2
+[    1.258276] ehci-platform 4300000.usb: irq 29, io mem 0x04300000
+[    1.263081] sunxi-mmc 4020000.mmc: initialized, max. request size: 1024 KB, uses new timings mode
+[    1.279154] sunxi-mmc 4022000.mmc: initialized, max. request size: 1024 KB, uses new timings mode
+[    1.307572] usb usb1: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 6.12
+[    1.314755] ehci-platform 4300000.usb: USB 2.0 started, EHCI 1.00
+[    1.319402] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    1.358822] usb usb1: Product: Generic Platform OHCI controller
+[    1.364785] usb usb1: Manufacturer: Linux 6.12.113 ohci_hcd
+[    1.368102] mmc0: new MMC card at address 0001
+[    1.370372] usb usb1: SerialNumber: 4300400.usb
+[    1.377074] mmcblk0: mmc0:0001 AJTD4R 14.6 GiB
+[    1.380563] hub 1-0:1.0: USB hub found
+[    1.385733]  mmcblk0: p1 p2
+[    1.387749] hub 1-0:1.0: 1 port detected
+[    1.392855] mmcblk0boot0: mmc0:0001 AJTD4R 4.00 MiB
+[    1.395845] usb usb2: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.12
+[    1.401937] mmcblk0boot1: mmc0:0001 AJTD4R 4.00 MiB
+[    1.407790] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    1.407817] usb usb2: Product: EHCI Host Controller
+[    1.407834] usb usb2: Manufacturer: Linux 6.12.113 ehci_hcd
+[    1.407850] usb usb2: SerialNumber: 4300000.usb
+[    1.436066] hub 2-0:1.0: USB hub found
+[    1.440076] hub 2-0:1.0: 1 port detected
+[    1.496085] sunxi-mmc 4023000.mmc: initialized, max. request size: 1024 KB, uses new timings mode
+[    1.518239] EXT4-fs (mmcblk0p2): recovery complete
+[    1.523441] EXT4-fs (mmcblk0p2): mounted filesystem ff313567-e9f1-5a5d-9895-3ba130b4a864 r/w with ordered data mode. Quota mode: disabled.
+[    1.524784] mmc2: new SDIO card at address 390b
+[    1.536057] VFS: Mounted root (ext4 filesystem) on device 179:2.
+[    1.551813] Freeing unused kernel image (initmem) memory: 2048K
+[    1.558255] Run /sbin/init as init process
+[    1.636865] init: Console is alive
+[    1.640697] init: - watchdog -
+[    1.713059] usb 2-1: new high-speed USB device number 2 using ehci-platform
+[    1.727978] kmodloader: loading kernel modules from /etc/modules-boot.d/*
+[    1.747345] kmodloader: done loading kernel modules from /etc/modules-boot.d/*
+[    1.756206] init: - preinit -
+[    1.884116] usb 2-1: New USB device found, idVendor=1a86, idProduct=8091, bcdDevice=13.20
+[    1.892407] usb 2-1: New USB device strings: Mfr=0, Product=2, SerialNumber=0
+[    1.899703] usb 2-1: Product: USB HUB
+[    1.905161] hub 2-1:1.0: USB hub found
+[    1.909264] hub 2-1:1.0: 4 ports detected
+[    3.743048] random: crng init done
+Cannot parse config file '/etc/fw_env.config': No such file or directory
+Failed to find NVMEM device
+[    4.321297] dwmac-sun8i-t153 4500000.ethernet eth0: Register MEM_TYPE_PAGE_POOL RxQ-0
+[    4.373180] dwmac-sun8i-t153 4500000.ethernet eth0: PHY [stmmac-0:01] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+[    4.393041] dwmac-sun8i-t153 4500000.ethernet eth0: No Safety Features support found
+[    4.410846] dwmac-sun8i-t153 4500000.ethernet eth0: IEEE 1588-2008 Advanced Timestamp supported
+[    4.419986] dwmac-sun8i-t153 4500000.ethernet eth0: registered PTP clock
+[    4.428321] dwmac-sun8i-t153 4500000.ethernet eth0: configuring for phy/rgmii link mode
+[    4.463779] 8021q: adding VLAN 0 to HW filter on device eth0
+Press the [f] key and hit [enter] to enter failsafe mode
+Press the [1], [2], [3] or [4] key and hit [enter] to select the debug level
+[    8.837690] mount_root: mounting /dev/root with options 
+[    8.873528] EXT4-fs (mmcblk0p2): re-mounted ff313567-e9f1-5a5d-9895-3ba130b4a864.
+[    8.961390] urandom-seed: Seeding with /etc/urandom.seed
+[    9.538111] dwmac-sun8i-t153 4500000.ethernet eth0: Timeout accessing MAC_VLAN_Tag_Filter
+[    9.546422] dwmac-sun8i-t153 4500000.ethernet eth0: failed to kill vid 0081/0
+[    9.563821] procd: - early -
+[    9.566984] procd: - watchdog -
+[   10.176857] procd: - watchdog -
+[   10.181388] procd: - ubus -
+[   10.241249] procd: - init -
+Please press Enter to activate this console.
+[   10.852451] kmodloader: loading kernel modules from /etc/modules.d/*
+[   10.878579] CAN device driver interface
+[   10.884871] can: raw protocol
+[   10.890712] usbcore: registered new interface driver cdc_wdm
+[   10.904627] m_can_sun8i_t153 453c800.can: m_can device registered (irq=335, version=33)
+[   10.915321] m_can_sun8i_t153 4541800.can: m_can device registered (irq=336, version=33)
+[   10.950698] usbcore: registered new interface driver usbserial_generic
+[   10.957737] usbserial: USB Serial support registered for generic
+[   10.966985] usbcore: registered new interface driver cdc_ether
+[   10.976677] usbcore: registered new interface driver cdc_ncm
+[   11.056332] PPP generic driver version 2.4.2
+[   11.064732] NET: Registered PF_PPPOX protocol family
+[   11.073517] usbcore: registered new interface driver qmi_wwan
+[   11.087077] usbcore: registered new interface driver cdc_mbim
+[   11.107389] usbcore: registered new interface driver option
+[   11.113387] usbserial: USB Serial support registered for GSM modem (1-port)
+[   11.131013] kmodloader: done loading kernel modules from /etc/modules.d/*
+[   12.165829] urngd: v1.0.2 started.
+[   16.938042] dwmac-sun8i-t153 4500000.ethernet eth0: Register MEM_TYPE_PAGE_POOL RxQ-0
+[   17.013181] dwmac-sun8i-t153 4500000.ethernet eth0: PHY [stmmac-0:01] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+[   17.103394] dwmac-sun8i-t153 4500000.ethernet eth0: No Safety Features support found
+[   17.121329] dwmac-sun8i-t153 4500000.ethernet eth0: IEEE 1588-2008 Advanced Timestamp supported
+[   17.130694] dwmac-sun8i-t153 4500000.ethernet eth0: registered PTP clock
+[   17.137540] dwmac-sun8i-t153 4500000.ethernet eth0: configuring for phy/rgmii link mode
+[   17.173857] 8021q: adding VLAN 0 to HW filter on device eth0
+[   17.182272] br-lan: port 1(eth0) entered blocking state
+[   17.187652] br-lan: port 1(eth0) entered disabled state
+[   17.193054] dwmac-sun8i-t153 4500000.ethernet eth0: entered allmulticast mode
+[   17.200794] dwmac-sun8i-t153 4500000.ethernet eth0: entered promiscuous mode
+[   17.238647] dwmac-sun8i-t153 4510000.ethernet eth1: Register MEM_TYPE_PAGE_POOL RxQ-0
+[   17.283280] dwmac-sun8i-t153 4510000.ethernet eth1: PHY [stmmac-1:01] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+[   17.293999] dwmac-sun8i-t153 4510000.ethernet eth1: No Safety Features support found
+[   17.311933] dwmac-sun8i-t153 4510000.ethernet eth1: IEEE 1588-2008 Advanced Timestamp supported
+[   17.321231] dwmac-sun8i-t153 4510000.ethernet eth1: registered PTP clock
+[   17.329792] dwmac-sun8i-t153 4510000.ethernet eth1: configuring for phy/rgmii-rxid link mode
+[   17.364280] 8021q: adding VLAN 0 to HW filter on device eth1
+[   29.834395] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[   29.848836] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+wget -T 5 -O /tmp/phytool http://BUILD_HOST:8871/phytool; chmod 755 /tmp/phytool; ethtool -s eth1 speed 1000 duplex full autoneg off; /tmp/phytool write eth1/1/0 0x4140; sleep 2; /tmp/phytool read eth1/1/0; /tmp/phytool read eth1/1/1; ethtool eth1 | grep -E "Speed|Duplex|Link detected"
+
+
+BusyBox v1.37.0 (2026-11-04 01:33:29 UTC) built-in shell (ash)
+
+  _______                     ________        __
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+ |_______||   __|_____|__|__||________||__|  |____|
+          |__| W I R E L E S S   F R E E D O M
+ -----------------------------------------------------
+ OpenWrt 25.12-SNAPSHOT, t153-6c57f7cd04 Dave's Guitar
+ -----------------------------------------------------
+
+ === WARNING! =====================================
+ There is no root password defined on this device!
+ Use the "passwd" command to set up a new password
+ in order to prevent unauthorized SSH logins.
+ --------------------------------------------------
+
+
+ OpenWrt recently switched to the "apk" package manager!
+
+ OPKG Command           APK Equivalent      Description
+ ------------------------------------------------------------------
+ opkg install <pkg>     apk add <pkg>       Install a package
+ opkg remove <pkg>      apk del <pkg>       Remove a package
+ opkg upgrade           apk upgrade         Upgrade all packages
+ opkg files <pkg>       apk info -L <pkg>   List package contents
+ opkg list-installed    apk info            List installed packages
+ opkg update            apk update          Update package lists
+ opkg search <pkg>      apk search <pkg>    Search for packages
+ ------------------------------------------------------------------
+
+For more information visit:
+https://openwrt.org/docs/guide-user/additional-software/opkg-to-apk-cheatsheet
+
+root@OpenWrt:~# 

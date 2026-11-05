@@ -1,0 +1,11 @@
+uptime; cat /sys/devices/system/cpu/online; ethtool eth1 | grep 
+-E "Speed|Duplex|Link detected"; hexdump -C /sys/firmware/devicetree/base/soc/et
+hernet@4510000/allwinner,rx-delay-taps
+ 01:43:09 up 9 min,  load average: 0.06, 0.04, 0.00
+0-3
+	Speed: 100Mb/s
+	Duplex: Full
+	Link detected: yes
+00000000  00 00 00 06                                       |....|
+00000004
+root@OpenWrt:~# 

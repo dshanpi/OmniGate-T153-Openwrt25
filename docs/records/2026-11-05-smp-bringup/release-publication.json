@@ -1,0 +1,92 @@
+{
+  "url": "https://github.com/dshanpi/t153-openwrt/releases/tag/smp-preview-20261105",
+  "target": "a7371ec91e26ff386866080d7825b6db62699d83",
+  "assets": [
+    {
+      "name": "README.txt",
+      "size": 14910,
+      "digest": "sha256:5407e0cfe9f22d3cca4b9f6f2bd2af3c9d7df111f74d4c2b46bb72938e07d101"
+    },
+    {
+      "name": "SHA256SUMS",
+      "size": 1586,
+      "digest": "sha256:5995ad6c6b9b82f1e6d4d1fa9e25cdc52561fead12b94a99a040b1374a59f72c"
+    },
+    {
+      "name": "smp-runtime-validation.json",
+      "size": 3605,
+      "digest": "sha256:05dcf1e7d346fe4fd6e5aca1df3802927ccd06d599004e7e8007f4b1cc9b8846"
+    },
+    {
+      "name": "t153-disk-1g-smp-manifest.json",
+      "size": 4366,
+      "digest": "sha256:e2ab04ec26d3a49a8668612ee9265a153e05f8018b5ca6856720ee5b0fae31d8"
+    },
+    {
+      "name": "t153-fes-ddr933-ram-loader.img",
+      "size": 1154048,
+      "digest": "sha256:0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873"
+    },
+    {
+      "name": "t153-fes-ddr933-ram-loader.manifest.json",
+      "size": 3355,
+      "digest": "sha256:5496954e136ad9ee9ea3420a0bf01788913851dae5fc5abccbe605173b7a54c3"
+    },
+    {
+      "name": "t153-openwrt-source-a7371ec.tar.gz",
+      "size": 432375,
+      "digest": "sha256:3c8473558b7b1fceb3b9b9c39179316e5d2fadb4881b5aac9fe5f69c66efd4df"
+    },
+    {
+      "name": "t153-openwrt25-source-1g-smp-disk.img.gz",
+      "size": 10031290,
+      "digest": "sha256:e11a46b7e7a2837db645f51f07c16e045faf2a071c15d9f8f62d839a5333a775"
+    },
+    {
+      "name": "t153-smp-smoke",
+      "size": 50248,
+      "digest": "sha256:56af9ae98fb3ffe6d1a7825a28dde951038135808130e851900704b64e4a71c4"
+    },
+    {
+      "name": "t153-smp-smoke.manifest.json",
+      "size": 1476,
+      "digest": "sha256:8c8e42b797084d57a214d28f896ae83588d5f82dcf6bb60fe3b419a61c8e88d3"
+    },
+    {
+      "name": "t153-uboot-2026.07-source-1g-smp-fel.bin",
+      "size": 320960,
+      "digest": "sha256:838f1419a5fbcf73069f22d29050d055749d5b4d18112bcf5647980c7125518f"
+    },
+    {
+      "name": "t153-uboot-2026.07-source-1g-smp-sd-bootarea.bin",
+      "size": 394688,
+      "digest": "sha256:61bfc3e776c08f76f401b86a3a7c17b6f5759ec96081c571b3488cac5ea48be4"
+    },
+    {
+      "name": "t153-uboot-2026.07-source-1g-smp-spl.bin",
+      "size": 49152,
+      "digest": "sha256:dd43452b780084f1637262106fe5e3f3b7a53faaa7491a3d1fa91dfc428c4e41"
+    },
+    {
+      "name": "t153-uboot-2026.07-source-1g-smp.bin",
+      "size": 271744,
+      "digest": "sha256:06867f0bf6bfbf5e18cd6ec687945f56be078d8796a9c4855617330d43549816"
+    },
+    {
+      "name": "t153-uboot-2026.07-source-1g-smp.img",
+      "size": 271808,
+      "digest": "sha256:49e9eb38f83a09196bcca8e8a53b1f9412407463d43d51f8caed5899956a67c6"
+    },
+    {
+      "name": "uboot-source-1g-smp-validation.json",
+      "size": 2520,
+      "digest": "sha256:2490565dbed4bcb5ab4819b532c13ea0b6aee0e510d9536dd9874eedb2f2ffbb"
+    },
+    {
+      "name": "uboot-source-1g-smp.config",
+      "size": 35963,
+      "digest": "sha256:7b0caacbd8735c4def46fb845f379148206c474c82d8d6d710a668dbf2859dfe"
+    }
+  ],
+  "verified_asset_count": 17
+}

@@ -1,0 +1,63 @@
+od -An -tx1 /sys/firmware/devicetree/base/soc/ethernet@4510000/a
+llwinner,rx-delay-taps; ethtool eth1 | grep -E "Speed|Duplex|Link detected"; eth
+tool --get-phy-tunable eth1 downshift; wget --help
+-ash: od: not found
+	Speed: 100Mb/s
+	Duplex: Full
+	Link detected: yes
+Cannot Get PHY downshift count: Not supported
+wget: unrecognized option: help
+Usage: wget [options] <URL>
+Options:
+	-4				Use IPv4 only
+	-6				Use IPv6 only
+	-O <file>			Redirect output to file (use "-" for stdout)
+	-P <dir>			Set directory for output files
+	--quiet | -q			Turn off status messages
+	--continue | -c			Continue a partially-downloaded file
+	--header='Header: value'	Add HTTP header. Multiple allowed
+	--user=<user>			HTTP authentication username
+	--password=<password>		HTTP authentication password
+	--user-agent | -U <str>		Set HTTP user agent
+	--post-data=STRING		use the POST method; send STRING as the data
+	--post-file=FILE		use the POST method; send FILE as the data
+	--method=METHOD		use the HTTP method e.g. PUT
+	--body-data=STRING		with --method send the STRING in body
+	--body-file=FILE		with --method send the FILE content in body
+	--spider | -s			Spider mode - only check file existence
+	--timeout=N | -T N		Set connect/request timeout to N seconds
+	--proxy=on | -Y on		Enable interpretation of proxy env vars (default)
+	--proxy=off | -Y off |
+	--no-proxy           		Disable interpretation of proxy env vars
+
+HTTPS options:
+	--ca-certificate=<cert>		Load CA certificates from file <cert>
+	--no-check-certificate		don't validate the server's certificate
+	--ciphers=<cipherlist>		Set the cipher list string
+
+root@OpenWrt:~# hexdump -C /sys/firmware/devicetree/base/soc/ethernet@4510000/al
+lwinner,rx-delay-taps; ethtool -r eth1; sleep 12; ethtool eth1 | grep -E "Speed|
+Duplex|Link detected"; cat /sys/class/net/eth1/carrier_changes
+00000000  00 00 00 00                                       |....|
+00000004
+[   99.443821] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+[  101.527046] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+[  102.563882] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+	Speed: Unknown!
+	Duplex: Unknown! (255)
+	Link detected: no
+4
+root@OpenWrt:~# [  115.044614] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[  115.059049] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+ethtool -s eth1 autoneg on advertise 0x020; sleep 12; ethtool et
+h1 | grep -E "Speed|Duplex|Link detected"; ethtool -S eth1 | grep -E "crc|rx_err
+or|carrier_error"
+[  141.535626] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+	Speed: Unknown!
+	Duplex: Unknown! (255)
+	Link detected: no
+     mmc_tx_carrier_error: 0
+     mmc_rx_crc_error: 0
+     mmc_rx_error: 0
+     rx_crc_errors: 0
+root@OpenWrt:~# 
