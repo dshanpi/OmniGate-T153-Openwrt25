@@ -1,0 +1,131 @@
+{
+  "recorded_at_utc": "2026-11-05T08:49:30.544739+00:00",
+  "release_url": "https://github.com/dshanpi/t153-openwrt/releases/tag/v25.12.6-t153-preview.1",
+  "tag": "v25.12.6-t153-preview.1",
+  "source_commit": "0cca3bd91df8e3b3c558bf3f61b46c712ef49b34",
+  "prerelease": true,
+  "published_at": "2026-11-05T08:48:40Z",
+  "verification": "All 20 uploaded asset sizes and GitHub SHA256 digests matched the local release whitelist before publication.",
+  "assets": [
+    {
+      "name": "BUILD-AND-FLASH.txt",
+      "bytes": 21264,
+      "digest": "sha256:b19c60515e55c7524229458d19999f066349553f2010c8155545b5c761ba576e",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/BUILD-AND-FLASH.txt"
+    },
+    {
+      "name": "config.buildinfo",
+      "bytes": 115,
+      "digest": "sha256:fc3038bdeac1723a9e987fe84241fbe23b38d18e8887e47a10e28956c95b493e",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/config.buildinfo"
+    },
+    {
+      "name": "feeds.buildinfo",
+      "bytes": 487,
+      "digest": "sha256:037f68494e8cf059f7cb49dbce7e0f73a3da4db1e73b2b8b7477ff2d2676f40b",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/feeds.buildinfo"
+    },
+    {
+      "name": "FES-REPRODUCE.txt",
+      "bytes": 3449,
+      "digest": "sha256:f32379e998f70a410fc387f9dc2265682f7b2e3221c1cfeaff1bc2c4861e0f63",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/FES-REPRODUCE.txt"
+    },
+    {
+      "name": "MCP-FES-WORKFLOW.json",
+      "bytes": 5521,
+      "digest": "sha256:53df53510c6b0bea78d3f4305811278deaa65cbfcb4e72415048ab755f4e1cd1",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/MCP-FES-WORKFLOW.json"
+    },
+    {
+      "name": "native-build-report.json",
+      "bytes": 6934,
+      "digest": "sha256:0173f2e96586d736c85b7ec90ce6d5715026019672f4a106f6ad94c8217c8c5f",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/native-build-report.json"
+    },
+    {
+      "name": "native-hardware-validation.json",
+      "bytes": 4895,
+      "digest": "sha256:9633cb588d032e1306bbfa7a8033b2758d8beadc52c871b065fffe0a80f31393",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/native-hardware-validation.json"
+    },
+    {
+      "name": "native-image-repeat-validation.json",
+      "bytes": 404,
+      "digest": "sha256:ded6221a13c191efe77ed757aac048b5918f6b2174a41bf6a21617a6bbb8dfec",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/native-image-repeat-validation.json"
+    },
+    {
+      "name": "native-image-validation.json",
+      "bytes": 9564,
+      "digest": "sha256:df8236dc2e40fde719e09b7c0aad6b0f0cb641af140cb7a04206a2daa85a9e81",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/native-image-validation.json"
+    },
+    {
+      "name": "native-uboot-build.json",
+      "bytes": 971,
+      "digest": "sha256:3f568fc9aaccc0a2394dd8f83c4ac2f8fa4e2bf86ea1582288cbce6d97547e0b",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/native-uboot-build.json"
+    },
+    {
+      "name": "openwrt-25.12.6-t153.manifest.json",
+      "bytes": 18394,
+      "digest": "sha256:ae3389061494affec67026033454f037e32a8ff9e30e009004c298fffce4b405",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/openwrt-25.12.6-t153.manifest.json"
+    },
+    {
+      "name": "openwrt-25.12.6-t153.patch",
+      "bytes": 474128,
+      "digest": "sha256:338dc6fbc70663a73416e984f1c148b0d5bfd02793294ef13160efd353889690",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/openwrt-25.12.6-t153.patch"
+    },
+    {
+      "name": "openwrt-sunxi-cortexa7-dshanpi_t153mx-omnigate-ext4-raw.img.gz",
+      "bytes": 16560656,
+      "digest": "sha256:aafef7198f0c5f68005471c30132b4a57334ae4d7e08c9ea5fcf9df5a68482ed",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/openwrt-sunxi-cortexa7-dshanpi_t153mx-omnigate-ext4-raw.img.gz"
+    },
+    {
+      "name": "openwrt-sunxi-cortexa7-dshanpi_t153mx-omnigate.manifest",
+      "bytes": 6421,
+      "digest": "sha256:3f3315a8777ec391e47346608ebdcc01b4282b25b6a027dfb55b2ea35ec54f46",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/openwrt-sunxi-cortexa7-dshanpi_t153mx-omnigate.manifest"
+    },
+    {
+      "name": "profiles.json",
+      "bytes": 2155,
+      "digest": "sha256:9a52c743c74fa1c0175fffc7a3d0a54463084e66980f5f28f3f3cc17366b1d6b",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/profiles.json"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 1818,
+      "digest": "sha256:189b74e13fcbeccf3c861216b697718a66be9fe6ac32450d444172ab2bb69795",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/SHA256SUMS"
+    },
+    {
+      "name": "t153-fes-ddr933-ram-loader.img",
+      "bytes": 1154048,
+      "digest": "sha256:0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/t153-fes-ddr933-ram-loader.img"
+    },
+    {
+      "name": "t153-fes-ddr933-ram-loader.manifest.json",
+      "bytes": 3355,
+      "digest": "sha256:5496954e136ad9ee9ea3420a0bf01788913851dae5fc5abccbe605173b7a54c3",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/t153-fes-ddr933-ram-loader.manifest.json"
+    },
+    {
+      "name": "t153-v25.12.6-validation-records.tar.gz",
+      "bytes": 2308244,
+      "digest": "sha256:a6c06b9da68d040f1caddf93936d13840c2571eaf4d9e4681713568a3a21a1c8",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/t153-v25.12.6-validation-records.tar.gz"
+    },
+    {
+      "name": "version.buildinfo",
+      "bytes": 18,
+      "digest": "sha256:47cc6a2e45cd952f6b4d5edaf3ba2259a038a8f7f834b37edcdac78f97078c9c",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/v25.12.6-t153-preview.1/version.buildinfo"
+    }
+  ]
+}

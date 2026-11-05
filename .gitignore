@@ -28,3 +28,6 @@ __pycache__/
 *.pem
 id_rsa*
 id_ed25519*
+/peripheral-work/
+/tests/diagnostics/t153-phy-loop-packets
+/tests/diagnostics/t153-phy-loop-packets.host
