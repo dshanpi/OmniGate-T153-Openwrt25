@@ -1,0 +1,74 @@
+{
+  "scope": "host-only control-flow and short concurrent run, not T153 hardware",
+  "allowed_host_cpus": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "checks": [
+    {
+      "arguments": [
+        "--cpus",
+        "0,1,2,3",
+        "--duration-ms",
+        "300"
+      ],
+      "exit": 0,
+      "seconds": 0.313,
+      "output": "MODE=explicit-cpus ONLINE=0-7 TARGET=0,1,2,3 DURATION_MS=300\nCPU target=0 observed=0 samples=1777 loops=454400 checksum=f0a4cc20 status=PASS error_kind=0 errno=0\nCPU target=1 observed=1 samples=1878 loops=480256 checksum=6b08174e status=PASS error_kind=0 errno=0\nCPU target=2 observed=2 samples=1872 loops=478720 checksum=54920c6e status=PASS error_kind=0 errno=0\nCPU target=3 observed=3 samples=1893 loops=484096 checksum=9365cc1d status=PASS error_kind=0 errno=0\nSHARED sequence=1897472 atomic_count=1897472 expected=1897472\nRESULT PASS wall_ms=303\n"
+    },
+    {
+      "arguments": [
+        "--cpus",
+        "0,1,2,3",
+        "--duration-ms",
+        "100"
+      ],
+      "exit": 1,
+      "seconds": 0.004,
+      "output": "MODE=explicit-cpus ONLINE=0-7 TARGET=0,1,2,3 DURATION_MS=100\nRESULT FAIL: target CPU 1 is offline or outside permitted affinity\n"
+    },
+    {
+      "arguments": [
+        "--cpus",
+        "0,0,2,3"
+      ],
+      "exit": 2,
+      "seconds": 0.002,
+      "output": "Usage: /tmp/t153-smp-host-1_sms4ty/runtime-smoke [--duration-ms 100..3000] [--cpus A,B,C,D]\n"
+    },
+    {
+      "arguments": [
+        "--duration-ms",
+        "0"
+      ],
+      "exit": 2,
+      "seconds": 0.001,
+      "output": "Usage: /tmp/t153-smp-host-1_sms4ty/runtime-smoke [--duration-ms 100..3000] [--cpus A,B,C,D]\n"
+    },
+    {
+      "arguments": [
+        "--duration-ms",
+        "3001"
+      ],
+      "exit": 2,
+      "seconds": 0.001,
+      "output": "Usage: /tmp/t153-smp-host-1_sms4ty/runtime-smoke [--duration-ms 100..3000] [--cpus A,B,C,D]\n"
+    },
+    {
+      "arguments": [
+        "--cpus",
+        ",1,2,3,4"
+      ],
+      "exit": 2,
+      "seconds": 0.001,
+      "output": "Usage: /tmp/t153-smp-host-1_sms4ty/runtime-smoke [--duration-ms 100..3000] [--cpus A,B,C,D]\n"
+    }
+  ],
+  "result": "PASS"
+}

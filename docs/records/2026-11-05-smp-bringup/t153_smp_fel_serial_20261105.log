@@ -1,0 +1,16 @@
+reboot efex
+root@OpenWrt:~# 
+root@OpenWrt:~# [   75.346062] dwmac-sun8i-t153 4500000.ethernet eth0: left allmulticast mode
+[   75.353049] dwmac-sun8i-t153 4500000.ethernet eth0: left promiscuous mode
+[   75.360160] br-lan: port 1(eth0) entered disabled state
+[   75.888277] dwmac-sun8i-t153 4500000.ethernet eth0: Timeout accessing MAC_VLAN_Tag_Filter
+[   75.896590] dwmac-sun8i-t153 4500000.ethernet eth0: failed to kill vid 0081/0
+[   77.253721] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+[   77.782337] dwmac-sun8i-t153 4510000.ethernet eth1: Timeout accessing MAC_VLAN_Tag_Filter
+[   77.790642] dwmac-sun8i-t153 4510000.ethernet eth1: failed to kill vid 0081/0
+[   78.364149] EXT4-fs (mmcblk0p2): re-mounted ff313567-e9f1-5a5d-9895-3ba130b4a864 ro.
+[   81.384651] reboot: Restarting system with command 'efex'
+
+U-Boot SPL 2026.07 (Jul 01 2026 - 00:00:00 +0000)
+T153 source SPL: no vendor DDR library
+RTC EFEX request cleared; entering BootROM FEL

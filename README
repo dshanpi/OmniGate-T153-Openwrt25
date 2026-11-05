@@ -1,5 +1,20 @@
+四核 Cortex-A7 实机验证预览（2026-11-05）
+-----------------------------------
+源码已实现CPU0–3的PSCI启动；四核镜像已FES烧录并完成整盘SHA读回。
+Linux实机online=0-3，逐核绑定并行计算/共享数据一致性短测通过；空闲后及普通
+重启后复测也通过。源码SPL软件回FEL已由USB枚举验证，随后再次FES烧录并
+启动成功，板子最终停在四核OpenWrt。仍属实验性移植。
+下载：https://github.com/dshanpi/t153-openwrt/releases/tag/smp-preview-20261105
+选用t153-openwrt25-source-1g-smp-disk.img.gz，搭配同页的
+ t153-fes-ddr933-ram-loader.img。四核构建与烧录差异见下方“四核候选使用方法”。
+实现、寄存器来源、限制：docs/T153-SMP.txt。
+软件证据：docs/records/2026-11-05-smp-software/。
+实机证据：docs/records/2026-11-05-smp-bringup/。
+
+已上板的CPU0基线（回退版本）
+---------------------------
 软件验证预览版下载：https://github.com/dshanpi/t153-openwrt/releases/tag/software-20261104
-推荐整盘文件：t153-openwrt25-source-1g-disk.img.gz；同时下载
+CPU0基线整盘文件：t153-openwrt25-source-1g-disk.img.gz；同时下载
 t153-fes-ddr933-ram-loader.img。SHA256和直接烧录步骤见下文。
 
 2026-11-04软件复跑结果：已从GitHub固定提交f16dc94在独立目录完成完整
@@ -17,32 +32,34 @@ T153MX OmniGate / OpenWrt 25.12 主线适配
 openwrt-25.12固定提交6c57f7cd04028d370f9360de71f5d59412046194，
 Linux 6.12.113、U-Boot 2026.07。没有使用Tina 5.10内核替代主线内核。
 
-已验证的实机里程碑（2026-11-04）
--------------------------------
-全源码1GiB DDR4 SPL → 主线U-Boot → Linux → eMMC ext4 → OpenWrt shell。
-实机已安装镜像SHA256：
-6ea18915b817e77c2a57ab7a68b8bc51e92e9d965e22fa23b1b7217379e39e98。
-FES写入校验通过；FES post-reboot后主线U-Boot读回全部292MiB，SHA精确匹配。
-16MiB随机文件写eMMC、sync、drop_caches后的读回SHA/cmp一致。
-eth1在运行时开启RTL8211F RX delay后，100Mbps全双工下取得DHCP，网关
-10次ping全通，16MiB HTTP下载SHA匹配，测试期间RX CRC计数未增加。
-重新协商1Gbps后掉线并降至100Mbps，千兆稳定性未通过。
-
-上述网络测试是在已安装镜像上临时调PHY完成；源码已将WAN设为rgmii-rxid，
-其持久设置及新增原生reboot/efex组合镜像仍待重新烧录验证。不能把旧镜像上
-临时PHY测试当作新组合固件已验收。后续实机验收应绑定新镜像hash单独记录。
-证据与历史故障：docs/records/2026-11-04-bringup/、docs/BRINGUP-1G-MCP.txt。
+已验证的实机里程碑（2026-11-05，CPU0基线）
+-----------------------------------------
+全源码1GiB DDR4 SPL → 主线U-Boot → Linux 6.12.113 → eMMC ext4 → OpenWrt。
+本次已安装的292MiB镜像raw SHA256：
+42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8。
+FES写入、校验和post-reboot成功，U-Boot读回整盘SHA精确匹配。
+持久rgmii-rxid无需临时调PHY，WAN自动取得DHCP；本次观察1000Mbps Full，
+网关5次ping全通。启动时出现过一次重新协商，不能据短测宣称千兆长期稳定。
+原生watchdog重启已观察到，但旧SPL没有消费RTC请求，reboot efex仍从eMMC
+启动，未进入FEL。新四核镜像已补SPL早期处理，并另行实测成功进入FEL。
+证据：docs/records/2026-11-05-bringup/。
+11/4首次存储/网络测试和历史故障保留于docs/records/2026-11-04-bringup/。
 
 当前限制
 --------
-- 物理DDR1GiB；仅CPU0，Linux地址窗口384MiB；PSCI/SMP尚未实现。
-- DDR/存储长期可靠性、千兆网络、eth0 LAN及其余外设仍需验收。
+- 物理DDR1GiB，Linux地址窗口仍384MiB。
+- 四核已完成启动、调度和共享数据一致性短测；没有完成长期负载/温控验证。
+- 四核仅实现PSCI 0.1 CPU_ON；CPU热插拔、休眠、多核kexec不支持。
+- DDR/存储长期可靠性、eth0 LAN及其余外设仍需验收。WAN多次掉线重协商，
+  正常重启测试中最终降至100Mbps Full；千兆稳定性问题仍未解决。
 - CAN0/1和SDIO已枚举，不代表CAN通信或Wi-Fi已通过。AIC8800D80 Wi-Fi/BT
   没有本内核对应主线驱动，未加入私有驱动。
-- USB0 gadget、CPU DVFS、休眠、eMMC高速模式未启用/验证；4G模块需实测。
-- Linux原生reboot、reboot efex已有源码实现和软件检查，尚无实机成功证据。
+- USB0 gadget、CPU DVFS、eMMC高速模式未启用/验证；4G模块需实测。
+- 新SPL的软件回FEL修复已实机成功枚举；旧CPU0固件仍需硬件进入FEL。
 - sysupgrade三处拒绝T153写盘；使用完整磁盘FES流程，不通过LuCI升级。
-- 独立干净完整软件构建及17阶段检查已通过；本次镜像烧录/启动未执行。
+- 11/4完整软件构建通过且对应CPU0镜像11/5已烧录；四核本轮复用同一内核和
+  rootfs，仅重新编译启动链；四核构建/烧录/运行已分别留证，但本轮没有重编
+  整套OpenWrt工具链/内核。
 
 源码和FES的边界
 ---------------
@@ -58,11 +75,13 @@ T113参考工程的两条烧录路径及T153对应实现见docs/FLASH-SOURCE.txt
 构建（Ubuntu 24.04）
 -------------------
 依赖安装、固定来源及详细步骤：docs/BUILD-REPRODUCE.txt。
+四核DT检查还需libfdt-dev（已列入该文档安装命令）。
 在干净源码checkout根目录运行：
   sh scripts/bootstrap.sh --check-only
-  bash scripts/build-release.sh --jobs 4
-同时准备FES RAM loader：
-  bash scripts/build-release.sh --jobs 4 --with-fes --factory-image /path/to/factory.img
+  bash scripts/build-release.sh --jobs 4 --smp
+不加--smp时生成CPU0回退配置。
+同时准备四核镜像和FES RAM loader：
+  bash scripts/build-release.sh --jobs 4 --smp --with-fes --factory-image /path/to/factory.img
 统一入口编译OpenWrt工具链/内核/选包和1GiB U-Boot，运行软件回归、打包并校验。
 默认拒绝旧build_dir/staging/tmp/bin/.config；仅开发增量可加--incremental。
 下载缓存可共享，构建对象不可共享，见docs/REBUILD-CACHE.txt。
@@ -81,6 +100,41 @@ t153-disk-1g-manifest.json绑定本次产物大小、布局和SHA，不用历史
 无私人会话的MCP下载/烧录/轮询示例：host-tools/README.txt。
 实机FES后的整盘SHA、Linux启动、网络和外设必须与本次产物分别验收。
 默认LAN地址192.168.153.1/24；WAN DHCP；从eMMC CID派生MAC。
+
+四核候选使用方法
+----------------
+下载smp-preview-20261105发布页中的以下文件：
+  t153-openwrt25-source-1g-smp-disk.img.gz
+  t153-disk-1g-smp-manifest.json
+  t153-fes-ddr933-ram-loader.img
+  t153-fes-ddr933-ram-loader.manifest.json
+  SHA256SUMS
+核对下载附件：sha256sum -c SHA256SUMS --ignore-missing
+解压：gzip -dk t153-openwrt25-source-1g-smp-disk.img.gz
+raw大小306184192字节，SHA256：
+  ad406a8489440386e0039bbd0a3655df2a475087dc3f9736eef5b1291b7177f6
+.gz SHA256：
+  e11a46b7e7a2837db645f51f07c16e045faf2a071c15d9f8f62d839a5333a775
+FES SHA256仍为下方0d32d521...，不使用源码的-smp-fel.bin替代FES loader。
+
+遵循下方同一套1–5步烧录操作，将磁盘下载名/firmwarePath/读回预期SHA
+全部改为本节四核文件和值；FES loaderPath及raw/command/verify/reboot不变。
+不要把CPU0的42df...读回值用于本四核候选。旧固件仍需硬件进入FEL。
+
+四核启动后应检查：
+  cat /sys/devices/system/cpu/online           期望0-3
+  grep '^processor' /proc/cpuinfo             期望4项
+  cat /proc/interrupts                       期望CPU0–CPU3列
+把同页t153-smp-smoke经网络复制到/tmp并按manifest核对SHA后：
+  chmod 755 /tmp/t153-smp-smoke
+  /tmp/t153-smp-smoke
+  echo $?
+要求4行CPU PASS、共享计数一致、RESULT PASS以及退出码0；仅显示4个CPU节点
+不算并行验证。空闲后再测、普通重启后再测；同时回归eMMC、WAN和软件回FEL。
+源码与判据：tests/smp/RUNTIME-SMOKE.txt。CPU0负对照会正确失败；四核镜像
+首次启动、空闲后、正常重启后正向结果均为PASS，见实机记录。软件构建manifest
+保留hardware_verified=false，表示该离线构建流程不访问板卡；实际成功证据
+另以本raw SHA绑定，不能由manifest中的cpu_count=4单独推断硬件成功。
 
 FEL/FES烧录步骤（本板1GiB DDR4 / eMMC）
 ---------------------------------------
@@ -167,8 +221,17 @@ U-Boot、内核和rootfs。不要用t153-fes-ram-loader.img（旧1066MHz）或ph
    必须把实际烧录/启动记录绑定该镜像hash，不能用旧镜像成功替代本轮验收。
 
 完整JSON-RPC请求及响应判据见host-tools/mcp-fes-workflow.example.json；
-细节见docs/FLASH-SOURCE.txt。软件回FEL须使用MCP规定的固定入口，并以实际
-USB重新枚举验证；本README不要求绕过工具限制或手工写寄存器。
+细节见docs/FLASH-SOURCE.txt。新四核镜像的软件回FEL已验证，可在真实Linux
+shell下通过MCP调用：
+  lynx_allwinner_enter_fel {
+    "method":"serial_shell_reboot_efex", "handle":"<实际串口句柄>",
+    "confirmDestructive":true, "preserveSerialMonitor":true
+  }
+要求state=fel-device-online且felOnline=true，并记录SPL的
+RTC EFEX request cleared; entering BootROM FEL。失败时不自动重试。
+成功后关闭自己的串口句柄，再按第3–5步烧录；不要同时启动串口读者。
+旧CPU0基线不具备这份SPL修复，不能套用其成功结论。本README不要求手工写
+寄存器、跳BootROM或绕过工具限制。
 
 目录
 ----

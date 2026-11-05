@@ -1,0 +1,20 @@
+ping -c 5 -W 2 <WAN_GATEWAY>; ethtool eth1 | grep -E "Speed|Duplex|Li
+nk"
+PING <WAN_GATEWAY> (<WAN_GATEWAY>): 56 data bytes
+64 bytes from <WAN_GATEWAY>: seq=0 ttl=64 time=0.870 ms
+64 bytes from <WAN_GATEWAY>: seq=1 ttl=64 time=0.624 ms
+64 bytes from <WAN_GATEWAY>: seq=2 ttl=64 time=0.635 ms
+64 bytes from <WAN_GATEWAY>: seq=3 ttl=64 time=0.558 ms
+64 bytes from <WAN_GATEWAY>: seq=4 ttl=64 time=0.700 ms
+
+--- <WAN_GATEWAY> ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 0.558/0.677/0.870 ms
+	Link partner advertised link modes:  10baseT/Half 10baseT/Full 
+	Link partner advertised pause frame use: Symmetric Receive-only
+	Link partner advertised auto-negotiation: Yes
+	Link partner advertised FEC modes: Not reported
+	Speed: 1000Mb/s
+	Duplex: Full
+	Link detected: yes
+root@OpenWrt:~# 

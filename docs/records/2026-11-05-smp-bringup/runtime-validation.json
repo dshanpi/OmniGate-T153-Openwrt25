@@ -1,0 +1,112 @@
+{
+  "recorded_utc": "2026-11-05T02:54:25.711501+00:00",
+  "date": "2026-11-05",
+  "image_sha256": "ad406a8489440386e0039bbd0a3655df2a475087dc3f9736eef5b1291b7177f6",
+  "image_bytes": 306184192,
+  "fes_loader_sha256": "0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873",
+  "flash_runs": [
+    {
+      "taskId": "flash-1793846646997374000",
+      "state": "success",
+      "verifyState": "success",
+      "postFlashState": "success",
+      "writtenBytes": 306184192,
+      "committedBytes": 306184192,
+      "exitCode": 0
+    },
+    {
+      "taskId": "flash-1793847017422747300",
+      "state": "success",
+      "verifyState": "success",
+      "postFlashState": "success",
+      "writtenBytes": 306184192,
+      "committedBytes": 306184192,
+      "exitCode": 0
+    }
+  ],
+  "first_flash_uboot_full_disk_sha256_match": true,
+  "linux": "6.12.113",
+  "openwrt": "25.12-SNAPSHOT t153-6c57f7cd04",
+  "rootfs": "eMMC mmcblk0p2 ext4 rw",
+  "physical_dram_mib": 1024,
+  "linux_window_mib": 384,
+  "cpu_online": "0-3",
+  "cpuinfo_processors": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "timer_and_ipi_four_columns": true,
+  "interrupt_errors": 0,
+  "runtime_smoke": {
+    "binary_sha256": "56af9ae98fb3ffe6d1a7825a28dde951038135808130e851900704b64e4a71c4",
+    "tests": [
+      {
+        "when": "first boot",
+        "duration_ms": 2000,
+        "exit": 0,
+        "result": "PASS"
+      },
+      {
+        "when": "after five seconds idle",
+        "duration_ms": 2000,
+        "exit": 0,
+        "result": "PASS"
+      },
+      {
+        "when": "after ordinary watchdog reboot",
+        "duration_ms": 2000,
+        "exit": 0,
+        "result": "PASS"
+      }
+    ],
+    "assertions": "four pinned workers each observed own CPU and nonzero work; mutex-protected payload consistent; shared sequence, atomic count and summed worker loops equal",
+    "qualification": "short smoke only; not long stress or comprehensive cache-coherence qualification"
+  },
+  "ordinary_reboot": {
+    "success": true,
+    "cpu_online_after": "0-3"
+  },
+  "software_fel": {
+    "method": "MCP serial_shell_reboot_efex",
+    "linux_prompt_observed": true,
+    "source_spl_message": "RTC EFEX request cleared; entering BootROM FEL",
+    "fel_online": true,
+    "automatic_retry": false,
+    "reflashed_afterward": true
+  },
+  "network": {
+    "dhcp": true,
+    "first_gateway_ping_sent": 3,
+    "first_gateway_ping_received": 3,
+    "http_test_binary_hash_match": true,
+    "initial_http_attempt_failed_during_link_drop": true,
+    "repeated_link_flaps": true,
+    "ordinary_reboot_and_final_boot_downshift_to": "100Mbps Full",
+    "gigabit_stability_passed": false
+  },
+  "final_board_state": {
+    "second_fes_write_verify_reboot": "success",
+    "openwrt_shell_observed": true,
+    "four_cpu_boot_log_observed": true,
+    "cpuinfo_processors": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "cpuinfo_input_origin": "manual serial user input was observed in final capture; no additional automated smoke after second flash",
+    "root_serial_handle_released": true
+  },
+  "limitations": [
+    "Linux remains 384MiB",
+    "PSCI CPU_ON only; no CPU_OFF/hotplug/suspend/multicore kexec",
+    "No physical power-off/cold power-on test this round",
+    "WAN repeated renegotiation/downshift remains unresolved",
+    "Long DDR/storage/CPU thermal reliability and other peripherals not qualified",
+    "FES loader contains vendor binaries; persistent SPL/DDR/U-Boot/PSCI are source built",
+    "Not upstream merged",
+    "Kernel/rootfs reused from prior complete clean build; no fresh full OpenWrt rebuild for SMP this round"
+  ]
+}

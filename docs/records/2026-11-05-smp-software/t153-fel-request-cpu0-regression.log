@@ -1,0 +1,10 @@
+RTC EFEX request cleared; entering BootROM FEL
+
+RTC EFEX request cleared; entering BootROM FEL
+
+RTC EFEX request cleared; entering BootROM FEL
+
+RTC EFEX request could not be cleared; stopping in SRAM
+
+PASS: actual FEL request C: media/magic gates, clear-before-jump, delayed clear, bounded failure without jump
+PASS: linked pre-DDR hook; ARM BootROM 0x20; VBAR context restore; self-contained SRAM transition

@@ -1,9 +1,12 @@
-T153MX OmniGate 启动与烧录架构（工作稿）
-=======================================
+T153MX OmniGate 启动与烧录架构（2026-11-05）
+==========================================
 
-目标板：Allwinner T153 / sun8iw22，DDR4 1GiB，eMMC约14.6GiB。
-当前主线启动只启用CPU0；U-Boot和Linux暂只使用384MiB地址窗口。
+目标板：Allwinner T153 / sun8iw22，4核 Cortex-A7，DDR4 1GiB，eMMC约14.6GiB。
+CPU0基线42df6e8f...与四核版本ad406a84...均已有实板记录。ad406a已完成首轮
+烧录/全盘读回、四核启动及短测、普通重启和软件进入FEL。两种配置的
+U-Boot/Linux仍为384MiB地址窗口；短测不代表长期可靠性验收。
 物理DDR初始化/测试1GiB与Linux可用内存384MiB是两个不同设置。
+本仓库是主线源码的外置板级移植，不表示T153已合入官方上游。
 
 持久启动链
 ----------
@@ -13,8 +16,15 @@ BootROM → eMMC源码SPL → 源码DDR4初始化/训练 → 主线U-Boot proper
 SPL/DDR源码：port/uboot/files/board/dshanpi/t153/。
 SPL入口0x40060，eGON头在SRAM 0x40000；源码DDR训练使用480→933MHz。
 主线proper装载入口0x4a000000；Linux FIT装载/入口0x48008000。
-U-Boot在跳Linux前修正DT内存/CPU范围；持久启动不依赖厂商monitor或DDR对象。
-目前FEL冷启动和eMMC冷启动的上下文不同，回FEL实现须按真实启动路径验证。
+U-Boot在跳Linux前修正DT内存/CPU范围；持久启动不链接厂商monitor或DDR对象。
+
+四核候选在U-Boot跳转Linux前，把主线ARMv7 monitor与T153 CPU_ON后端复制到
+SRAM 0x50000..0x57fff。Linux通过PSCI 0.1 SMC CPU_ON启动CPU1、CPU2、CPU3；
+最终DT只声明arm,psci、method=smc和cpu_on，并启用4个CPU节点。
+monitor代码、数据、分派表和栈驻留该32KiB保留区；SRAM驻留不代表配置了
+硬件TrustZone隔离。CPU_OFF、热插拔、suspend、多核kexec不支持。
+现有Linux已配置CONFIG_SMP、ARM_PSCI_FW、NR_CPUS=8，候选复用同一内核/rootfs；
+本轮实际重编了U-Boot，未重跑整套OpenWrt构建。实现、配置与检查见T153-SMP.txt。
 
 292MiB整盘布局（eMMC user area，不沿用原厂A/B）
 ---------------------------------------------
@@ -25,38 +35,58 @@ SPL：绝对偏移8192（8KiB）；proper：绝对偏移131072（128KiB）。
 根参数：root=PARTUUID=15302512-02 rootfstype=ext4 rootwait rw。
 总长度：306184192字节，598016扇区。镜像只覆盖此范围，不扩展到整块eMMC。
 同ID克隆SD与eMMC同时插入会产生PARTUUID歧义；验收时应使用目标启动介质。
+四核候选只更换基线SPL/U-Boot区域，其余字节已比较一致。
 
 FEL/FES临时烧录链
 -----------------
 USB主机/MCP → BootROM FEL → RAM中的FES1 DDR初始化
 → RAM中的厂商FES服务/U-Boot → raw写入上面的源码磁盘镜像。
 FES临时loader只承载协议/初始化，不作为最终eMMC boot0/boot_package固件。
-当前FES1是厂商二进制，已经实现的全源码DDR属于最终主线SPL；两者必须分别标注。
-FES主机侧提取/组包/参数更新现已纯Python实现，不再调用厂商host工具；
-此变化没有改变FES1二进制属性，输入须由用户提供，见FES-REPRODUCE.txt。
+当前FES1是厂商二进制；全源码DDR属于最终主线SPL，两者必须分别标注。
+FES主机侧提取/组包/参数更新为纯Python实现，不调用厂商host工具；
+这没有改变FES1二进制属性，重现输入须由用户提供，见FES-REPRODUCE.txt。
 933MHz临时loader来自同板SDK参数，stock1066MHz除频率外另31项参数保持一致。
-本轮FES校验及FES post-reboot后的全盘SHA通过，尚不能单凭此断定首次bit差异原因已解决。
+已发布loader与使用步骤见仓库README及11/5发布记录。
 
 关键地址转换：stock FES MMC层使用+40960扇区偏移，当前主机raw路径已补偿。
 不能把服务端改成physical0又同时保留主机补偿；错误路线已禁用并保留事件记录。
 详见FES-RAW-MAPPING-CORRECTION.txt。
+
+软件回FEL路径与修复边界
+----------------------
+11/5在42df基线上执行标准reboot efex：请求到达内核，watchdog正常复位，随后
+仍从eMMC启动OpenWrt；USB FEL没有出现。此结果只能证明复位，不能记为回FEL成功。
+已查明厂商boot0在DDR前消费RTC data[2]（0x07090108）的0x5aa5a55a请求；
+原源码SPL遗漏此步骤。BootROM不会直接消费该请求。
+
+新SPL修复已随ad406a上板：reboot efex后串口打印RTC请求已清除并进入BootROM
+FEL，官方MCP确认fel-device-online。实现只在有效eGON.BT0且介质为SD/eMMC
+时消费该magic；有界重试清零并读回后，按厂商已核实路径关闭I/C/A/M、失效I/BP、
+等待后进入ARM物理0x20，并恢复SPL入口保存的原始VBAR。
+该路径发生在DDR前，不等同于从运行中的Linux/U-Boot直接跳地址。
+USB加载SPL的既有保存SP/LR返回FEL路径保持独立，不能混用。
+证据见records/2026-11-05-smp-software/fel-entry-evidence.json和T153-SMP.txt。
 
 Linux适配层
 -----------
 port/target/linux/sunxi/提供CCU、pinctrl、DT、MMC、GMAC、USB和CAN适配。
 T153硬件布局与T113不同；参考T113流程不意味着可复用其DRAM或寄存器值。
 CCU内部父时钟须同时完成hw_clks注册，单列ccu_clks不足以注册时钟。
-T153 MMC固定/2及DMA差异按硬件版本处理；本轮用literal 0x1000表示
-4096字节DMA段，已从eMMC成功挂载ext4进入OpenWrt shell。
-GMAC的AXI/AHB复位分别描述，完成probe不等于PHY链路和收发已验收。
+T153 MMC固定/2及DMA差异按硬件版本处理；4096字节DMA段修复后，已从eMMC
+成功挂载ext4进入OpenWrt。GMAC的AXI/AHB复位分别描述，WAN采用持久rgmii-rxid。
 
 目前证据边界
 ------------
-通过：此前源码DDR/SPL/proper冷启动；本轮FES post-reboot后292MiB回读SHA、Linux内核
-启动、清晰earlycon、两路GMAC probe、三个SMHC版本识别、eMMC卡枚举。
-已通过：本轮6ea18915...整盘SHA回读、eMMC ext4根挂载、OpenWrt shell。
-此前b114...数据读错/NULL panic保留为修复前历史。
-已通过：运行时RX delay修正后100Mbps WAN DHCP、网关ping及16MiB HTTP SHA，
-以及16MiB eMMC文件写回SHA。1Gbps重新协商掉线降速，稳定性未通过。
-待验证：持久rgmii-rxid新镜像、eth0及其余外设、原生复位/软件回FEL、长期可靠性。
-后续提交、镜像hash和最终验收日志在功能修复完成后补齐。
+42df基线11/5已通过FES写入/校验、重启后292MiB全盘SHA读回、源码SPL/U-Boot、
+Linux/eMMC ext4根挂载和OpenWrt shell。WAN无需手工改PHY即可DHCP，测试时
+1000Mbps/Full、网关ping 5/5；曾发生初始重协商，仅为短时连通测试，非千兆稳定性验收。
+ad406a首轮FES/292MiB读回通过，Linux online=0-3、四个processor条目，IPI/timer
+四列且Err=0；各核绑定的2秒调度/共享数据一致性短测三次通过，其中一次在空闲5秒后，
+一次在普通reboot后；新SPL软件进入FEL已枚举确认。实机记录独立存放于
+records/2026-11-05-smp-bringup/，不改写原离线构建manifest的hardware_verified=false。
+四核WAN DHCP和1000Mbps/Full下ping 3/3通过，但多次链路抖动，首次下载失败；
+恢复后下载SHA正确，后续链路降为100Mbps/Full，网络稳定性仍未解决。
+待验证：长时间多核/DDR/存储、千兆稳定性、LAN及其余外设、物理断电冷启动。
+FES post-reboot和watchdog普通重启均不等于物理断电重启测试。
+11/4的bit差异、MMC panic及100Mbps运行记录仍保留，不能移作新镜像的测试结果。
+完整hash、证据路径和验证范围见STATUS.txt、VALIDATION.txt。

@@ -1,0 +1,25 @@
+{
+  "source": "read-only original SDK boot0_sdcard_sun8iw22p1.bin",
+  "sha256": "b2fad4436c32d0c9b1c9607532835df9db411489819763879eab73a4f97127dd",
+  "load_base": "0x40000",
+  "flag_register": "0x07090108",
+  "flag_magic": "0x5aa5a55a",
+  "flag_read": "0x43a04",
+  "clear_caller": "0x43a7c",
+  "clear_helper": "0x439e8..0x43a02",
+  "clear_operation": "write 0; DSB; ISB; readback; repeat",
+  "cache_cleanup": "0x4215e",
+  "delay_us": "0x420a0 CNTPCT at 24MHz",
+  "delay_ms": "0x420c4",
+  "physical_ARM_entry": "0x20",
+  "entry_helper": "0x42198",
+  "vendor_delays_us": [
+    100,
+    10000
+  ],
+  "port_differences": [
+    "bounded 1000 clear retries; failure stops in SRAM",
+    "restore original VBAR saved by save_boot_params because upstream start.S changes VBAR while vendor boot0 does not"
+  ],
+  "vendor_binary_or_full_disassembly_included": false
+}

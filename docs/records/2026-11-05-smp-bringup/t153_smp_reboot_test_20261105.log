@@ -1,0 +1,24 @@
+[   48.564538] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+[   48.577062] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+cat /sys/devices/system/cpu/online; cat /sys/class/net/eth1/carr
+ier; wget -T 5 -O /tmp/t153-smp-smoke http://BUILD_HOST:8871/t153-smp-smoke; 
+sha256sum /tmp/t153-smp-smoke
+0-3
+1
+Downloading 'http://BUILD_HOST:8871/t153-smp-smoke'
+Connecting to BUILD_HOST:8871
+Writing to '/tmp/t153-smp-smoke'
+/tmp/t153-smp-smoke  100% |*******************************| 50248   0:00:00 ETA
+Download completed (50248 bytes)
+56af9ae98fb3ffe6d1a7825a28dde951038135808130e851900704b64e4a71c4  /tmp/t153-smp-smoke
+root@OpenWrt:~# chmod 755 /tmp/t153-smp-smoke; /tmp/t153-smp-smoke; echo REBOOT_
+SMOKE_EXIT=$?
+MODE=t153-cpu0-3 ONLINE=0-3 TARGET=0,1,2,3 DURATION_MS=2000
+CPU target=0 observed=0 samples=720 loops=183808 checksum=3d413514 status=PASS error_kind=0 errno=0
+CPU target=1 observed=1 samples=755 loops=192768 checksum=68e62c4d status=PASS error_kind=0 errno=0
+CPU target=2 observed=2 samples=727 loops=185600 checksum=675f31f7 status=PASS error_kind=0 errno=0
+CPU target=3 observed=3 samples=759 loops=193792 checksum=619fae47 status=PASS error_kind=0 errno=0
+SHARED sequence=755968 atomic_count=755968 expected=755968
+RESULT PASS wall_ms=2002
+REBOOT_SMOKE_EXIT=0
+root@OpenWrt:~# 

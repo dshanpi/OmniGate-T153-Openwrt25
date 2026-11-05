@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-05",
+  "image_sha256": "42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8",
+  "image_bytes": 306184192,
+  "flash_task": "flash-1793844667582556800",
+  "fes_write_verify": "success",
+  "post_flash_reboot": "success",
+  "uboot_whole_disk_sha_match": true,
+  "linux_rootfs": "eMMC mmcblk0p2 ext4 rw",
+  "openwrt_shell": true,
+  "cpu_online": "0",
+  "wan": {
+    "mode": "persistent rgmii-rxid; no manual PHY change",
+    "dhcp": true,
+    "speed_at_test": "1000Mbps full duplex",
+    "gateway_ping_sent": 5,
+    "gateway_ping_received": 5,
+    "qualification": "short connectivity only; initial link renegotiation occurred; long stability not established"
+  },
+  "native_reboot_efex": {
+    "standard_reboot_command_reached_kernel": true,
+    "watchdog_system_reset_observed": true,
+    "returned_to_emmc_openwrt": true,
+    "fel_usb_observed": false,
+    "mcp_result": "fel-device-not-found",
+    "automatic_retry_performed": false,
+    "investigation": "Vendor boot0 consumes RTC data[2] request before DDR and enters BootROM FEL; original source SPL omitted this. Correction included in separate ad406a SMP software candidate; not yet board tested."
+  },
+  "four_core_status": "ad406a SMP image built and software checked; not yet hardware tested",
+  "runtime_smoke_negative_control": {
+    "cpu_online": "0",
+    "exit": 1,
+    "result": "target CPU 1 is offline or outside permitted affinity",
+    "binary_sha256": "56af9ae98fb3ffe6d1a7825a28dde951038135808130e851900704b64e4a71c4"
+  }
+}

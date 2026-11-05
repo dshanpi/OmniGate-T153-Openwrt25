@@ -1,0 +1,109 @@
+{
+  "date": "2026-11-05",
+  "release": "https://github.com/dshanpi/t153-openwrt/releases/tag/software-20261104",
+  "assets_verified": 17,
+  "assets": [
+    {
+      "name": "config.buildinfo",
+      "size": 2936,
+      "digest": "sha256:ff98836f192e809226d3ab96536826b644dceddc59374277f94b2e6712590122",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/config.buildinfo"
+    },
+    {
+      "name": "feeds.buildinfo",
+      "size": 252,
+      "digest": "sha256:c6a380fe47e8e39eefe31fb6a4dd02ba94cbb0b93f202c051d8b25ab61e62d65",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/feeds.buildinfo"
+    },
+    {
+      "name": "openwrt-25.12-snapshot-t153-6c57f7cd04-sunxi-cortexa7-dshanpi_t153mx-omnigate-initramfs-kernel.bin",
+      "size": 7967544,
+      "digest": "sha256:98c3588271fc4e405a59b91d8aedc8b7b6eeef4292dcd2e94b7e8d3078b13656",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/openwrt-25.12-snapshot-t153-6c57f7cd04-sunxi-cortexa7-dshanpi_t153mx-omnigate-initramfs-kernel.bin"
+    },
+    {
+      "name": "openwrt-clean-build.log.gz",
+      "size": 1873117,
+      "digest": "sha256:a9032933595f604a30e40d4c0aaac959dc7b0249b0819614ff36dbd3918d1821",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/openwrt-clean-build.log.gz"
+    },
+    {
+      "name": "README-FIRMWARE.txt",
+      "size": 1861,
+      "digest": "sha256:188b362acbb1af1fd0351226e2224d564ee71b079190e3c1d1551383a121de33",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/README-FIRMWARE.txt"
+    },
+    {
+      "name": "SHA256SUMS",
+      "size": 1603,
+      "digest": "sha256:f79fe1893a1a3c55a249f915d36e4f8533cfda55155f1815ca2f5a5ccc5ad875",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/SHA256SUMS"
+    },
+    {
+      "name": "t153-disk-1g-manifest.json",
+      "size": 4173,
+      "digest": "sha256:b7db255729e3ee36de9b7e4d68dea22493efc6fefdf5643831ac39625b8c908e",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/t153-disk-1g-manifest.json"
+    },
+    {
+      "name": "t153-fes-ddr933-ram-loader.img",
+      "size": 1154048,
+      "digest": "sha256:0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/t153-fes-ddr933-ram-loader.img"
+    },
+    {
+      "name": "t153-fes-ddr933-ram-loader.manifest.json",
+      "size": 3659,
+      "digest": "sha256:da9bbc9d8fcd4643706da0158cfc3c14018fc3173f224e27b97fd8f55b778ada",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/t153-fes-ddr933-ram-loader.manifest.json"
+    },
+    {
+      "name": "t153-kexec-native-reboot.tar.gz",
+      "size": 8033291,
+      "digest": "sha256:62dbe1f6de21cd440a688328723339823c78dbeb03c77de8f2a9e25eb7615c11",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/t153-kexec-native-reboot.tar.gz"
+    },
+    {
+      "name": "t153-openwrt25-port.tar.gz",
+      "size": 222865,
+      "digest": "sha256:338e8b1047f4bf83220840660755cbf219f322a244313ac72ab9026bdabb67c4",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/t153-openwrt25-port.tar.gz"
+    },
+    {
+      "name": "t153-openwrt25-source-1g-disk.img.gz",
+      "size": 10028573,
+      "digest": "sha256:76291858f55c74084c795e253d20e102ba5c85a3b66804f5b60a64968a1c7dce",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/t153-openwrt25-source-1g-disk.img.gz"
+    },
+    {
+      "name": "t153-software-validation-records.tar.gz",
+      "size": 99674,
+      "digest": "sha256:e96cfebc83c80b99da479e1330a1042b8c3bcc7375b3a338baa2fac0c6d750c7",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/t153-software-validation-records.tar.gz"
+    },
+    {
+      "name": "t153-uboot-2026.07-source-1g-sd-bootarea.bin",
+      "size": 390232,
+      "digest": "sha256:f4df161cf1443981dbe97a4871cc7afbf9e7495dd19db2df1c962f534a7d5cd2",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/t153-uboot-2026.07-source-1g-sd-bootarea.bin"
+    },
+    {
+      "name": "t153-uboot-2026.07-source-1g-spl.bin",
+      "size": 49152,
+      "digest": "sha256:623051f91994ee88c7931df9e3ffcf1d097f0ab91f0420bbb71faebce2ecf147",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/t153-uboot-2026.07-source-1g-spl.bin"
+    },
+    {
+      "name": "t153-uboot-2026.07-source-1g.img",
+      "size": 267352,
+      "digest": "sha256:5b666c0e1d63a0a9005bd0a87731ed931d4dd9b0aa9700b403092a4e773b9e3c",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/t153-uboot-2026.07-source-1g.img"
+    },
+    {
+      "name": "version.buildinfo",
+      "size": 41,
+      "digest": "sha256:7f96c99848c0d6f31875a2dca62db5bd6270ffc59ce27e2ad2c507d6b93a03f2",
+      "url": "https://github.com/dshanpi/t153-openwrt/releases/download/software-20261104/version.buildinfo"
+    }
+  ]
+}

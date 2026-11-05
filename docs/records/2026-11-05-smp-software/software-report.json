@@ -1,0 +1,44 @@
+{
+  "status": "software checks passed; four-core hardware acceptance separate",
+  "utc_recorded": "2026-11-05T02:38:05.695359+00:00",
+  "git_base_commit": "080a7332276980f7d84c9d06b4c5e58448eb8f0a",
+  "source_worktree_dirty": true,
+  "runtime_source_sha256": {
+    "port/uboot/files/board/dshanpi/t153/Kconfig": "b05deb2f5b59a2f65a46b67ff56353681dbf9b45028e368091dc03f67692b47e",
+    "port/uboot/files/board/dshanpi/t153/Makefile": "a6289c1ca685103e66bed61cc23ad1deff585c377307071c7e22deae00c1ca2e",
+    "port/uboot/files/board/dshanpi/t153/board.c": "af340094da0273e9a1f5f6ad1356f6e479ebe5202299909d86737f8c46c2ea73",
+    "port/uboot/files/board/dshanpi/t153/ddr.c": "d9be271cbe1c61ec76a154684c28a147911df472a06db68531797393a42bd9c9",
+    "port/uboot/files/board/dshanpi/t153/ddr.h": "08461af3c9c46fb0eb6093c7c90b07960e34037ad1113b4b90e374e60b3df0ca",
+    "port/uboot/files/board/dshanpi/t153/fel-request.c": "0d476918764f36db13e1e376d6bf5806a9f29a2c427e89847e14ea18ce4ded4a",
+    "port/uboot/files/board/dshanpi/t153/fel.S": "f490fd730f8d7064e962e510b899d769dd41ea23e956d4e98f58ee8785dfe160",
+    "port/uboot/files/board/dshanpi/t153/mmc.c": "6e649b59ec38f1cef4a01ad14287725496e72a2d5de1d7d81d06a7aaaa20ae45",
+    "port/uboot/files/board/dshanpi/t153/psci-entry-t153.S": "1e8bbf14315cafc0a2114a2d3fe506c90f92357ccfeaa2b8b3241e68e83b6e55",
+    "port/uboot/files/board/dshanpi/t153/psci-t153.c": "7bf4b49ea5af687b989d86bd4637c6560ad870cf1cca2ec3c3f7cbd2fd12ed86",
+    "port/uboot/files/board/dshanpi/t153/reset.c": "f3cc4232b39ee94aa119ecfb9c7795bc20558ef1706f1d1710ec06114073e7f7",
+    "port/uboot/files/board/dshanpi/t153/smp-dt.c": "49b48dd6aef98a4f93166b9014b585e698db6704b14970a0173acec86188a31a",
+    "port/uboot/files/board/dshanpi/t153/spl.c": "324e54bc0ebea87ec351cbba7b602a43d38037f514a181ba9828cabcdf949e53",
+    "port/uboot/files/board/dshanpi/t153/sunxi_mmc.h": "5a7a55782ec872eb3a7227093739c4e23c48658eb4d922aadba22c7d8fd584aa",
+    "port/uboot/files/board/dshanpi/t153/t153.h": "bf3b65b4581d6ff1d2b46a21c5a9383ebe4ec59c46687dfce2243694869a59c3",
+    "port/uboot/files/configs/dshanpi_t153_source_1g_smp_defconfig": "fecd1b63fd8753a61f792358310c32c5ad910bee82b3eadf36478b443a1a45f2",
+    "scripts/apply-uboot.py": "1a071c6c137ddcaa4a6e075fd3c5d91200f4ab570b4ee70234a98eb2ccabc9a0"
+  },
+  "kernel_rootfs_rebuilt_this_run": false,
+  "base_image_sha256": "42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8",
+  "smp_image": {
+    "file": "t153-openwrt25-source-1g-smp-disk.img",
+    "bytes": 306184192,
+    "sha256": "ad406a8489440386e0039bbd0a3655df2a475087dc3f9736eef5b1291b7177f6"
+  },
+  "checks": {
+    "smp_uboot_build_exit": 0,
+    "smp_linked_monitor": "passed",
+    "smp_dt_with_ubsan": "passed",
+    "actual_fel_request_c_with_ubsan": "passed",
+    "smp_disk_full_verify": "passed",
+    "base_bytes_outside_bootarea": "identical",
+    "cpu0_isolated_build_regression": "passed",
+    "release_orchestration_with_mock_build_steps": "passed"
+  },
+  "full_clean_openwrt_rebuild_for_smp_this_run": false,
+  "hardware_verified_by_this_record": false
+}

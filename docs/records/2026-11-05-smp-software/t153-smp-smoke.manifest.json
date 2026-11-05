@@ -1,0 +1,34 @@
+{
+  "status": "compiled and ELF-checked; target execution is separate",
+  "source": "tests/smp/runtime-smoke.c",
+  "source_sha256": "ac34d3a23092ee9a34d50a57cb598918246c5d15c4bd6e7aa72d80e17e6d2d3a",
+  "compiler": "arm-openwrt-linux-muslgnueabi-gcc (OpenWrt GCC 14.3.0 unknown) 14.3.0",
+  "command": [
+    "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt/staging_dir/toolchain-arm_cortex-a7+neon-vfpv4_gcc-14.3.0_musl_eabi/bin/arm-openwrt-linux-muslgnueabi-gcc",
+    "-std=c11",
+    "-O2",
+    "-g0",
+    "-mcpu=cortex-a7",
+    "-mfpu=neon-vfpv4",
+    "-mfloat-abi=hard",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-pthread",
+    "-static",
+    "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/tests/smp/runtime-smoke.c",
+    "-o",
+    "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/artifacts/diagnostics/t153-smp-smoke"
+  ],
+  "strip_command": [
+    "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt/staging_dir/toolchain-arm_cortex-a7+neon-vfpv4_gcc-14.3.0_musl_eabi/bin/arm-openwrt-linux-muslgnueabi-strip",
+    "--strip-unneeded",
+    "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/artifacts/diagnostics/t153-smp-smoke"
+  ],
+  "build_script_sha256": "d3e99fd818948a2927501a425802805fa391074ec06a555f5a8690098215a2f9",
+  "output": "artifacts/diagnostics/t153-smp-smoke",
+  "bytes": 50248,
+  "sha256": "56af9ae98fb3ffe6d1a7825a28dde951038135808130e851900704b64e4a71c4",
+  "elf": "ELF32 ARM, EABI hard-float, no PT_INTERP",
+  "hardware_executed_by_builder": false
+}

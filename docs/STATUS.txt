@@ -1,36 +1,85 @@
-2026-11-04软件复跑结果：已从GitHub固定提交f16dc94在独立目录完成完整
-OpenWrt/工具链/内核/U-Boot编译、FES组包及17阶段检查，全部exit 0。
-本次固件raw SHA256为42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8。
-展开配置、来源、工具版本及日志见docs/records/2026-11-04-software-rebuild/
-（从docs内阅读时去掉前缀docs/）。板卡已断开，本次未进行烧录/启动验证。
-下文提到尚未完成的“最终全流程”包含硬件验收，不能据软件构建通过宣称已完成。
+最终回环状态：软件进入FEL后，同一ad406a镜像再次FES写入/校验/重启成功，
+板子最终运行四核OpenWrt并已释放串口。详见records/2026-11-05-smp-bringup/。
+第二次重刷后没有再次跑自动并行短测；首轮、空闲后及普通重启后的三次PASS
+分别保存，不把它们说成第二次重刷的测试。
 
-CURRENT MILESTONE: eMMC OpenWrt, storage and 100 Mbps WAN (2026-11-04)
-===================================================================
-Installed/tested image SHA256:
-6ea18915b817e77c2a57ab7a68b8bc51e92e9d965e22fa23b1b7217379e39e98.
-FES verified 306184192 bytes. After FES post-reboot, source DDR/SPL and mainline
-U-Boot started; whole-image readback of 598016 sectors matched exactly.
-The literal-4096 MMC descriptor fix permits ext4 root mounting and OpenWrt shell.
-A 16 MiB random file passed write/sync/cache-drop/readback SHA256 and cmp.
+T153 OmniGate OpenWrt 25.12 当前状态（2026-11-05）
+================================================
 
-After enabling RTL8211F RX delay at runtime, eth1 passed DHCP, 10/10 gateway
-pings and a hash-checked 16 MiB HTTP transfer at 100 Mbps/Full; the RX CRC
-counter did not rise during that transfer. Gigabit renegotiation dropped the
-link and downshifted to 100 Mbps; stable 1 Gbps operation is not established.
-The persisted WAN rgmii-rxid DT change and native Linux reboot-mode/userspace
-support are now in the source, but their combined new image is not boot-tested.
-Latest clean-built software candidate (17 pipeline stages passed; not flashed):
-42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8.
-Do not attribute the installed image's runtime observations to this candidate.
+四核版本ad406a已完成首轮FES烧录/全盘读回、CPU0..3启动、三次短测、
+普通重启后四核复测，以及reboot efex软件进入FEL；千兆链路稳定性仍未解决。
+CPU0镜像42df保留为已上板的基线。两者实机记录分别绑定各自hash，不互相替代。
 
-Limits: CPU0 only, 384 MiB Linux window, 1 GiB physical DDR. CAN0/CAN1 and SDIO
-are registered; bus traffic/wireless function remain unvalidated. Software
-reboot/efex, kexec, LAN, other peripherals and long-term DDR/storage qualification
-remain pending. The board/debugger is disconnected; hardware work awaits reconnection.
-MCP power-GPIO recovery failed. FES post-reboot is not a physical power-cycle test.
-The final clean configuration/full software build passed; flashing/boot acceptance of this image remains pending.
-Evidence: docs/records/2026-11-04-bringup/hardware-status.json and published logs.
+已验证的CPU0基线
+----------------
+镜像SHA256：
+42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8。
+来源为11/4从GitHub固定提交f16dc94完成的独立完整OpenWrt/工具链/内核/U-Boot
+构建、FES组包及17阶段检查；此前“未烧录”的状态已被11/5记录更新。
+
+11/5 FES写入与校验306184192字节通过，post-reboot后主线U-Boot全盘598016扇区
+SHA256匹配；源码DDR4/SPL、U-Boot、Linux 6.12.113、eMMC ext4 rw根分区及
+OpenWrt shell启动通过，CPU online为0。物理DDR 1GiB，Linux仍为384MiB。
+WAN持久rgmii-rxid生效，无需手工改PHY：DHCP成功，测试时1000Mbps/Full，
+网关ping 5/5。启动时曾重协商；这是短时连通测试，不代表千兆长期稳定性通过。
+
+标准reboot efex到达内核且watchdog正常复位，但重新从eMMC启动OpenWrt，未出现
+USB FEL。MCP返回fel-device-not-found，未自动重试；不得记为软件回FEL成功。
+调查已确认原源码SPL缺少厂商boot0的RTC请求消费步骤，修复已编入下述候选。
+证据：records/2026-11-05-bringup/baseline-validation.json及同目录串口/FES记录。
+软件复跑：records/2026-11-04-software-rebuild/。
+
+四核版本与软件证据
+------------------
+镜像：artifacts/t153-openwrt25-source-1g-smp-disk.img，306184192字节。
+SHA256：
+ad406a8489440386e0039bbd0a3655df2a475087dc3f9736eef5b1291b7177f6。
+
+新增源码PSCI 0.1 CPU_ON监控器，配置CPU0..3，运行时代码/数据/栈驻留
+SRAM 0x50000..0x57fff；最终DT启用四核且不错误声明PSCI 1.0。
+新SPL在DDR前消费RTC EFEX magic，清零读回成功后按已核实厂商路径进入BootROM。
+不链接厂商DDR库或多核monitor；临时FES1 loader仍是厂商二进制。
+
+已通过：独立U-Boot编译、真实ELF驻留/调用/重定位检查、实际DT修复C代码UBSan
+测试、实际FEL请求C代码测试、CPU0独立构建回归、完整磁盘/gzip校验和启动区外
+字节与42df基线一致性检查。发布编排的mock测试不等于完整重编译或硬件测试。
+本轮复用11/4同一内核/rootfs，没有再次运行完整OpenWrt构建。
+证据：records/2026-11-05-smp-software/software-report.json及同目录配置/日志。
+实现、构建入口及限制：T153-SMP.txt。
+
+四核版本11/5实机短测
+-------------------
+首轮FES任务flash-1793846646997374000写入/校验/post-reboot成功，U-Boot
+读回完整292MiB SHA256精确匹配ad406a。Linux报告Brought up 4 CPUs，
+online=0-3，/proc/cpuinfo有4项processor，IPI/timer为4列且Err=0。
+绑定CPU0..3的2秒调度/共享数据一致性测试三次RESULT PASS、exit 0：
+首次、空闲5秒后及普通sync/reboot后；重启后仍online=0-3。
+WAN DHCP成功，1000Mbps/Full时ping 3/3，但多次link flap、首次下载失败；
+链路恢复后下载SHA通过，随后降为100Mbps/Full。网络稳定性没有通过。
+官方MCP serial_shell_reboot_efex返回fel-device-online，串口打印
+RTC EFEX request cleared; entering BootROM FEL，证实新SPL软件回FEL路径。
+证据：records/2026-11-05-smp-bringup/，以独立实机JSON/日志记录；原构建
+manifest中的hardware_verified=false描述构建流程，不重写为执行过硬件。
+本节不计入后续第二轮FES烧录的结果，也不代替物理断电冷启动验收。
+
+待完成的硬件验收
+----------------
+长时间四核/DDR/存储与网络可靠性仍待验证。CPU_OFF、热插拔、suspend及多核kexec
+不支持；本次短测不等于完整缓存一致性证明、温控、DVFS或性能基准测试。
+LAN、CAN总线收发、Wi-Fi/BT、其余外设和长期DDR/存储/千兆可靠性仍待验收。
+FES post-reboot不是物理断电重启；已有短测不能替代冷启动与长期压力测试。
+本项目为实验性板级移植，不能声明上游官方支持或完整硬件适配已经完成。
+
+11/4历史运行结果摘要
+------------------
+6ea18915b817e77c2a57ab7a68b8bc51e92e9d965e22fa23b1b7217379e39e98：
+FES及全盘读回、OpenWrt根挂载、16MiB eMMC写入/读回SHA通过；运行时修正PHY
+RX delay后100Mbps/Full DHCP、10/10 ping及16MiB HTTP SHA通过。当时千兆
+重协商掉线降速。上述文件传输测试只属于该历史镜像，不归入42df或ad406a。
+证据：records/2026-11-04-bringup/hardware-status.json。
+
+以下为原始历史记录；其中“当前”“尚未实现”“尚未测试”均指当时状态，
+如与本文开头冲突，以2026-11-05明确绑定镜像hash的记录为准。
 
 Earlier records below are historical, including the prior rootfs failure.
 

@@ -1,0 +1,74 @@
+[
+  {
+    "file": "t153_smp_20261105_status.json",
+    "original_sha256": "fab179751b638da00913b7ac2fa853b94d4f4783a43ed2fba6535af04095647a",
+    "published_sha256": "1e62f73164349cb7f4b81f04414caae07e1ebfd8ecafc8063d3b2b31014ce060",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_smp_20261105_boot.log",
+    "original_sha256": "beb2eef1368da40cef4a0990b2453c7f263b63017884dd5647ce7b72e4748a40",
+    "published_sha256": "beb2eef1368da40cef4a0990b2453c7f263b63017884dd5647ce7b72e4748a40",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_smp_readback_20261105.log",
+    "original_sha256": "f1694dc42afd3b8cb71a4c5a790ead18ac2da563481a8742204cb1738d0f4222",
+    "published_sha256": "f1694dc42afd3b8cb71a4c5a790ead18ac2da563481a8742204cb1738d0f4222",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_smp_linux_20261105.log",
+    "original_sha256": "81617d3406b5d91c30bb932d964ec43512540be67c419f2e5e2c9e41e2167ee6",
+    "published_sha256": "81617d3406b5d91c30bb932d964ec43512540be67c419f2e5e2c9e41e2167ee6",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_smp_runtime_20261105.log",
+    "original_sha256": "c3570fb1d4d578eb4bd034b9f9901e6e58641efcf3f82c654ecef1a71ee97787",
+    "published_sha256": "7f276588a3b524b250814ca2e5ed3a90fbe04e5521efc1be27a34efbdd8c4ff5",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_smp_reboot_20261105.log",
+    "original_sha256": "8680cad19db375b8eec023b70bdf18f7fccd997b4b93b95888c4ff6644202d56",
+    "published_sha256": "8680cad19db375b8eec023b70bdf18f7fccd997b4b93b95888c4ff6644202d56",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_smp_reboot_test_20261105.log",
+    "original_sha256": "ac29ea91185361aa252ad21b2e7a214e682a9141bf93aba3337c1e4091a1e124",
+    "published_sha256": "ff55de29de0cc6b7d3e62e6e0b2b79667350c8c6f4b7d172aa028f7d463f66b0",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_smp_fel_20261105.json",
+    "original_sha256": "a9790e262e8dc26cfc2f2108cdfc0ab21a5feaadea406d8b63c0e1fa896437d7",
+    "published_sha256": "a9790e262e8dc26cfc2f2108cdfc0ab21a5feaadea406d8b63c0e1fa896437d7",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_smp_fel_serial_20261105.log",
+    "original_sha256": "4ca3e290be2c4e140cefa16669904296ba0c8a445d1a43b150939503e2e7eaf8",
+    "published_sha256": "4ca3e290be2c4e140cefa16669904296ba0c8a445d1a43b150939503e2e7eaf8",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_smp_final_20261105_status.json",
+    "original_sha256": "d9089cb50ab2da4e4b1c8ec42b32d2ba2a04fa75ed295684b0f8e0d2b640922a",
+    "published_sha256": "c5980665ceccc4a790c157d034ffb278f052707add1cbb609acdedf1f444e324",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_smp_final_20261105_boot.log",
+    "original_sha256": "beb2eef1368da40cef4a0990b2453c7f263b63017884dd5647ce7b72e4748a40",
+    "published_sha256": "beb2eef1368da40cef4a0990b2453c7f263b63017884dd5647ce7b72e4748a40",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_smp_final_linux_20261105.log",
+    "original_sha256": "53460a847faa36533bf05633d534d14a88e88f92e6128ae13bc0483698c997d4",
+    "published_sha256": "53460a847faa36533bf05633d534d14a88e88f92e6128ae13bc0483698c997d4",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  }
+]

@@ -1,0 +1,476 @@
+
+/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/u-boot-work/build-t153-source-1g-smp/u-boot:     file format elf32-littlearm
+
+
+Disassembly of section .secure_text:
+
+00050000 <_monitor_vectors>:
+	...
+   50008:	e28ff010 	add	pc, pc, #16
+	...
+
+00050020 <_secure_monitor>:
+   50020:	e59f50f4 	ldr	r5, [pc, #244]	@ 5011c <_nonsec_init+0x78>
+   50024:	ee0c5f30 	mcr	15, 0, r5, cr12, cr0, {1}
+   50028:	f57ff06f 	isb	sy
+   5002c:	eb0000d7 	bl	50390 <psci_stack_setup>
+   50030:	e92d1007 	push	{r0, r1, r2, ip}
+   50034:	eb0000dc 	bl	503ac <psci_arch_init>
+   50038:	e8bd1007 	pop	{r0, r1, r2, ip}
+   5003c:	ee115f11 	mrc	15, 0, r5, cr1, cr1, {0}
+   50040:	e3c5504a 	bic	r5, r5, #74	@ 0x4a
+   50044:	e3855031 	orr	r5, r5, #49	@ 0x31
+   50048:	e3a06013 	mov	r6, #19
+   5004c:	ee104f31 	mrc	15, 0, r4, cr0, cr1, {1}
+   50050:	e2044a0f 	and	r4, r4, #61440	@ 0xf000
+   50054:	e3540a01 	cmp	r4, #4096	@ 0x1000
+   50058:	ee015f11 	mcr	15, 0, r5, cr1, cr1, {0}
+   5005c:	f57ff06f 	isb	sy
+   50060:	1a000003 	bne	50074 <_secure_monitor+0x54>
+   50064:	ee104f31 	mrc	15, 0, r4, cr0, cr1, {1}
+   50068:	e214480f 	ands	r4, r4, #983040	@ 0xf0000
+   5006c:	13a04000 	movne	r4, #0
+   50070:	1c444f4e 	mcrrne	15, 4, r4, r4, cr14
+   50074:	e1a0e00c 	mov	lr, ip
+   50078:	e3a0cd07 	mov	ip, #448	@ 0x1c0
+   5007c:	e31e0001 	tst	lr, #1
+   50080:	138cc020 	orrne	ip, ip, #32
+   50084:	e18cc006 	orr	ip, ip, r6
+   50088:	e16ff00c 	msr	SPSR_fsxc, ip
+   5008c:	e1b0f00e 	movs	pc, lr
+
+00050090 <_do_nonsec_entry>:
+   50090:	e1a0c000 	mov	ip, r0
+   50094:	e1a00001 	mov	r0, r1
+   50098:	e1a01002 	mov	r1, r2
+   5009c:	e1a02003 	mov	r2, r3
+   500a0:	e1600070 	smc	0
+
+000500a4 <_nonsec_init>:
+   500a4:	e3a0350d 	mov	r3, #54525952	@ 0x3400000
+   500a8:	e2833a01 	add	r3, r3, #4096	@ 0x1000
+   500ac:	e3e01000 	mvn	r1, #0
+   500b0:	e5831080 	str	r1, [r3, #128]	@ 0x80
+   500b4:	e3a0350d 	mov	r3, #54525952	@ 0x3400000
+   500b8:	ee101f31 	mrc	15, 0, r1, cr0, cr1, {1}
+   500bc:	e2011a0f 	and	r1, r1, #61440	@ 0xf000
+   500c0:	e3510a01 	cmp	r1, #4096	@ 0x1000
+   500c4:	13a01c01 	movne	r1, #256	@ 0x100
+   500c8:	03a01a02 	moveq	r1, #8192	@ 0x2000
+   500cc:	e0833001 	add	r3, r3, r1
+   500d0:	e3a01003 	mov	r1, #3
+   500d4:	e5831000 	str	r1, [r3]
+   500d8:	e3a010ff 	mov	r1, #255	@ 0xff
+   500dc:	e5831004 	str	r1, [r3, #4]
+   500e0:	ee110f51 	mrc	15, 0, r0, cr1, cr1, {2}
+   500e4:	e3031fff 	movw	r1, #16383	@ 0x3fff
+   500e8:	e3401004 	movt	r1, #4
+   500ec:	e1800001 	orr	r0, r0, r1
+   500f0:	ee010f51 	mcr	15, 0, r0, cr1, cr1, {2}
+   500f4:	ee100f31 	mrc	15, 0, r0, cr0, cr1, {1}
+   500f8:	e200080f 	and	r0, r0, #983040	@ 0xf0000
+   500fc:	e3500801 	cmp	r0, #65536	@ 0x10000
+   50100:	059f1018 	ldreq	r1, [pc, #24]	@ 50120 <_nonsec_init+0x7c>
+   50104:	0e0e1f10 	mcreq	15, 0, r1, cr14, cr0, {0}
+   50108:	e24f1e11 	sub	r1, pc, #272	@ 0x110
+   5010c:	ee0c1f30 	mcr	15, 0, r1, cr12, cr0, {1}
+   50110:	f57ff06f 	isb	sy
+   50114:	e1a00003 	mov	r0, r3
+   50118:	e12fff1e 	bx	lr
+   5011c:	00050140 	.word	0x00050140
+   50120:	016e3600 	.word	0x016e3600
+	...
+
+00050140 <_psci_vectors>:
+   50140:	ea000007 	b	50164 <default_psci_vector>
+   50144:	ea000006 	b	50164 <default_psci_vector>
+   50148:	ea000036 	b	50228 <_smc_psci>
+   5014c:	ea000004 	b	50164 <default_psci_vector>
+   50150:	ea000003 	b	50164 <default_psci_vector>
+   50154:	ea000002 	b	50164 <default_psci_vector>
+   50158:	ea000001 	b	50164 <default_psci_vector>
+   5015c:	eaffffff 	b	50160 <psci_fiq_enter>
+
+00050160 <psci_fiq_enter>:
+   50160:	e1b0f00e 	movs	pc, lr
+
+00050164 <default_psci_vector>:
+   50164:	e1b0f00e 	movs	pc, lr
+
+00050168 <psci_affinity_info>:
+   50168:	e3e00000 	mvn	r0, #0
+   5016c:	e1a0f00e 	mov	pc, lr
+
+00050170 <_psci_table>:
+   50170:	95c1ba5e 	.word	0x95c1ba5e
+   50174:	00050648 	.word	0x00050648
+   50178:	95c1ba5f 	.word	0x95c1ba5f
+   5017c:	00050640 	.word	0x00050640
+   50180:	95c1ba60 	.word	0x95c1ba60
+   50184:	0005042c 	.word	0x0005042c
+   50188:	95c1ba61 	.word	0x95c1ba61
+   5018c:	00050168 	.word	0x00050168
+   50190:	84000000 	.word	0x84000000
+   50194:	00050168 	.word	0x00050168
+   50198:	84000001 	.word	0x84000001
+   5019c:	00050648 	.word	0x00050648
+   501a0:	84000002 	.word	0x84000002
+   501a4:	00050640 	.word	0x00050640
+   501a8:	84000003 	.word	0x84000003
+   501ac:	0005042c 	.word	0x0005042c
+   501b0:	84000004 	.word	0x84000004
+   501b4:	00050168 	.word	0x00050168
+   501b8:	84000005 	.word	0x84000005
+   501bc:	00050168 	.word	0x00050168
+   501c0:	84000006 	.word	0x84000006
+   501c4:	00050168 	.word	0x00050168
+   501c8:	84000007 	.word	0x84000007
+   501cc:	00050168 	.word	0x00050168
+   501d0:	84000008 	.word	0x84000008
+   501d4:	00050168 	.word	0x00050168
+   501d8:	84000009 	.word	0x84000009
+   501dc:	00050168 	.word	0x00050168
+   501e0:	8400000a 	.word	0x8400000a
+   501e4:	00050168 	.word	0x00050168
+   501e8:	8400000b 	.word	0x8400000b
+   501ec:	00050168 	.word	0x00050168
+   501f0:	8400000c 	.word	0x8400000c
+   501f4:	00050168 	.word	0x00050168
+   501f8:	8400000d 	.word	0x8400000d
+   501fc:	00050168 	.word	0x00050168
+   50200:	8400000e 	.word	0x8400000e
+   50204:	00050168 	.word	0x00050168
+   50208:	8400000f 	.word	0x8400000f
+   5020c:	00050168 	.word	0x00050168
+   50210:	84000010 	.word	0x84000010
+   50214:	00050168 	.word	0x00050168
+   50218:	84000011 	.word	0x84000011
+   5021c:	00050168 	.word	0x00050168
+	...
+
+00050228 <_smc_psci>:
+   50228:	e92d40f0 	push	{r4, r5, r6, r7, lr}
+   5022c:	ee117f11 	mrc	15, 0, r7, cr1, cr1, {0}
+   50230:	e3c74001 	bic	r4, r7, #1
+   50234:	ee014f11 	mcr	15, 0, r4, cr1, cr1, {0}
+   50238:	f57ff06f 	isb	sy
+   5023c:	e24f40d4 	sub	r4, pc, #212	@ 0xd4
+   50240:	e5945000 	ldr	r5, [r4]
+   50244:	e5946004 	ldr	r6, [r4, #4]
+   50248:	e3550000 	cmp	r5, #0
+   5024c:	03e00001 	mvneq	r0, #1
+   50250:	0a000003 	beq	50264 <_smc_psci+0x3c>
+   50254:	e1500005 	cmp	r0, r5
+   50258:	12844008 	addne	r4, r4, #8
+   5025c:	1afffff7 	bne	50240 <_smc_psci+0x18>
+   50260:	e12fff36 	blx	r6
+   50264:	ee017f11 	mcr	15, 0, r7, cr1, cr1, {0}
+   50268:	e8bd40f0 	pop	{r4, r5, r6, r7, lr}
+   5026c:	e1b0f00e 	movs	pc, lr
+
+00050270 <psci_get_cpu_id>:
+   50270:	ee100fb0 	mrc	15, 0, r0, cr0, cr0, {5}
+   50274:	e20000ff 	and	r0, r0, #255	@ 0xff
+   50278:	e12fff1e 	bx	lr
+
+0005027c <psci_v7_flush_dcache_all>:
+   5027c:	e92d4eb0 	push	{r4, r5, r7, r9, sl, fp, lr}
+   50280:	f57ff05f 	dmb	sy
+   50284:	ee300f30 	mrc	15, 1, r0, cr0, cr0, {1}
+   50288:	e2103407 	ands	r3, r0, #117440512	@ 0x7000000
+   5028c:	e1a03ba3 	lsr	r3, r3, #23
+   50290:	0a00001c 	beq	50308 <finished>
+   50294:	e3a0a000 	mov	sl, #0
+
+00050298 <flush_levels>:
+   50298:	e08a20aa 	add	r2, sl, sl, lsr #1
+   5029c:	e1a01230 	lsr	r1, r0, r2
+   502a0:	e2011007 	and	r1, r1, #7
+   502a4:	e3510002 	cmp	r1, #2
+   502a8:	ba000013 	blt	502fc <skip>
+   502ac:	e10f9000 	mrs	r9, CPSR
+   502b0:	ee40af10 	mcr	15, 2, sl, cr0, cr0, {0}
+   502b4:	f57ff06f 	isb	sy
+   502b8:	ee301f10 	mrc	15, 1, r1, cr0, cr0, {0}
+   502bc:	e121f009 	msr	CPSR_c, r9
+   502c0:	e2012007 	and	r2, r1, #7
+   502c4:	e2822004 	add	r2, r2, #4
+   502c8:	e59f4110 	ldr	r4, [pc, #272]	@ 503e0 <psci_cpu_entry+0x2c>
+   502cc:	e01441a1 	ands	r4, r4, r1, lsr #3
+   502d0:	e16f5f14 	clz	r5, r4
+   502d4:	e59f7108 	ldr	r7, [pc, #264]	@ 503e4 <psci_cpu_entry+0x30>
+   502d8:	e01776a1 	ands	r7, r7, r1, lsr #13
+
+000502dc <loop1>:
+   502dc:	e1a09007 	mov	r9, r7
+
+000502e0 <loop2>:
+   502e0:	e18ab514 	orr	fp, sl, r4, lsl r5
+   502e4:	e18bb219 	orr	fp, fp, r9, lsl r2
+   502e8:	ee07bf5e 	mcr	15, 0, fp, cr7, cr14, {2}
+   502ec:	e2599001 	subs	r9, r9, #1
+   502f0:	aafffffa 	bge	502e0 <loop2>
+   502f4:	e2544001 	subs	r4, r4, #1
+   502f8:	aafffff7 	bge	502dc <loop1>
+
+000502fc <skip>:
+   502fc:	e28aa002 	add	sl, sl, #2
+   50300:	e153000a 	cmp	r3, sl
+   50304:	caffffe3 	bgt	50298 <flush_levels>
+
+00050308 <finished>:
+   50308:	e3a0a000 	mov	sl, #0
+   5030c:	ee40af10 	mcr	15, 2, sl, cr0, cr0, {0}
+   50310:	f57ff04e 	dsb	st
+   50314:	f57ff06f 	isb	sy
+   50318:	e8bd4eb0 	pop	{r4, r5, r7, r9, sl, fp, lr}
+   5031c:	e12fff1e 	bx	lr
+
+00050320 <psci_disable_smp>:
+   50320:	ee110f30 	mrc	15, 0, r0, cr1, cr0, {1}
+   50324:	e3c00040 	bic	r0, r0, #64	@ 0x40
+   50328:	ee010f30 	mcr	15, 0, r0, cr1, cr0, {1}
+   5032c:	f57ff06f 	isb	sy
+   50330:	f57ff04f 	dsb	sy
+   50334:	e12fff1e 	bx	lr
+
+00050338 <psci_enable_smp>:
+   50338:	ee110f30 	mrc	15, 0, r0, cr1, cr0, {1}
+   5033c:	e3800040 	orr	r0, r0, #64	@ 0x40
+   50340:	ee010f30 	mcr	15, 0, r0, cr1, cr0, {1}
+   50344:	f57ff06f 	isb	sy
+   50348:	e12fff1e 	bx	lr
+
+0005034c <psci_cpu_off_common>:
+   5034c:	e52de004 	push	{lr}		@ (str lr, [sp, #-4]!)
+   50350:	ebffffc9 	bl	5027c <psci_v7_flush_dcache_all>
+   50354:	f57ff01f 	clrex
+   50358:	ee110f10 	mrc	15, 0, r0, cr1, cr0, {0}
+   5035c:	e3c00004 	bic	r0, r0, #4
+   50360:	ee010f10 	mcr	15, 0, r0, cr1, cr0, {0}
+   50364:	f57ff06f 	isb	sy
+   50368:	f57ff04f 	dsb	sy
+   5036c:	ebffffc2 	bl	5027c <psci_v7_flush_dcache_all>
+   50370:	f57ff01f 	clrex
+   50374:	ebffffe9 	bl	50320 <psci_disable_smp>
+   50378:	e49de004 	pop	{lr}		@ (ldr lr, [sp], #4)
+   5037c:	e12fff1e 	bx	lr
+
+00050380 <psci_get_cpu_stack_top>:
+   50380:	e59f3060 	ldr	r3, [pc, #96]	@ 503e8 <psci_cpu_entry+0x34>
+   50384:	e0430500 	sub	r0, r3, r0, lsl #10
+   50388:	e2400004 	sub	r0, r0, #4
+   5038c:	e12fff1e 	bx	lr
+
+00050390 <psci_stack_setup>:
+   50390:	e1a0600e 	mov	r6, lr
+   50394:	e1a07000 	mov	r7, r0
+   50398:	ebffffb4 	bl	50270 <psci_get_cpu_id>
+   5039c:	ebfffff7 	bl	50380 <psci_get_cpu_stack_top>
+   503a0:	e1a0d000 	mov	sp, r0
+   503a4:	e1a00007 	mov	r0, r7
+   503a8:	e12fff16 	bx	r6
+
+000503ac <psci_arch_init>:
+   503ac:	e1a0f00e 	mov	pc, lr
+   503b0:	e1a0f00e 	mov	pc, lr
+
+000503b4 <psci_cpu_entry>:
+   503b4:	ebffffdf 	bl	50338 <psci_enable_smp>
+   503b8:	ebffff39 	bl	500a4 <_nonsec_init>
+   503bc:	ebfffff3 	bl	50390 <psci_stack_setup>
+   503c0:	eb00007d 	bl	505bc <psci_arch_cpu_entry>
+   503c4:	ebffffa9 	bl	50270 <psci_get_cpu_id>
+   503c8:	eb000013 	bl	5041c <psci_get_context_id>
+   503cc:	e52d0004 	push	{r0}		@ (str r0, [sp, #-4]!)
+   503d0:	ebffffa6 	bl	50270 <psci_get_cpu_id>
+   503d4:	eb00000c 	bl	5040c <psci_get_target_pc>
+   503d8:	e49d1004 	pop	{r1}		@ (ldr r1, [sp], #4)
+   503dc:	eaffff2b 	b	50090 <_do_nonsec_entry>
+   503e0:	000003ff 	.word	0x000003ff
+   503e4:	00007fff 	.word	0x00007fff
+   503e8:	00053000 	.word	0x00053000
+
+000503ec <psci_save>:
+   503ec:	e59f3010 	ldr	r3, [pc, #16]	@ 50404 <psci_save+0x18>
+   503f0:	e7831100 	str	r1, [r3, r0, lsl #2]
+   503f4:	e59f300c 	ldr	r3, [pc, #12]	@ 50408 <psci_save+0x1c>
+   503f8:	e7832100 	str	r2, [r3, r0, lsl #2]
+   503fc:	f57ff04f 	dsb	sy
+   50400:	e12fff1e 	bx	lr
+   50404:	000506a8 	.word	0x000506a8
+   50408:	00050698 	.word	0x00050698
+
+0005040c <psci_get_target_pc>:
+   5040c:	e59f3004 	ldr	r3, [pc, #4]	@ 50418 <psci_get_target_pc+0xc>
+   50410:	e7930100 	ldr	r0, [r3, r0, lsl #2]
+   50414:	e12fff1e 	bx	lr
+   50418:	000506a8 	.word	0x000506a8
+
+0005041c <psci_get_context_id>:
+   5041c:	e59f3004 	ldr	r3, [pc, #4]	@ 50428 <psci_get_context_id+0xc>
+   50420:	e7930100 	ldr	r0, [r3, r0, lsl #2]
+   50424:	e12fff1e 	bx	lr
+   50428:	00050698 	.word	0x00050698
+
+0005042c <psci_cpu_on>:
+   5042c:	e16f0f12 	clz	r0, r2
+   50430:	e92d41f0 	push	{r4, r5, r6, r7, r8, lr}
+   50434:	e1a002a0 	lsr	r0, r0, #5
+   50438:	e1a06003 	mov	r6, r3
+   5043c:	e2413001 	sub	r3, r1, #1
+   50440:	e3530002 	cmp	r3, #2
+   50444:	83800001 	orrhi	r0, r0, #1
+   50448:	e3500000 	cmp	r0, #0
+   5044c:	1a000050 	bne	50594 <psci_cpu_on+0x168>
+   50450:	e3120003 	tst	r2, #3
+   50454:	e1a07002 	mov	r7, r2
+   50458:	1a00004d 	bne	50594 <psci_cpu_on+0x168>
+   5045c:	e1a04001 	mov	r4, r1
+   50460:	ebffff82 	bl	50270 <psci_get_cpu_id>
+   50464:	e3500000 	cmp	r0, #0
+   50468:	0a000001 	beq	50474 <psci_cpu_on+0x48>
+   5046c:	e3e00002 	mvn	r0, #2
+   50470:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   50474:	e59f5130 	ldr	r5, [pc, #304]	@ 505ac <psci_cpu_on+0x180>
+   50478:	e7953104 	ldr	r3, [r5, r4, lsl #2]
+   5047c:	e3530002 	cmp	r3, #2
+   50480:	0a000045 	beq	5059c <psci_cpu_on+0x170>
+   50484:	e3530001 	cmp	r3, #1
+   50488:	0a000045 	beq	505a4 <psci_cpu_on+0x178>
+   5048c:	e3530000 	cmp	r3, #0
+   50490:	1afffff5 	bne	5046c <psci_cpu_on+0x40>
+   50494:	e1a02006 	mov	r2, r6
+   50498:	e1a01007 	mov	r1, r7
+   5049c:	e1a00004 	mov	r0, r4
+   504a0:	ebffffd1 	bl	503ec <psci_save>
+   504a4:	f57ff05f 	dmb	sy
+   504a8:	e59f3100 	ldr	r3, [pc, #256]	@ 505b0 <psci_cpu_on+0x184>
+   504ac:	e59f2100 	ldr	r2, [pc, #256]	@ 505b4 <psci_cpu_on+0x188>
+   504b0:	e0843003 	add	r3, r4, r3
+   504b4:	e1a01103 	lsl	r1, r3, #2
+   504b8:	e5812000 	str	r2, [r1]
+   504bc:	e3a02001 	mov	r2, #1
+   504c0:	e7852104 	str	r2, [r5, r4, lsl #2]
+   504c4:	f57ff04f 	dsb	sy
+   504c8:	e3012010 	movw	r2, #4112	@ 0x1010
+   504cc:	e7920103 	ldr	r0, [r2, r3, lsl #2]
+   504d0:	e081c002 	add	ip, r1, r2
+   504d4:	e3800001 	orr	r0, r0, #1
+   504d8:	e7820103 	str	r0, [r2, r3, lsl #2]
+   504dc:	e5911fe0 	ldr	r1, [r1, #4064]	@ 0xfe0
+   504e0:	f57ff05f 	dmb	sy
+   504e4:	e6ef1071 	uxtb	r1, r1
+   504e8:	e35100ff 	cmp	r1, #255	@ 0xff
+   504ec:	03a01ffa 	moveq	r1, #1000	@ 0x3e8
+   504f0:	0a000006 	beq	50510 <psci_cpu_on+0xe4>
+   504f4:	e7921103 	ldr	r1, [r2, r3, lsl #2]
+   504f8:	e3c11001 	bic	r1, r1, #1
+   504fc:	e7821103 	str	r1, [r2, r3, lsl #2]
+   50500:	e3a03003 	mov	r3, #3
+   50504:	e7853104 	str	r3, [r5, r4, lsl #2]
+   50508:	f57ff04f 	dsb	sy
+   5050c:	eaffffd6 	b	5046c <psci_cpu_on+0x40>
+   50510:	e320f000 	nop	{0}
+   50514:	e2511001 	subs	r1, r1, #1
+   50518:	1afffffc 	bne	50510 <psci_cpu_on+0xe4>
+   5051c:	e7921103 	ldr	r1, [r2, r3, lsl #2]
+   50520:	e3811801 	orr	r1, r1, #65536	@ 0x10000
+   50524:	e7821103 	str	r1, [r2, r3, lsl #2]
+   50528:	f57ff04f 	dsb	sy
+   5052c:	e3a02601 	mov	r2, #1048576	@ 0x100000
+   50530:	e59f1080 	ldr	r1, [pc, #128]	@ 505b8 <psci_cpu_on+0x18c>
+   50534:	e59c0000 	ldr	r0, [ip]
+   50538:	f57ff05f 	dmb	sy
+   5053c:	e2100801 	ands	r0, r0, #65536	@ 0x10000
+   50540:	1a000007 	bne	50564 <psci_cpu_on+0x138>
+   50544:	e7913104 	ldr	r3, [r1, r4, lsl #2]
+   50548:	e3530000 	cmp	r3, #0
+   5054c:	0a000004 	beq	50564 <psci_cpu_on+0x138>
+   50550:	e3a03002 	mov	r3, #2
+   50554:	e7853104 	str	r3, [r5, r4, lsl #2]
+   50558:	f57ff04f 	dsb	sy
+   5055c:	e320f004 	sev
+   50560:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   50564:	e3a03064 	mov	r3, #100	@ 0x64
+   50568:	e320f000 	nop	{0}
+   5056c:	e2533001 	subs	r3, r3, #1
+   50570:	1afffffc 	bne	50568 <psci_cpu_on+0x13c>
+   50574:	e2522001 	subs	r2, r2, #1
+   50578:	1affffed 	bne	50534 <psci_cpu_on+0x108>
+   5057c:	e3a03003 	mov	r3, #3
+   50580:	e7853104 	str	r3, [r5, r4, lsl #2]
+   50584:	f57ff04f 	dsb	sy
+   50588:	e320f004 	sev
+   5058c:	e3e00005 	mvn	r0, #5
+   50590:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   50594:	e3e00001 	mvn	r0, #1
+   50598:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   5059c:	e3e00003 	mvn	r0, #3
+   505a0:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   505a4:	e3e00004 	mvn	r0, #4
+   505a8:	e8bd81f0 	pop	{r4, r5, r6, r7, r8, pc}
+   505ac:	000506c8 	.word	0x000506c8
+   505b0:	01c1401c 	.word	0x01c1401c
+   505b4:	00050660 	.word	0x00050660
+   505b8:	000506b8 	.word	0x000506b8
+
+000505bc <psci_arch_cpu_entry>:
+   505bc:	e92d4010 	push	{r4, lr}
+   505c0:	ebffff2a 	bl	50270 <psci_get_cpu_id>
+   505c4:	e2403001 	sub	r3, r0, #1
+   505c8:	e3530002 	cmp	r3, #2
+   505cc:	8a000016 	bhi	5062c <psci_arch_cpu_entry+0x70>
+   505d0:	e59f305c 	ldr	r3, [pc, #92]	@ 50634 <psci_arch_cpu_entry+0x78>
+   505d4:	e0803003 	add	r3, r0, r3
+   505d8:	e1a03103 	lsl	r3, r3, #2
+   505dc:	e5932000 	ldr	r2, [r3]
+   505e0:	e3c22001 	bic	r2, r2, #1
+   505e4:	e5832000 	str	r2, [r3]
+   505e8:	e59f3048 	ldr	r3, [pc, #72]	@ 50638 <psci_arch_cpu_entry+0x7c>
+   505ec:	e7932100 	ldr	r2, [r3, r0, lsl #2]
+   505f0:	e3520001 	cmp	r2, #1
+   505f4:	1a00000c 	bne	5062c <psci_arch_cpu_entry+0x70>
+   505f8:	e59f103c 	ldr	r1, [pc, #60]	@ 5063c <psci_arch_cpu_entry+0x80>
+   505fc:	e7812100 	str	r2, [r1, r0, lsl #2]
+   50600:	f57ff04f 	dsb	sy
+   50604:	e7932100 	ldr	r2, [r3, r0, lsl #2]
+   50608:	e3520001 	cmp	r2, #1
+   5060c:	0a000004 	beq	50624 <psci_arch_cpu_entry+0x68>
+   50610:	e7933100 	ldr	r3, [r3, r0, lsl #2]
+   50614:	e3530002 	cmp	r3, #2
+   50618:	1a000003 	bne	5062c <psci_arch_cpu_entry+0x70>
+   5061c:	f57ff04f 	dsb	sy
+   50620:	e8bd8010 	pop	{r4, pc}
+   50624:	e320f002 	wfe
+   50628:	eafffff5 	b	50604 <psci_arch_cpu_entry+0x48>
+   5062c:	e320f003 	wfi
+   50630:	eafffffd 	b	5062c <psci_arch_cpu_entry+0x70>
+   50634:	01c14420 	.word	0x01c14420
+   50638:	000506c8 	.word	0x000506c8
+   5063c:	000506b8 	.word	0x000506b8
+
+00050640 <psci_cpu_off>:
+   50640:	e3e00000 	mvn	r0, #0
+   50644:	e12fff1e 	bx	lr
+
+00050648 <psci_cpu_suspend>:
+   50648:	e3e00000 	mvn	r0, #0
+   5064c:	e12fff1e 	bx	lr
+	...
+
+00050660 <t153_psci_cpu_entry>:
+   50660:	f10c00c0 	cpsid	if
+   50664:	ee110f10 	mrc	15, 0, r0, cr1, cr0, {0}
+   50668:	e3100005 	tst	r0, #5
+   5066c:	1a000007 	bne	50690 <t153_psci_cpu_entry+0x30>
+   50670:	e3c00a02 	bic	r0, r0, #8192	@ 0x2000
+   50674:	ee010f10 	mcr	15, 0, r0, cr1, cr0, {0}
+   50678:	e3a00000 	mov	r0, #0
+   5067c:	ee070f15 	mcr	15, 0, r0, cr7, cr5, {0}
+   50680:	ee070fd5 	mcr	15, 0, r0, cr7, cr5, {6}
+   50684:	f57ff04f 	dsb	sy
+   50688:	f57ff06f 	isb	sy
+   5068c:	eaffff48 	b	503b4 <psci_cpu_entry>
+   50690:	e320f003 	wfi
+   50694:	eafffffd 	b	50690 <t153_psci_cpu_entry+0x30>

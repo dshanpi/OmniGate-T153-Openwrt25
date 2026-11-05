@@ -1,0 +1,92 @@
+cat /sys/devices/system/cpu/online; grep "^processor" /proc/cpui
+nfo; cat /proc/interrupts; mount | grep mmc; ip -4 addr show eth1; ip route
+0-3
+processor	: 0
+processor	: 1
+processor	: 2
+processor	: 3
+           CPU0       CPU1       CPU2       CPU3       
+ 27:       2859       3046       2240       2693 GIC-0  27 Level     arch_timer
+ 29:         30          0          0          0 GIC-0  64 Level     ehci_hcd:usb1
+ 30:          0          0          0          0 GIC-0  65 Level     ohci_hcd:usb2
+328:        146          0          0          0 GIC-0  34 Level     ttyS0
+330:          0          0          0          0 GIC-0  78 Level     eth0
+331:         12          0          0          0 GIC-0  79 Level     eth1
+332:        352          0          0          0 GIC-0  72 Level     sunxi-mmc
+333:        839          0          0          0 GIC-0  74 Level     sunxi-mmc
+334:        147          0          0          0 GIC-0 139 Level     sunxi-mmc
+IPI0:          0          0          0          0  CPU wakeup interrupts
+IPI1:          0          0          0          0  Timer broadcast interrupts
+IPI2:       1044        832        849        994  Rescheduling interrupts
+IPI3:       1258       1456       1148       1691  Function call interrupts
+IPI4:          0          0          0          0  CPU stop interrupts
+IPI5:          0          0          0          0  IRQ work interrupts
+IPI6:          0          0          0          0  completion interrupts
+Err:          0
+3: [1;36meth1: [0m<BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state [1;32mUP [0mgroup default qlen 1000
+    inet [1;35mWAN_LEASE[0m/24 brd [1;35mWAN_BROADCAST [0mscope global eth1
+       valid_lft forever preferred_lft forever
+default via [1;35mWAN_GATEWAY [0mdev [1;36meth1 [0mproto static src [1;35mWAN_LEASE [0m
+[1;35m10.0.0.0/24 [0mdev [1;36meth1 [0mproto kernel scope link src [1;35mWAN_LEASE [0m
+[1;35m192.168.153.0/24 [0mdev [1;36mbr-lan [0mproto kernel scope link src [1;35m192.168.153.1 [0mlinkdown 
+root@OpenWrt:~# [   38.403677] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+[   40.484612] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+[   41.523714] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+wget -O /tmp/t153-smp-smoke http://BUILD_HOST:8871/t153-smp-s
+moke; sha256sum /tmp/t153-smp-smoke
+Downloading 'http://BUILD_HOST:8871/t153-smp-smoke'
+Failed to send request: Operation not permitted
+sha256sum: can't open '/tmp/t153-smp-smoke': No such file or directory
+root@OpenWrt:~# [   44.644531] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+cat /sys/class/net/eth1/carrier; cat /sys/class/net/eth1/speed; 
+cat /proc/mounts; ping -c 3 -W 2 WAN_GATEWAY
+1
+1000
+/dev/root / ext4 rw,noatime 0 0
+proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
+sysfs /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0
+cgroup2 /sys/fs/cgroup cgroup2 rw,nosuid,nodev,noexec,relatime,nsdelegate 0 0
+tmpfs /tmp tmpfs rw,nosuid,nodev,noatime 0 0
+tmpfs /dev tmpfs rw,nosuid,noexec,noatime,size=512k,mode=755 0 0
+devpts /dev/pts devpts rw,nosuid,noexec,noatime,mode=600,ptmxmode=000 0 0
+debugfs /sys/kernel/debug debugfs rw,nosuid,nodev,noexec,noatime 0 0
+bpffs /sys/fs/bpf bpf rw,nosuid,nodev,noexec,noatime,mode=700 0 0
+PING WAN_GATEWAY (WAN_GATEWAY): 56 data bytes
+64 bytes from WAN_GATEWAY: seq=0 ttl=64 time=0.985 ms
+64 bytes from WAN_GATEWAY: seq=1 ttl=64 time=0.821 ms
+64 bytes from WAN_GATEWAY: seq=2 ttl=64 time=0.845 ms
+
+--- WAN_GATEWAY ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.821/0.883/0.985 ms
+root@OpenWrt:~# wget -O /tmp/t153-smp-smoke http://BUILD_HOST:8871/t153-smp-s
+moke; sha256sum /tmp/t153-smp-smoke
+Downloading 'http://BUILD_HOST:8871/t153-smp-smoke'
+Connecting to BUILD_HOST:8871
+Writing to '/tmp/t153-smp-smoke'
+/tmp/t153-smp-smoke  100% |*******************************| 50248   0:00:00 ETA
+Download completed (50248 bytes)
+56af9ae98fb3ffe6d1a7825a28dde951038135808130e851900704b64e4a71c4  /tmp/t153-smp-smoke
+root@OpenWrt:~# chmod 755 /tmp/t153-smp-smoke; /tmp/t153-smp-smoke; echo SMOKE_E
+XIT=$?
+MODE=t153-cpu0-3 ONLINE=0-3 TARGET=0,1,2,3 DURATION_MS=2000
+CPU target=0 observed=0 samples=723 loops=184576 checksum=be833c4c status=PASS error_kind=0 errno=0
+CPU target=1 observed=1 samples=735 loops=187648 checksum=b3345dd6 status=PASS error_kind=0 errno=0
+CPU target=2 observed=2 samples=727 loops=185600 checksum=675f31f7 status=PASS error_kind=0 errno=0
+CPU target=3 observed=3 samples=733 loops=187136 checksum=eaaca554 status=PASS error_kind=0 errno=0
+SHARED sequence=744960 atomic_count=744960 expected=744960
+RESULT PASS wall_ms=2004
+SMOKE_EXIT=0
+root@OpenWrt:~# sleep 5; /tmp/t153-smp-smoke; echo IDLE_SMOKE_EXIT=$?; cat /sys/
+devices/system/cpu/online; dmesg | grep -E "BUG:|Oops:|stall|lockup|SMP:"
+MODE=t153-cpu0-3 ONLINE=0-3 TARGET=0,1,2,3 DURATION_MS=2000
+CPU target=0 observed=0 samples=718 loops=183296 checksum=5635947d status=PASS error_kind=0 errno=0
+CPU target=1 observed=1 samples=726 loops=185344 checksum=ba4a8071 status=PASS error_kind=0 errno=0
+CPU target=2 observed=2 samples=729 loops=186112 checksum=c6e0ba63 status=PASS error_kind=0 errno=0
+CPU target=3 observed=3 samples=733 loops=187136 checksum=eaaca554 status=PASS error_kind=0 errno=0
+SHARED sequence=741888 atomic_count=741888 expected=741888
+RESULT PASS wall_ms=2003
+IDLE_SMOKE_EXIT=0
+0-3
+[    0.189858] SMP: Total of 4 processors activated (192.00 BogoMIPS).
+root@OpenWrt:~# 

@@ -1,0 +1,14 @@
+wget -O /tmp/t153-smp-smoke http://BUILD_HOST:8871/t153-smp-s
+moke; sha256sum /tmp/t153-smp-smoke
+Downloading 'http://BUILD_HOST:8871/t153-smp-smoke'
+Connecting to BUILD_HOST:8871
+Writing to '/tmp/t153-smp-smoke'
+/tmp/t153-smp-smoke  100% |*******************************| 50248   0:00:00 ETA
+Download completed (50248 bytes)
+56af9ae98fb3ffe6d1a7825a28dde951038135808130e851900704b64e4a71c4  /tmp/t153-smp-smoke
+root@OpenWrt:~# chmod 755 /tmp/t153-smp-smoke; /tmp/t153-smp-smoke; echo SMOKE_E
+XIT=$?
+MODE=t153-cpu0-3 ONLINE=0 TARGET=0,1,2,3 DURATION_MS=2000
+RESULT FAIL: target CPU 1 is offline or outside permitted affinity
+SMOKE_EXIT=1
+root@OpenWrt:~# 

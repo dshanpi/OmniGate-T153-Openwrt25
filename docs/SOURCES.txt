@@ -51,3 +51,10 @@ configs/fes-ddr933-profile.json；非执行容器元数据：fes-imagewty-layout
 
 kexec-tools固定2.0.28归档与OpenWrt补丁hash：configs/kexec-tools.lock.json。
 sunxi-tools固定T153 RFC revision与归档SHA：scripts/build-fel-tool.sh。
+
+T153四核CPU_ON参考（GPL-2.0+）：
+https://github.com/YuzukiHD/SyterKit/tree/7f539e17762639589897db835e58dd638b2bea80/boards/tlt153-minievm/app_sram/smp
+固定提交7f539e17762639589897db835e58dd638b2bea80，main.c和smp.S中的
+T153专用CPU入口/上电/复位序列；主线ARMv7 PSCI框架来自上述U-Boot。
+本仓库重新实现有界握手、SRAM驻留和最终DT修正，不使用厂商monitor对象。
+SPL消费RTC FEL请求的厂商行为参考只保存hash/地址事实，见T153-SMP.txt。

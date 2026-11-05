@@ -42,3 +42,11 @@ print('Applied experimental T153 U-Boot overlay:', source)
 line = 'dtb-$(CONFIG_TARGET_DSHANPI_T153_SOURCE) += sun8i-t153-dshanpi-omnigate-uboot.dtb'
 if line not in s:
     p.write_text(line+'\n'+s)
+
+# Only the opt-in T153 PSCI profile enables these generic ARMv7 knobs.
+p = source / 'arch/arm/cpu/armv7/Kconfig'
+s = p.read_text()
+s = s.replace('|| MACH_SUN7I || MACH_SUN8I\n\tdefault 0xbc00', '|| MACH_SUN7I || MACH_SUN8I || T153_PSCI_COLD_SMP\n\tdefault 0x8000 if T153_PSCI_COLD_SMP\n\tdefault 0xbc00')
+s = s.replace('depends on ARCH_EXYNOS5 || MACH_SUN8I_R528\n', 'depends on ARCH_EXYNOS5 || MACH_SUN8I_R528 || T153_PSCI_COLD_SMP\n')
+s = s.replace('\tdefault 0x10480000 if ARCH_EXYNOS5\n', '\tdefault 0x03400000 if T153_PSCI_COLD_SMP\n\tdefault 0x10480000 if ARCH_EXYNOS5\n') if 'default 0x03400000 if T153_PSCI_COLD_SMP' not in s else s
+p.write_text(s)

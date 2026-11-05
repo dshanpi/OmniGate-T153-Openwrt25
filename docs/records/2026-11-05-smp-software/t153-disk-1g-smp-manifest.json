@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "board": "dshanpi,t153mx-omnigate",
+  "status": "software image checks passed; hardware NOT tested",
+  "hardware_verified": false,
+  "target_media": [
+    "SD card",
+    "eMMC user area"
+  ],
+  "emmc_bootrom_user_offsets_verified": false,
+  "emmc_hardware_boot_configuration_changed": false,
+  "factory_layout_compatible": false,
+  "cpu_count": 4,
+  "sector_bytes": 512,
+  "disk_signature": "15302512",
+  "root_partuuid": "15302512-02",
+  "image": {
+    "file": "t153-openwrt25-source-1g-smp-disk.img",
+    "bytes": 306184192,
+    "sha256": "ad406a8489440386e0039bbd0a3655df2a475087dc3f9736eef5b1291b7177f6"
+  },
+  "partitions": [
+    {
+      "number": 1,
+      "type": "0x0e",
+      "filesystem": "fat16",
+      "label": "T153BOOT",
+      "start_lba": 8192,
+      "sectors": 65536,
+      "partuuid": "15302512-01"
+    },
+    {
+      "number": 2,
+      "type": "0x83",
+      "filesystem": "ext4",
+      "start_lba": 73728,
+      "sectors": 524288,
+      "partuuid": "15302512-02"
+    }
+  ],
+  "bootarea": {
+    "spl_bytes": 49152,
+    "proper_bytes": 271808,
+    "spl_offset": 8192,
+    "proper_offset": 131072,
+    "bytes": 394688,
+    "sha256": "61bfc3e776c08f76f401b86a3a7c17b6f5759ec96081c571b3488cac5ea48be4"
+  },
+  "kernel": {
+    "bytes": 4309532,
+    "sha256": "67bcf9403d0c948b468091520fa9ca9f6099d8c861bf718ea268faa5c46f6981",
+    "zimage_bytes": 4306064,
+    "zimage_sha256": "aa9e16035cf9b31a66e6ef9bf7f68411fc2d11f6e52fdbef5cb29120d167f87a",
+    "load": "0x48008000",
+    "console": "ttyS0,115200",
+    "has_init": false,
+    "populated_initramfs": false,
+    "builtin_cpio_bytes": 512,
+    "builtin_cpio_entries": [
+      "dev",
+      "dev/console",
+      "root"
+    ],
+    "decoded_kernel_bytes": 17695936,
+    "decoded_kernel_sha256": "b7673dd170244736329dd9fe0a6321372b5800d6cfb61004a104297c7fd7315b"
+  },
+  "boot_files": {
+    "openwrt-t153.itb": {
+      "bytes": 4309532,
+      "sha256": "67bcf9403d0c948b468091520fa9ca9f6099d8c861bf718ea268faa5c46f6981"
+    },
+    "boot.scr": {
+      "bytes": 469,
+      "sha256": "223c2b499f5a572b6844c087ed51c842ec8e5a51f4ca2cd635bac41474f6a814"
+    }
+  },
+  "boot_script": "# T153 persistent rootfs; bootdev is 0 (SD) or 1 (eMMC) in U-Boot.\nsetenv bootargs console=ttyS0,115200 earlycon=uart8250,mmio32,0x02600000,115200n8,24000000 root=PARTUUID=15302512-02 rootfstype=ext4 rootwait rw clk_ignore_unused\nif load mmc ${bootdev}:1 ${loadaddr} openwrt-t153.itb; then\n    if iminfo ${loadaddr}; then\n        bootm ${loadaddr}\n    fi\nfi\necho T153 persistent boot failed\nfalse\n",
+  "rootfs": {
+    "bytes": 268435456,
+    "sha256": "f0024e0c843e5f3813b101661993d9c35bfb04b016c8992867403b97d6ee4620",
+    "source_gzip": "openwrt-25.12-snapshot-t153-6c57f7cd04-sunxi-cortexa7-dshanpi_t153mx-omnigate-ext4-rootfs.ext4.gz",
+    "source_gzip_sha256": "7139e73d87b5dc81ba9f50438b0337ffa06b967739c2947d8728f2af2b87cac4",
+    "source_uncompressed_sha256": "3d4c3b5cec3eee321fb572b386e44715a1cd38d78099beb18e286cab7c089540",
+    "metadata_normalization": "rootfs: Padding at end of inode bitmap is not set. FIXED.\nrootfs: 1533/16384 files (0.0% non-contiguous), 6209/65536 blocks"
+  },
+  "limitations": [
+    "hardware validation pending",
+    "CPU_ON only; hotplug/suspend/multi-core kexec unsupported",
+    "Linux remains 384MiB",
+    "whole-disk write replaces factory partition table"
+  ],
+  "source_profile": "dshanpi_t153_source_1g_smp_defconfig",
+  "physical_dram_mib": 1024,
+  "linux_usable_mib": 384,
+  "ddr_mhz": [
+    480,
+    933
+  ],
+  "vendor_ddr_object_linked": false,
+  "checks": [
+    "MBR signature/partition geometry",
+    "eGON checksum/branch",
+    "U-Boot legacy header/data CRC",
+    "FAT16 fsck and file hashes",
+    "FIT payload CRC32/SHA1",
+    "boot script CRC/root PARTUUID",
+    "ext4 e2fsck -fn and /sbin/init",
+    "whole image SHA256"
+  ],
+  "compressed_image": {
+    "file": "t153-openwrt25-source-1g-smp-disk.img.gz",
+    "bytes": 10031290,
+    "sha256": "e11a46b7e7a2837db645f51f07c16e045faf2a071c15d9f8f62d839a5333a775"
+  },
+  "psci_version": "0.1",
+  "psci_cpu_on": true,
+  "psci_cpu_off": false,
+  "secure_sram": {
+    "base": "0x50000",
+    "reserved_bytes": 32768
+  },
+  "base_image": {
+    "file": "t153-openwrt25-source-1g-disk.img",
+    "bytes": 306184192,
+    "sha256": "42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8"
+  }
+}

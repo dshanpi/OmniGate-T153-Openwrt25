@@ -63,7 +63,11 @@ int checkboard(void)
 {
 #ifdef CONFIG_TARGET_DSHANPI_T153_SOURCE
 	puts("Board: T153 OmniGate (experimental source SPL/U-Boot)\n");
+	#ifdef CONFIG_T153_PSCI_COLD_SMP
+	puts("No vendor DDR/monitor. Four-core PSCI cold-boot profile.\n");
+#else
 	puts("No vendor DDR/monitor. Linux bring-up is currently CPU0 only.\n");
+#endif
 #else
 	puts("Board: DshanPI T153MX OmniGate (experimental RAM U-Boot)\n");
 	puts("DDR and secure monitor inherited; cold-boot SPL is not included.\n");
@@ -128,6 +132,11 @@ int board_late_init(void)
  */
 int ft_board_setup(void *fdt, struct bd_info *bd)
 {
+#ifdef CONFIG_T153_PSCI_COLD_SMP
+	extern int t153_smp_fixup_dt(void *fdt);
+
+	return t153_smp_fixup_dt(fdt);
+#else
 	int node, cpus, ret;
 	const fdt32_t *reg;
 
@@ -156,5 +165,6 @@ int ft_board_setup(void *fdt, struct bd_info *bd)
 	}
 	puts("Source boot: CPU0 only; T153 PSCI/SMP bring-up is pending.\n");
 	return 0;
+#endif
 }
 #endif

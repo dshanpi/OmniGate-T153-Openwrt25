@@ -6,16 +6,19 @@ root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 jobs=${JOBS:-4}
 incremental=false
 with_fes=false
+with_smp=false
 factory_image=''
 while [ "$#" -gt 0 ]; do
     case "$1" in
         --jobs) [ "$#" -ge 2 ] || exit 2; jobs=$2; shift 2 ;;
         --incremental) incremental=true; shift ;;
         --with-fes) with_fes=true; shift ;;
+        --smp) with_smp=true; shift ;;
         --factory-image) [ "$#" -ge 2 ] || exit 2; factory_image=$2; shift 2 ;;
         --help|-h)
-            echo 'Usage: scripts/build-release.sh [--jobs N] [--incremental] [--with-fes [--factory-image PATH]]'
+            echo 'Usage: scripts/build-release.sh [--jobs N] [--incremental] [--smp] [--with-fes [--factory-image PATH]]'
             echo 'Default refuses existing target build trees; final acceptance must use this clean mode.'
+            echo '--smp adds the four-core source profile and selects its disk/config in the final report.'
             echo 'FES uses a user-supplied hash-pinned factory image, or SDK_ROOT/out/t153_linux_omnigate_uart0-default.img.'
             exit 0 ;;
         *) echo "Unknown option: $1" >&2; exit 2 ;;
@@ -32,6 +35,10 @@ if [ "$incremental" = false ]; then
             exit 1
         fi
     done
+    if [ "$with_smp" = true ] && [ -e "$root/u-boot-work/build-t153-source-1g-smp" ]; then
+        echo 'Clean SMP rebuild requires an unused build-t153-source-1g-smp tree.' >&2
+        exit 1
+    fi
 fi
 export JOBS=$jobs
 cd "$root"
@@ -65,6 +72,14 @@ run_step package-common sh scripts/package-artifacts.sh "$root/openwrt" --openwr
 run_step package-disk-1g python3 scripts/package-disk-image.py --profile 1g
 run_step verify-disk-1g python3 scripts/package-disk-image.py --profile 1g --verify-only
 run_step disk-regression-1g env T153_DISK_PROFILE=1g python3 tests/flash/test-disk-image.py
+if [ "$with_smp" = true ]; then
+    run_step uboot-source-1g-smp sh scripts/build-uboot-source-1g-smp.sh
+    run_step smp-dt python3 tests/smp/test-smp-dt.py
+    run_step smp-fel-request python3 tests/smp/test-fel-request.py
+    run_step package-uboot-source-1g-smp python3 scripts/package-uboot-source-1g-smp.py
+    run_step package-disk-1g-smp python3 scripts/package-disk-smp.py --base-root "$root"
+    run_step verify-disk-1g-smp python3 scripts/package-disk-smp.py --base-root "$root" --verify-only
+fi
 if [ "$with_fes" = true ]; then
     fes_args=()
     [ -z "$factory_image" ] || fes_args+=(--factory-image "$factory_image")
@@ -72,17 +87,20 @@ if [ "$with_fes" = true ]; then
     run_step fes-ddr933 python3 scripts/package-fes-ddr933.py
     run_step fes-tests python3 tests/fes/test-portable-loader.py
 fi
-python3 - "$run_dir" "$incremental" <<'PY'
+python3 - "$run_dir" "$incremental" "$with_smp" <<'PY'
 from pathlib import Path
 import hashlib,json,subprocess,sys
-root=Path.cwd();output=Path(sys.argv[1]);manifest=json.loads((root/'artifacts/t153-disk-1g-manifest.json').read_text())
+root=Path.cwd();output=Path(sys.argv[1]);smp=sys.argv[3]=='true'
+profile='1g-smp' if smp else '1g'
+manifest=json.loads((root/f'artifacts/t153-disk-{profile}-manifest.json').read_text())
 r=subprocess.run(['git','rev-parse','HEAD'],capture_output=True,text=True)
 worktree=subprocess.run(['git','status','--porcelain','--untracked-files=normal'],capture_output=True,text=True)
 report={'status':'software build passed; hardware acceptance is separate','source_commit':r.stdout.strip() if r.returncode==0 else None,
         'source_worktree_status':worktree.stdout if worktree.returncode==0 else None,
-        'incremental':sys.argv[2]=='true','hardware_validated_by_this_run':False,'disk':manifest['image'],
+        'incremental':sys.argv[2]=='true','hardware_validated_by_this_run':False,
+        'profile':'source-'+profile,'cpu_count':manifest['cpu_count'],'disk':manifest['image'],
         'config_sha256':hashlib.sha256((root/'openwrt/.config').read_bytes()).hexdigest(),
-        'uboot_config_sha256':hashlib.sha256((root/'u-boot-work/build-t153-source-1g/.config').read_bytes()).hexdigest(),
+        'uboot_config_sha256':hashlib.sha256((root/f'u-boot-work/build-t153-source-{profile}/.config').read_bytes()).hexdigest(),
         'steps':{p.stem:int(p.read_text()) for p in sorted(output.glob('*.exit'))}}
 (output/'build-report.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(report,indent=2))

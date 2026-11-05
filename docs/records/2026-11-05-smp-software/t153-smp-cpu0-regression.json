@@ -1,0 +1,11 @@
+{
+  "status": "isolated CPU0 regression build passed; not flashed",
+  "build_dir": "u-boot-work/build-t153-source-1g-cpu0-regression",
+  "build_exit": 0,
+  "psci_smp_enabled": false,
+  "monitor_symbols_absent": true,
+  "pre_ddr_fel_request_test": "passed",
+  "uboot_elf_sha256": "d747e054010178d76c67c5fc463795dda282760ab16a5255e3da77d74ea82b81",
+  "spl_elf_sha256": "f7d91d218e3035318fe52a671072ffad8e8819572a5cddb65b80bcf94258cb23",
+  "existing_cpu0_disk_not_repackaged": true
+}

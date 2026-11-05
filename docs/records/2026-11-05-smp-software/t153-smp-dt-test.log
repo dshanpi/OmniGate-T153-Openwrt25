@@ -1,0 +1,5 @@
+PASS: exact PSCI0.1 CPU_ON-only DT; four CPUs; SRAM reservation/idempotence; invalid CPU rejected; callback ordering
+Source boot: 4 Cortex-A7 CPUs; PSCI 0.1 CPU_ON; SRAM 0x50000..0x57fff.
+
+Source boot: 4 Cortex-A7 CPUs; PSCI 0.1 CPU_ON; SRAM 0x50000..0x57fff.
+

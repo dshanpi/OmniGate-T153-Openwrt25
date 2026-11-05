@@ -1,0 +1,124 @@
+{
+  "status": "linked software checks passed; hardware not tested",
+  "elf_sha256": "24a18e102c85ae3411eba074fbb5be60690e6ce0f9af147be39436e8ee69b2fd",
+  "sram_reservation": {
+    "base": "0x50000",
+    "bytes": 32768
+  },
+  "sections": {
+    ".secure_text": {
+      "start": 327680,
+      "end": 329368,
+      "bytes": 1688
+    },
+    ".secure_data": {
+      "start": 329368,
+      "end": 329432,
+      "bytes": 64
+    },
+    ".secure_stack": {
+      "start": 333464,
+      "end": 339968,
+      "bytes": 6504
+    }
+  },
+  "dispatch_entries": [
+    {
+      "id": "0x95c1ba5e",
+      "target": "0x50648"
+    },
+    {
+      "id": "0x95c1ba5f",
+      "target": "0x50640"
+    },
+    {
+      "id": "0x95c1ba60",
+      "target": "0x5042c"
+    },
+    {
+      "id": "0x95c1ba61",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x84000000",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x84000001",
+      "target": "0x50648"
+    },
+    {
+      "id": "0x84000002",
+      "target": "0x50640"
+    },
+    {
+      "id": "0x84000003",
+      "target": "0x5042c"
+    },
+    {
+      "id": "0x84000004",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x84000005",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x84000006",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x84000007",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x84000008",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x84000009",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x8400000a",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x8400000b",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x8400000c",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x8400000d",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x8400000e",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x8400000f",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x84000010",
+      "target": "0x50168"
+    },
+    {
+      "id": "0x84000011",
+      "target": "0x50168"
+    }
+  ],
+  "direct_runtime_branches_resident": true,
+  "no_runtime_secure_relocations": true,
+  "spl_excludes_monitor": true,
+  "hardware_isolation_configured": false,
+  "limitations": [
+    "CPU_ON only",
+    "CPU_OFF/hotplug/suspend/multi-core kexec unsupported",
+    "SRAM residency is not a claim of TrustZone access isolation"
+  ]
+}

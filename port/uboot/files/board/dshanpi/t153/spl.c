@@ -16,6 +16,7 @@ DECLARE_GLOBAL_DATA_PTR;
 /* Must be initialized data: saved by assembly before the BSS is cleared. */
 u32 t153_fel_context[5] __section(".data") = { 0, 0, 0, 0, 0 };
 extern void t153_return_to_fel(void) __attribute__((noreturn));
+extern void t153_handle_fel_request(void);
 
 void board_init_f(ulong dummy)
 {
@@ -32,6 +33,7 @@ void board_init_f(ulong dummy)
 		hang();
 	preloader_console_init();
 	puts("T153 source SPL: no vendor DDR library\n");
+	t153_handle_fel_request();
 	ret = t153_ddr_init();
 	if (ret) {
 		printf("DDR failed (%d); stopping in SRAM\n", ret);

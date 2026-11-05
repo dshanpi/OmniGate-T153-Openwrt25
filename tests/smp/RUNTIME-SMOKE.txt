@@ -1,0 +1,49 @@
+T153 four-CPU short runtime smoke check
+======================================
+
+Build on the Linux source checkout (requires its existing OpenWrt toolchain):
+  python3 tests/smp/build-runtime-smoke.py
+Output: artifacts/diagnostics/t153-smp-smoke and a SHA256/ELF/compiler manifest.
+This is a static ARM Cortex-A7 hard-float ELF; it has no dynamic interpreter.
+The builder does not access a board or change firmware selection/configuration.
+
+Copy the binary to a board booted with the four-CPU profile, verify its SHA256
+against the generated manifest, then run from a RAM directory:
+  chmod 755 /tmp/t153-smp-smoke
+  /tmp/t153-smp-smoke
+  echo $?
+Do not run the host-compiled test binary on ARM. No physical register, disk,
+reboot-mode or programming-mode access is performed by this program.
+
+Default target CPUs are exactly 0,1,2,3. Each must be online and permitted by the
+process affinity mask. Four pthreads each set their own affinity and repeatedly
+sample sched_getcpu. During a default two-second run, each does integer work,
+checks/updates a mutex-protected shared 16-word payload, and increments a separate
+C11 atomic counter. Final shared sequence, atomic count and sum of all worker loop
+counts must agree, and every target must have executed nonzero work on its CPU.
+
+The setup wait is bounded to 500 ms; process SIGALRM fails the run after five
+seconds. This bound assumes the running kernel still schedules timers/signals;
+it cannot recover a hung kernel. A failure during creation or affinity setup
+releases the start gate instead of waiting on a four-thread barrier.
+No helper power cycle/reboot is issued. All allocated data are process RAM only.
+
+Required success: four per-CPU status=PASS rows, SHARED counters equal, final
+RESULT PASS, and exit 0. Exit 1 is a failed CPU/affinity/consistency check, exit 2
+is an argument/environment error, and exit 124 is the wall-deadline failure.
+An interrupted or missing final result is NOT a pass.
+
+Options: --duration-ms 100..3000 (default 2000); --cpus A,B,C,D explicitly selects
+four distinct permitted logical CPUs. The latter is intended for host checks and
+prints MODE=explicit-cpus; it must not replace the default CPU0..3 check used to
+qualify this four-core T153 image.
+
+Host control-flow validation:
+  python3 tests/smp/test-runtime-smoke-host.py
+This compiles native code with UBSan, selects four allowed host CPUs, checks a
+short successful concurrent run, and rejects restricted affinity/invalid input.
+The log explicitly says host-only and does not establish T153 success.
+
+Scope: a short scheduling/shared-memory smoke test, not CPU hotplug qualification,
+long-duration DDR stability, comprehensive cache-coherence proof, power management,
+thermal testing, performance benchmarking or multi-core kexec validation.

@@ -1,0 +1,120 @@
+[   38.532231] dwmac-sun8i-t153 4500000.ethernet eth0: Register MEM_TYPE_PAGE_POOL RxQ-0
+[   38.641328] dwmac-sun8i-t153 4500000.ethernet eth0: PHY [stmmac-0:01] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+[   38.695090] dwmac-sun8i-t153 4500000.ethernet eth0: No Safety Features support found
+[   38.713145] dwmac-sun8i-t153 4500000.ethernet eth0: IEEE 1588-2008 Advanced Timestamp supported
+[   38.722331] dwmac-sun8i-t153 4500000.ethernet eth0: registered PTP clock
+[   38.729080] dwmac-sun8i-t153 4500000.ethernet eth0: configuring for phy/rgmii link mode
+[   38.876980] 8021q: adding VLAN 0 to HW filter on device eth0
+[   38.900831] br-lan: port 1(eth0) entered blocking state
+[   38.906315] br-lan: port 1(eth0) entered disabled state
+[   38.911689] dwmac-sun8i-t153 4500000.ethernet eth0: entered allmulticast mode
+[   38.919338] dwmac-sun8i-t153 4500000.ethernet eth0: entered promiscuous mode
+[   39.065253] dwmac-sun8i-t153 4510000.ethernet eth1: Register MEM_TYPE_PAGE_POOL RxQ-0
+[   39.161423] dwmac-sun8i-t153 4510000.ethernet eth1: PHY [stmmac-1:01] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+[   39.172051] dwmac-sun8i-t153 4510000.ethernet eth1: No Safety Features support found
+[   39.189859] dwmac-sun8i-t153 4510000.ethernet eth1: IEEE 1588-2008 Advanced Timestamp supported
+[   39.199027] dwmac-sun8i-t153 4510000.ethernet eth1: registered PTP clock
+[   39.291492] dwmac-sun8i-t153 4510000.ethernet eth1: configuring for phy/rgmii-rxid link mode
+[   39.342138] 8021q: adding VLAN 0 to HW filter on device eth1
+[   42.494830] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+[   43.537517] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+[   45.613168] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+ 
+
+
+BusyBox v1.37.0 (2026-11-04 01:33:29 UTC) built-in shell (ash)
+
+  _______                     ________        __
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+ |_______||   __|_____|__|__||________||__|  |____|
+          |__| W I R E L E S S   F R E E D O M
+ -----------------------------------------------------
+ OpenWrt 25.12-SNAPSHOT, t153-6c57f7cd04 Dave's Guitar
+ -----------------------------------------------------
+
+ === WARNING! =====================================
+ There is no root password defined on this device!
+ Use the "passwd" command to set up a new password
+ in order to prevent unauthorized SSH logins.
+ --------------------------------------------------
+
+
+ OpenWrt recently switched to the "apk" package manager!
+
+ OPKG Command           APK Equivalent      Description
+ ------------------------------------------------------------------
+ opkg install <pkg>     apk add <pkg>       Install a package
+ opkg remove <pkg>      apk del <pkg>       Remove a package
+ opkg upgrade           apk upgrade         Upgrade all packages
+ opkg files <pkg>       apk info -L <pkg>   List package contents
+ opkg list-installed    apk info            List installed packages
+ opkg update            apk update          Update package lists
+ opkg search <pkg>      apk search <pkg>    Search for packages
+ ------------------------------------------------------------------
+
+For more information visit:
+https://openwrt.org/docs/guide-user/additional-software/opkg-to-apk-cheatsheet
+
+root@OpenWrt:~# uname -a; cat /sys/devices/system/cpu/online; ip -4 addr; ip rou
+te; ubus -v list system | head -10
+Linux OpenWrt 6.12.113 #0 SMP Wed Nov  4 01:33:29 2026 armv7l GNU/Linux
+0
+1: [1;36mlo: [0m<LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet [1;35m127.0.0.1[0m/8 scope host lo
+       valid_lft forever preferred_lft forever
+3: [1;36meth1: [0m<BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state [1;32mUP [0mgroup default qlen 1000
+    inet [1;35mWAN_LEASE[0m/24 brd [1;35m10.0.0.255 [0mscope global eth1
+       valid_lft forever preferred_lft forever
+6: [1;36mbr-lan: [0m<NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state [1;31mDOWN [0mgroup default qlen 1000
+    inet [1;35m192.168.153.1[0m/24 brd [1;35m192.168.153.255 [0mscope global br-lan
+       valid_lft forever preferred_lft forever
+default via [1;35mWAN_GATEWAY [0mdev [1;36meth1 [0mproto static src [1;35mWAN_LEASE [0m
+[1;35m10.0.0.0/24 [0mdev [1;36meth1 [0mproto kernel scope link src [1;35mWAN_LEASE [0m
+[1;35m192.168.153.0/24 [0mdev [1;36mbr-lan [0mproto kernel scope link src [1;35m192.168.153.1 [0mlinkdown 
+'system' @b0ff9aea
+	"board":{}
+	"info":{}
+	"reboot":{"command":"String"}
+	"watchdog":{"frequency":"Integer","timeout":"Integer","magicclose":"Boolean","stop":"Boolean"}
+	"signal":{"pid":"Integer","signum":"Integer"}
+	"validate_firmware_image":{"path":"String"}
+	"sysupgrade":{"path":"String","force":"Boolean","backup":"String","prefix":"String","command":"String","options":"Table"}
+root@OpenWrt:~#  
+
+
+BusyBox v1.37.0 (2026-11-04 01:33:29 UTC) built-in shell (ash)
+
+  _______                     ________        __
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+ |_______||   __|_____|__|__||________||__|  |____|
+          |__| W I R E L E S S   F R E E D O M
+ -----------------------------------------------------
+ OpenWrt 25.12-SNAPSHOT, t153-6c57f7cd04 Dave's Guitar
+ -----------------------------------------------------
+
+ === WARNING! =====================================
+ There is no root password defined on this device!
+ Use the "passwd" command to set up a new password
+ in order to prevent unauthorized SSH logins.
+ --------------------------------------------------
+
+
+ OpenWrt recently switched to the "apk" package manager!
+
+ OPKG Command           APK Equivalent      Description
+ ------------------------------------------------------------------
+ opkg install <pkg>     apk add <pkg>       Install a package
+ opkg remove <pkg>      apk del <pkg>       Remove a package
+ opkg upgrade           apk upgrade         Upgrade all packages
+ opkg files <pkg>       apk info -L <pkg>   List package contents
+ opkg list-installed    apk info            List installed packages
+ opkg update            apk update          Update package lists
+ opkg search <pkg>      apk search <pkg>    Search for packages
+ ------------------------------------------------------------------
+
+For more information visit:
+https://openwrt.org/docs/guide-user/additional-software/opkg-to-apk-cheatsheet
+
+root@OpenWrt:~# 

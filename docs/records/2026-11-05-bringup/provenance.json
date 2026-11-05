@@ -1,0 +1,56 @@
+[
+  {
+    "file": "t153_latest_20261105_status.json",
+    "original_sha256": "73957f118ce73ba3cf61672dea458bbab98efb5cd70dcba79831c2fd31295bf9",
+    "published_sha256": "18505616337d967d7ace1eb1e400b11b3ee7e3a12bfc69d47e3881d2cbb8dd20",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_latest_20261105_boot.log",
+    "original_sha256": "4ec82793199f36461a739e3cc439301799bebb5283caada2ac69655ac596b1fb",
+    "published_sha256": "4ec82793199f36461a739e3cc439301799bebb5283caada2ac69655ac596b1fb",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_latest_readback_20261105.log",
+    "original_sha256": "9142bfda9b3fe38153d3b836c9b13083867edb9f31cadfa2d1aeabaff6f5e96c",
+    "published_sha256": "9142bfda9b3fe38153d3b836c9b13083867edb9f31cadfa2d1aeabaff6f5e96c",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_latest_linux_20261105.log",
+    "original_sha256": "be10b98cb88a25061582d7366967736b0abb573d133b6f63b3de6ef5faa4f750",
+    "published_sha256": "be10b98cb88a25061582d7366967736b0abb573d133b6f63b3de6ef5faa4f750",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_latest_network_20261105.log",
+    "original_sha256": "17e81ae451435877bae30c093559972061dda8f231ff550b76c3b4c550692627",
+    "published_sha256": "70588fc6e468b433240360c2c6696cd4ccf9f75daf8260ff5ac20591972d99b0",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_native_fel_20261105.json",
+    "original_sha256": "512559a6c0f1ccee1270fde917903ace456bd2f0deabf1aa72c9911e5d5a0c4e",
+    "published_sha256": "512559a6c0f1ccee1270fde917903ace456bd2f0deabf1aa72c9911e5d5a0c4e",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_native_fel_serial_20261105.log",
+    "original_sha256": "2f16c54a3a8646a994e4c9c8f39eaa0e876db0fc5970e13146f7581524b1b9a6",
+    "published_sha256": "2f16c54a3a8646a994e4c9c8f39eaa0e876db0fc5970e13146f7581524b1b9a6",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_latest_runtime_20261105.log",
+    "original_sha256": "8c4a358b940d09bf927e361864cd2b8cc81c671f4b886a10105107b37ac67509",
+    "published_sha256": "9307d9ba0ece59ef78768a32938cc6d22b37188b1ae7fe88b4409e43b217b168",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  },
+  {
+    "file": "t153_smp_smoke_baseline_20261105.log",
+    "original_sha256": "90d7f115f728e7a0a392226c70d0b5cabb891928e816fd4ff7bb6d8b02d29368",
+    "published_sha256": "d44abd05a585fb0de578e63188dcc465012a858c791968afc086c7202ea2f15a",
+    "sanitization": "private host addresses and local Windows username replaced; otherwise bytes preserved"
+  }
+]

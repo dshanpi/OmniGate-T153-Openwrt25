@@ -1,0 +1,160 @@
+T153 四核 Cortex-A7 源码适配（2026-11-05）
+========================================
+
+范围与状态
+----------
+本方案以 U-Boot 2026.07、OpenWrt openwrt-25.12 / Linux 6.12 的现有
+T153 板级移植为基础。使用源码 SPL、源码 DDR4 初始化、源码 ARMv7 PSCI
+monitor；不链接厂商 DDR 库或厂商多核 monitor。属于仓库外置板级补丁，
+不能据此声称 T153 已合入上游官方 U-Boot / Linux。
+
+软件检查及ad406a版本的首轮四核实机短测已通过：包含烧录/读回、四核上线、
+调度/共享数据短测、普通重启和软件进入FEL；网络稳定性仍有问题。实机证据
+另存于records/2026-11-05-smp-bringup/，不把ELF/DT检查当成硬件结果。
+本配置启用 CPU0..CPU3，物理 DDR 1GiB，Linux 仍为
+384MiB；扩展 Linux 内存并不在此次四核改动内。
+
+构建与检查
+----------
+主机依赖在 BUILD-REPRODUCE.txt 中列出；本次 DT host test 还需要
+libfdt-dev。干净配置的一体入口为：
+
+  bash scripts/build-release.sh --jobs 4 --smp
+
+同时复现 FES 临时引导：
+
+  bash scripts/build-release.sh --jobs 4 --smp --with-fes \
+    --factory-image /absolute/path/to/user-owned-factory.img
+
+请在独立 Linux checkout 中固定发布对应 commit 后执行。该入口拒绝已有
+OpenWrt build_dir/staging_dir/tmp/bin/.config、CPU0/SMP U-Boot目标目录；
+重新从 configs/t153mx-omnigate.config 展开配置，构建 OpenWrt工具链、
+内核、rootfs、CPU0基准、四核 U-Boot及磁盘。可以按 REBUILD-CACHE.txt
+共享经过校验的下载归档，不能复用目标文件。--incremental 仅用于开发。
+最终 logs/rebuild-*/build-report.json 在 --smp 时绑定四核磁盘 SHA、
+四核 U-Boot 配置 hash 与 CPU 数量，默认不加该参数仍选 CPU0。
+本轮四核产物复用了11/4完整编译的同一内核/rootfs，没有伪称又跑了一次
+完整 OpenWrt 编译。独立 U-Boot 构建、软件测试和字节一致性检查已执行。
+
+以下为已有 CPU0 基准工程时的分步构建命令（在仓库根目录执行）：
+
+  JOBS=4 sh scripts/build-uboot-source-1g-smp.sh
+  python3 tests/smp/test-smp-dt.py
+  python3 tests/smp/test-fel-request.py
+  python3 scripts/package-uboot-source-1g-smp.py
+  python3 scripts/package-disk-smp.py --base-root /path/to/verified-cpu0-build
+  python3 scripts/package-disk-smp.py --base-root /path/to/verified-cpu0-build --verify-only
+
+base-root 指向已构建并完成软件检查的 CPU0 源码工程，必须含对应的
+artifacts/t153-openwrt25-source-1g-disk.img、manifest、常规内核 ELF。
+实际本次基准路径为 /home/ubuntu/T153MX/t153-openwrt-verify-20261104。
+package-disk-smp.py 先验证基准，替换 SPL / U-Boot 区，比较其余全部字节
+保持一致，再重新检查整盘、FAT、FIT、ext4、gzip 与 SHA256。
+
+输出独立保存在 artifacts/：
+  t153-openwrt25-source-1g-smp-disk.img[.gz]
+  t153-disk-1g-smp-manifest.json
+  t153-uboot-2026.07-source-1g-smp-spl.bin
+  t153-uboot-2026.07-source-1g-smp.bin
+  t153-uboot-2026.07-source-1g-smp.img
+  t153-uboot-2026.07-source-1g-smp-fel.bin
+  t153-uboot-2026.07-source-1g-smp-sd-bootarea.bin
+  uboot-source-1g-smp.config
+  uboot-source-1g-smp-validation.json
+
+默认 CPU0 产物未被此脚本覆盖。选用
+configs/dshanpi_t153_source_1g_smp_defconfig 才会打开
+CONFIG_T153_PSCI_COLD_SMP。现有内核已经开启 CONFIG_SMP、ARM_PSCI_FW，
+NR_CPUS=8，因此这次不需要仅为 CPU 数量重新构建内核。
+
+多核启动架构
+------------
+CPU0 从 eMMC/SD 的 SPL 完成 DDR 后进入 U-Boot；U-Boot 在跳转 Linux 前
+把主线 ARMv7 monitor 和 T153 CPU_ON 后端复制到固定 SRAM。
+Linux 通过 PSCI 0.1 SMC CPU_ON 启动另外三个 Cortex-A7 核心。
+
+  GIC：0x03400000
+  SRAM C 已知物理范围：0x40000..0x67fff（160KiB）
+  monitor 保留范围：0x50000..0x57fff（32KiB）
+  FEL thunk / swap：0x66a00..0x67fff（不与 monitor 重叠）
+  四个 monitor 栈：每核 1KiB，沿用主线 ARMv7 框架
+
+monitor 运行时代码、数据、分派表、调用目标与栈均留在上述 SRAM。
+SPL 已完成后才复制 monitor，因此与已退出的 SPL SRAM 占用不冲突。
+没有假设或伪造 TrustZone 保护寄存器；SRAM 驻留不表示已配置硬件隔离。
+
+CPU_ON 寄存器来源为 GPL SyterKit 的固定版本示例：
+https://github.com/YuzukiHD/SyterKit/tree/7f539e17762639589897db835e58dd638b2bea80/boards/tlt153-minievm/app_sram/smp
+
+  CPU 入口：0x07050070 + cpu * 4
+  CPU power status：0x07051050 + cpu * 4
+  CPU config：0x07051070 + cpu * 4（IRQ mask bit4）
+  hotplug：0x07051080 + cpu * 4（wakeup bit0、request bit16）
+  CPUIDLE enable：0x07051100，keys 0x16aa0000 / 0xaa160001
+  延迟寄存器：0x07051140、0x07051144，各为24
+
+只接受 CPU0 发起对 CPU1..3 的 CPU_ON。发起方与次级 CPU 使用有界
+ready/release 握手；若调用超时，迟到的次级核留在 SRAM 等待，不能继续
+访问已失效的临时 U-Boot DRAM。入口要求 MMU/D-cache 已关闭，否则停驻；
+同时屏蔽 IRQ/FIQ，清理 I-cache/分支预测，沿用主线 psci_cpu_entry 设置 ACTLR.SMP、GIC、
+monitor 栈与 nonsecure Linux 入口。CONFIG_ARMV7_SET_CORTEX_SMPEN 是
+隐藏配置，由板级 Kconfig select，不能仅在 defconfig 写一行。
+
+最终 DT 与限制
+-------------
+board fixup 在 arch_fixup_fdt 后执行，重建 /psci 为：
+  compatible = "arm,psci"
+  method = "smc"
+  cpu_on = <0x95c1ba60>
+CPU0..3 的 status="okay"、enable-method="psci"；添加 SRAM memreserve。
+拒绝缺失、重复或越界 CPU ID，保留重复执行时的幂等性。
+
+没有提供 cpu_off、cpu_suspend、migrate DT 属性，不宣称 PSCI 1.0。
+CPU 热插拔、suspend、多核 kexec 均不支持。Linux watchdog 正常重启
+使用 smp_send_stop，不依赖 CPU_OFF。四核启动验证不能用 multicore kexec。
+
+早期 SPL 消费 RTC FEL 请求
+------------------------
+此前 Linux / U-Boot 写 RTC magic 并触发 watchdog 后仍重新正常启动。
+原因是 T153 由 boot0 消费该请求，BootROM 不直接消费；源码 SPL 原先没有
+对应处理。新代码在 console/timer 初始化后、DDR 初始化前检查：
+  SRAM 0x40000 的 header magic 必须为 eGON.BT0；media 必须为0或2；
+  RTC data2 0x07090108 必须等于 0x5aa5a55a。
+
+清零步骤最多1000轮，每轮 write0 -> DSB -> ISB -> readback。
+只有成功读到0才跳转；失败停在 SRAM，不带着未清 magic 反复回 BootROM。
+随后屏蔽 IRQ/FIQ，按24MHz CNTPCT 等100us，清 SCTLR 的 I/C/A/M，
+失效 I-cache 和分支预测，DSB/ISB，再等10ms，进入 ARM physical 0x20。
+
+物理入口和清理序列来自原SDK只读参考：
+  device/config/chips/t153/bin/boot0_sdcard_sun8iw22p1.bin
+  SHA256 b2fad4436c32d0c9b1c9607532835df9db411489819763879eab73a4f97127dd
+  cold flow：0x4d6ea -> flag read0x43a04 -> clear0x43a7c
+  cache cleanup：0x4215e；100us counter delay：0x420a0
+  10ms：0x420c4；ARM entry32 jump helper：0x42198
+  clear helper 0x439e8..0x43a02：write0、barrier、read，原版无界重试
+
+额外恢复 save_boot_params 保存的原始 VBAR，是为了补偿主线 start.S
+会修改 VBAR 而厂商 boot0 不修改的差异；不是声称厂商反汇编原本就有此步。
+此路径是新启动 BootROM FEL，不恢复旧 SP/LR/CPSR。
+eGON.FEL USB 加载路径仍使用原 t153_return_to_fel 保存上下文返回，保持独立。
+
+验证记录与硬件验收
+------------------
+tests/smp/test-fel-request.py 编译运行实际 C：普通启动、错误magic、USB
+header、错误media不跳；清零成功后跳；延迟清零；1000轮失败不跳。
+它还检查最终 SPL hook 在DDR之前，入口/上下文都在SRAM且汇编无外部调用。
+tests/smp/test-smp-dt.py 使用真实 libfdt / UBSan 检查最终 DT。
+scripts/check-uboot-smp.py 检查最终 ELF SRAM区间、分派表、直接分支、
+DRAM literal、动态重定位、未解析符号，以及 SPL 不误链接 monitor。
+
+2026-11-05首轮实机结果（raw镜像ad406a8489440386e0039bbd0a3655df2a475087dc3f9736eef5b1291b7177f6）：
+FES写入/校验/post-reboot成功，U-Boot全292MiB SHA读回匹配；OpenWrt运行
+online=0-3、4项processor、四核IPI/timer列且Err=0。绑定每核的2秒调度及
+共享数据一致性测试三次PASS/exit 0，包括空闲5秒后和普通reboot后复测。
+官方MCP reboot efex确认fel-device-online，串口显示RTC请求已清除并进入BootROM FEL。
+WAN DHCP、1000Mbps/Full下ping 3/3通过，但多次flap、首次下载失败，恢复后
+下载SHA正确，随后降为100Mbps/Full；不能宣称网络稳定性通过。
+记录：records/2026-11-05-smp-bringup/。原离线manifest仍描述自身软件流程。
+这里不计入后续第二轮FES结果。物理断电冷启动、长时多核/DDR/存储/千兆与
+其他外设仍待验收；本次短测不是完整缓存一致性证明、温控/DVFS或性能测试。

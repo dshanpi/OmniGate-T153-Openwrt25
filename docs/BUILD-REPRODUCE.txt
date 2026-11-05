@@ -1,18 +1,15 @@
-2026-11-04软件复跑结果：已从GitHub固定提交f16dc94在独立目录完成完整
-OpenWrt/工具链/内核/U-Boot编译、FES组包及17阶段检查，全部exit 0。
-本次固件raw SHA256为42df6e8f2755e362eb82c7121671855984cd68c65fea037ac0d3bbcd87e6aad8。
-展开配置、来源、工具版本及日志见docs/records/2026-11-04-software-rebuild/
-（从docs内阅读时去掉前缀docs/）。板卡已断开，本次未进行烧录/启动验证。
-下文提到尚未完成的“最终全流程”包含硬件验收，不能据软件构建通过宣称已完成。
+软件与实机状态（更新至2026-11-05）
+==================================
+11/4已从GitHub固定提交f16dc94在独立目录完整构建OpenWrt/工具链/内核、
+CPU0 U-Boot、FES并通过17阶段检查。对应raw镜像42df6e8f...于11/5完成
+FES写入校验、整盘读回、OpenWrt eMMC启动及WAN DHCP短测；不是四核验收。
+记录：records/2026-11-04-software-rebuild/、records/2026-11-05-bringup/。
 
-从配置到验收的复现说明（独立软件构建已通过，硬件复跑未执行）
-==================================================
-
-本文件记录可复现的软件流程和仍需进行的硬件步骤。独立干净配置与完整
-编译已完成；本次没有执行烧录和运行验收。日志及镜像hash见本页开头记录。
-当前实机已用MMC literal-4096修复镜像挂载eMMC ext4并进入OpenWrt shell，
-运行时RX delay修正后100Mbps WAN DHCP及16MiB HTTP SHA已通过，
-但持久rxid、原生回FEL及1Gbps稳定性仍待验证；最终干净全流程复跑尚未完成。
+四核候选ad406a84...在同一内核/rootfs基础上重编源码SPL/U-Boot，DT、ELF、
+整盘及CPU0回归检查通过。未重新全量构建OpenWrt；新四核镜像已烧录并通过
+四核启动/并行短测、正常重启及软件回FEL，见records/2026-11-05-smp-bringup/。
+新版一体入口使用--smp可从干净目录完整构建四核版本，见本页末尾及T153-SMP.txt。
+软件证据：records/2026-11-05-smp-software/。所有硬件结论须绑定实际镜像hash。
 
 一、源码边界和版本
 ------------------
@@ -37,7 +34,7 @@ Ubuntu 24.04依赖安装命令（仅安装主机依赖，不访问板卡）：
     g++-multilib gettext git libncurses-dev libssl-dev python3 python3-setuptools \
     python3-venv rsync swig unzip zlib1g-dev file wget curl xz-utils zstd time \
     subversion device-tree-compiler u-boot-tools e2fsprogs dosfstools mtools \
-    libusb-1.0-0-dev pkg-config bzip2
+    libusb-1.0-0-dev libfdt-dev pkg-config bzip2
   sh scripts/bootstrap.sh --check-only
 实测主机包版本和工具版本已保存在软件复跑记录的host-environment.json。
 不要求在Windows保存源码。源码和输出可全部位于Linux构建服务器。
@@ -105,7 +102,8 @@ raw写盘地址须使用当前OpenixCLI/MCP的stock映射：主机已补偿+4096
 保留loader原MMC偏移；不要使用已禁用physical0 loader再做一次抵消。
 通用MCP完整JSON请求、下载/任务轮询与结果判据已在host-tools/README.txt
 及mcp-fes-workflow.example.json中提供，无私人会话。完整步骤见FLASH-SOURCE.txt。
-工具当前版本/能力以连接时capabilities为准；原生回FEL实机验证尚待重连。
+工具当前版本/能力以连接时capabilities为准；新四核镜像原生回FEL已于11/5
+实机验证，旧CPU0镜像不可套用该结论。
 
 六、完整验收清单（软件步骤已完成；硬件步骤仍未执行）
 ----------------------------------------------------
@@ -119,3 +117,16 @@ raw写盘地址须使用当前OpenixCLI/MCP的stock映射：主机已补偿+4096
 8. 重启/再次进入FEL路径按实现实际验证，避免把编译通过当硬件可用。
 9. 将公开源码、说明、经筛选的验收记录推送目标仓库后，再按用户要求完整复跑；
    若复跑引入修复，必须更新仓库和证据，使最终提交与最后一次通过的固件一致。
+
+2026-11-05 四核配置补充
+---------------------
+新 --smp 参数保留默认 CPU0 回退流程，增加独立的四核 U-Boot 构建/检查，
+并选择四核磁盘与配置作为最终 build-report 的输出：
+  bash scripts/build-release.sh --jobs 4 --smp --with-fes \
+    --factory-image /absolute/path/to/user-owned-factory.img
+干净构建目录与下载缓存规则不变。四核目标配置为
+port/uboot/files/configs/dshanpi_t153_source_1g_smp_defconfig。
+架构、限制、FEL 请求修复与分步命令见 T153-SMP.txt；软件证据见
+records/2026-11-05-smp-software/。当次实际四核软件产物复用11/4完整重建的
+内核/rootfs，新构建SPL/U-Boot并验证其余字节完全一致；没有声称此轮又完整
+重编工具链和OpenWrt。硬件结果另见11/5实机记录。
