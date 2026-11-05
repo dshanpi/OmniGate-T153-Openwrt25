@@ -1,0 +1,33 @@
+{
+  "upstream": "U-Boot 2026.07",
+  "source_ddr": true,
+  "vendor_ddr_or_monitor": false,
+  "profile": "dshanpi_t153_source_1g_smp",
+  "physical_ddr_mib": 1024,
+  "usable_dram_mib": 384,
+  "linux_cpus": 4,
+  "psci": "0.1 CPU_ON only",
+  "disk_spl_offset": 8192,
+  "disk_uboot_offset": 131072,
+  "file_uboot_offset": 122880,
+  "secure_sram_sections": {
+    ".secure_text": {
+      "start": 327680,
+      "bytes": 1688
+    },
+    ".secure_data": {
+      "start": 329368,
+      "bytes": 64
+    },
+    ".secure_stack": {
+      "start": 333464,
+      "bytes": 6504
+    }
+  },
+  "image": "u-boot-t153-with-spl.bin",
+  "bytes": 394752,
+  "sha256": "268703509efb34b61fd15b6fbf40a0b6f75269009ac80b7df31d50d637583693",
+  "spl_sha256": "3a0924528fa82d67a87ac4d229be14393e35f90855972b66f7ee4b51a512d73e",
+  "uboot_img_sha256": "a4b9afbe7aae7a56749952a8615a00ebc74c2e51a5ed05579c8c900368772107",
+  "config_sha256": "072f3468c884f91d34e65cfb43e65ef689b08d8205dca9e8698b8d347f3bd015"
+}

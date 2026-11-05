@@ -1,0 +1,278 @@
+{
+  "status": "150ms corrects reproduced early PHY capability anomaly, but fourth baseline RAM boot and two later integration RAM images reproduce WAN loss/downshift; clearing standard EEE advertisement also reproduced loss. WAN stability remains unresolved.",
+  "baseline_disk_sha256": "ad406a8489440386e0039bbd0a3655df2a475087dc3f9736eef5b1291b7177f6",
+  "baseline_fit_sha256": "67bcf9403d0c948b468091520fa9ca9f6099d8c861bf718ea268faa5c46f6981",
+  "persistent_firmware_changed": false,
+  "runtime_change": {
+    "node": "/soc/ethernet@4510000/mdio/ethernet-phy@1",
+    "property": "reset-deassert-us",
+    "old": 30000,
+    "test": 150000,
+    "method": "U-Boot copy FIT DT to RAM, apply one change, boot original kernel"
+  },
+  "unchanged": {
+    "mac_tx_taps": 9,
+    "mac_rx_taps": 6,
+    "phy_mode": "rgmii-rxid",
+    "pause": "rx/tx",
+    "autoneg": true
+  },
+  "payload_bytes": 16777216,
+  "payload_sha256": "2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9",
+  "trials": [
+    {
+      "log": "reset150-boot1.log",
+      "carrier_changes_at_end": 1,
+      "speed_mbps": 1000,
+      "duplex": "Full",
+      "download_payloads": 8,
+      "upload_payloads": 0,
+      "payload_hashes_pass": true,
+      "rx_errors": 0,
+      "tx_errors": 0
+    },
+    {
+      "log": "reset150-boot2.log",
+      "carrier_changes_at_end": 1,
+      "speed_mbps": 1000,
+      "duplex": "Full",
+      "download_payloads": 1,
+      "upload_payloads": 4,
+      "payload_hashes_pass": true,
+      "rx_errors": 0,
+      "tx_errors": 0
+    },
+    {
+      "log": "reset150-boot3.log",
+      "carrier_changes_at_end": 1,
+      "speed_mbps": 1000,
+      "duplex": "Full",
+      "download_payloads": 8,
+      "upload_payloads": 0,
+      "payload_hashes_pass": true,
+      "rx_errors": 0,
+      "tx_errors": 0
+    }
+  ],
+  "scope": {
+    "download_mib": 272,
+    "upload_mib": 64,
+    "warm_reboots": 4,
+    "cold_power_cycle": false,
+    "long_duration": false,
+    "lan_tested": false,
+    "formal_new_image_installed": false,
+    "observed_150ms_boots": 4,
+    "transfer_validated_warm_reboots": 3
+  },
+  "notes": [
+    "Board RTC is not wall-clock evidence; kernel timestamps are uptime.",
+    "Two earlier unexplained reboot captures were subsequently confirmed by the user as manual restarts.",
+    "PHY packet loopback diagnostic was built but packet loopback was not run; loopback-probe.log contains only a bounded BMCR/carrier probe."
+  ],
+  "matched_30ms_control": {
+    "log": "matched-reset30.log",
+    "cached_supported_incorrect": [
+      "1000baseT/Half",
+      "1000baseX/Full"
+    ],
+    "later_mii_estatus": "0x2000",
+    "phy_id": "0x001cc916",
+    "carrier_changes": 1,
+    "download_mib": 16,
+    "payload_hash_pass": true,
+    "interpretation": "Repeated early PHY capability anomaly with same RAM-DT boot path; this bounded control did not reproduce link loss"
+  },
+  "restored_150ms_fourth_boot": {
+    "log": "restored150.log",
+    "log_archived": true,
+    "evidence_source": "archived restored150.log plus user confirmation of no Ethernet cable/switch manipulation",
+    "observation_window_minutes_approx": 18,
+    "wan_down_up_cycles": 3,
+    "wan_transition_uptime_seconds_approx": [
+      1011,
+      1015,
+      1025
+    ],
+    "carrier_changes_at_check": 7,
+    "speed_mbps_at_check": 1000,
+    "duplex_at_check": "Full",
+    "ec20_usb_enumeration_uptime_seconds_approx": 1031,
+    "user_confirmed": "Only EC20 connected; no Ethernet cable or switch manipulation",
+    "cause_of_wan_transitions": "unresolved; temporal proximity to USB attachment is not proof of causation",
+    "payload_transfer_tested": false,
+    "log_sha256": "34599dc34c6c4a94e83c7647fc89d028a776fc1937eb56226a7b049fcd1ca402",
+    "wan_transition_uptime_seconds": {
+      "down": [
+        1011.683614,
+        1015.843639,
+        1025.203711
+      ],
+      "up": [
+        1014.806421,
+        1022.086409,
+        1027.28646
+      ]
+    }
+  },
+  "later_ram_trials": {
+    "scope": "Separate integration RAM FIT tests; not persistent FES image acceptance and not added to the original 272MiB/64MiB transfer totals",
+    "connectivity_ram": {
+      "fit_sha256": "f6259f6145e9fb0ddb713805b683f3d3dbb8d99dcdf9c225d7562313906c8c6d",
+      "down_uptime_seconds": 1089.283968,
+      "downshift_1g_to_100m_uptime_seconds": 1101.76478,
+      "up_100m_uptime_seconds": 1101.77922,
+      "carrier_changes_at_approx_1411_seconds": 3,
+      "known_physical_manipulation": false,
+      "cause": "unresolved; AIC SDIO recovery/BT test temporal proximity is not causation"
+    },
+    "uart_flow_ram": {
+      "fit_sha256": "6853e52a257a2950865b27daafa95eaa696a0fb394ff438ec09ca31c6a1b1573",
+      "initial_up_1g_uptime_seconds": 40.486855,
+      "natural_transitions_before_eee_test": [
+        {
+          "down": 56.084069,
+          "up": 59.206872,
+          "speed_mbps": 1000
+        },
+        {
+          "down": 61.294125,
+          "up": 64.40687,
+          "speed_mbps": 1000
+        },
+        {
+          "down": 82.084065,
+          "downshift": 97.684872,
+          "up": 97.699323,
+          "speed_mbps": 100
+        }
+      ],
+      "eee_before": {
+        "status": "disabled",
+        "tx_lpi": "disabled",
+        "supported": [
+          "100baseT/Full",
+          "1000baseT/Full"
+        ],
+        "advertised": [
+          "100baseT/Full",
+          "1000baseT/Full"
+        ],
+        "link_partner_advertised": "Not reported"
+      },
+      "eee_temporary_test": {
+        "approx_command_uptime_seconds": 379,
+        "commands": [
+          "ethtool --set-eee eth1 eee off advertise 0",
+          "ethtool --show-eee eth1",
+          "ethtool -r eth1"
+        ],
+        "set_exit": 0,
+        "restart_exit": 0,
+        "output_note": "eee unmodified, ignoring was printed, but subsequent standard readback showed no EEE advertisement",
+        "advertised_after_setting": "Not reported",
+        "manual_restart_transition": {
+          "down": 380.564077,
+          "up": 382.646913,
+          "speed_mbps": 1000,
+          "count_as_natural_loss": false
+        },
+        "subsequent_natural_transition": {
+          "down": 572.964061,
+          "up": 584.406861,
+          "speed_mbps": 100
+        },
+        "advertised_after_natural_loss": "Not reported",
+        "result": "WAN loss/downshift persists with standard EEE advertisement cleared",
+        "persistent_configuration_changed": false,
+        "devmem_or_low_level_mmd_write_used": false
+      },
+      "standard_register_caution": "Prior reg9/reg10 values were obtained with page 0x0a42 and no explicit verified standard page0 selection; not used as standard 1000BASE-T state evidence",
+      "source_logs": [
+        "logs/uart-flow-runtime-raw-20261105.log",
+        "logs/wan-eee-raw-20261105.log"
+      ],
+      "public_records_directory": "docs/records/2026-11-05-connectivity/",
+      "source_log_tail_update_pending": false,
+      "tail_evidence_source": "docs/records/2026-11-05-connectivity/ram-runtime-uart-fix.log and wan-eee-advertisement-test.log"
+    },
+    "next_persistent_candidate": {
+      "raw_sha256": "7c777beb559d72c052f0a0d650255c346ebd429d41829b1b1a3f8502a61f302c",
+      "hardware_acceptance": "FES write completed and full-disk readback SHA256 matched candidate; startup/long-term stability are separate acceptance items",
+      "full_disk_readback_sha256": "7c777beb559d72c052f0a0d650255c346ebd429d41829b1b1a3f8502a61f302c"
+    },
+    "unexplained_reboot": {
+      "classification": "confirmed non-manual unexpected reboot; cause unresolved",
+      "fit_sha256": "f6259f6145e9fb0ddb713805b683f3d3dbb8d99dcdf9c225d7562313906c8c6d",
+      "context": "After multiple AIC SDIO recovery and EIR diagnostic operations in first connectivity RAM run; rebooted into old persistent eMMC image",
+      "user_confirmed_no_board_manipulation": true,
+      "user_statement": "没有，板子一直没动",
+      "debugging_task_initiated_reboot": false,
+      "clear_panic_cause_captured": false,
+      "absence_of_panic_excludes_anomaly": false,
+      "cause": "Unknown; no attribution to SMP, DDR, AIC, power or a particular diagnostic command",
+      "separate_from_earlier_two_confirmed_manual_reboots": true,
+      "fixed_by_uart_patch_or_successful_flash": false,
+      "fix_note": "No demonstrated fix for this reboot; successful UARTfix image FES/readback is not long-term stability evidence"
+    },
+    "stock_tina_ec20_connection_comparison": {
+      "user_answer_pending": false,
+      "user_confirmed_same_ec20_connected_in_stable_tina_test": true,
+      "matched_conditions": [
+        "same board",
+        "same Ethernet cable",
+        "same link partner",
+        "same EC20 module connected"
+      ],
+      "interpretation": "Do not attribute mainline loss to EC20 attachment or power merely because EC20 is present; root cause unresolved",
+      "tina_image_sha_matching_existing_sdk_artifacts_confirmed": false
+    },
+    "phy_mode_eee_emmc_trial": {
+      "scope": "Separate temporary runtime test on newly written persistent UARTfix image; PHY-mode EEE enable did not recover 1Gbps",
+      "disk_raw_sha256": "7c777beb559d72c052f0a0d650255c346ebd429d41829b1b1a3f8502a61f302c",
+      "approx_change_uptime_seconds": 650,
+      "phy_register": {
+        "page": "0x0a43",
+        "register": "0x19",
+        "mask": "0x0020",
+        "before": "0x0843",
+        "written_and_read_back": "0x0863"
+      },
+      "original_page": "0x0a42",
+      "original_page_restored": true,
+      "renegotiation_command": "ethtool -r eth1",
+      "BMCR_RESET_used": false,
+      "permanent_configuration_changed": false,
+      "result": "Bit5 persisted after autonegotiation, but link remained 100Mbps; no 1Gbps stability window and no fix demonstrated",
+      "post_renegotiation_register_readback": {
+        "approx_uptime_seconds": 790,
+        "page": "0x0a43",
+        "register": "0x19",
+        "value": "0x0863"
+      },
+      "distinct_from_failed_standard_eee_advertisement_test": true,
+      "link_before_mbps": 100,
+      "manual_restart_transition": {
+        "down": 648.244766,
+        "count_as_natural_loss": false,
+        "downshift": 660.725561,
+        "up": 660.739997,
+        "speed_mbps": 100
+      },
+      "restoration": {
+        "target": "0x0843",
+        "approx_uptime_seconds": 898,
+        "completion_confirmed": true,
+        "readback": "0x0843"
+      },
+      "source_log": "logs/wan-phy-mode-eee-raw-20261105.log",
+      "source_log_upload_pending": false,
+      "evidence_source": "Board-testing task reported exact negotiation transitions, 0863 readback near790s and restored0843 readback near898s; raw source log not yet present at documentation update"
+    },
+    "r2_scope": "r2 changes Bluetooth stop/cleanup only; no additional permanent WAN parameters, and its flash/short tests must not be treated as resolution of the existing WAN/reboot risks"
+  },
+  "remaining_risks": [
+    "WAN repeatedly loses link and downshifts to100Mbps; no validated permanent fix",
+    "First connectivity RAM run had a user-confirmed non-manual unexpected reboot; no captured conclusive panic cause and no demonstrated root-cause fix"
+  ]
+}

@@ -1,0 +1,65 @@
+AIC8800D80 EIR pre-HCI diagnostic
+================================
+
+Purpose: isolate the 245-byte H4 Write Extended Inquiry Response command from
+N_HCI and the kernel Bluetooth initialization sequence. This is a temporary
+board diagnostic, not the normal Bluetooth service. No firmware/image changes
+are made by this helper. GPIO reset and vendor HCI initialization do change the
+current controller state, and Bluetooth is blocked again at exit.
+
+Build output:
+  artifacts/diagnostics/aic8800d80-bt-eir-probe
+  artifacts/diagnostics/aic8800d80-bt-eir-probe.build.json
+Build and host test log:
+  logs/peripherals/bt-eir-probe-build.log
+The ELF is statically linked ARM EABI5 using the actual OpenWrt toolchain.
+
+Stop the normal Bluetooth helper before running this program. It requires an
+unowned N_TTY UART and claims it with flock/TIOCEXCL. Keep the AIC BSP/FDRV
+loaded with successful shared SDIO firmware initialization. Use the soft path
+of the rfkill device named t153-aic8800d80-bt, not a guessed rfkill index.
+
+First run (single unpaced H4 frame; normal partial writes are completed):
+  /tmp/aic8800d80-bt-eir-probe --device /dev/ttyS7 \
+    --rfkill-soft /sys/class/rfkill/rfkillN/soft --address auto --eir-mode whole
+
+A separate run, after the board operator restores MMC3/chip firmware state:
+  /tmp/aic8800d80-bt-eir-probe --device /dev/ttyS7 \
+    --rfkill-soft /sys/class/rfkill/rfkillN/soft --address auto --eir-mode chunked
+
+Replace rfkillN with the label-matched index. An explicit unique --address may
+be used instead of auto, following the normal package's address rules.
+
+Both modes send the same six vendor initialization commands as the normal
+helper, then 0x0c52 with 241 zero parameter bytes. Only the EIR frame changes
+pacing: chunked mode uses at most 32 bytes per write group and a 1ms interval
+between groups. H4 framing is not repeated for each chunk. Each command has a
+single overall three-second deadline. Any H4 framing/status/timeout failure
+stops the run; the program never automatically retries or changes modes.
+
+Default: report EIR result, restore termios, close UART and block Bluetooth.
+Optional --attach: only after a successful EIR probe, install N_HCI/H4 and stay
+in the foreground until SIGTERM/SIGINT, matching the production helper's
+lifetime. Avoid --attach for the initial isolation test.
+
+Logs show each command opcode, parameter count, returned HCI status (-1 if no
+matching status arrived), errno, host bytes written/read, complete HCI events,
+and final totals. A successful seven-command run writes 137 vendor-init bytes
+plus 245 EIR bytes = 382 bytes. These are host write() acceptance counts, not
+measurements of bytes on the physical UART. The UART/peer counters and HCI
+Command Complete result are needed to interpret a timeout.
+
+Interpretation:
+- Pre-HCI whole succeeds but kernel init fails: investigate the N_HCI/H4 to TTY
+  path and timing after attachment.
+- Whole fails but chunked succeeds after a fresh chip recovery: investigate
+  transmitter FIFO/CTS/buffering/pacing before changing firmware or LP policy.
+- Both fail: compare independent short commands, firmware state and version;
+  do not treat a higher timeout or skipped EIR as proof of a working controller.
+
+Host tests:
+  cc -std=c11 -O2 -Wall -Wextra -Werror \
+    tests/diagnostics/aic8800d80-bt-eir-probe-test.c -o /tmp/aic-eir-test
+  /tmp/aic-eir-test
+Includes complete EIR frame checks in both modes, counters, the 104-byte AON
+payload, address validation, full vendor sequence, and HCI error/timeout cases.

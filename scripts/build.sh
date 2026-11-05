@@ -12,7 +12,7 @@ cd "$openwrt_dir"
 # Install only selected feed packages and their dependencies. Installing the
 # entire LuCI feed also exposes unrelated upstream Kconfig dependency cycles.
 ./scripts/feeds uninstall -a
-./scripts/feeds install luci luci-ssl luci-proto-qmi luci-proto-mbim usbutils canutils
+./scripts/feeds install luci luci-ssl luci-proto-qmi luci-proto-mbim luci-proto-3g usbutils canutils picocom bluez-utils bluez-daemon
 if [ -f .config ]; then
     cp -p .config ".config.before-t153.$(date +%Y%m%d%H%M%S)"
 fi

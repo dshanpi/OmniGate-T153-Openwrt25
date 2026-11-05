@@ -1,0 +1,7 @@
+# Replace usb0 with the interface actually bound to cdc_ether/rndis_host.
+# The modem must already have an active cellular data session.
+config interface 'cellular'
+        option proto 'dhcp'
+        option device 'usb0'
+        option metric '20'
+        option auto '0'

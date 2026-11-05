@@ -1,0 +1,152 @@
+{
+  "date": "2026-11-05",
+  "scope": "Read-only examination of existing SDK built images/configuration/symbol map and their driver dispatch source; no new stock-board boot was performed",
+  "sdk_artifacts": [
+    {
+      "path": "out/t153/omnigate/buildroot/bImage",
+      "bytes": 18601936,
+      "sha256": "f64567223f12684fd03bcec16beaa705e32b8e5a515d627188feabf8b03cc323"
+    },
+    {
+      "path": "out/t153/omnigate/buildroot/vmlinux",
+      "bytes": 220231944,
+      "sha256": "3ba0a862b7122bce3a484d879ad918bd1a3f529ae03fc3e6f0bc5b25ca423d84"
+    }
+  ],
+  "embedded_configuration": {
+    "extraction": "kernel/linux-5.10-origin/scripts/extract-ikconfig <image>",
+    "identical_for_bimage_and_vmlinux": true,
+    "sha256": "b837e340039c120c74fdb4866345f7e11e94a1b6f3d86f8e0e55021f476fcf71",
+    "selected_lines": [
+      "# CONFIG_REALTEK_PHY is not set",
+      "CONFIG_AW_MOTORCOMM_PHY=y",
+      "CONFIG_AW_STMMAC_ETH=y",
+      "CONFIG_AW_DWMAC_SUNXI=y",
+      "CONFIG_STMMAC_ETH=y",
+      "CONFIG_PHYLIB=y"
+    ]
+  },
+  "system_map": {
+    "path": "out/t153/omnigate/buildroot/System.map",
+    "absent": [
+      "rtl8211f_config_init",
+      "rtlgen_read_status"
+    ],
+    "present": {
+      "genphy_driver": "c1081ffc",
+      "phy_init_hw": "c053ec98",
+      "stmmac_mdio_read": "c05501fc",
+      "stmmac_mdio_reset": "c055008c",
+      "yt8531_config_init": "c07515e8"
+    }
+  },
+  "motorcomm_matching": {
+    "path": "bsp/drivers/net/phy/motorcomm.c",
+    "mask": "0xffffffff",
+    "rtl8211f_id": "0x001cc916",
+    "matching_entry_found": false
+  },
+  "fallback": {
+    "source": "kernel/linux-5.10-origin/drivers/net/phy/phy_device.c:phy_attach_direct",
+    "behavior": "If no PHY driver matches the Clause22 device, attach genphy_driver explicitly",
+    "generic_driver_has_soft_reset": false,
+    "generic_driver_has_config_init": false,
+    "conclusion": "This SDK image does not execute rtl8211f_config_init; it preserves hardware vendor-page defaults rather than applying that unbuilt source function"
+  },
+  "mainline": {
+    "kernel": "6.12.113",
+    "config": "CONFIG_REALTEK_PHY=y",
+    "driver": "RTL8211F Gigabit Ethernet",
+    "init_changes": [
+      "disable PHY-mode EEE at page0xa43 reg0x19 bit5",
+      "explicit RGMII RX/TX delay bits selected by DTS",
+      "disable WOL/PME events in probe"
+    ],
+    "aldps": "No realtek,aldps-enable property, so hardware setting is preserved",
+    "clkout": "No realtek,clkout-disable property, so hardware setting is preserved"
+  },
+  "source_comparison": {
+    "gmac4_reset": "Both dwmac4_lib.c implementations set DMA_BUS_MODE_SFT_RESET and poll with 10000us delay/1000000us timeout",
+    "clause22_mdio": "Same MII_BUSY/address/clk_csr encoding and before/after busy polling (100us/10000us); new source splits read_c22/read_c45 and updates runtime-PM API",
+    "standard_aneg_master_slave": "genphy_setup_master_slave and genphy_check_and_restart_aneg source bodies identical"
+  },
+  "runtime_driver_rebinding": {
+    "generic_id": "0xffffffff",
+    "generic_mask": "0xffffffff",
+    "matches_realtek_id": false,
+    "mdio_driver_override_available_in_reviewed_source": false,
+    "mainline_realtek_built_in": true,
+    "conclusion": "Ordinary sysfs bind is not equivalent to the internal genphy fallback; do not use blind unbind/bind as a recovery-free experiment"
+  },
+  "candidate_reversible_test": {
+    "description": "Preserve all other settings and temporarily set page0xa43 reg0x19 bit5, verify readback, restore original page; no BMCR reset. Later restore only that saved bit. This is a hypothesis test, not a confirmed fix",
+    "hardware_executed_by_this_review": false
+  },
+  "user_stock_comparison": {
+    "same_board": true,
+    "same_cable": true,
+    "same_peer": true,
+    "same_ec20_connected": true
+  },
+  "elf_symbol_verification": {
+    "command": "nm -n out/t153/omnigate/buildroot/vmlinux",
+    "absent": [
+      "rtl8211f_config_init",
+      "rtlgen_read_status"
+    ],
+    "present": {
+      "genphy_driver": "c1081ffc",
+      "phy_init_hw": "c053ec98",
+      "stmmac_mdio_read": "c05501fc",
+      "stmmac_mdio_reset": "c055008c",
+      "dwmac4_dma_reset": "c0556318",
+      "sunxi_dwmac_probe": "c0725280",
+      "yt8531_config_init": "c07515e8"
+    },
+    "matches_system_map_for_shared_entries": true
+  },
+  "root_vco_audit": {
+    "sdk_nm_m_field": "not defined; zero factor normalized to 1 by ccu_nm_recalc_rate",
+    "mainline_mult_equivalence": "N register field plus one, no M division; equivalent when SDM disabled",
+    "historical_peri0_register": "0xb8216310",
+    "N": 100,
+    "oscillator_hz": 24000000,
+    "root_vco_hz": 2400000000,
+    "chain_divisors": [
+      2,
+      2,
+      2,
+      2,
+      6
+    ],
+    "calculated_phy_hz": 25000000,
+    "historical_sdm_bit24": 0,
+    "active_sdk_dtb_sdm_node": "/soc@3000000/ccu@2002000/sdm_info/pll-peri0",
+    "active_sdk_dtb_sdm_enable": 0,
+    "scope": "Source and existing SDK DTB examination plus previously recorded warm-reboot register value; not a new board or cold-boot measurement",
+    "new_missing_clock_sequence_found": false
+  },
+  "soft_reset_audit": {
+    "rtl8211f_exact_id": "0x001cc916",
+    "rtl8211f_soft_reset_callback": false,
+    "generic_phy_soft_reset_callback": false,
+    "other_realtek_entries_with_callback": "RTL8226/RTL8221 variants; not this exact model",
+    "phy_init_hw_fallback_soft_reset": false,
+    "rtl8211f_clkout_conditional_reset": "Only when realtek,clkout-disable is set; absent for this board",
+    "phy_poll_reset_if_explicitly_called": {
+      "sleep_before_first_read_us": 50000,
+      "poll_interval_us": 50000,
+      "timeout_us": 600000,
+      "settle_after_reset_clears_ms": 1,
+      "repeats_gpio_reset_deassert_delay": false
+    },
+    "standard_ethtool_restart": "genphy_restart_aneg sets BMCR_ANENABLE|BMCR_ANRESTART and clears BMCR_ISOLATE; no BMCR_RESET and no config_init call",
+    "conclusion": "No hidden second BMCR reset following the 150ms GPIO release wait in the reviewed current board configuration"
+  },
+  "artifact_provenance_limit": {
+    "source": "Existing SDK out/t153/omnigate/buildroot/bImage and vmlinux",
+    "sha_matches_user_previously_flashed_stable_tina_image": null,
+    "user_confirmed_hardware_conditions_only": true,
+    "interpretation": "Built-image evidence establishes this SDK artifact path, not the exact user previously flashed image without its SHA"
+  }
+}

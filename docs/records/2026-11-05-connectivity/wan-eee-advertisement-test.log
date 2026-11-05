@@ -1,0 +1,97 @@
+ethtool eth1; /tmp/phytool read eth1/1/0x1f; ethtool --set-eee e
+
+
+th1 eee off advertise 0; echo EEE_SET_EXIT=$?; ethtool --show-eee eth1; ethtool 
+
+
+-r eth1; echo AN_RESTART_EXIT=$?; uptime
+
+Settings for eth1:
+
+	Supported ports: [ TP MII ]
+
+	Supported link modes:   10baseT/Half 10baseT/Full 
+
+	                        100baseT/Half 100baseT/Full 
+
+	                        1000baseT/Full 
+
+	Supported pause frame use: Symmetric Receive-only
+
+	Supports auto-negotiation: Yes
+
+	Supported FEC modes: Not reported
+
+	Advertised link modes:  10baseT/Half 10baseT/Full 
+
+	                        100baseT/Half 100baseT/Full 
+
+	                        1000baseT/Full 
+
+	Advertised pause frame use: Symmetric Receive-only
+
+	Advertised auto-negotiation: Yes
+
+	Advertised FEC modes: Not reported
+
+	Link partner advertised link modes:  10baseT/Half 10baseT/Full 
+
+	                                     100baseT/Half 100baseT/Full 
+
+	                                     1000baseT/Full 
+
+	Link partner advertised pause frame use: Symmetric Receive-only
+
+	Link partner advertised auto-negotiation: Yes
+
+	Link partner advertised FEC modes: Not reported
+
+	Speed: 100Mb/s
+
+	Duplex: Full
+
+	Port: Twisted Pair
+
+	PHYAD: 1
+
+	Transceiver: external
+
+	Auto-negotiation: on
+
+	MDI-X: Unknown
+
+	Supports Wake-on: d
+
+	Wake-on: d
+
+	Current message level: 0x0000003f (63)
+
+			       drv probe link timer ifdown ifup
+
+	Link detected: yes
+
+0x0a42
+
+eee unmodified, ignoring
+
+EEE_SET_EXIT=0
+
+EEE Settings for eth1:
+
+	EEE status: disabled
+
+	Tx LPI: disabled
+
+	Supported EEE link modes:  100baseT/Full 
+
+	                           1000baseT/Full 
+
+	Advertised EEE link modes:  Not reported
+
+	Link partner advertised EEE link modes:  Not reported
+
+AN_RESTART_EXIT=0
+
+ 00:06:19 up 6 min,  load average: 0.03, 0.14, 0.08
+
+root@OpenWrt:~# 

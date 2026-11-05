@@ -1,0 +1,7 @@
+{
+  "scope": "software-only native image recipe repeat using existing build inputs; no recompilation or board access",
+  "source_date_epoch": 1792282260,
+  "comparison": "byte-identical to validated raw disk after a later invocation",
+  "raw_sha256": "cd57d6970329f4a9255e7020ea3f7dfbc2c13040f7154563cbe43ba0d431a32e",
+  "log_sha256": "dd18f24d0c81b0b21fed809143f3ea312850d2e334d2e994b2580a067236a9ac"
+}

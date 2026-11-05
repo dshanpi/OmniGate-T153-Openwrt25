@@ -1,0 +1,22 @@
+{
+  "image_sha256": "7f2485c12409c205255ba64a57f44d26c62084c1be04aa484f582b963e884ea5",
+  "independent_readback": "full disk exact match",
+  "emmc_boot": "ext4 mounted; CPU0-3 online",
+  "bt_helper_sha256": "39542ae105e52ca7a91d68401a9846c77fc353e50102035eaee041d18f5e3be4",
+  "luci": "listening on80/443; complete unauthenticated login page returned locally; WAN blocked by default",
+  "files": {
+    "connectivity-r2-readback-20261105.log.gz": {
+      "bytes": 246,
+      "sha256": "22aebd6102f701e167a36dbaadcd839a07ca7b9dc7a6e38261717384934357b2"
+    },
+    "connectivity-r2-emmc-boot-20261105.log.gz": {
+      "bytes": 8838,
+      "sha256": "94644ea15709b4dc0128a597a8a52db3499733030109f1a629bc763c153aced3"
+    },
+    "luci-diagnostics-20261105.log.gz": {
+      "bytes": 5542,
+      "sha256": "08f8321fb528e3f33a46cad8d02bdf32aee48e56cc32f34f8a3d23806cf0523c"
+    }
+  },
+  "scope": "This final r2 check does not repeat all preceding r1 Wi-Fi, BT or EC20 tests; prior results retain separate records."
+}

@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-05",
+  "build_command": "make -j6 V=s",
+  "incremental": true,
+  "build_exit": 0,
+  "profile_settings": {
+    "formal": "58/58",
+    "AIC": "13/13",
+    "4G": "16/16"
+  },
+  "rootfs_helper_sha256": "39542ae105e52ca7a91d68401a9846c77fc353e50102035eaee041d18f5e3be4",
+  "manifest_package": "aic8800d80-bt - 2026.11.05-r2",
+  "hardware_qualification": "The r2 helper was tested by hot replacement before this build. This record does not itself flash or boot the newly generated full image.",
+  "disk_packaging_or_flashing_by_this_run": false,
+  "artifacts": {
+    "openwrt/bin/targets/sunxi/cortexa7/openwrt-25.12-snapshot-t153-6c57f7cd04-sunxi-cortexa7-dshanpi_t153mx-omnigate-initramfs-kernel.bin": {
+      "bytes": 11449460,
+      "sha256": "96a0ccd448aa2d23e14450d7de6ffee73cd013d3fa547254ce0a37dadbddda94"
+    },
+    "openwrt/bin/targets/sunxi/cortexa7/openwrt-25.12-snapshot-t153-6c57f7cd04-sunxi-cortexa7-dshanpi_t153mx-omnigate-rootfs.tar.gz": {
+      "bytes": 11785991,
+      "sha256": "df44d71852e090437d86171fa750b1a77a4a41d651006c00036c742a7de17862"
+    },
+    "openwrt/bin/targets/sunxi/cortexa7/openwrt-25.12-snapshot-t153-6c57f7cd04-sunxi-cortexa7-dshanpi_t153mx-omnigate-ext4-rootfs.ext4.gz": {
+      "bytes": 12054784,
+      "sha256": "1e47943add04bf6cb15f59450a04a70bbc88d55909bf2311f149370b5f208da0"
+    },
+    "openwrt/bin/targets/sunxi/cortexa7/openwrt-25.12-snapshot-t153-6c57f7cd04-sunxi-cortexa7-dshanpi_t153mx-omnigate.manifest": {
+      "bytes": 6325,
+      "sha256": "957dac8a9af7ccb728a8c780f714a34052ff170e8ebbde96065186b7a4281d11"
+    },
+    "openwrt/.config": {
+      "bytes": 156534,
+      "sha256": "ee6780192aba30aa9074de3846d83e99fe0d56f0b863caf2521f8a7ecb0f88e7"
+    }
+  }
+}

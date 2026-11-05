@@ -61,6 +61,13 @@
 		reset-gpios = <&pio 9 10 GPIO_ACTIVE_LOW>;
 		post-power-on-delay-ms = <200>;
 	};
+	bluetooth-rfkill {
+		compatible = "rfkill-gpio";
+		label = "t153-aic8800d80-bt";
+		radio-type = "bluetooth";
+		/* Match the validated Tina AIC8800D80 path: PB0 low enables BT. */
+		shutdown-gpios = <&pio 1 0 GPIO_ACTIVE_LOW>;
+	};
 	leds {
 		compatible = "gpio-leds";
 		led_status: led-0 {
@@ -72,6 +79,7 @@
 };
 
 &pio {
+
 	vcc-pa-supply = <&reg_3v3>;
 	vcc-pb-supply = <&reg_3v3>;
 	/* PC I/O rail and voltage-select registers are retained from firmware. */
@@ -79,6 +87,14 @@
 	vcc-pf-supply = <&reg_3v3>;
 	vcc-pg-supply = <&reg_3v3>;
 	vcc-pj-supply = <&reg_3v3>;
+
+	/* Keep the controller awake until the AIC low-power handshake is ported. */
+	bluetooth-device-wake-hog {
+		gpio-hog;
+		gpios = <9 11 GPIO_ACTIVE_HIGH>;
+		output-high;
+		line-name = "aic8800d80-bt-wake";
+	};
 };
 
 &uart0 {
@@ -130,7 +146,8 @@
 		reg = <1>;
 		reset-gpios = <&pio 9 2 GPIO_ACTIVE_LOW>;
 		reset-assert-us = <10000>;
-		reset-deassert-us = <30000>;
+		/* Allow RTL8211F settling and its 100 ms configuration window. */
+		reset-deassert-us = <150000>;
 	};
 };
 &mdio1 {
@@ -139,7 +156,8 @@
 		reg = <1>;
 		reset-gpios = <&pio 9 3 GPIO_ACTIVE_LOW>;
 		reset-assert-us = <10000>;
-		reset-deassert-us = <30000>;
+		/* Allow RTL8211F settling and its 100 ms configuration window. */
+		reset-deassert-us = <150000>;
 	};
 };
 
@@ -156,7 +174,7 @@
 	status = "okay";
 };
 
-/* The SDIO transport is available; no upstream AIC8800D80 WLAN driver exists. */
+/* SDIO transport for the separately packaged AIC8800D80 full-MAC driver. */
 &mmc3 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&mmc3_pins>;
@@ -179,11 +197,12 @@
 	status = "okay";
 };
 
-/* UART transport only; Bluetooth reset/firmware support needs its own driver. */
+/* UART H4; AIC firmware is uploaded by the shared SDIO BSP/FDRV first. */
 &uart7 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&uart7_pins>;
 	uart-has-rtscts;
+	status = "okay";
 };
 
 &usbphy { status = "okay"; };

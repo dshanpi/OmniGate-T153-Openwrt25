@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-05",
+  "version": "BlueZ 5.83",
+  "source_archive_sha256": "108522d909d220581399bfec93daab62035539ceef3dda3e79970785c63bd24c",
+  "observed_one_shot_errors": [
+    "Unable to send index_list cmd",
+    "Unable to send start_discovery cmd"
+  ],
+  "source_analysis": "Two initialization defects: noninteractive bt_shell_attach executes before bt_shell_run/menu pre_run; furthermore the first mgmt menu becomes the main menu, but bt_shell_run invokes pre_run only for submenus. Standalone btmgmt therefore leaves its static mgmt object NULL even interactively. mgmt_send_timeout returns zero for NULL before a controller request is submitted.",
+  "firmware_change_for_this_issue": false,
+  "upstream_package_patched": false,
+  "recommended_interface": "bluetoothctl with bluetoothd; board discovery passed",
+  "interactive_btmgmt_status": "Tested on board and failed; not a workaround",
+  "source_files": {
+    "tools/btmgmt.c": {
+      "sha256": "41d7c04532a308ea60fa99072ba0eabed7b25df86eb7ffbfde0a6976fb4b39e2",
+      "locations": {
+        "bt_shell_attach(fileno(stdin));": [
+          51
+        ],
+        "status = bt_shell_run();": [
+          52
+        ]
+      }
+    },
+    "src/shared/shell.c": {
+      "sha256": "daacbe13d56d8c6770288a7294322437b81c25f39491f99d23c74fdf29953d4d",
+      "locations": {
+        "int bt_shell_run(void)": [
+          1447
+        ],
+        "menu->pre_run(menu);": [
+          1457
+        ],
+        "bool bt_shell_attach(int fd)": [
+          1624
+        ],
+        "if (shell_exec(data.argc, data.argv) < 0)": [
+          1638
+        ],
+        "first menu becomes main and is not queued as submenu": [
+          1584,
+          1585
+        ],
+        "bt_shell_run only walks submenus": [
+          1452,
+          1453,
+          1454,
+          1455,
+          1456,
+          1457
+        ]
+      }
+    },
+    "client/mgmt.c": {
+      "sha256": "190217e58b8f5c61c11391654206f04b8956ab3cc1f89c484f19277c9d4b5bf0",
+      "locations": {
+        "static struct mgmt *mgmt = NULL;": [
+          53
+        ],
+        "static void mgmt_menu_pre_run(const struct bt_shell_menu *menu)": [
+          74,
+          6181
+        ],
+        "mgmt = mgmt_new_default();": [
+          6183
+        ],
+        "Unable to send index_list cmd": [
+          1461
+        ]
+      }
+    },
+    "src/shared/mgmt.c": {
+      "sha256": "3fc3879e4170318447a894e65ceda3526c7a2f2bb4660a64f48dd145433c41dc",
+      "locations": {
+        "unsigned int mgmt_send_timeout(": [
+          780
+        ],
+        "NULL mgmt returns zero": [
+          788,
+          789
+        ]
+      }
+    }
+  },
+  "scope": "This tool error does not negate UART64, ten successful whole-frame EIR commands, or successful BlueZ discovery. No connection/audio qualification implied.",
+  "observed_invocation_modes": {
+    "one_shot_info_find": "Unable to send index_list/start_discovery cmd",
+    "real_serial_interactive_info": "Unable to send index_list cmd",
+    "piped_info_with_two_second_delay": "Unable to send index_list cmd"
+  },
+  "compile_analysis": "BlueZ config.h identifies 5.83 and enables readline; relevant initialization paths have no conditional compilation branch."
+}

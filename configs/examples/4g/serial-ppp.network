@@ -1,0 +1,10 @@
+# Last-resort fallback only if this firmware supports serial PPP.
+# Replace ttyUSB_DATA with the identified data/PPP port, not the DIAG/NMEA port.
+config interface 'cellular'
+        option proto '3g'
+        option device '/dev/ttyUSB_DATA'
+        option apn 'REPLACE_WITH_CARRIER_APN'
+        option service 'umts'
+        option dialnumber '*99***1#'
+        option metric '20'
+        option auto '0'

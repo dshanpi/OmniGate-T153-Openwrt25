@@ -1,0 +1,22 @@
+{
+  "diagnostics_only": true,
+  "installed_by_formal_packages": false,
+  "artifacts": {
+    "tests/diagnostics/t153-tty-status.c": {
+      "sha256": "e28875194034fb4845cb021ac883c3f868705e3b907f70a0a2e4c3f711ed6437",
+      "bytes": 3455
+    },
+    "artifacts/diagnostics/t153-tty-status": {
+      "sha256": "96d77e72e0f54ce27bfa9f5c5a4a50bb4579ae4d4ab9cd126e1259e27533123b",
+      "bytes": 25668
+    },
+    "tests/diagnostics/aic8800d80-bt-eir-probe.c": {
+      "sha256": "fd32862022a503e4ddbde1bdf2162b17ee6e4c39305fc025a51f2217067dde7e",
+      "bytes": 15179
+    },
+    "artifacts/diagnostics/aic8800d80-bt-eir-probe": {
+      "sha256": "41e8f62f3dba8a3c04ccd346698d5e40a4e9a03d5e2217ffa832bf178d4e11f2",
+      "bytes": 351044
+    }
+  }
+}

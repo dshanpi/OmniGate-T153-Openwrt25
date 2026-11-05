@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "purpose": "Reusable JSON-RPC request examples, not an auto-executing flasher",
+  "purpose": "Reusable v25.12.6 native raw-image JSON-RPC request examples, not an auto-executing flasher",
   "endpoint_example": "http://127.0.0.1:8771/mcp",
   "transport": "Use a normally initialized MCP client; no session IDs, tokens or SSH passwords are stored here.",
   "substitution": "Replace angle-bracket placeholders with values from this run. Each poll must use a new JSON-RPC id.",
@@ -41,7 +41,7 @@
         "params": {
           "name": "lynx_download_firmware",
           "arguments": {
-            "remotePath": "<REMOTE_ROOT>/artifacts/t153-fes-ddr933-ram-loader.img"
+            "remotePath": "<REMOTE_LOADER_ABSOLUTE_PATH>"
           }
         }
       },
@@ -92,7 +92,7 @@
         "params": {
           "name": "lynx_download_firmware",
           "arguments": {
-            "remotePath": "<REMOTE_ROOT>/artifacts/t153-openwrt25-source-1g-disk.img"
+            "remotePath": "<REMOTE_DECOMPRESSED_RAW_ABSOLUTE_PATH>"
           }
         }
       },
@@ -114,7 +114,7 @@
       "repeat_until_terminal": true,
       "require": {
         "state": "success",
-        "sha256": "<DISK_SHA256_FROM_MATCHING_MANIFEST>",
+        "sha256": "<SHA256_OF_THIS_DECOMPRESSED_RAW>",
         "totalBytes": 306184192
       },
       "save": "response localPath as <LOCAL_DISK_PATH>"
@@ -163,10 +163,12 @@
         "exitCode": 0,
         "verifyState": "success",
         "writtenBytes": 306184192,
-        "committedBytes": 306184192
+        "committedBytes": 306184192,
+        "postFlashState": "success"
       },
       "next": "Save status and the source-SPL/U-Boot boot log from FES post-reboot. Verify the whole-disk SHA256 in mainline U-Boot, then validate Linux/rootfs/network. This is not a physical power-cycle test."
     }
   ],
-  "post_flash_action": "This example uses reboot, the tested path when external power control is unavailable. Confirm reboot is advertised by current capabilities. none leaves the board in FES; use it only with a verified subsequent boot/recovery method."
+  "post_flash_action": "This example uses reboot, the tested path when external power control is unavailable. Confirm reboot is advertised by current capabilities. none leaves the board in FES; use it only with a verified subsequent boot/recovery method.",
+  "image_contract": "Use the decompressed native *-ext4-raw.img and its locally calculated SHA256/size. Defaults below are 306184192 bytes; custom root partition sizes require updating all length checks and readback ranges."
 }

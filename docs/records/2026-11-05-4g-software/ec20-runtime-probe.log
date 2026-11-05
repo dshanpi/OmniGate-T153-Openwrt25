@@ -1,0 +1,117 @@
+echo EC20_READONLY; lsusb; ls -l /dev/cdc-wdm0 /dev/ttyUSB*; rea
+dlink /sys/class/net/wwan0/device/driver; uqmi -d /dev/cdc-wdm0 --timeout 5000 -
+-get-pin-status; uqmi -d /dev/cdc-wdm0 --timeout 5000 --get-serving-system; uqmi
+ -d /dev/cdc-wdm0 --timeout 5000 --get-signal-info
+EC20_READONLY
+Bus 001 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 002: ID 1a86:8091 QinHeng Electronics USB HUB
+Bus 002 Device 003: ID 2c7c:0125 Quectel Wireless Solutions Co., Ltd. EC25 LTE modem
+crw-------    1 root     root      180, 176 Nov  4 01:50 /dev/cdc-wdm0
+crw-rw----    1 root     dialout   188,   0 Nov  4 01:50 /dev/ttyUSB0
+crw-rw----    1 root     dialout   188,   1 Nov  4 01:50 /dev/ttyUSB1
+crw-rw----    1 root     dialout   188,   2 Nov  4 01:50 /dev/ttyUSB2
+crw-rw----    1 root     dialout   188,   3 Nov  4 01:50 /dev/ttyUSB3
+../../../../../../../../bus/usb/drivers/qmi_wwan
+"Not supported"
+{
+	"registration": "not_registered",
+	"radio_interface": [
+		"none"
+	]
+}
+"Information unavailable"
+root@OpenWrt:~# uqmi --help 2>&1 | grep -Ei "uim|card|operating|version|capabil"
+; command -v microcom; command -v picocom; command -v timeout; command -v stty
+  --get-versions:                   Get service versions
+  --get-capabilities:               List device capabilities
+  --get-device-operating-mode       Get the device operating mode
+  --set-device-operating-mode <m>   Set the device operating mode
+  --uim-verify-pin1 <pin>:          Verify PIN1 (new devices)
+  --uim-verify-pin2 <pin>:          Verify PIN2 (new devices)
+  --uim-get-sim-state:              Get current SIM state
+  --uim-power-off:                  Power off SIM card
+    --uim-slot:                     SIM slot [1-2]
+  --uim-power-on:                   Power on SIM card
+    --uim-slot:                     SIM slot [1-2]
+  --uim-channel-open <AID>:         Open channel for AID
+    --uim-slot:                     SIM slot [1-2]
+  --uim-channel-close:              Close channel
+    --uim-slot:                     SIM slot [1-2]
+    --uim-channel-id:               Channel-id
+  --uim-apdu-send <cmd>:            Send APDU command to ICC
+    --uim-slot:                     SIM slot [1-2]
+    --uim-channel-id:               Channel-id
+root@OpenWrt:~# echo EC20_UIM; uqmi -d /dev/cdc-wdm0 --timeout 5000 --uim-get-si
+m-state; uqmi -d /dev/cdc-wdm0 --timeout 5000 --get-device-operating-mode; uqmi 
+-d /dev/cdc-wdm0 --timeout 5000 --get-capabilities
+EC20_UIM
+{
+	
+}
+"online"
+{
+	"max_tx_channel_rate": 50000000,
+	"max_rx_channel_rate": 100000000,
+	"data_service": "non_simultaneous_cs_ps",
+	"sim": "supported",
+	"networks": [
+		"cdma1x",
+		"cdma1xevdo",
+		"gsm",
+		"umts",
+		"lte"
+	]
+}
+root@OpenWrt:~# wget -q -T 8 -O /tmp/picocom http://BUILD_HOST:8878/picocom &
+& chmod +x /tmp/picocom && sha256sum /tmp/picocom; /tmp/picocom --help | head -2
+6
+c1c864f79cd9fbe37a9dc57fc06ddd3a0b2bb8d2b0c71504580630d300cba4d6  /tmp/picocom
+picocom v3.1
+
+Compiled-in options:
+  TTY_Q_SZ is 0
+  HIGH_BAUD is enabled
+  USE_FLOCK is enabled
+  LINENOISE is enabled
+  HISTFILE is: .picocom_history
+
+Usage is: picocom [options] <tty port device>
+Options are:
+  --<b>aud <baudrate>
+  --<f>low x (=soft,xon/xoff) | h (=hard) | n (=none)
+  --parit<y> o (=odd) | e (=even) | n (=none)
+  --<d>atabits 5 | 6 | 7 | 8
+  --sto<p>bits 1 | 2
+  --<e>scape <char>
+  --<n>o-escape
+  --e<c>ho
+  --no<i>nit
+  --no<r>eset
+  --hang<u>p
+  --no<l>ock
+  --<s>end-cmd <command>
+  --recei<v>e-cmd <command>
+  --imap <map> (input mappings)
+root@OpenWrt:~# echo EC20_CPIN_QUERY; printf "AT+CPIN?\r" | /tmp/picocom --quiet
+ --noreset --no-escape --baud 115200 --flow n --exit-after 2000 /dev/ttyUSB2; ec
+ho AT_QUERY_STATUS=$?
+EC20_CPIN_QUERY
+AT+CPIN?
++CME ERROR: 10
+AT_QUERY_STATUS=0
+root@OpenWrt:~# echo EC20_MODEL_QUERY; printf "AT+CGMM\r" | /tmp/picocom --quiet
+ --noreset --no-escape --baud 115200 --flow n --exit-after 2000 /dev/ttyUSB2; ec
+ho EC20_FW_QUERY; printf "AT+CGMR\r" | /tmp/picocom --quiet --noreset --no-escap
+e --baud 115200 --flow n --exit-after 2000 /dev/ttyUSB2
+EC20_MODEL_QUERY
+AT+CGMM
+EC20F
+
+OK
+EC20_FW_QUERY
+AT+CGMR
+EC20CEHDLGR08A03M1G
+
+OK
+root@OpenWrt:~# 

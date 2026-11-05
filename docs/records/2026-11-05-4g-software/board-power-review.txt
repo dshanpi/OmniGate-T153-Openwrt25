@@ -1,0 +1,60 @@
+T153MX 4G board-level power/reset/USB review (2026-11-05)
+=======================================================
+Scope: schematic plus active Tina DTS/DTB/rootfs source review only.
+No board GPIO writes, modem commands or electrical measurements were performed.
+
+Schematic: SDK root T153MX_MAIN_4G_V11.pdf, visually inspected pages 1, 7 and 8.
+- Page 7: M1 EC20_ME909S VBAT uses VDD_4G_3V4_1. U2 MP1495S IN(2)
+  uses VCC_5V. EN/SYNC(6) is connected to VCC_5V through R16 100 ohm;
+  no SoC GPIO controls this enable.
+- Page 8: M2 EC20_ME909S VBAT uses VDD_4G_3V4_2. U3 MP1495S IN(2)
+  uses VCC_5V. EN/SYNC(6) is connected to VCC_5V through R32 100 ohm;
+  no SoC GPIO controls this enable. Both regulators mark ZTP7193MA
+  as pin-compatible; actual fitted parts have not been inspected.
+- M1/M2 PESRT1#/PESRT2#(22/33), W_DISABLE#(20), WAKEUP_IN(19),
+  WAKEUP_OUT(32) have no drawn SoC connection. No PWRKEY net is shown.
+  VDD_EXT(11) is the separate VDD_EXT_1V8_1/2 module output.
+- M1 USB_DM/DP(36/38) connect through R10/R9 zero-ohm links to
+  HUB_USB1_DM/DP. M2 uses R26/R25 to HUB_USB2_DM/DP.
+- Page 1: CH334F U1 DMU/DPU(14/15) connect to the SoC USB1_DM/DP
+  upstream path. Downstream ports 1/2 feed M1/M2 and ports 3/4 feed
+  the dual Type-A sockets. PWREN#(24) is not connected. RESET#/CDP(16)
+  has a R3 10K_NC pull-up option to VCC_3V3, no SoC GPIO. OVCUR#(1)
+  is pulled up by R4 10K. Thus hub software power bits do not provide
+  a schematic-supported way to switch the separate modem supplies.
+
+Tina evidence:
+- device/config/chips/t153/configs/omnigate/linux-5.10-origin/board.dts
+  lines 23-30: reg_usb1_vbus is fixed 5V with no enable GPIO.
+  lines 1048-1062: usbc1, ehci1 and ohci1 enabled; usb_regulator_io=nocare.
+- out/t153/omnigate/buildroot/sunxi.dtb independently decompiled and
+  checked: the same host enables and gpio-less usb1-vbus regulator.
+- Actual target/etc/init.d/S44modem-manager only launches ModemManager.
+- Actual target/etc/omnigate-web/config.json configures ec20a/b with
+  cdc-wdm0/1, wwan0/1 and APN/auth parameters; no power/reset GPIO.
+- Actual target/usr/lib/omnigate-web/{app.py,hmi_api.py}, supervisor
+  Python sources and init scripts were searched for GPIO/PWRKEY/reset
+  handling. Cellular workflows use existing USB QMI interfaces;
+  no modem GPIO power/start sequence was found.
+
+Mainline port:
+- port/target/linux/sunxi/files/arch/arm/boot/dts/allwinner/
+  sun8i-t153-dshanpi-omnigate.dts enables usbphy, ehci1 and ohci1.
+- No speculative modem power/reset GPIO is added. There is no board
+  evidence for such a line or for a missing GPIO startup sequence.
+
+Observation limits:
+At the time of the initial schematic review, the board operator reported
+enumeration of only the CH334F hub
+(1a86:8091). This does not establish that either module is absent, nor prove
+its VBAT, USB wiring or firmware state. The schematic establishes wiring,
+not actual assembly or measured voltages. If no child USB device appears,
+record hub topology, per-port status and USB errors first; later physical
+checks can verify fitted module, VBAT and the module-specific startup
+requirements. USB serial/network driver IDs cannot fix a device which has
+not enumerated. No further board-level source change is supported yet.
+
+Later update: the user attached EC20 and the board operator confirmed USB
+2c7c:0125 enumeration, option ttyUSB0-3 and qmi_wwan wwan0/cdc-wdm0. No
+modem-specific GPIO change was needed for this enumeration. See evidence.json
+for the bounded QMI queries and the still-unverified cellular data session.

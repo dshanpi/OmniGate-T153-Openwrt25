@@ -1,0 +1,105 @@
+{
+  "recorded_utc": "2026-11-05T07:37:42.628201+00:00",
+  "source": "/home/ubuntu/T153MX/t153-openwrt-v25.12.6-verify/source",
+  "feeds_conf_default_sha256": "037f68494e8cf059f7cb49dbce7e0f73a3da4db1e73b2b8b7477ff2d2676f40b",
+  "official_feeds_config_unchanged": true,
+  "feeds": [
+    {
+      "name": "packages",
+      "url": "https://git.openwrt.org/feed/packages.git",
+      "expected_commit": "093d551675b1119a06ef224d419905e8d6b2af1a",
+      "actual_commit": "093d551675b1119a06ef224d419905e8d6b2af1a",
+      "matches": true,
+      "index_bytes": 3229030,
+      "worktree_clean": true
+    },
+    {
+      "name": "luci",
+      "url": "https://git.openwrt.org/project/luci.git",
+      "expected_commit": "75a306df84a020c57a631ef5b4c02ace56d93387",
+      "actual_commit": "75a306df84a020c57a631ef5b4c02ace56d93387",
+      "matches": true,
+      "index_bytes": 1615386,
+      "worktree_clean": true
+    },
+    {
+      "name": "routing",
+      "url": "https://git.openwrt.org/feed/routing.git",
+      "expected_commit": "48c808034414a2112cf9d5261a20a320e8d0d170",
+      "actual_commit": "48c808034414a2112cf9d5261a20a320e8d0d170",
+      "matches": true,
+      "index_bytes": 40092,
+      "worktree_clean": true
+    },
+    {
+      "name": "telephony",
+      "url": "https://git.openwrt.org/feed/telephony.git",
+      "expected_commit": "2618106d5846a4a542fdf5809f0d3ed228ce439b",
+      "actual_commit": "2618106d5846a4a542fdf5809f0d3ed228ce439b",
+      "matches": true,
+      "index_bytes": 507112,
+      "worktree_clean": true
+    },
+    {
+      "name": "video",
+      "url": "https://github.com/openwrt/video.git",
+      "expected_commit": "094bf58da6682f895255a35a84349a79dab4bf95",
+      "actual_commit": "094bf58da6682f895255a35a84349a79dab4bf95",
+      "matches": true,
+      "index_bytes": 76474,
+      "worktree_clean": true
+    }
+  ],
+  "commands": [
+    {
+      "command": "./scripts/feeds update -a",
+      "exit_code": 1,
+      "log": "feeds-update.log",
+      "failure": "GitHub video clone GnuTLS recv error (-110); other four feeds succeeded"
+    },
+    {
+      "command": "timeout 180 ./scripts/feeds update video",
+      "exit_code": 0,
+      "log": "feeds-video-retry.log"
+    },
+    {
+      "command": "./scripts/feeds install -a",
+      "exit_code": 0,
+      "log": "feeds-install.log"
+    }
+  ],
+  "config_sha256_before_install": "456e2127d4620d52d5459c5b4b6283281e6911808bbcb9dc7d38e341a4aa9a92",
+  "config_sha256_after_install": "456e2127d4620d52d5459c5b4b6283281e6911808bbcb9dc7d38e341a4aa9a92",
+  "config_unchanged": true,
+  "install_warning_lines": [
+    "WARNING: Makefile 'package/boot/arm-trusted-firmware-microchipsw/Makefile' has a build dependency on 'ruby/host', which does not exist",
+    "WARNING: Makefile 'package/utils/audit/Makefile' has a dependency on 'libev', which does not exist",
+    "WARNING: Makefile 'package/utils/busybox/Makefile' has a dependency on 'libpam', which does not exist",
+    "WARNING: Makefile 'package/utils/busybox/Makefile' has a dependency on 'libtirpc', which does not exist",
+    "WARNING: Makefile 'package/utils/busybox/Makefile' has a dependency on 'libpam', which does not exist",
+    "WARNING: Makefile 'package/utils/busybox/Makefile' has a dependency on 'libtirpc', which does not exist",
+    "WARNING: Makefile 'package/utils/busybox/Makefile' has a build dependency on 'libpam', which does not exist",
+    "WARNING: Makefile 'package/boot/kexec-tools/Makefile' has a dependency on 'liblzma', which does not exist",
+    "WARNING: Makefile 'package/network/services/lldpd/Makefile' has a dependency on 'libnetsnmp', which does not exist",
+    "WARNING: Makefile 'package/utils/policycoreutils/Makefile' has a dependency on 'libpam', which does not exist",
+    "WARNING: Makefile 'package/utils/policycoreutils/Makefile' has a dependency on 'libpam', which does not exist",
+    "WARNING: Makefile 'package/utils/policycoreutils/Makefile' has a build dependency on 'libpam', which does not exist",
+    "WARNING: No feed for package 'luafilesystem5.4' found",
+    "WARNING: No feed for package 'luaexpat5.4' found",
+    "WARNING: No feed for package 'luasec5.4' found",
+    "WARNING: No feed for package 'luasocket5.4' found"
+  ],
+  "network": {
+    "feeds_urls_modified": false,
+    "pins_modified": false,
+    "git_global_config_modified": false,
+    "transport": "Original official feeds endpoints; no URL mapping",
+    "notes": "Initial packages and LuCI clones were slow but actively progressing. A bounded GitHub packages bare-clone transport probe timed out before objects; did not substitute source. Retried video once at the same original URL after TLS interruption."
+  },
+  "warning_attribution": {
+    "initial_missing_dependencies": "The initial get_installed metadata scan runs before feed symlinks are installed. ruby, libev, libpam, libtirpc, xz and net-snmp package links now all exist. Root will regenerate final metadata during defconfig.",
+    "missing_lua54_feed_packages": "Unmodified official packages feed net/prosody/Makefile line33 depends on luafilesystem5.4, luaexpat5.4, luasec5.4 and luasocket5.4; none is exported by pinned feed index. These warnings are upstream optional Prosody package dependencies, not T153 port dependencies.",
+    "t153_feed_index_errors_found": false,
+    "dependency_cycle_errors_found": false
+  }
+}

@@ -1,0 +1,37 @@
+T153 standard TTY state diagnostic
+=================================
+
+Source: tests/diagnostics/t153-tty-status.c
+Temporary target executable: artifacts/diagnostics/t153-tty-status
+Invocation: /tmp/t153-tty-status /dev/ttyS7
+
+This diagnostic opens the named TTY read-only, nonblocking, and without taking
+it as a controlling terminal. It does not read UART data, write UART data,
+change termios, or access device registers. It queries standard TTY ioctls:
+TIOCGSERIAL, TIOCGICOUNT, TCGETS via tcgetattr, TIOCMGET, TIOCGETD and TIOCOUTQ.
+Results are JSON with explicit error records for unsupported/refused queries.
+The active Bluetooth helper uses exclusive ownership; the device administrator
+may query this state when CAP_SYS_ADMIN permits, otherwise the open fails.
+
+Interpretation:
+- xmit_fifo_size is the depth the driver is using, not a hardware measurement.
+- icount.tx counts driver-accepted transmission bytes, not observed wire bytes.
+- icount.cts records CTS transitions, not proof that automatic flow control is on.
+- termios.rtscts records the requested mode, not proof of MCR.AFE capability.
+- TIOCOUTQ may be unsupported under the HCI line discipline.
+
+Build on the existing remote OpenWrt host, from the port root:
+  export STAGING_DIR="$PWD/openwrt/staging_dir"
+  TC="$STAGING_DIR/toolchain-arm_cortex-a7+neon-vfpv4_gcc-14.3.0_musl_eabi/bin/arm-openwrt-linux-muslgnueabi"
+  "${TC}-gcc" -std=c11 -Wall -Wextra -Werror -Os -static -mfloat-abi=hard \
+    -o artifacts/diagnostics/t153-tty-status tests/diagnostics/t153-tty-status.c
+  "${TC}-strip" artifacts/diagnostics/t153-tty-status
+
+2026-11-05 artifact SHA256:
+96d77e72e0f54ce27bfa9f5c5a4a50bb4579ae4d4ab9cd126e1259e27533123b
+Source SHA256:
+e28875194034fb4845cb021ac883c3f868705e3b907f70a0a2e4c3f711ed6437
+
+Validation: strict host compiler passed; /dev/null error-path output parsed as
+JSON; ARM executable is statically linked EABI5 with no shared-library needs.
+This diagnostic is not installed by the formal aic8800d80-bt package.

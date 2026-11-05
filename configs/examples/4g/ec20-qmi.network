@@ -1,0 +1,10 @@
+# Import only this selected example after replacing APN/device.
+# Match cdc-wdmN to this modem through /sys/class/usbmisc/*/device.
+config interface 'cellular'
+        option proto 'qmi'
+        option device '/dev/cdc-wdm0'
+        option apn 'REPLACE_WITH_CARRIER_APN'
+        option auth 'none'
+        option pdptype 'ip'
+        option metric '20'
+        option auto '0'

@@ -1,0 +1,152 @@
+{
+  "date": "2026-11-05",
+  "linux_version": "6.12.113",
+  "source_review": "Existing upstream ID/class matches cover reviewed EC20 variants and common ML302 USB layouts. No new ID patch.",
+  "hardware_tested": true,
+  "module_usb_mode_changed": false,
+  "new_required_driver_packages": [
+    "kmod-usb-serial-qualcomm",
+    "kmod-usb-net-rndis"
+  ],
+  "configuration_retention": {
+    "result": "PASS",
+    "requested_settings_retained": 16,
+    "log": "config-check.log",
+    "scope": "temporary integrated build .config, not hardware verification"
+  },
+  "package_build": {
+    "status": "PASS",
+    "scope": "Five newly selected packages compiled after final kernel config freeze; final firmware image and installed integration test remain separate",
+    "artifacts": [
+      {
+        "file": "openwrt/bin/targets/sunxi/cortexa7/packages/kmod-usb-serial-qualcomm-6.12.113-r1.apk",
+        "sha256": "5784c1d39a408c400b849c1bfb5de642930fc4c0e5f2e839401f408da07c5282",
+        "size_bytes": 3483
+      },
+      {
+        "file": "openwrt/bin/targets/sunxi/cortexa7/packages/kmod-usb-net-rndis-6.12.113-r1.apk",
+        "sha256": "29595ad800a8599e331750e5e7bd0b4418146eb3c1fc5ca3b833a9ac64933813",
+        "size_bytes": 5266
+      },
+      {
+        "file": "openwrt/bin/targets/sunxi/cortexa7/packages/comgt-0.32-r37.apk",
+        "sha256": "08d5b5719adf6126ff3af2cc91fed38344c7b61378a86c2894bf6153b8c8fb7f",
+        "size_bytes": 20973
+      },
+      {
+        "file": "openwrt/bin/packages/arm_cortex-a7_neon-vfpv4/packages/picocom-3.1-r5.apk",
+        "sha256": "b00bef62517f0258e99ff3b01ea8e0e34a52506e0067b17158809acc0c65e9ea",
+        "size_bytes": 20029
+      },
+      {
+        "file": "openwrt/bin/packages/arm_cortex-a7_neon-vfpv4/luci/luci-proto-3g-0.apk",
+        "sha256": "d2fee833cc65e5b486273477345677c7190c4283650f6e4afa170a9acbdb3b63",
+        "size_bytes": 2478
+      }
+    ],
+    "user_package_build_log": "4g-user-build-2.log",
+    "user_package_build_log_sha256": "738433e77ea5756be9b860c2e6cecd005451585408841736d4c180f9198a5c5d"
+  },
+  "uci_validation_runtime": "existing target uci via qemu-arm-static; temporary config/savedir only",
+  "uci_examples": [
+    {
+      "file": "configs/examples/4g/ec20-mbim.network",
+      "protocol": "mbim",
+      "uci_merge_parse_pass": true,
+      "existing_lan_wan_preserved": true,
+      "auto_start": false,
+      "sha256": "75711ffda4d14ee42568c4c28c544f6560c15aeed284c4ec8a6246f0c28a7478"
+    },
+    {
+      "file": "configs/examples/4g/ec20-qmi.network",
+      "protocol": "qmi",
+      "uci_merge_parse_pass": true,
+      "existing_lan_wan_preserved": true,
+      "auto_start": false,
+      "sha256": "7cec489515d54d45f46a3c6d52100d72d84376378f7d92cb59f6e06dd7707c23"
+    },
+    {
+      "file": "configs/examples/4g/ml302-ecm-rndis.network",
+      "protocol": "dhcp",
+      "uci_merge_parse_pass": true,
+      "existing_lan_wan_preserved": true,
+      "auto_start": false,
+      "sha256": "24f69ddf44df9ce3d09c91476d69f3dee82bcb14489242ec62280b7b2d853bfb"
+    },
+    {
+      "file": "configs/examples/4g/serial-ppp.network",
+      "protocol": "3g",
+      "uci_merge_parse_pass": true,
+      "existing_lan_wan_preserved": true,
+      "auto_start": false,
+      "sha256": "afd2174faf3d73a6d79d33f9b70773d427733ce9a8db40bf9fd2b895161de8c2"
+    }
+  ],
+  "source_sha256": {
+    "drivers/usb/serial/option.c": "7390a1ecd2132e0e346169551ecbb479c50d535141bb3b6f4bdf4f18dade7a49",
+    "drivers/usb/serial/qcserial.c": "4a98bf3a34da1c6a1ac9718d5688796bbe725caa864c1abd132b261a450b0659",
+    "drivers/net/usb/qmi_wwan.c": "d175024ae7b66a36aeb62b4eaf82a9586952258fb12233995dc0b989f5d41602",
+    "drivers/net/usb/cdc_ether.c": "4e93ab980ea5753cabee3ae61e257cf8fdf7a59a0a6e5572639a4bb4f0e347cb",
+    "drivers/net/usb/cdc_mbim.c": "213f07df003206ea40c30cec2ffba9fb06e77b5728883e6a29128b1eb557615c",
+    "drivers/net/usb/rndis_host.c": "dda3d7465bb80be4995ef1e4f336ea7739601594cecc04f57be5ecf976bd9f00"
+  },
+  "config_fragment_sha256": "e4bf5b14f4402579a8b2e5f91d908ee1cd446cf0a7ff91e9d177be6d62087eac",
+  "board_power_review": {
+    "record": "board-power-review.txt",
+    "schematic_sha256": "38a943279360ec8d86e7d5150722d93006758572856a0e70fba68b438e040014",
+    "gpio_change_required_by_review": false,
+    "electrical_measurements": false
+  },
+  "hardware_scope": "EC20 USB enumeration, driver binding, read-only QMI and AT control queries; module reports SIM not inserted, so no cellular registration or data session proved",
+  "hardware_observation": {
+    "date": "2026-11-05",
+    "module_reported_by_user": "EC20",
+    "usb_id": "2c7c:0125",
+    "serial_driver": "option",
+    "serial_nodes": [
+      "ttyUSB0",
+      "ttyUSB1",
+      "ttyUSB2",
+      "ttyUSB3"
+    ],
+    "network_driver": "qmi_wwan",
+    "network_node": "wwan0",
+    "control_node": "cdc-wdm0",
+    "qmi_read_only": {
+      "device_operating_mode": "online",
+      "capabilities_include": "LTE",
+      "serving_system": "not_registered",
+      "dms_pin_query": "Not supported",
+      "uim_sim_state": {},
+      "signal_query": "Information unavailable",
+      "advertised_max_tx_channel_rate_bps": 50000000,
+      "advertised_max_rx_channel_rate_bps": 100000000,
+      "rate_note": "Advertised capabilities, not measured throughput"
+    },
+    "sim_state_conclusion": "AT+CPIN? returned +CME ERROR: 10 (SIM not inserted); module did not detect SIM",
+    "module_configuration_written": false,
+    "cellular_registered": false,
+    "data_session_tested": false,
+    "ml302_hardware_tested": false,
+    "evidence_source": "archived USB enumeration and QMI read-only logs",
+    "enumeration_log": "../2026-11-05-wan-reset/restored150.log",
+    "log_archived": true,
+    "usb_product_string": "EC20-CE-HDLG",
+    "qmi_probe_log": "ec20-runtime-probe.log",
+    "qmi_probe_log_sha256": "2eae1ab6afb59a587c4b0a9984902782577ea02fd1964effb1698166ecd5e02b",
+    "picocom_host_validation": "picocom-host-check.json",
+    "at_read_only": {
+      "AT+CPIN?": "+CME ERROR: 10",
+      "AT+CGMM": "EC20F",
+      "AT+CGMR": "EC20CEHDLGR08A03M1G",
+      "picocom_exit_code": 0,
+      "picocom_sha256": "c1c864f79cd9fbe37a9dc57fc06ddd3a0b2bb8d2b0c71504580630d300cba4d6",
+      "pin_verification_attempts": 0,
+      "imei_iccid_queried": false,
+      "persistent_settings_changed": false,
+      "log": "ec20-runtime-probe.log",
+      "log_sha256": "2eae1ab6afb59a587c4b0a9984902782577ea02fd1964effb1698166ecd5e02b"
+    },
+    "at_log_update_pending": false
+  }
+}

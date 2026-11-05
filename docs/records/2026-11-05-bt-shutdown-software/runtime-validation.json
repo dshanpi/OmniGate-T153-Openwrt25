@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-05",
+  "tested_helper": {
+    "path": "artifacts/diagnostics/aic8800d80-bt-clean-shutdown",
+    "bytes": 12287,
+    "sha256": "39542ae105e52ca7a91d68401a9846c77fc353e50102035eaee041d18f5e3be4"
+  },
+  "method": "Hot replacement on the running eMMC system. bluetoothd was deliberately left running.",
+  "initial_stop": {
+    "starting_hci_state": "UP RUNNING",
+    "helper_exit_code": 0,
+    "two_second_reset_timeout_observed": false
+  },
+  "repeated_cycles": {
+    "count": 3,
+    "sequence": "HCI UP -> service stop -> service start -> wait two seconds",
+    "all_stop_exit_codes": 0,
+    "all_restarted_hci_states": "UP RUNNING",
+    "dmesg_hci_opcode_failed_count": 0
+  },
+  "scope": "Service cleanup/start cycles passed with bluetoothd running. This does not independently qualify connection, audio, suspend/resume or all reboot cases.",
+  "reported_by": "board serial validation"
+}

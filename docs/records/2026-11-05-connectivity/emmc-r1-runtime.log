@@ -1,0 +1,364 @@
+[   54.712345] dwmac-sun8i-t153 4500000.ethernet eth0: Register MEM_TYPE_PAGE_POOL RxQ-0
+
+[   54.905228] dwmac-sun8i-t153 4500000.ethernet eth0: PHY [stmmac-0:01] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+
+[   54.927878] dwmac-sun8i-t153 4500000.ethernet eth0: No Safety Features support found
+
+[   54.945952] dwmac-sun8i-t153 4500000.ethernet eth0: IEEE 1588-2008 Advanced Timestamp supported
+
+[   54.955314] dwmac-sun8i-t153 4500000.ethernet eth0: registered PTP clock
+
+[   54.962154] dwmac-sun8i-t153 4500000.ethernet eth0: configuring for phy/rgmii link mode
+
+[   54.994669] 8021q: adding VLAN 0 to HW filter on device eth0
+
+[   55.004891] br-lan: port 1(eth0) entered blocking state
+
+[   55.010209] br-lan: port 1(eth0) entered disabled state
+
+[   55.015692] dwmac-sun8i-t153 4500000.ethernet eth0: entered allmulticast mode
+
+[   55.023421] dwmac-sun8i-t153 4500000.ethernet eth0: entered promiscuous mode
+
+[   55.063556] dwmac-sun8i-t153 4510000.ethernet eth1: Register MEM_TYPE_PAGE_POOL RxQ-0
+
+[   55.105418] dwmac-sun8i-t153 4510000.ethernet eth1: PHY [stmmac-1:01] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+
+[   55.116123] dwmac-sun8i-t153 4510000.ethernet eth1: No Safety Features support found
+
+[   55.134004] dwmac-sun8i-t153 4510000.ethernet eth1: IEEE 1588-2008 Advanced Timestamp supported
+
+[   55.143357] dwmac-sun8i-t153 4510000.ethernet eth1: registered PTP clock
+
+[   55.152305] dwmac-sun8i-t153 4510000.ethernet eth1: configuring for phy/rgmii-rxid link mode
+
+[   55.185311] 8021q: adding VLAN 0 to HW filter on device eth1
+
+[   55.523662] get_txpwr_max:txpwr_max:18 
+
+
+[   55.532991] get_txpwr_max:txpwr_max:18 
+
+
+[   55.539641] aicwf_sdio mmc2:390b:1 wlan0: Remove Interface
+
+[   55.545380] get_txpwr_max:txpwr_max:18 
+
+
+[   57.322110] dw-apb-uart 2607000.serial: failed to request DMA
+
+[   58.051358] Bluetooth: MGMT ver 1.23
+
+ 
+
+
+
+
+
+BusyBox v1.37.0 (2026-11-04 01:33:29 UTC) built-in shell (ash)
+
+
+
+  _______                     ________        __
+
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+
+ |_______||   __|_____|__|__||________||__|  |____|
+
+          |__| W I R E L E S S   F R E E D O M
+
+ -----------------------------------------------------
+
+ OpenWrt 25.12-SNAPSHOT, t153-6c57f7cd04 Dave's Guitar
+
+ -----------------------------------------------------
+
+
+
+ === WARNING! =====================================
+
+ There is no root password defined on this device!
+
+ Use the "passwd" command to set up a new password
+
+ in order to prevent unauthorized SSH logins.
+
+ --------------------------------------------------
+
+
+
+
+
+ OpenWrt recently switched to the "apk" package manager!
+
+
+
+ OPKG Command           APK Equivalent      Description
+
+ ------------------------------------------------------------------
+
+ opkg install <pkg>     apk add <pkg>       Install a package
+
+ opkg remove <pkg>      apk del <pkg>       Remove a package
+
+ opkg upgrade           apk upgrade         Upgrade all packages
+
+ opkg files <pkg>       apk info -L <pkg>   List package contents
+
+ opkg list-installed    apk info            List installed packages
+
+ opkg update            apk update          Update package lists
+
+ opkg search <pkg>      apk search <pkg>    Search for packages
+
+ ------------------------------------------------------------------
+
+
+
+For more information visit:
+
+https://openwrt.org/docs/guide-user/additional-software/opkg-to-apk-cheatsheet
+
+
+
+root@OpenWrt:~# [   67.685458] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+
+[   67.699894] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+
+uptime; mount | grep " / "; cat /sys/devices/system/cpu/online; 
+
+
+hciconfig hci0; cat /sys/kernel/debug/mmc2/ios | head -3; ls /dev/ttyUSB* /dev/c
+
+
+dc-wdm*; uqmi -d /dev/cdc-wdm0 --get-device-operating-mode; printf "AT+CPIN?\r" 
+
+
+| picocom --quiet --noreset --no-escape --baud 115200 --flow n --exit-after 2000
+
+
+ /dev/ttyUSB2; ethtool eth1 | grep -E "Speed:|Duplex:|Link detected:"
+
+ 01:34:36 up 1 min,  load average: 0.70, 0.23, 0.08
+
+/dev/root on / type ext4 (rw,noatime)
+
+0-3
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 1021:9  SCO MTU: 255:4
+
+	UP RUNNING 
+
+	RX bytes:759 acl:0 sco:0 events:49 errors:0
+
+	TX bytes:2184 acl:0 sco:0 commands:49 errors:0
+
+
+
+clock:		25000000 Hz
+
+actual clock:	25000000 Hz
+
+vdd:		21 (3.3 ~ 3.4 V)
+
+/dev/cdc-wdm0  /dev/ttyUSB0   /dev/ttyUSB1   /dev/ttyUSB2   /dev/ttyUSB3
+
+"online"
+
+AT+CPIN?
+
+
+
++CME ERROR: 10
+
+
+	Speed: 100Mb/s
+
+	Duplex: Full
+
+	Link detected: yes
+
+root@OpenWrt:~# wget -q -O /tmp/t153-smp-smoke http://192.168.1.228:8878/t153-sm
+
+
+p-smoke; sha256sum /tmp/t153-smp-smoke; chmod +x /tmp/t153-smp-smoke; /tmp/t153-
+
+
+smp-smoke --duration-ms 3000; iw phy phy0 interface add testwifi type managed; i
+
+
+p link set testwifi up; iw dev testwifi scan > /tmp/emmc-wifi-scan.txt 2>/tmp/em
+
+
+mc-wifi-scan.err; echo EMMC_WIFI_SCAN_EXIT=$?; grep -c "^BSS " /tmp/emmc-wifi-sc
+
+
+an.txt; cat /tmp/emmc-wifi-scan.err; iw dev testwifi del; bluetoothctl --timeout
+
+
+ 10 scan on > /tmp/emmc-bt-scan.txt 2>&1; echo
+
+56af9ae98fb3ffe6d1a7825a28dde951038135808130e851900704b64e4a71c4  /tmp/t153-smp-smoke
+
+MODE=t153-cpu0-3 ONLINE=0-3 TARGET=0,1,2,3 DURATION_MS=3000
+
+CPU target=0 observed=0 samples=1067 loops=272640 checksum=b7e52a10 status=PASS error_kind=0 errno=0
+
+CPU target=1 observed=1 samples=1088 loops=278016 checksum=f46a8693 status=PASS error_kind=0 errno=0
+
+CPU target=2 observed=2 samples=1084 loops=276992 checksum=9dfa0aa5 status=PASS error_kind=0 errno=0
+
+CPU target=3 observed=3 samples=1076 loops=274944 checksum=f62b6fb2 status=PASS error_kind=0 errno=0
+
+SHARED sequence=1102592 atomic_count=1102592 expected=1102592
+
+RESULT PASS wall_ms=3002
+
+[  101.304481] get_txpwr_max:txpwr_max:18 
+
+
+[  101.308555] get_txpwr_max:txpwr_max:18 
+
+
+EMMC_WIFI_SCAN_EXIT=0
+
+3
+
+[  103.067868] aicwf_sdio mmc2:390b:1 testwifi: CLOSE
+
+[  103.074000] ieee80211 phy0: HT supp 1, VHT supp 1, HE supp 1
+
+[  103.081060] aicwf_sdio mmc2:390b:1 testwifi: Remove Interface
+
+[  103.086934] get_txpwr_max:txpwr_max:18 
+
+
+
+
+root@OpenWrt:~# grep -c "Device " /tmp/emmc-bt-scan.txt; grep -E "Discovery star
+
+
+ted|Failed to start" /tmp/emmc-bt-scan.txt; hciconfig hci0; bluetoothctl show | 
+
+
+grep -E "Powered:|Discovering:"; dmesg | grep -E "Oops|panic|hci0:.*failed"
+
+0
+
+Discovery started
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 1021:9  SCO MTU: 255:4
+
+	UP RUNNING 
+
+	RX bytes:966 acl:0 sco:0 events:60 errors:0
+
+	TX bytes:2244 acl:0 sco:0 commands:55 errors:0
+
+
+
+	Powered: yes
+
+	Discovering: no
+
+root@OpenWrt:~# bluetoothctl --timeout 12 scan le > /tmp/emmc-bt-le.txt 2>&1; ec
+
+
+ho BT_LE_EXIT=$?; grep -c "Device " /tmp/emmc-bt-le.txt; grep -E "Discovery star
+
+
+ted|Failed to start" /tmp/emmc-bt-le.txt; hciconfig hci0
+
+BT_LE_EXIT=0
+
+28
+
+Discovery started
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 1021:9  SCO MTU: 255:4
+
+	UP RUNNING 
+
+	RX bytes:2136 acl:0 sco:0 events:99 errors:0
+
+	TX bytes:2338 acl:0 sco:0 commands:63 errors:0
+
+
+
+root@OpenWrt:~# logread -h 2>&1 | head -24; ls -la /sys/fs/pstore; ubus call sys
+
+
+tem watchdog; uptime; ethtool eth1 | grep -E "Speed:|Link detected:"; cat /sys/c
+
+
+lass/net/eth1/carrier_changes
+
+logread: option requires an argument: h
+
+Usage: logread [options]
+
+Options:
+
+    -s <path>		Path to ubus socket
+
+    -l	<count>		Got only the last 'count' messages
+
+    -e	<pattern>	Filter messages with a regexp
+
+    -r	<server> <port>	Stream message to a server
+
+    -F	<file>		Log file
+
+    -S	<bytes>		Log size
+
+    -p	<file>		PID file
+
+    -h	<hostname>	Add hostname to the message
+
+    -P	<prefix>	Prefix custom text to streamed messages
+
+    -z	<facility>	handle only messages with given facility (0-23), repeatable
+
+    -Z	<facility>	ignore messages with given facility (0-23), repeatable
+
+    -f			Follow log messages
+
+    -u			Use UDP as the protocol
+
+    -t			Add an extra timestamp
+
+    -0			Use \0 instead of \n as trailer when using TCP
+
+
+
+ls: /sys/fs/pstore: No such file or directory
+
+{
+
+	"status": "running",
+
+	"timeout": 30,
+
+	"frequency": 5,
+
+	"magicclose": false
+
+}
+
+ 01:38:44 up 5 min,  load average: 0.08, 0.16, 0.08
+
+	Speed: 100Mb/s
+
+	Link detected: yes
+
+1
+
+root@OpenWrt:~# 

@@ -1,0 +1,5 @@
+{"ready": true, "bytes": 16777216, "sha256": "2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9"}
+{"round": 1, "bytes": 16777216, "sha256": "2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9", "seconds": 0.803262, "ok": true}
+{"round": 2, "bytes": 16777216, "sha256": "2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9", "seconds": 0.940848, "ok": true}
+{"round": 3, "bytes": 16777216, "sha256": "2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9", "seconds": 0.775953, "ok": true}
+{"round": 4, "bytes": 16777216, "sha256": "2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9", "seconds": 0.951833, "ok": true}

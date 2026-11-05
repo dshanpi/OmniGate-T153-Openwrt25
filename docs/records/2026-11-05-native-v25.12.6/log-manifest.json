@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "redaction": "Only build workspace/adaptation repository/home directory prefixes are replaced; command output, warnings and escape sequences are retained. Original raw logs remain on the Linux build host.",
+  "logs": [
+    {
+      "source": "<BUILD_WORKSPACE>/bootstrap-defconfig.log",
+      "file": "bootstrap-defconfig.log.gz",
+      "original_bytes": 2790,
+      "original_sha256": "74abe8a6241c4b4efc39bfb0079d9bd9888e206a8685c47b560dfc4f20a79cac",
+      "redacted_bytes": 2790,
+      "redacted_sha256": "74abe8a6241c4b4efc39bfb0079d9bd9888e206a8685c47b560dfc4f20a79cac",
+      "gzip_bytes": 564,
+      "gzip_sha256": "bb3efa74488bce4c6e3eb4ad2aaae54ecee441abc99dffeae7bb55f13ba00d8b",
+      "redacted": false
+    },
+    {
+      "source": "<BUILD_WORKSPACE>/feeds-update.log",
+      "file": "feeds-update.log.gz",
+      "original_bytes": 104644,
+      "original_sha256": "978430fffc3ed62d285b6cc49298a248042426b1d3766f8a0e9e143a709023fc",
+      "redacted_bytes": 104520,
+      "redacted_sha256": "8e49ae286dc77473e4c1cf7d3db6b77cc643ce8ba3884cb0bed5212322a168a5",
+      "gzip_bytes": 10770,
+      "gzip_sha256": "4e556887fc66d7f8c50efe72c8228fff6c257ea31dbc5b94c0a7d4165f875933",
+      "redacted": true
+    },
+    {
+      "source": "<BUILD_WORKSPACE>/feeds-video-retry.log",
+      "file": "feeds-video-retry.log.gz",
+      "original_bytes": 3348,
+      "original_sha256": "3e8c5def29cd53e397130f35eac6980d801499154a30cf3792e4fe6475eb09bd",
+      "redacted_bytes": 3317,
+      "redacted_sha256": "4db7553155d754cee94dee4bc13697bfa52e7b78efbe9e753cb82e4e1c409b8b",
+      "gzip_bytes": 669,
+      "gzip_sha256": "3c92a72477ff550ed8ec43783aab45bd428bcead28870ce2c31e3c15dac2fa4f",
+      "redacted": true
+    },
+    {
+      "source": "<BUILD_WORKSPACE>/feeds-install.log",
+      "file": "feeds-install.log.gz",
+      "original_bytes": 80579,
+      "original_sha256": "f4e7499d5984045ac43c92574c80eb9d4142f90aee5b2ad3e8923cc325a97110",
+      "redacted_bytes": 80579,
+      "redacted_sha256": "f4e7499d5984045ac43c92574c80eb9d4142f90aee5b2ad3e8923cc325a97110",
+      "gzip_bytes": 10352,
+      "gzip_sha256": "194897dcc7918eff7f019233a5d8af3f34147e6d2dcbb0ce2807b3f8a94898a7",
+      "redacted": false
+    },
+    {
+      "source": "<BUILD_WORKSPACE>/final-defconfig.log",
+      "file": "final-defconfig.log.gz",
+      "original_bytes": 988,
+      "original_sha256": "e848dba4680093080befc3867a19c666df90d4ca47e91866dad777fad2bb75ef",
+      "redacted_bytes": 988,
+      "redacted_sha256": "e848dba4680093080befc3867a19c666df90d4ca47e91866dad777fad2bb75ef",
+      "gzip_bytes": 350,
+      "gzip_sha256": "15f166608ca10f8cac4393a641e5ebda0e077e87cbac658c44e09f2b167106c2",
+      "redacted": false
+    },
+    {
+      "source": "<BUILD_WORKSPACE>/menuconfig-terminal.log",
+      "file": "menuconfig-terminal.log.gz",
+      "original_bytes": 15312,
+      "original_sha256": "4cfa148790a415bcfa0d295fe6c9161d3e07a723bff061380532c6240faddce0",
+      "redacted_bytes": 15312,
+      "redacted_sha256": "4cfa148790a415bcfa0d295fe6c9161d3e07a723bff061380532c6240faddce0",
+      "gzip_bytes": 1992,
+      "gzip_sha256": "2d6aff41cf25019c6a3a514442150d7f901cbbe1564e70b0a211be8c7f1b96e5",
+      "redacted": false
+    },
+    {
+      "source": "<BUILD_WORKSPACE>/post-menuconfig-defconfig.log",
+      "file": "post-menuconfig-defconfig.log.gz",
+      "original_bytes": 975,
+      "original_sha256": "2c9443902628ef1e9d38534042beab6b9685effc456092a71397abe84bc09176",
+      "redacted_bytes": 975,
+      "redacted_sha256": "2c9443902628ef1e9d38534042beab6b9685effc456092a71397abe84bc09176",
+      "gzip_bytes": 347,
+      "gzip_sha256": "8a724dbc01a8ee106fe68b82b7e7a9535ad96216d8a6c5ca2a5fde4931e2829a",
+      "redacted": false
+    },
+    {
+      "source": "<BUILD_WORKSPACE>/tools-build.log",
+      "file": "tools-build.log.gz",
+      "original_bytes": 10314486,
+      "original_sha256": "5b2dc114b364dabf0800b665536accc3334e3fb02d35cb7b6b74fa80de62e075",
+      "redacted_bytes": 9141818,
+      "redacted_sha256": "0693b17295fa84040b4d85f72e8788f4d7c389c3b06e8e64e6ca1fec1eb6e762",
+      "gzip_bytes": 548191,
+      "gzip_sha256": "53547f4a7c68cdbfecafc8fcce2562bacee7e27ea3bc5f4b6bf636e04387b6e5",
+      "redacted": true
+    },
+    {
+      "source": "<BUILD_WORKSPACE>/toolchain-build.log",
+      "file": "toolchain-build.log.gz",
+      "original_bytes": 15204669,
+      "original_sha256": "c2a254ab93d139440428e374d22a8a54136bf025356bd937dde1aea039618ae3",
+      "redacted_bytes": 13515820,
+      "redacted_sha256": "0b6993689a77e1718fa99a45330bf4fc0885ecd3c146163083cf3726db5fad10",
+      "gzip_bytes": 572901,
+      "gzip_sha256": "9dde76702d5607b76a3acb9b61b345ed05d1facb939c064ff41f0df5a361e13d",
+      "redacted": true
+    },
+    {
+      "source": "<BUILD_WORKSPACE>/openwrt-full-build.log",
+      "file": "openwrt-full-build.log.gz",
+      "original_bytes": 17969733,
+      "original_sha256": "207bff38a5791c2fd6388865a9e1672e6b46c604af2b645a16ef92ae10f11b4e",
+      "redacted_bytes": 15669595,
+      "redacted_sha256": "8263e08e46543bdbedec6779dc88d92e4549edd3f9fd9b41cb4b08d66b2c68ca",
+      "gzip_bytes": 932527,
+      "gzip_sha256": "9dd7adf37e58cf55e3978f67fdc56c62a0a5428c0a0b9597ed3a26503a15d8e5",
+      "redacted": true
+    },
+    {
+      "source": "<BUILD_WORKSPACE>/openwrt-image-fsck-build.log",
+      "file": "openwrt-image-fsck-build.log.gz",
+      "original_bytes": 3258080,
+      "original_sha256": "be7e514e85d1c837468e208e0cfe033dd202a88dd409b0654ae0effcc7317186",
+      "redacted_bytes": 2726027,
+      "redacted_sha256": "b66212763b5ed15778731fb5bb8d04caa503f18ad174693e0c0aa6c169390606",
+      "gzip_bytes": 157356,
+      "gzip_sha256": "6535b58b9eb13fee6fe6fc7f02e8382e965055a4b7d6428dedc584c371671af0",
+      "redacted": true
+    },
+    {
+      "source": "<BUILD_WORKSPACE>/patch-final-apply.log",
+      "file": "patch-final-apply.log.gz",
+      "original_bytes": 6118,
+      "original_sha256": "937dbfe14c99e93bd841e738dfc07f422626285031e401f243cca4fe457e7d4d",
+      "redacted_bytes": 6118,
+      "redacted_sha256": "937dbfe14c99e93bd841e738dfc07f422626285031e401f243cca4fe457e7d4d",
+      "gzip_bytes": 1162,
+      "gzip_sha256": "503a0d2d9fbb35f715646f099a9a45c2f189a3648b07ff730398436fb791c758",
+      "redacted": false
+    }
+  ]
+}

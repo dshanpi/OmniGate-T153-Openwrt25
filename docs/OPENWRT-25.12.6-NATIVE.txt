@@ -1,0 +1,382 @@
+T153MX OmniGate：官方 OpenWrt 25.12.6 + 单补丁原生构建
+====================================================
+
+状态（2026-11-05，已绑定本次软件与实机记录）
+----------------------------------------
+本入口基于官方 v25.12.6 源码归档，目标是选择 T153 profile 后，由普通
+OpenWrt make 自动编译四核 SPL/U-Boot、内核、软件包和完整磁盘镜像。
+不需要 Tina SDK，不需要先运行本仓库的外层 build-release/打包脚本。
+
+目前：单补丁已在干净官方归档上通过 patch -p1；官方 25.12.6 的正常 make
+已完成工具链、内核、原生 U-Boot、软件包和完整磁盘构建。最终镜像通过
+独立软件验证：启动区及 FIT/DTB 匹配本次构建，实际 Linux 6.12.112 普通
+内核与其 ELF 逐字节绑定且只含最小 cpio，最终 ext4 只读 fsck 通过，
+已安装系统版本和蓝牙等关键文件与本次 root-sunxi 一致。
+
+同一正式版镜像已在第二块 T153MX OmniGate 完成 FES 写入校验、首次 Linux
+启动前全部 598016 扇区读回 SHA256 一致、源码 DDR/U-Boot 启动、eMMC ext4
+可写根分区及 CPU0–3 在线；四个固定核心并发 SHA256 短测通过。恢复用户
+配置后软件重启通过。Wi-Fi AP 启动、蓝牙 HCI 和本机 LuCI 登录页已检查，
+外部 LAN 本轮未重测，WAN 仍降到100Mbps，4G未接入；长期稳定性未验证。
+本轮硬件证据：docs/records/2026-11-05-native-hardware/README.txt。
+软件证据：docs/records/2026-11-05-native-image/；官方来源、feeds、配置和
+补丁检查：docs/records/2026-11-05-native-v25.12.6/。软件证据仍独立记录
+hardware_verified=false；本次真实板验另存，不能将软件检查写成实机检查。
+本轮预览发布（含镜像、独立FES、构建与烧录文档）：
+  https://github.com/dshanpi/t153-openwrt/releases/tag/v25.12.6-t153-preview.1
+
+一、固定来源与准备文件
+----------------------
+官方版本：OpenWrt v25.12.6
+源码 commit：64900e756efa667774214f9c6b17c113222e01f7
+annotated tag object：22dd0e28678a6cd6fbadea2d5aaded3a805ab8a4
+官方版本字符串：25.12.6 / r33311-981c978eff
+Linux：6.12.112；mac80211 backports：6.18.55-r2
+
+官方源码归档：
+  https://codeload.github.com/openwrt/openwrt/tar.gz/refs/tags/v25.12.6
+本次下载实算 SHA256：
+  f5ff8258572a82df960470608ceb025655a42bc94b8e7e2a77a4373db46263d9
+该值是本项目对本次官方来源归档的实算摘要，不是上游独立发布的摘要文件。
+
+原生单补丁保存在本仓库 patches/openwrt-25.12.6-t153.patch：
+  https://raw.githubusercontent.com/dshanpi/t153-openwrt/main/patches/openwrt-25.12.6-t153.patch
+本次最终补丁为 474128 字节，SHA256：
+  338dc6fbc70663a73416e984f1c148b0d5bfd02793294ef13160efd353889690
+补丁必须与本版本匹配；后续修订应同时更新校验值与记录。不使用旧快照
+6c57f7cd04/6.12.113 的代码或镜像冒充 v25.12.6 正式版。
+
+烧录时另取以下两个文件，不把它们放进 OpenWrt 构建输入：
+  t153-fes-ddr933-ram-loader.img
+  t153-fes-ddr933-ram-loader.manifest.json
+现有 loader 发布入口：
+  https://github.com/dshanpi/t153-openwrt/releases/tag/software-20261104
+loader 固定为 1154048 字节，SHA256：
+  0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873
+
+二、Linux 主机与单补丁安装
+--------------------------
+在 Linux 构建机的独立目录中操作，使用普通用户执行编译。下例适用于
+Ubuntu 24.04，不需要在 Windows 保存源码工程副本。依赖安装：
+
+  sudo apt-get update
+  sudo apt-get install build-essential clang flex bison gawk gcc-multilib \
+    g++-multilib gettext git libncurses-dev libssl-dev libelf-dev \
+    python3 python3-dev python3-setuptools python3-pyelftools \
+    rsync swig unzip zlib1g-dev file wget curl ca-certificates patch \
+    xz-utils bzip2 zstd time pkg-config
+
+创建不位于其它 Git 仓库内部的工作目录。以下命令同时下载官方源码与
+本仓库单补丁，示例使用 ~/t153-build：
+
+  mkdir -p ~/t153-build
+  cd ~/t153-build
+  curl --fail --location --output openwrt-v25.12.6.tar.gz \
+    https://codeload.github.com/openwrt/openwrt/tar.gz/refs/tags/v25.12.6
+  printf '%s\n' \
+    'f5ff8258572a82df960470608ceb025655a42bc94b8e7e2a77a4373db46263d9  openwrt-v25.12.6.tar.gz' \
+    | sha256sum -c -
+  curl --fail --location --output openwrt-25.12.6-t153.patch \
+    https://raw.githubusercontent.com/dshanpi/t153-openwrt/main/patches/openwrt-25.12.6-t153.patch
+  printf '%s\n' \
+    '338dc6fbc70663a73416e984f1c148b0d5bfd02793294ef13160efd353889690  openwrt-25.12.6-t153.patch' | sha256sum -c -
+  tar -xzf openwrt-v25.12.6.tar.gz
+  cd openwrt-25.12.6
+  patch -p1 < ../openwrt-25.12.6-t153.patch
+
+补丁应完整应用且无 .rej。若失败，先核对归档版本与补丁，不用强制忽略错误。
+本流程直接应用发布补丁；scripts/apply-native.sh 属于适配仓库维护者的
+补丁导出工具，不是普通用户下载官方源码后的构建步骤。
+
+补丁自带 version/version.date，使无 .git 的官方归档仍具有正确 release
+标识与时间戳。不要删除它们，也不要把归档复制到另一个 Git 仓库里面后
+让构建系统误用父仓库的版本历史。解压时保留归档自身文件时间。
+
+三、正常 feeds、menuconfig、make
+--------------------------------
+在打好补丁的 openwrt-25.12.6 目录内执行：
+
+  ./scripts/feeds update -a
+  ./scripts/feeds install -a
+  make menuconfig
+
+保留 v25.12.6 自带 feeds.conf.default 的固定提交，不改成 master 或浮动
+openwrt-25.12 分支。在 menuconfig 选择下面三个项目：
+
+  Target System   -> Allwinner ARM SoCs
+  Subtarget       -> Allwinner A20/A3x/H3/R40（cortexa7）
+  Target Profile  -> DshanPI T153MX OmniGate four-core Cortex-A7 (experimental)
+
+Subtarget 的历史菜单标题未列出 T153，cortexa7 仍是正确项。
+保存配置后即可正常编译：
+
+  make defconfig
+  make -j"$(nproc)"
+
+资源较少的构建机可改为 make -j4。若出现错误，用 make -j1 V=s 查看具体
+失败位置；不需要切回本仓库的历史构建 wrapper。
+
+选择本 profile 后，默认根文件系统为 ext4、根分区为 256 MiB，生成完整
+raw.img.gz。Target Images 中可调整 Root filesystem partition size；必须
+保留 ext4。T153 的启动 FAT 固定为 32 MiB。menuconfig 增删应用包的选择会
+正常保留；再次 make 不应被外层脚本重置成固定 .config。
+
+默认随板软件包括：
+- LuCI/HTTPS、ethtool、ip-full；
+- USB host/storage、CAN 与 CAN 工具；
+- EC20/ML302 的 QMI、MBIM、USB 网卡和串口/PPP 软件及 LuCI 协议界面；
+- AIC8800D80 SDIO Wi-Fi、UART 蓝牙、BlueZ 与初始化服务。
+
+无线、蓝牙、4G 包被选中不代表该版每个功能都已实机通过。删减这些包后，
+相应功能自然不再提供。U-Boot 是构建依赖，由板卡 profile 自动选择，不是
+安装进 rootfs 的 APK；无需手动把 u-boot 包加入 rootfs 软件列表。
+
+四、构建产物与启动架构
+----------------------
+完整盘位于：
+  bin/targets/sunxi/cortexa7/*-dshanpi_t153mx-omnigate-ext4-raw.img.gz
+可同时得到 initramfs 救援内核、manifest、config.buildinfo、feeds.buildinfo、
+version.buildinfo、profiles.json 和 sha256sums，具体以本次配置生成内容为准。
+用于 FES 的是解压后的完整 raw.img，不是 initramfs、rootfs、FIT 或单独 SPL。
+
+  ls -lh bin/targets/sunxi/cortexa7/*ext4-raw.img.gz
+  cd bin/targets/sunxi/cortexa7
+  sha256sum -c sha256sums --ignore-missing
+
+确认目录中只有本次目标文件后，以实际文件名代替以下占位符：
+
+  gzip -dk <本次完整文件名-ext4-raw.img.gz>
+  sha256sum <本次完整文件名-ext4-raw.img>
+  stat -c %s <本次完整文件名-ext4-raw.img>
+
+保存 raw SHA256 和字节数。默认根分区 256 MiB 时整盘恰为 306184192 字节
+（292 MiB），598016 个 512 字节扇区。自定义根分区 R MiB 时整盘为
+(R + 36) MiB，后续烧录完成字节数和读回范围须使用这个实际长度。
+
+本次默认配置软件验证产物：
+  openwrt-sunxi-cortexa7-dshanpi_t153mx-omnigate-ext4-raw.img.gz
+  16560656 字节，SHA256：
+    aafef7198f0c5f68005471c30132b4a57334ae4d7e08c9ea5fcf9df5a68482ed
+  解压 raw 为 306184192 字节，SHA256：
+    cd57d6970329f4a9255e7020ea3f7dfbc2c13040f7154563cbe43ba0d431a32e
+文件名前缀不含版本号并不表示 snapshot；镜像内已实际核对
+OpenWrt 25.12.6 / r33311-981c978eff 与 Linux 6.12.112。
+这些值只绑定本次默认配置，自定义配置或源码后应重新生成校验记录。
+
+ext4 元数据规范化与可重复性：
+原始 make_ext4fs root.ext4 存在 inode 位图尾部填充未置位，原生 T153
+镜像步骤现在自动复制到私有临时文件，再使用 OpenWrt staging 的 e2fsck
+-pf（只接受 0/1）规范化，之后 -fn 必须返回 0；原始 build/root.ext4 不改。
+E2FSCK_TIME 与 E2FSPROGS_FAKE_TIME 均固定为 SOURCE_DATE_EPOCH，避免
+检查时间引入每次不同的镜像。此操作属于正常 make 的 image pipeline，
+不要求用户另跑外层打包脚本，也不修改其它板卡的镜像流程。
+
+独立验证器另建临时副本进行规范化并比较完整 SHA；同时逐字节审计差异。
+本次仅 3087 字节改变：位图尾部 3072、时间 8、unused inode 计数 3、
+group descriptor 校验 4；6313/8192 的 unused 计数由实际位图独立复算。
+文件数据和 inode 表全部未改，关键文件还与 root-sunxi 直接比较。
+原始 rootfs SHA256：
+  15c082651fb49ac140a2dae3d9126d5934f6757b58af4f401f40221907bde369
+最终 root 分区 SHA256：
+  1605ab1ce5ef6682993977721a86ae5a72d64bae191f8a92713a187f76400a6c
+因此不把最终分区宣称为“原始 rootfs 逐字节未变”。稍后复用同次编译输入
+再次执行原生镜像步骤，raw 与上面产物逐字节一致；该重复验证未重新编译
+整套工具链/内核，也未操作板卡。详见软件证据中的 validation.json、
+repeat-validation.json 与 repeated-image-generation.log。
+
+磁盘布局：
+  LBA 0            MBR，磁盘 ID 15302512
+  8 KiB            eGON SPL，包含源码 DDR4 初始化与四核启动准备
+  128 KiB          主线 U-Boot proper
+  4 MiB / 32 MiB   FAT16，包含 boot.scr 与 openwrt-t153.itb
+  36 MiB / R MiB   ext4 根分区，PARTUUID=15302512-02
+
+构建链：
+  官方 OpenWrt v25.12.6 + T153 单补丁
+    -> OpenWrt 工具链
+    -> 原生 uboot-t153 包（下载固定 U-Boot 2026.07 + T153 源码）
+    -> Linux 6.12.112 + T153 驱动/设备树 + 所选 OpenWrt 软件包
+    -> 普通内核 gzip FIT + boot.scr + FAT16 + ext4 + MBR/SPL/U-Boot
+    -> bin/targets/sunxi/cortexa7/*ext4-raw.img.gz
+
+上电启动链：
+  BootROM -> 源码 SPL/DDR4 -> 主线 U-Boot -> FAT boot.scr
+          -> 普通 FIT 内核 -> eMMC ext4 OpenWrt
+
+U-Boot 从所选 SD/eMMC 的第 1 分区读取 boot.scr，并提供 bootdev；启动脚本
+使用 PARTUUID 找 Linux 根分区，不依赖 Linux MMC 枚举编号。FIT 中 ARM
+zImage 的 load/entry 均为 0x48008000，U-Boot 的 FIT 输入缓冲区为
+0x50000000。持久镜像使用普通内核，不把救援 initramfs 当作磁盘内核。
+U-Boot ft_board_setup 修正传给内核的内存与 PSCI 信息。
+
+本 profile 初始化物理 1 GiB DDR4，保留此前验证使用的 384 MiB Linux/
+U-Boot 可见窗口；四个 Cortex-A7 通过源码 PSCI 0.1 CPU_ON 上线。
+“四核”不等于“Linux 已使用全部 1 GiB”。CPU_OFF/hotplug、suspend、多核
+kexec 尚不在已实现的 monitor 接口范围内，长期多核/DDR稳定性仍须验证。
+
+源码边界：持久 DDR/SPL/U-Boot、内核和 AIC 主机驱动由源码构建。T153 板级
+支持仍是本项目补丁，并非已经合入所有上游；AIC 主机驱动为外部 GPL 驱动，
+不是 Linux 上游驱动。AIC radio 的 .bin 是设备固件二进制，保留来源/许可
+说明。下述临时 FES loader 同样含厂商二进制，不属于“全源码 DDR”证明。
+
+五、独立 FES 引导与 LYNX/OpenixCLI 烧录
+--------------------------------------
+本流程沿用已验证的 LYNX MCP -> OpenixCLI raw command 路径，不猜测独立
+OpenixCLI 命令行参数。MCP 工具 schema 和完成条件见 host-tools/README.txt、
+host-tools/mcp-fes-workflow.example.json；这些文件在适配仓库中，普通
+OpenWrt 单补丁构建本身不依赖它们。
+
+输入是两个独立文件：
+1. 本次 make 生成并解压的完整 raw.img，包含同次构建的全部持久启动区。
+2. t153-fes-ddr933-ram-loader.img，固定大小/SHA 见第一节，仅运行于 RAM。
+
+不需再把 FES 拼到 raw.img，不向 eMMC 单独写 FES，不用 -smp-fel.bin
+代替 FES loader。loader 中的 FES1/DDR/U-Boot 为临时厂商二进制；正常
+启动不再需要它。提取/组包源代码及重现步骤见 docs/FES-REPRODUCE.txt。
+旧 1066 MHz loader 与 physical0 loader 不用于本流程。
+
+操作步骤：
+
+1. 保留需要的旧系统数据，移除带相同 PARTUUID 的 SD 卡。整盘操作会覆盖
+   eMMC 前 R+36 MiB 及分区表，不保留原厂 A/B，也不自动扩容剩余 eMMC。
+   使用本板硬件 FEL 入口，使 USB 数据口连接烧录主机并进入 BootROM FEL。
+
+2. 通过正常 MCP 客户端连接实际 LYNX 服务并完成 initialize/initialized。
+   本项目会话使用的地址为 http://127.0.0.1:8771/mcp；其它电脑应使用其
+   实际服务地址。依次调用当前工具：
+     lynx_workbench_status {}
+     lynx_flash_capabilities {}
+     lynx_scan_flash_devices {}
+   核实绑定的是目标 T153，实测 SoC=0x1922，且 raw/command/verify/reboot
+   能力可用。不要根据旧通道显示名称判断芯片；未扫描到 FEL 时不开始烧录。
+
+3. 关闭其它串口终端；MCP 已开串口时，先用 lynx_serial_close 关闭自己
+   的句柄。烧录预检独占串口读取 eMMC 几何信息，任务完成前不要另开读者。
+   文件在 LYNX 主机时使用已校验的绝对路径；文件在 Linux 构建服务器时：
+     lynx_download_firmware {"remotePath":"<933MHz loader 的远端绝对路径>"}
+     lynx_download_firmware {"remotePath":"<本次解压 raw.img 的远端绝对路径>"}
+   每个下载用 lynx_workbench_task_status {"taskId":"<实际返回的 ID>"}
+   轮询到 success。核对大小/SHA，保存实际 localPath，不猜缓存目录。
+   多项目服务按实际绑定填写 projectId。检查 loader：
+     lynx_inspect_firmware {"image_path":"<实际 FES localPath>"}
+   应为六个 RAM-only 角色，无要持久写入的厂商 kernel/rootfs。
+
+4. 调用 lynx_start_flash，arguments：
+   {
+     "firmwarePath": "<本次 raw.img 在 LYNX 主机上的绝对路径>",
+     "confirmDestructive": true,
+     "options": {
+       "mode": "command",
+       "verify": true,
+       "postFlashAction": "reboot",
+       "vendorOptions": {
+         "raw": true,
+         "loaderPath": "<933MHz FES loader 在 LYNX 主机上的绝对路径>"
+       }
+     }
+   }
+
+   保留 loader 原厂 +40960（0xa000）扇区映射，只由匹配的 OpenixCLI raw
+   后端执行补偿。不要在镜像、loader 或用户参数中再做 physical0 修正。
+   历史错误中的 0xffffxxxx 越界来自双重抵消；依据见
+   docs/FES-RAW-MAPPING-CORRECTION.txt。不能只根据传输 ACK 推断落盘正确。
+
+5. 轮询同一个 flash taskId，不重复 start_flash。必须同时满足：
+     state=success
+     exitCode=0
+     verifyState=success
+     writtenBytes=committedBytes=<本次 raw.img 实际字节数>
+     postFlashState=success
+   默认长度为 306184192。失败或取消时保存完整状态并停止本轮，不自动
+   重刷。transferredBytes 或进度 100% 不能代替上述校验。
+
+六、启动、四核与整盘读回
+----------------------
+任务完成并释放串口后，以 UART0、115200、8N1 采集源码 SPL/U-Boot/Linux
+启动日志。FES post-reboot 是软件重启，不是物理断电冷启动测试。
+
+默认 292 MiB 镜像的独立 SHA 读回沿用已验证命令：在主线 U-Boot 倒计时
+中断，确认 mmc 1 为本板 eMMC user area，然后执行：
+
+  mmc dev 1
+  if mmc read 48000000 0 92000; then hash sha256 48000000 12400000; fi
+
+92000 是 598016 扇区，12400000 是 292 MiB，均为十六进制。SHA 必须与
+本次 raw.img 相同；FES 加法校验不能代替整盘 SHA256。
+该命令只适用于默认长度。自定义根分区后不能照搬读回范围，也不能未经
+RAM/保留区核对就在原地址读入更大镜像；需另行安排正确的分段读回验证。
+
+完成后执行 run bootcmd。进入 Linux 后保留：
+
+  cat /etc/openwrt_release
+  uname -r
+  cat /sys/devices/system/cpu/online
+  grep -c '^processor' /proc/cpuinfo
+  cat /proc/mounts
+  ubus call system board
+
+本轮实测为 OpenWrt 25.12.6 / r33311-981c978eff / Linux 6.12.112，CPU
+online 为 0-3，/dev/root 为 ext4 rw。已在 tmpfs 创建 16 MiB 零文件，
+同时运行四个分别以 taskset -c 0、1、2、3 固定核心的 SHA256 进程，四份
+结果均为：
+  080acf35a507ac9849cfcba47dc2ad83e01b75663a516279c8b9d243b719643e
+这是逐核并发短测，不涵盖共享写一致性、长期多核/DDR负载或存储压力。
+
+本轮还校验用户配置备份的 SHA 后，通过 sysupgrade -r 恢复配置并正常
+软件重启；私有备份未归档或发布。这里的 -r 仅恢复配置，不是固件升级。
+物理断电冷启动尚未测试；不能将本次 FES post-reboot 或配置恢复后的
+软件重启当作冷启动验证。逐项结果和日志见
+  docs/records/2026-11-05-native-hardware/README.txt
+旧版本四核记录另见 docs/T153-SMP.txt 及其证据目录。
+
+以前四核 SPL 已验证的软件回 FEL 路径可在启动兼容系统后使用：
+  lynx_allwinner_enter_fel {
+    "method":"serial_shell_reboot_efex", "handle":"<实际串口句柄>",
+    "confirmDestructive":true, "preserveSerialMonitor":true
+  }
+必须重新确认 state=fel-device-online、felOnline=true 及 USB FEL 枚举，
+并记录 SPL 的 RTC EFEX request cleared; entering BootROM FEL。随后关闭
+自己的串口句柄，再执行 FES 流程。新正式版尚需独立验证这条路径；失败时
+不假定板卡已在 FEL，不要求用户手写寄存器绕过工具检查。
+
+七、默认网络与已知问题
+----------------------
+LAN 是 eth0，地址 192.168.153.1/24；WAN 是 eth1，默认 DHCP 客户端。
+电脑接 LAN，使用 http://192.168.153.1/ 或 https://192.168.153.1/ 进入
+LuCI；初始化管理员密码。默认防火墙禁止从 WAN 管理，WAN 取得的地址不能
+当成默认 LuCI 入口。用户已选择保留此 LAN 管理策略；补丁不默认开放 WAN。
+
+WAN 仍可能掉线、由 1 Gbps 降到 100 Mbps，原因尚未解决。PHY 复位释放
+150 ms 修正了已复现的早期能力读取异常，但未根治稳定性；RGMII tap、ALDPS
+和 EEE 对照也不能据此宣称修复。用户已确认原厂 Tina 在同板、同网线、
+同对端与同 EC20 条件稳定，不能未经证据把问题归因于线材或 EC20/供电。
+此外有一次已确认非人工的意外重启，根因未知，不归咎于已证实的 SMP 问题。
+详细观察、撤回的早期推断与日志见 docs/WAN-RTL8211F-RESET.txt。
+
+本轮恢复用户配置后的外设检查与限制：
+- Wi-Fi AP 已在信道40 / 5200MHz / 80MHz启动，未测客户端关联或吞吐。
+- 蓝牙 hci0 UP RUNNING，HCI5.4、RX/TX errors=0，未测配对或音频。
+- LuCI 在 127.0.0.1 返回 HTTP403、x-luci-login-required: yes 及用户名/
+  密码表单，这是正常未登录页面；不表示外部网络访问已通过。
+- eth0 carrier=0，Windows ASIX 不在当前 Get-NetAdapter 清单；本轮未重测
+  外部 LAN，不据此推断物理断线原因。旧 r2 snapshot 的外部 LAN 成功
+  记录单独保留于 docs/records/2026-11-05-newboard/，不替代本轮验收。
+- WAN 再次从1Gbps降到100Mbps。恢复的用户专用 WAN 管理例外只在该板上，
+  未加入发布镜像默认配置；发布默认仍拒绝 WAN 管理。
+- option/qmi_wwan/cdc_mbim 驱动已加载，但本轮未接入 modem；EC20/ML302
+  拨号与流量尚未测试。
+
+本入口未启用 T153 的 sysupgrade/LuCI 固件升级；升级仍使用完整磁盘 FES
+流程，需自行保存配置。SD 启动、物理断电循环、长期多核/DDR/存储/网络压力
+以及上述未测功能，应分别绑定实际镜像 SHA 验收。此前一次 FES reconnect
+在写入 eMMC 前失败，传输0字节，其状态与本轮成功记录一起归档。
+
+八、保存一轮可复现记录
+----------------------
+记录源码归档 SHA、patch SHA、固定 feeds、完整 .config、构建日志、编译
+结果退出码及 bin 目录的 buildinfo/manifest/profiles.json/sha256sums。
+另外保存解压 raw 的 SHA/字节数、loader SHA、MCP 最终状态、U-Boot 全盘
+读回 SHA、完整启动日志、CPU/根分区/网络结果与实测限制。
+
+编译通过、FES 写入通过、全盘读回通过、Linux 启动通过和长期稳定通过是
+不同结论。发布时逐项更新本文件开头状态，不能用历史版本测试替代新产物。

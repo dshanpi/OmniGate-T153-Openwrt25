@@ -1,0 +1,632 @@
+[   40.486855] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+
+ 
+
+
+
+
+
+BusyBox v1.37.0 (2026-11-04 01:33:29 UTC) built-in shell (ash)
+
+
+
+  _______                     ________        __
+
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+
+ |_______||   __|_____|__|__||________||__|  |____|
+
+          |__| W I R E L E S S   F R E E D O M
+
+ -----------------------------------------------------
+
+ OpenWrt 25.12-SNAPSHOT, t153-6c57f7cd04 Dave's Guitar
+
+ -----------------------------------------------------
+
+
+
+ === WARNING! =====================================
+
+ There is no root password defined on this device!
+
+ Use the "passwd" command to set up a new password
+
+ in order to prevent unauthorized SSH logins.
+
+ --------------------------------------------------
+
+
+
+
+
+ OpenWrt recently switched to the "apk" package manager!
+
+
+
+ OPKG Command           APK Equivalent      Description
+
+ ------------------------------------------------------------------
+
+ opkg install <pkg>     apk add <pkg>       Install a package
+
+ opkg remove <pkg>      apk del <pkg>       Remove a package
+
+ opkg upgrade           apk upgrade         Upgrade all packages
+
+ opkg files <pkg>       apk info -L <pkg>   List package contents
+
+ opkg list-installed    apk info            List installed packages
+
+ opkg update            apk update          Update package lists
+
+ opkg search <pkg>      apk search <pkg>    Search for packages
+
+ ------------------------------------------------------------------
+
+
+
+For more information visit:
+
+https://openwrt.org/docs/guide-user/additional-software/opkg-to-apk-cheatsheet
+
+
+
+root@OpenWrt:~# [   56.084069] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+
+[   59.206872] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+
+hciconfig -a; wget -q -O /tmp/t153-tty-status http://192.168.1.2
+
+
+28:8878/t153-tty-status; chmod +x /tmp/t153-tty-status; /tmp/t153-tty-status /de
+
+
+v/ttyS7; logread | grep -Ei "aic8800d80-bt|Bluetooth: hci"; cat /sys/devices/sys
+
+
+tem/cpu/online; cat /sys/kernel/debug/mmc2/ios | head -3
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 1021:9  SCO MTU: 255:4
+
+	UP RUNNING 
+
+	RX bytes:759 acl:0 sco:0 events:49 errors:0
+
+	TX bytes:2184 acl:0 sco:0 commands:49 errors:0
+
+	Features: 0xbf 0x2e 0x4d 0xfe 0xd8 0x3f 0x7b 0x87
+
+	Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV3 
+
+	Link policy: RSWITCH SNIFF 
+
+	Link mode: PERIPHERAL ACCEPT 
+
+	Name: 'BlueZ 5.83'
+
+	Class: 0x000000
+
+	Service Classes: Unspecified
+
+	Device Class: Miscellaneous, 
+
+	HCI Version: 5.4 (0xd)  Revision: 0xb
+
+	LMP Version: 5.4 (0xd)  Subversion: 0xb
+
+	Manufacturer: not assigned (2875)
+
+
+
+[   61.294125] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+
+[   64.406870] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+
+{"device":"/dev/ttyS7","operation":"standard-tty-ioctl-snapshot","open":{"ok":true},"serial":{"ok":true,"type":4,"line":7,"irq":330,"flags":956301312,"xmit_fifo_size":64,"baud_base":1500000,"custom_divisor":0,"io_type":3},"icount":{"ok":true,"cts":26,"dsr":0,"rng":0,"dcd":0,"rx":1081,"tx":2333,"frame":0,"overrun":0,"parity":0,"brk":0,"buf_overrun":0},"termios":{"ok":true,"cflag":2147491002,"iflag":0,"ispeed":1500000,"ospeed":1500000,"rtscts":true,"clocal":true},"modem":{"ok":true,"bits":16422,"cts":true,"rts":true,"dtr":true},"line_discipline":{"ok":true,"value":15},"tx_queued":{"ok":false,"errno":25,"error":"Not a tty"}}
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.012626] Bluetooth: HCI device and connection manager initialized
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.019145] Bluetooth: HCI socket layer initialized
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.094305] Bluetooth: HCI UART driver ver 2.3
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.098865] Bluetooth: HCI UART protocol H4 registered
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.104175] Bluetooth: HCI UART protocol BCSP registered
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.195297] rfkill_gpio bluetooth-rfkill: t153-aic8800d80-bt device registered.
+
+Thu Jan  1 00:00:33 1970 daemon.err aic8800d80-bt[3786]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:00:33 1970 daemon.err aic8800d80-bt[3786]: AIC8800D80 attached as hci0 at 1500000 baud, address <device-address>; low power disabled
+
+0-3
+
+clock:		25000000 Hz
+
+actual clock:	25000000 Hz
+
+vdd:		21 (3.3 ~ 3.4 V)
+
+root@OpenWrt:~# [   82.084065] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+
+i=0; p=; while [ $i -lt 241 ]; do p="$p 00"; i=$((i+1)); done; f
+
+
+or n in 1 2 3 4 5 6 7 8 9 10; do hcitool -i hci0 cmd 0x03 0x0052 $p > /tmp/eir-t
+
+
+est-$n.log 2>&1; echo EIR_$n=$?; tail -1 /tmp/eir-test-$n.log; done; hciconfig h
+
+
+ci0
+
+EIR_1=0
+
+  05 52 0C 00 
+
+EIR_2=0
+
+  05 52 0C 00 
+
+EIR_3=0
+
+  05 52 0C 00 
+
+EIR_4=0
+
+  05 52 0C 00 
+
+EIR_5=0
+
+  05 52 0C 00 
+
+EIR_6=0
+
+  05 52 0C 00 
+
+EIR_7=0
+
+  05 52 0C 00 
+
+EIR_8=0
+
+  05 52 0C 00 
+
+EIR_9=0
+
+  05 52 0C 00 
+
+EIR_10=0
+
+  05 52 0C 00 
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 1021:9  SCO MTU: 255:4
+
+	UP RUNNING 
+
+	RX bytes:1109 acl:0 sco:0 events:62 errors:0
+
+	TX bytes:4646 acl:0 sco:0 commands:62 errors:0
+
+
+
+root@OpenWrt:~# [   97.684872] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+
+[   97.699323] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+
+timeout 12 btmgmt find > /tmp/bt-discovery.txt 2>&1; echo BT_FIN
+
+
+D_EXIT=$?; grep -c "dev_found" /tmp/bt-discovery.txt; head -3 /tmp/bt-discovery.
+
+
+txt; btmgmt stop-find; hciconfig hci0
+
+BT_FIND_EXIT=127
+
+0
+
+-ash: timeout: not found
+
+Unable to send stop_discovery cmd
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 1021:9  SCO MTU: 255:4
+
+	UP RUNNING 
+
+	RX bytes:1109 acl:0 sco:0 events:62 errors:0
+
+	TX bytes:4646 acl:0 sco:0 commands:62 errors:0
+
+
+
+root@OpenWrt:~# btmgmt -i 0 find > /tmp/bt-discovery.txt 2>&1 & btp=$!; sleep 12
+
+
+; kill -INT $btp 2>/dev/null; wait $btp; echo BT_DISCOVERY_EXIT=$?; grep -c dev_
+
+
+found /tmp/bt-discovery.txt; grep -Ei "discovery|discovering|failed|error" /tmp/
+
+
+bt-discovery.txt; hciconfig hci0
+
+BT_DISCOVERY_EXIT=1
+
+0
+
+Unable to send start_discovery cmd
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 1021:9  SCO MTU: 255:4
+
+	UP RUNNING 
+
+	RX bytes:1109 acl:0 sco:0 events:62 errors:0
+
+	TX bytes:4646 acl:0 sco:0 commands:62 errors:0
+
+
+
+[1]+  Done(1)                    btmgmt -i 0 find 1>/tmp/bt-discovery.txt 2>&1
+
+root@OpenWrt:~# btmgmt --help | head -18; btmgmt info; which bluetoothctl; bluet
+
+
+oothctl list; hcitool -i hci0 lescan --duplicates > /tmp/bt-le-scan.txt 2>&1 & l
+
+
+p=$!; sleep 10; kill -INT $lp 2>/dev/null; wait $lp; echo LE_SCAN_EXIT=$?; wc -l
+
+
+ /tmp/bt-le-scan.txt; grep -Ei "failed|error|not available|disabled|scanning" /t
+
+
+mp/bt-le-scan.txt
+
+btmgmt ver 5.83
+
+Usage:
+
+	btmgmt [--options] [commands]
+
+Options:
+
+	--index 	Specify adapter index
+
+
+
+	--monitor 	Enable monitor output
+
+	--timeout 	Timeout in seconds for non-interactive mode
+
+	--version 	Display version
+
+	--init-script 	Init script file
+
+	--help 		Display help
+
+Commands:
+
+	select		Select a different index
+
+	revision	Get the MGMT Revision
+
+	commands	List supported commands
+
+	config		Show configuration info
+
+	info		Show controller info
+
+	extinfo		Show extended controller info
+
+Unable to send index_list cmd
+
+/usr/bin/bluetoothctl
+
+Controller <device-address> BlueZ 5.83 [default]
+
+[NEW] Media /org/bluez/hci0 
+
+	SupportedUUIDs: 0000110a-0000-1000-8000-00805f9b34fb
+
+	SupportedUUIDs: 0000110b-0000-1000-8000-00805f9b34fb
+
+LE_SCAN_EXIT=0
+
+114 /tmp/bt-le-scan.txt
+
+[1]+  Done                       hcitool -i hci0 lescan --duplicates 1>/tmp/bt-le-scan.txt 2>&1
+
+root@OpenWrt:~# bluetoothctl --timeout 10 scan on > /tmp/bt-bluez-scan.txt 2>&1;
+
+
+ echo BLUEZ_SCAN_EXIT=$?; bluetoothctl scan off; grep -c "Device " /tmp/bt-bluez
+
+
+-scan.txt; grep -Ei "failed|error|not available|discovering|discovery" /tmp/bt-b
+
+
+luez-scan.txt; hciconfig hci0
+
+[  233.099570] Bluetooth: hci0: Opcode 0x2041 failed: -16
+
+BLUEZ_SCAN_EXIT=0
+
+[NEW] Media /org/bluez/hci0 
+
+	SupportedUUIDs: 0000110a-0000-1000-8000-00805f9b34fb
+
+	SupportedUUIDs: 0000110b-0000-1000-8000-00805f9b34fb
+
+Failed to stop discovery: org.bluez.Error.Failed
+
+0
+
+hci0 type 0 discovering off
+
+SetDiscoveryFilter success
+
+Failed to start discovery: org.bluez.Error.InProgress
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 1021:9  SCO MTU: 255:4
+
+	UP RUNNING 
+
+	RX bytes:5555 acl:0 sco:0 events:180 errors:0
+
+	TX bytes:4696 acl:0 sco:0 commands:67 errors:0
+
+
+
+root@OpenWrt:~# hciconfig hci0 reset; echo HCI_RESET_EXIT=$?; bluetoothctl --tim
+
+
+eout 10 scan on > /tmp/bt-bluez-scan2.txt 2>&1; echo BLUEZ_SCAN2_EXIT=$?; blueto
+
+
+othctl scan off; grep -c "Device " /tmp/bt-bluez-scan2.txt; grep -Ei "failed|err
+
+
+or|not available|discovering|discovery" /tmp/bt-bluez-scan2.txt; hciconfig hci0
+
+HCI_RESET_EXIT=0
+
+BLUEZ_SCAN2_EXIT=0
+
+[NEW] Media /org/bluez/hci0 
+
+	SupportedUUIDs: 0000110a-0000-1000-8000-00805f9b34fb
+
+	SupportedUUIDs: 0000110b-0000-1000-8000-00805f9b34fb
+
+Failed to stop discovery: org.bluez.Error.Failed
+
+1
+
+hci0 type 7 discovering on
+
+SetDiscoveryFilter success
+
+Discovery started
+
+[CHG] Controller <device-address> Discovering: yes
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 1021:9  SCO MTU: 255:4
+
+	UP RUNNING 
+
+	RX bytes:6594 acl:0 sco:0 events:238 errors:0
+
+	TX bytes:5467 acl:0 sco:0 commands:117 errors:0
+
+
+
+root@OpenWrt:~# wget -q -O /tmp/phytool http://192.168.1.228:8878/phytool; sha25
+
+
+6sum /tmp/phytool; chmod +x /tmp/phytool; ethtool --show-eee eth1; /tmp/phytool 
+
+
+read eth1/1/0x0d; /tmp/phytool read eth1/1/1; /tmp/phytool read eth1/1/1; /tmp/p
+
+
+hytool read eth1/1/9; /tmp/phytool read eth1/1/10; bluetoothctl show | grep -E "
+
+
+Powered:|Discovering:"
+
+a09aea85ddb768d23b41c51787ea76ec2b227bb31288e38e94bcd2faa3e8bb8d  /tmp/phytool
+
+EEE Settings for eth1:
+
+	EEE status: disabled
+
+	Tx LPI: disabled
+
+	Supported EEE link modes:  100baseT/Full 
+
+	                           1000baseT/Full 
+
+	Advertised EEE link modes:  100baseT/Full 
+
+	                            1000baseT/Full 
+
+	Link partner advertised EEE link modes:  Not reported
+
+0x4007
+
+0x79ad
+
+0x79ad
+
+0x0000
+
+0x0800
+
+	Powered: yes
+
+	Discovering: no
+
+root@OpenWrt:~# [  380.564077] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+
+[  382.646913] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+
+uptime; ethtool --show-eee eth1; ethtool eth1 | grep -E "Speed:|
+
+
+Duplex:|Link detected:"; cat /sys/class/net/eth1/carrier_changes; dmesg | grep -
+
+
+E "eth1: Link|Downshift"; iw phy phy0 interface add testwifi type managed; ip li
+
+
+nk set testwifi up; iw dev testwifi scan > /tmp/uartfix-wifi.txt 2>/tmp/uartfix-
+
+
+wifi.err; echo WIFI_SCAN_EXIT=$?; grep -c "^BSS " /tmp/uartfix-wifi.txt; cat /tm
+
+
+p/uartfix-wifi.err; iw dev testwifi del
+
+ 00:08:36 up 8 min,  load average: 0.00, 0.09, 0.07
+
+EEE Settings for eth1:
+
+	EEE status: disabled
+
+	Tx LPI: disabled
+
+	Supported EEE link modes:  100baseT/Full 
+
+	                           1000baseT/Full 
+
+	Advertised EEE link modes:  Not reported
+
+	Link partner advertised EEE link modes:  Not reported
+
+	Speed: 1000Mb/s
+
+	Duplex: Full
+
+	Link detected: yes
+
+9
+
+[   40.486855] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+
+[   56.084069] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+
+[   59.206872] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+
+[   61.294125] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+
+[   64.406870] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+
+[   82.084065] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+
+[   97.684872] RTL[  517.041449] get_txpwr_max:txpwr_max:18 
+
+
+8211F Gigabit Et[  517.046395] get_txpwr_max:txpwr_max:18 
+
+
+hernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+
+[   97.699323] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+
+[  380.564077] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+
+[  382.646913] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+
+WIFI_SCAN_EXIT=0
+
+8
+
+[  518.819652] aicwf_sdio mmc2:390b:1 testwifi: CLOSE
+
+[  518.825819] ieee80211 phy0: HT supp 1, VHT supp 1, HE supp 1
+
+[  518.832566] aicwf_sdio mmc2:390b:1 testwifi: Remove Interface
+
+[  518.838438] get_txpwr_max:txpwr_max:18 
+
+
+root@OpenWrt:~# [  572.964061] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+
+[  584.406861] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+
+printf "info\nquit\n" | btmgmt > /tmp/btmgmt-interactive.txt 2>&
+
+
+1; grep -E "Unable|supported settings|current settings|hci0:|Powered" /tmp/btmgm
+
+
+t-interactive.txt; echo BT_MGMT_INTERACTIVE_EXIT=$?; cat /sys/class/net/eth1/car
+
+
+rier_changes; uptime
+
+BT_MGMT_INTERACTIVE_EXIT=1
+
+11
+
+ 00:09:58 up 9 min,  load average: 0.13, 0.10, 0.07
+
+root@OpenWrt:~# (printf "info\n"; sleep 2; printf "quit\n") | btmgmt > /tmp/btmg
+
+
+mt-interactive2.txt 2>&1; echo BTMGMT_PROCESS_EXIT=$?; grep -E "Unable|supported
+
+
+ settings|current settings|hci0:|Primary controller|Index list" /tmp/btmgmt-inte
+
+
+ractive2.txt; ethtool --show-eee eth1 | head -8
+
+BTMGMT_PROCESS_EXIT=0
+
+Unable to send index_list cmd
+
+EEE Settings for eth1:
+
+	EEE status: disabled
+
+	Tx LPI: disabled
+
+	Supported EEE link modes:  100baseT/Full 
+
+	                           1000baseT/Full 
+
+	Advertised EEE link modes:  Not reported
+
+	Link partner advertised EEE link modes:  Not reported
+
+root@OpenWrt:~# btmgmt
+
+[mgmt]> info
+
+
+Unable to send index_list cmd
+
+[mgmt]> quit
+
+
+[mgmt]> 
+
+root@OpenWrt:~# 

@@ -1,0 +1,30 @@
+rootfs: Padding at end of inode bitmap is not set. FIXED.
+rootfs: 1879/16384 files (0.0% non-contiguous), 9910/65536 blocks
+e2fsck 1.47.3 (8-Jul-2025)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+rootfs: 1879/16384 files (0.0% non-contiguous), 9910/65536 blocks
+Image Name:   T153 persistent boot
+Created:      Sun Oct 18 00:11:00 2026
+Image Type:   ARM Linux Script (uncompressed)
+Data Size:    491 Bytes = 0.48 KiB = 0.00 MiB
+Load Address: 00000000
+Entry Point:  00000000
+Contents:
+   Image 0: 483 Bytes = 0.47 KiB = 0.00 MiB
+mkfs.fat: Warning: lowercase labels might not work properly on some systems
+mkfs.fat 4.2 (2021-01-31)
+fsck.fat 4.2 (2021-01-31)
+/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/docs/records/2026-11-05-native-image/.image-repeat.RMY7j5/disk.img.work.NPLUKx/boot.fat: 3 files, 2108/16343 clusters
+385+1 records in
+385+1 records out
+394752 bytes (395 kB, 386 KiB) copied, 0.000777973 s, 507 MB/s
+32+0 records in
+32+0 records out
+33554432 bytes (34 MB, 32 MiB) copied, 0.0126615 s, 2.7 GB/s
+256+0 records in
+256+0 records out
+268435456 bytes (268 MB, 256 MiB) copied, 0.0953045 s, 2.8 GB/s

@@ -1,0 +1,95 @@
+wget -q -O /tmp/phytool http://192.168.1.228:8878/phytool; sha25
+
+
+6sum /tmp/phytool; chmod +x /tmp/phytool; saved_page=$(/tmp/phytool read eth1/1/
+
+
+31); echo SAVED_PAGE=$saved_page; /tmp/phytool write eth1/1/31 0xa43; /tmp/phyto
+
+
+ol read eth1/1/0x19; /tmp/phytool write eth1/1/31 $saved_page; uptime
+
+a09aea85ddb768d23b41c51787ea76ec2b227bb31288e38e94bcd2faa3e8bb8d  /tmp/phytool
+
+SAVED_PAGE=0x0a42
+
+0x0843
+
+ 01:50:11 up 10 min,  load average: 0.12, 0.07, 0.05
+
+root@OpenWrt:~# saved_page=$(/tmp/phytool read eth1/1/31); /tmp/phytool write et
+
+
+h1/1/31 0xa43; phy_mode_original=$(/tmp/phytool read eth1/1/0x19); echo PHY_MODE
+
+
+_ORIGINAL=$phy_mode_original; /tmp/phytool write eth1/1/0x19 $((phy_mode_origina
+
+
+l | 32)); /tmp/phytool read eth1/1/0x19; /tmp/phytool write eth1/1/31 $saved_pag
+
+
+e; ethtool -r eth1; echo AN_RESTART_EXIT=$?; uptime
+
+PHY_MODE_ORIGINAL=0x0843
+
+0x0863
+
+AN_RESTART_EXIT=0
+
+ 01:50:35 up 10 min,  load average: 0.07, 0.07, 0.04
+
+root@OpenWrt:~# [  648.244766] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+
+[  660.725561] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+
+[  660.739997] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+
+uptime; ethtool eth1 | grep -E "Speed:|Duplex:|Link detected:"; 
+
+
+cat /sys/class/net/eth1/carrier_changes; saved_page=$(/tmp/phytool read eth1/1/3
+
+
+1); /tmp/phytool write eth1/1/31 0xa43; /tmp/phytool read eth1/1/0x19; /tmp/phyt
+
+
+ool write eth1/1/31 $saved_page; dmesg | grep -E "eth1: Link|Downshift"
+
+ 01:52:57 up 13 min,  load average: 0.05, 0.09, 0.06
+
+	Speed: 100Mb/s
+
+	Duplex: Full
+
+	Link detected: yes
+
+3
+
+0x0863
+
+[   36.725577] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+
+[   36.740015] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+
+[  648.244766] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+
+[  660.725561] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+
+[  660.739997] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+
+root@OpenWrt:~# saved_page=$(/tmp/phytool read eth1/1/31); /tmp/phytool write et
+
+
+h1/1/31 0xa43; /tmp/phytool write eth1/1/0x19 0x0843; /tmp/phytool read eth1/1/0
+
+
+x19; /tmp/phytool write eth1/1/31 $saved_page; echo PHY_MODE_RESTORED; uptime
+
+0x0843
+
+PHY_MODE_RESTORED
+
+ 01:54:37 up 14 min,  load average: 0.00, 0.06, 0.05
+
+root@OpenWrt:~# 

@@ -1,0 +1,308 @@
+T153 / RTL8211F：复位释放等待与千兆 WAN 验证
+=============================================
+记录日期：2026-11-05
+
+结果与适用范围
+--------------
+最新结论：150ms 修正解决了已复现的启动早期 PHY 能力缓存异常，但 WAN
+稳定性仍未解决。第四次基线 RAM 对照出现三次 down/up；后续两轮连接功能
+集成 RAM 也复现掉线/降至 100M。UART 修复 RAM 中临时清除标准 EEE 广告、
+确认读回后仍再掉线/降速，因此关闭 EEE 广告也不是已证实修复；未将该试验
+写成永久配置。不能把早先短窗口 1G 在线或传输通过扩展为长期稳定结论。
+
+在已发布 ad406a 四核镜像上，仅将 RAM 设备树中 WAN PHY 的
+reset-deassert-us 从 30000 改为 150000，三次热重启后的观察窗口均保持
+1000Mbps Full Duplex。下载共 272MiB、上传共 64MiB，所有传输的 SHA256
+校验通过；各窗口 carrier_changes=1，未观察到链路 down，RX/TX errors=0。
+
+这是同板、同线、同对端的复位等待对照，并另做相同 RAM copy/bootm 路径的
+30ms 匹配对照，结果见下文。用户确认原厂 Tina 在相同连接条件下稳定千兆；
+本次结果不把此前降速归因于网线。150ms 修正符合器件时序要求，但尚未证明
+它是此前所有掉线的唯一原因，也不等同于冷断电启动或长期满负载验收。
+
+RAM 对照保持 MAC TX tap=9、RX tap=6、phy-mode=rgmii-rxid；未改变 PHY
+RX 2ns/TX 无延迟设置、时钟源或协商策略。正式设备树修正两颗同型号 PHY
+为 150ms；本次三轮 RAM 对照只实际验证 WAN，LAN 修改依据为同型号器件的
+复位时序要求，不能将它写成已完成同等三轮传输验收。
+
+器件时序依据
+------------
+RTL8211F(D)(I)-CG DataSheet Rev.1.4：
+https://datasheet.lcsc.com/datasheet/pdf/7023c5bb6713a670a415e3c449e0d974.pdf?productCode=C187932
+
+- 第 7.17 节，印刷页 30：PHYRSTB 至少保持低电平 10ms；
+  访问 PHY 寄存器前至少等待 50ms，使内部电路稳定。
+- 第 9.3 节 Note 6，印刷页 53：另有 100ms 的特殊参数
+  配置窗口；文档给出通过 page 0xa46 / reg 0x14 / bit 1 提前结束的方式。
+  本项目没有新增该提前结束操作，选择 150ms 作为保守释放等待。
+
+当前实际 PHY ID 是 001c:c916，对应 RTL8211F；不要与独立的 RTL8211F-VD
+驱动条目混淆。150ms 是本板经过对照的选择，不宣称所有 RTL8211F 板卡的
+最小可用值均为 150ms。
+
+为什么 Tina 与主线同写 30ms，实际等待却不同
+-----------------------------------------
+本机 Tina linux-5.10-origin 的 OmniGate 板 DTS 为两颗 PHY 配置
+reset-assert-us=10000、reset-deassert-us=30000。实际软件调用如下：
+
+  mdiobus_register_device(): assert，等待 10ms
+  phy_device_register():    deassert，等待 30ms
+  phy_probe():              再次 deassert，Tina 继续等待 30ms
+  genphy_read_abilities():  读取能力寄存器
+
+因此 Tina 在读取能力之前累计至少两段 30ms 的显式释放等待；额外调度、
+驱动装载时间不包含在这个下限中。后续 phy_init_hw() 还会再调用一次释放。
+
+Linux 6.12.113 的 mdio_device_reset() 会比较 reset_state。复位已释放时，
+phy_probe() 与 phy_init_hw() 的重复释放调用直接返回，也不再等待。因此
+相同 DTS 的 30000 属性，在首次 probe 的这条路径上只保证一次 30ms。
+所核对Tina已构建镜像实际使用Generic PHY，其条目没有soft_reset回调；主线
+RTL8211F条目也没有该回调。不能假定中间还有通用BMCR软复位或额外稳定时间。
+实际Tina驱动配置的核验及早期源码推断更正见后面的“真实Tina驱动路径”。
+
+这项行为变化有明确上游来源，属于去掉重复操作的通用优化：
+  df16c1c51d8166958f533c0c886766f7ee9dd50f
+  net: phy: mdio_device: Reset device only when necessary
+  https://github.com/torvalds/linux/commit/df16c1c51d8166958f533c0c886766f7ee9dd50f
+补丁说明直接列出了注册、probe、init_hw 的重复释放与等待：
+  https://lkml.iu.edu/2311.3/03393.html
+
+其它板卡也曾通过修正 DTS 等待时间适应同一变化，例如 BeagleBone 的
+b9bf5612610aa7e38d58fee16f489814db251c01。它只作为机制先例，不是 T153
+或 RTL8211F 的硬件证据：
+  https://github.com/torvalds/linux/commit/b9bf5612610aa7e38d58fee16f489814db251c01
+
+能力缓存异常如何产生
+--------------------
+基线曾出现 ethtool 的 Supported 中额外列出 1000baseT/Half 和
+1000baseX/Full，而稍后 MDIO 读取 MII_ESTATUS（reg 0x0f）为 0x2000，
+只声明 1000baseT/Full。当前实际 genphy_read_abilities() 对 MII_ESTATUS
+只读取一次，负返回值才被视为错误；0xffff 这样的正值会被当成有效位图，
+把额外能力写入 phydev->supported。之后寄存器恢复正常不会自动重读该缓存。
+
+因此“启动早期读到未稳定的能力值”是与源码及观测一致的机制解释。没有
+在那次函数调用内直接捕获原始读值，不能写成已抓到该时刻必然返回 0xffff。
+PHY ID 正常和后续 MDIO 正常也不能排除更早的单次能力读取异常。
+
+三轮传输记录
+------------
+基线 FIT SHA256：
+  67bcf9403d0c948b468091520fa9ca9f6099d8c861bf718ea268faa5c46f6981
+使用基线 FIT 配合独立 RAM DT，不改基线 FIT 内容；仅覆盖 WAN 复位释放等待。
+
+轮次  下载                 上传                 结果
+1     8 x 16MiB = 128MiB   无                   全部 SHA256 一致
+2     1 x 16MiB = 16MiB    4 x 16MiB = 64MiB    下载及服务端上传 SHA256 一致
+3     8 x 16MiB = 128MiB   无                   全部 SHA256 一致
+合计  272MiB              64MiB
+
+三轮能力记录均确认没有此前多出的 1000Half/BaseX。三轮链路均为
+1000Mbps Full，carrier_changes=1、无新增 down、RX/TX errors=0。该计数包含首次上线，
+不能误写成从未发生过 carrier 状态变化。
+
+匹配的 30ms RAM 对照
+--------------------
+随后使用同样的 U-Boot RAM DT copy/bootm 路径，保持其它参数一致，仅将 WAN
+reset-deassert-us 恢复为 30000（实际DT读回00007530）。这次 Supported 中再次
+出现 1000baseT/Half 和 1000baseX/Full，而稍后实读 ID=001c:c916、
+MII_ESTATUS=0x2000、page=0xa42。与三轮 150ms 的能力列表正常形成可复现对照，
+排除了“仅因为手动停留 U-Boot 更久就不再出现能力异常”的解释。
+
+但是，这次 30ms 对照在约 84 秒窗口内 carrier_changes=1，单次 16MiB 下载
+SHA256 也正确，没有观察到掉线。因此它只复现了能力缓存异常，未在该窗口
+复现降速。不能写成“30ms 每次都会掉线”或“150ms 已证明是全部问题的唯一
+根因”。仍保留 150ms 作为确定的规范时序修正，并继续观察正式镜像的稳定性。
+这次对照的 16MiB 不计入上面三轮 150ms 的 272MiB 下载总量。
+
+恢复 150ms 后的第四轮：掉线再次出现
+-----------------------------------
+在 30ms 匹配对照后恢复 WAN reset-deassert-us=150000，第四次启动先保持
+空闲观察约 18 分钟。内核 uptime 约 1011、1015、1025 秒出现三次链路 down/up；
+随后检查仍为 1000Mbps Full，carrier_changes=7（首次上线一次加三组 down/up）。
+本轮没有进行前三轮那样的传输验收，不能追加到 272MiB/64MiB 通过总量。
+
+约 uptime 1031 秒首次记录 EC20 USB 2c7c:0125 接入。用户明确说明只连接了
+EC20，没有操作网线或交换机。不得把本轮链路变化标成手工拔网线，也不能仅凭
+相邻时间推断是 EC20 导致。PHY 时序修正保留，但网络掉线原因仍须继续定位。
+本轮由板级验证任务提供实测结果，完整日志已归档为 restored150.log。
+
+对应完整串口记录由硬件验证任务归档到：
+  docs/records/2026-11-05-wan-reset/reset150-boot1.log
+  docs/records/2026-11-05-wan-reset/reset150-boot2.log
+  docs/records/2026-11-05-wan-reset/reset150-boot3.log
+  docs/records/2026-11-05-wan-reset/matched-reset30.log
+对照及前置排查：
+  docs/records/2026-11-05-wan-reset/baseline-reboot.log
+  docs/records/2026-11-05-wan-reset/pause-ab.log
+  docs/records/2026-11-05-wan-reset/loopback-probe.log
+早期未解决阶段的历史记录仍保留在 docs/records/2026-11-05-wan/，不可将
+其中阶段性“未解决”结论与本次复位时序对照的时间顺序混为一谈。
+
+后续集成 RAM 与标准 EEE 广告对照
+--------------------------------
+以下是不同于 ad406a 加临时 DT 的新 RAM FIT，均非本轮整盘 FES 验收。
+
+第一轮连接功能 RAM FIT SHA256：
+  f6259f6145e9fb0ddb713805b683f3d3dbb8d99dcdf9c225d7562313906c8c6d
+uptime 1089.283968 秒 Link Down；1101.764780 秒报告 1G -> 100M downshift；
+1101.779220 秒 Link Up 100Mbps，约 1411 秒检查 carrier_changes=3。
+该运行窗口没有已知网线/USB 插拔；调试端进行了 AIC SDIO 恢复和蓝牙测试，
+未做物理操作。时间相邻不足以认定无线、USB 或供电为掉线原因。
+
+第二轮 UART7 FIFO/AFCE 修复 RAM FIT SHA256：
+  6853e52a257a2950865b27daafa95eaa696a0fb394ff438ec09ca31c6a1b1573
+本轮启动后的 WAN 时间线（内核 uptime 秒）：
+  40.486855   首次 Link Up 1G
+  56.084069   Link Down
+  59.206872   Link Up 1G
+  61.294125   Link Down
+  64.406870   Link Up 1G
+  82.084065   Link Down
+  97.684872   PHY 报告从协商 1G downshift 到实际 100M
+  97.699323   Link Up 100M
+
+随后标准 ethtool --show-eee eth1 正常返回：EEE disabled、Tx LPI disabled，
+Supported/Advertised EEE 均为 100baseT/Full 和 1000baseT/Full，对端广告
+Not reported。这与早期旧 RAM 中显示 not supported 的观测不同，应保留
+各自镜像/运行窗口，不把旧显示推广为本轮 PHY 不支持 EEE。
+
+约 uptime 379 秒，由调试端执行可逆的标准命令：
+  ethtool --set-eee eth1 eee off advertise 0
+  ethtool --show-eee eth1
+  ethtool -r eth1
+设置和重协商均返回 0。命令有“eee unmodified, ignoring”输出，随后实际
+读回 Advertised EEE 为 Not reported，故按读回记录广告变化；不把这句话
+误解为整个请求都未生效。未使用 devmem 或低级 MMD 写入，未永久保存配置。
+
+  380.564077  人工重协商导致 Link Down（不计自然掉线）
+  382.646913  Link Up 1G
+  572.964061  再次自然 Link Down
+  584.406861  Link Up 100M
+自然掉线后再查询，Advertised EEE 仍为 Not reported。此 A/B 证明关闭标准
+EEE 广告后本轮仍可复现问题，不能发布“禁用 EEE 修复千兆”的结论。没有把
+短暂恢复 1G 记为好转，也没有把本轮观察追加进前三轮数据完整性通过总量。
+
+此前读取 PHY reg9/reg10 时 page 为 0x0a42，未明确切换并核验标准 page0；
+因此那些原始数值不用于判定本轮标准 1000BASE-T 主从/接收器状态。需要相应
+状态时应使用正确页的标准访问并记录页选择，不能仅凭寄存器编号解释数值。
+
+本轮原始日志由板级任务保存为 logs/uart-flow-runtime-raw-20261105.log 和
+logs/wan-eee-raw-20261105.log。当前已上传部分包含设置/读回及前段时间线；
+572.964061/584.406861 秒和最后读回由板级任务报告，末尾原始记录待补齐。
+公开运行记录由 docs/records/2026-11-05-connectivity/ 单独归档，补齐之前
+不将已有部分日志 hash 宣称为涵盖全部后续事件。时间线结构化摘要见本目录
+records/2026-11-05-wan-reset/runtime-validation.json 的 later_ram_trials。
+
+后续正规整盘候选 raw SHA256：
+  7c777beb559d72c052f0a0d650255c346ebd429d41829b1b1a3f8502a61f302c
+该 UART 修复版已完成 FEL/FES 烧录，整盘读回 SHA256 精确匹配上述 raw；
+烧录/读回与持久启动、长期运行验证分别记录，不能与上述 RAM 结果混用。
+
+首轮连接功能 RAM 的非人工意外重启
+---------------------------------
+首轮 f6259f61... RAM 经多次 AIC SDIO 恢复和 EIR 诊断后，出现非调试端
+发起的完整重启，随后从 eMMC 启动旧持久镜像。用户现已明确确认“没有，
+板子一直没动”，故该次应记录为已确认非人工的意外重启，不再留作是否手动
+待确认，也不能因没有明确 panic 输出就排除异常。
+串口未捕获可确认的 panic 原因，具体根因仍未知。现有证据不能直接归因为
+SMP、DDR、AIC、供电或某一诊断命令；“发生在SDIO恢复/EIR诊断之后”仅为
+时间顺序。新版 UART 修复镜像烧录/读回成功不证明该重启原因已被修复。
+这与更早 WAN 排查中用户确认手动的两次重启是不同事件，历史结论不混用。
+用户进一步确认：原厂 Tina 稳定千兆时同样插着当前这块 EC20。已确认的
+对照条件为同板、同网线、同对端、同 EC20；不能简单将主线掉线归因于 EC20
+插入，或仅凭它在场认定供电为原因。原厂对照仍应结合实际 PHY/MAC/时钟
+状态定位；当前 RGMII 延迟组合、150ms 复位等待和清除标准 EEE 广告均未根治
+主线反复掉线/降至 100M，非人工意外重启也仍未解释。
+
+真实Tina驱动路径：未编入Realtek专用驱动
+---------------------------------------
+对SDK现有out/t153/omnigate/buildroot/{bImage,vmlinux}分别提取内嵌配置，
+二者config hash相同，均为“# CONFIG_REALTEK_PHY is not set”；System.map
+没有rtl8211f_config_init/rtlgen_read_status，但有genphy_driver。已启用的
+Motorcomm精确ID表不匹配本板001cc916。结合phy_attach_direct的回退代码，
+该SDK产物对RTL8211F采用Generic PHY，不执行源码树中未编入的Realtek初始化。
+来源仅为SDK当前已有out/bImage及vmlinux；尚未证明其SHA与用户此前实际烧录、
+稳定千兆的Tina镜像相同。用户确认的是同板同线同对端同EC20的硬件条件，
+没有确认当时镜像文件SHA。不能将本次产物核验扩展成已复现原厂运行现场。
+
+因此此前“实际Tina会打开ALDPS并在rgmii下关闭PHY RX/TX延迟”的源码推断
+撤回。Generic PHY没有vendor config_init，保留PHY硬件默认；主线专用驱动
+明确设置延迟、关闭PHY-mode EEE并在probe禁用PME。主线未设置ALDPS/CLKOUT
+可选DT属性，因此这两项也保留默认。只比较存在的.c文件不足以确定运行差异。
+完整产物hash、配置、符号和匹配证据：
+  records/2026-11-05-wan/tina-actual-driver-evidence.json
+
+由此支持的最小新对照是仅临时恢复a43:19 bit5、读回且不做BMCR reset，
+保持150ms/RGMII/标准EEE其它设置不变，随后恢复该位。板级任务已在新eMMC
+镜像（raw7c777beb...）执行：原a43:19=0843，仅置bit5后读回0863，原pageA42
+已恢复，再执行标准ethtool -r eth1；未写BMCR_RESET，未做永久修改。
+
+本次原本已是100M；648.244766秒人工重协商产生down，660.725561秒仍报告
+从1G downshift至100M，660.739997秒恢复100M。约790秒再次读取a43:19仍为
+0863，说明该位在重协商后保留，但没有恢复千兆；本轮没有产生可用于评价
+1G长期稳定性的窗口，不记通过或修复。约uptime898秒已恢复0843并读回确认，
+本次临时变化已撤销。该对照不同于已失败的标准EEE广告关闭，也不同于早期
+改位后软复位但没读回的尝试；当前没有新的PHY参数可合入永久配置。
+原始记录由板级任务上传为logs/wan-phy-mode-eee-raw-20261105.log，公开归档
+随连接功能实机记录整理；本次文档收尾时该源日志仍待上传，恢复结果依据板级
+任务报告，不能声称已核验尚未收到的完整原始日志。
+普通sysfs绑定Generic PHY不是可靠替代方案：其ID/mask
+为ffffffff/ffffffff，不匹配本PHY，当前MDIO也无driver_override；源码内的
+phy_attach_direct回退有单独路径，不能靠盲目解绑/绑定模仿。
+
+PHY软复位路径已单独核对：实际6.12.113精确001cc916的RTL8211F驱动条目
+没有soft_reset回调，Generic PHY也没有；附近RTL8226/8221等2.5G条目的
+soft_reset不能套到本板。phy_init_hw仅在该回调存在时才调用。RTL8211F初始化
+中config_clk_out只有在realtek,clkout-disable存在时才会调用genphy_soft_reset；
+本板缺省保留CLKOUT，因而不会发生“GPIO150ms之后又隐式BMCR_RESET”。
+
+若未来显式调用genphy_soft_reset，phy_poll_reset先等50ms再读、以50ms间隔
+最多轮询600ms，RESET位清后额外msleep(1)；它不会重跑GPIO150ms等待或额外
+100ms特殊配置窗口。当前正常init不走此分支。ethtool -r调用的
+ genphy_restart_aneg只清ISOLATE并置ANENABLE/ANRESTART，不置BMCR_RESET，
+也不重新执行config_init；本次约790秒已确认重协商后的0863读回。
+
+GMAC4 DMA软复位两版均为10ms轮询、1秒总超时；实际Clause22 MDIO事务的
+busy/地址/clk_csr编码及前后100us/10ms轮询一致，尚未找到专用等待序列遗漏。
+该核验未访问板卡、未改驱动、未编译，也没有重新启动原厂系统验证。
+
+PLL根频率也已复算：SDK ccu_nm的PERI0未定义M，recalc将零M归1，等价于
+主线ccu_mult的N+1。历史0xb8216310读数对应24MHz x100=2.4GHz VCO，之后
+按/2/2/2/2得到150MHz，再经GMAC PHY /6得到25MHz。实际SDK DTB的PERI0
+sdm-enable=0，历史寄存器bit24也为0，未发现启用SDM或分频比例遗漏；这里
+没有把PLL输出名称当作固定频率，也不将旧热重启读数算成当前或冷启动验证。
+
+源码定位（本次核对时的行号）
+--------------------------
+以下路径相对实际构建内核 linux-6.12.113：
+- drivers/net/mdio/fwnode_mdio.c:94：读取 PHY 复位时间，随后注册 PHY。
+- drivers/net/phy/mdio_bus.c:89：注册时先执行硬件复位断言。
+- drivers/net/phy/mdio_device.c:126：相同 reset_state 跳过操作及等待。
+- drivers/net/phy/phy_device.c:1086：注册 PHY 时释放复位。
+- drivers/net/phy/phy_device.c:3620：probe 时再次调用释放复位。
+- drivers/net/phy/phy_device.c:2911：读取 MII_ESTATUS 并设置缓存能力。
+- drivers/net/phy/realtek/realtek_main.c:2135：001c:c916 驱动条目。
+
+Tina 对照路径相对 SDK kernel/linux-5.10-origin：
+- drivers/net/phy/mdio_device.c:116：没有 reset_state 去重判断。
+- drivers/net/phy/phy_device.c:873、2837：两次释放各等待 DTS 设定时间。
+- drivers/net/phy/phy_device.c:1098：phy_init_hw() 的后续释放调用。
+- drivers/net/phy/realtek.c:634：同一 PHY ID，无 soft_reset 回调。
+SDK 板级参数：device/config/chips/t153/configs/omnigate/
+linux-5.10-origin/board.dts:1486（LAN）、1495（WAN）。
+
+尚未完成的验收
+--------------
+- 完全断电后的多轮冷启动；热重启不能替代电源重新建立时序。
+- 长时间持续负载、双向同时满载、线速吞吐、温度变化及多种交换机互通。
+- 首轮连接功能 RAM 非人工意外重启的根因与修复验证。
+- 正式重建镜像安装后的同等回归；本节三轮结果专指基线 FIT 加 RAM DT。
+- LAN 的同等数据完整性/稳定性验证。
+
+故当前可以记录“150ms 修正通过三轮 WAN 热重启及有界数据完整性对照，
+但第四轮及后续集成 RAM 仍掉线/降速，清除标准 EEE 广告后也复现”。不能记录
+“网络已完全修复”、“禁用 EEE 已修复”、“所有网络场景已验收”或“千兆线速已测得”。
+后续在eMMC上恢复PHY-mode EEE位的试验也没有恢复千兆，已读回撤销为0843。
+当前仍有WAN掉线/降100M，以及首轮连接功能RAM非人工意外重启这两个未解决
+风险；没有证据将二者归为同一原因。后续r2构建仅修复蓝牙停止清理，不含新的
+永久WAN参数；其重新烧录和短测不能自动关闭上述风险，最终发布状态另行记录。

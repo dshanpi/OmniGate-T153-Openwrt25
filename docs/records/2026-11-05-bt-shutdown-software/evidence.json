@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-05",
+  "package_release": "2026.11.05-r2",
+  "scope": "Only the Bluetooth helper shutdown path. Startup, other services, kernel and disk artifacts were not changed by this build.",
+  "problem": "TIOCSETD unregisters the UART transport before HCI RESET_ON_CLOSE. Linux 6.12.113 then times out HCI Reset after two seconds during shutdown; startup and operation had already succeeded.",
+  "change": "Save the registered hci_id. Perform synchronous HCIDEVDOWN while N_HCI, 1500000 baud and rfkill power remain intact, before the existing line-discipline/termios/rfkill cleanup. ENODEV is already removed; other errors are logged and cleanup continues.",
+  "build_command": "make -j4 package/utils/aic8800d80-bt/compile V=s",
+  "build_exit": 0,
+  "host_validation": {
+    "strict_helper_compile": "passed",
+    "existing_vendor_protocol_suite": "passed",
+    "shutdown_syscall_wrapper_suite": "passed",
+    "shutdown_ASan_UBSan": "passed",
+    "shutdown_cases": [
+      "hci0/hci7/hci31 identifiers",
+      "Bluetooth raw+CLOEXEC socket arguments",
+      "EINTR retry",
+      "ENODEV already removed",
+      "EPERM and ETIMEDOUT preserved",
+      "close errno does not mask ioctl error",
+      "exact socket/ioctl/close order",
+      "socket failure does not close invalid descriptor"
+    ]
+  },
+  "hardware_validated_by_this_record": false,
+  "files": {
+    "port/package/utils/aic8800d80-bt/src/aic8800d80-bt.c": {
+      "bytes": 12501,
+      "sha256": "ac115bc4b17ddb74fdcffffb667f0f02a73550b8b92fba9d6a56ad7c47e69424"
+    },
+    "port/package/utils/aic8800d80-bt/tests/test-shutdown.c": {
+      "bytes": 4542,
+      "sha256": "deb2253f02c252e5ed353c7e965db3a4fba9995175f81e9ff29956ff501d3be3"
+    },
+    "artifacts/diagnostics/aic8800d80-bt-clean-shutdown": {
+      "bytes": 12287,
+      "sha256": "39542ae105e52ca7a91d68401a9846c77fc353e50102035eaee041d18f5e3be4"
+    },
+    "openwrt/bin/packages/arm_cortex-a7_neon-vfpv4/base/aic8800d80-bt-2026.11.05-r2.apk": {
+      "bytes": 6593,
+      "sha256": "5ec6e1109c0ffb2e5edac3e29a3f259ce1cd45e8c874e054d2f514157d88be63"
+    }
+  }
+}

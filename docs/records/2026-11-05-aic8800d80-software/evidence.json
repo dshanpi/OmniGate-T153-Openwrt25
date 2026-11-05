@@ -1,0 +1,126 @@
+{
+  "recorded_utc": "2026-11-05T05:08:29.410158+00:00",
+  "scope": "software-build-and-static-verification-only",
+  "hardware_verified": false,
+  "source_repository": "https://github.com/radxa-pkg/aic8800",
+  "source_commit": "d9c72efd382ccdbf2f1fdb09d2d4f3cc212edd9d",
+  "source_archive_sha256": "46bf2d2202287479c46adeed07696505a16d84b413bedfd13cb6a73c2f7d07b9",
+  "kernel": "6.12.113",
+  "cfg80211_backports": "6.18.55",
+  "kernel_werror": true,
+  "fortify_enabled": true,
+  "firmware_files_verified": 15,
+  "module_info": {
+    "aic8800_bsp": {
+      "path": "openwrt/staging_dir/target-arm_cortex-a7+neon-vfpv4_musl_eabi/root-sunxi/lib/modules/6.12.113/aic8800_bsp.ko",
+      "sha256": "4e930b5a2cffb3f2b65caeab90494e1ffd4e812caf4ae8ad63e358574a976785",
+      "vermagic": "6.12.113 SMP mod_unload ARMv7 p2v8",
+      "depends": "",
+      "vendor_sunxi_symbols": false
+    },
+    "aic8800_fdrv": {
+      "path": "openwrt/staging_dir/target-arm_cortex-a7+neon-vfpv4_musl_eabi/root-sunxi/lib/modules/6.12.113/aic8800_fdrv.ko",
+      "sha256": "c574de780f17443a22e03b9bef2833dd6001b326c2d80b7965de4d1d693ef628",
+      "vermagic": "6.12.113 SMP mod_unload ARMv7 p2v8",
+      "depends": "cfg80211,aic8800_bsp",
+      "vendor_sunxi_symbols": false
+    },
+    "rfkill-gpio": {
+      "path": "openwrt/staging_dir/target-arm_cortex-a7+neon-vfpv4_musl_eabi/root-sunxi/lib/modules/6.12.113/rfkill-gpio.ko",
+      "sha256": "0771e11e5e8f3645da5b2e8e05807ecd65194ab442a291f879f87cc3212b2e97",
+      "vermagic": "6.12.113 SMP mod_unload ARMv7 p2v8",
+      "depends": "rfkill",
+      "vendor_sunxi_symbols": false
+    }
+  },
+  "autoload_note": "CONFIG_MODULE_STRIPPED=y removes MODULE_DEVICE_TABLE aliases in OpenWrt. /etc/modules.d/aic8800-sdio explicitly loads BSP/FDRV. Driver table matches C8A1:0082; BSP handles function 2.",
+  "packages": [
+    {
+      "path": "openwrt/bin/packages/arm_cortex-a7_neon-vfpv4/packages/bluez-daemon-5.83-r1.apk",
+      "sha256": "e2fbd1286d6ade12184d04f25b29867543f9e15563f58377155e31adb279a946",
+      "bytes": 680706
+    },
+    {
+      "path": "openwrt/bin/packages/arm_cortex-a7_neon-vfpv4/packages/bluez-utils-extra-5.83-r1.apk",
+      "sha256": "aa11bd7df886b5246de74c187f930b145644b851086a2c8c3fd6ec8a138ecbd6",
+      "bytes": 146603
+    },
+    {
+      "path": "openwrt/bin/packages/arm_cortex-a7_neon-vfpv4/packages/bluez-utils-5.83-r1.apk",
+      "sha256": "29b6974350e461af45db2e591809018ced7b2dfd0d18d3ffefc4b6e788648423",
+      "bytes": 326591
+    },
+    {
+      "path": "openwrt/bin/packages/arm_cortex-a7_neon-vfpv4/base/aic8800d80-bt-2026.11.05-r1.apk",
+      "sha256": "73d67b0daa69c58185046a04c05374a581995f4f7206d3d28683550fd6150864",
+      "bytes": 6434
+    },
+    {
+      "path": "openwrt/bin/targets/sunxi/cortexa7/packages/aic8800d80-firmware-2026.11.05-r1.apk",
+      "sha256": "fcac554857db15cb2362bdaca4e42825f51a13ed95f985c968acbdfd369b5b64",
+      "bytes": 1611677
+    },
+    {
+      "path": "openwrt/bin/targets/sunxi/cortexa7/packages/kmod-aic8800-sdio-6.12.113.2026.11.05-r1.apk",
+      "sha256": "e9f65a2fe4e04a9f0a7f525c326504a746c97ea7754a2cb71879c1433c2e6104",
+      "bytes": 234229
+    },
+    {
+      "path": "openwrt/bin/targets/sunxi/cortexa7/packages/kmod-rfkill-gpio-6.12.113.2026.11.05-r1.apk",
+      "sha256": "e17474a1d624af85115271d09e73b009f7818b7d5e1b9670eb69b518d73b09bb",
+      "bytes": 2848
+    }
+  ],
+  "configuration_check": "58 profile settings and 13 AIC fragment settings retained",
+  "bt_dtb_check": {
+    "uart7_path": "/soc/serial@2607000",
+    "uart7_status": "okay",
+    "rfkill_compatible": "rfkill-gpio",
+    "rfkill_shutdown_gpios_hex": "13 1 0 1",
+    "rfkill_label": "t153-aic8800d80-bt"
+  },
+  "logs": {
+    "aic-build-9.log": {
+      "source_sha256": "4e9cad64b7257c7cdf2fe7add18db8b2f83ca0df6636f04efce92d72728e33a2",
+      "archive": "docs/records/2026-11-05-aic8800d80-software/aic-build-9.log.gz",
+      "archive_sha256": "0dfbd540e0c6252716a3495d6af5b59ff0aecda85f904329637b53c3549094c0"
+    },
+    "bt-helper-package-build.log": {
+      "source_sha256": "25be79e70c20a32c85c60dcb556722748c24d10c493bbc594251f0ffbd681c45",
+      "archive": "docs/records/2026-11-05-aic8800d80-software/bt-helper-package-build.log.gz",
+      "archive_sha256": "b94468a23edb8656df2f0de3131cc6d486615aaa2e2767b0d623aa2f261d825f"
+    },
+    "bluez-build.log": {
+      "source_sha256": "71f97ea62ef5193103f41124487119d7a5890de8c23ceeba60fdafeefaa434e2",
+      "archive": "docs/records/2026-11-05-aic8800d80-software/bluez-build.log.gz",
+      "archive_sha256": "2ae888f73480498d5e915541b29198d5408c05bb334491da1eb6a058e9762b90"
+    },
+    "bt-helper-host-tests.log": {
+      "source_sha256": "9557f5886ccf10a6d4ed6c08c83a9ef1c50d573b6af8d9c1b3512e139b61e15e",
+      "archive": "docs/records/2026-11-05-aic8800d80-software/bt-helper-host-tests.log.gz",
+      "archive_sha256": "cd48ee3581d89492254e105c2398812b9e8e3da88b66a3991360c9b6ab36e2fa"
+    },
+    "aic-config-check.log": {
+      "source_sha256": "dcb9fc6174abd916bf23a3b1a8abd826aebcad7043b1b7892d8fe4950c3ba757",
+      "archive": "docs/records/2026-11-05-aic8800d80-software/aic-config-check.log.gz",
+      "archive_sha256": "fb6bfbad82139caa71f464b261b4bb85056bf476d70a65442f239f3540d203f6"
+    },
+    "profile-config-check.log": {
+      "source_sha256": "65842b5c735e7704216b2207bf24bd4a504e242546684f2deef9b1ef8bd123de",
+      "archive": "docs/records/2026-11-05-aic8800d80-software/profile-config-check.log.gz",
+      "archive_sha256": "f98eddf7f11d823a89ef78b2a13ed228fd8f58dfaa52f1cc23d47a76bbe2429b"
+    },
+    "bt-dtb-check.json": {
+      "source_sha256": "2167aee1f1f0d4bc6067597e91c027069455caa8e3f4d06b352f696fa28bae24",
+      "archive": "docs/records/2026-11-05-aic8800d80-software/bt-dtb-check.json.gz",
+      "archive_sha256": "9969d48b6a3eb26252cbc2b73995e727028dadf5b92e1e304fe6d12f5a83c7c3"
+    }
+  },
+  "pending_hardware": [
+    "Wi-Fi firmware load, scan, association, DHCP, bidirectional traffic",
+    "Bluetooth vendor HCI sequence and HCI registration, discovery",
+    "PB0 ACTIVE_LOW reset with shared SDIO patch retained",
+    "Reboot/cold-boot and concurrent WLAN/BT traffic"
+  ],
+  "added_warning_downgrades": false
+}

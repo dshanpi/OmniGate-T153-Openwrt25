@@ -1,0 +1,50 @@
+[
+  {
+    "file": "baseline-reboot.log",
+    "raw_sha256": "07605639e04f12cac04766d4c8036268172ec1a6b70f8dd23ec78c0f40d626d6",
+    "published_sha256": "6690047c6781e496d8024e86bd7a3aa14512b20230c6d6c58fb4d6ee27a49dfc",
+    "normalization": "CR/LF and ANSI; build-host address and board MAC replaced"
+  },
+  {
+    "file": "pause-ab.log",
+    "raw_sha256": "5dd27cb55d0656be283af1910f050be1f115d96ab8d60a2063e6e00b5df985b3",
+    "published_sha256": "f8d9eb0094ef85b4f9c9ec97bc0e5ea83f95fae6f31f9c569eb74f50686c7dcc",
+    "normalization": "CR/LF and ANSI; build-host address and board MAC replaced"
+  },
+  {
+    "file": "loopback-probe.log",
+    "raw_sha256": "27785eba1d71749a73cfe51283eac371172a8bf47703e5be85be3895f6df5a3f",
+    "published_sha256": "1ff8a1dec7dd772683bdee4de1d06fcd1b740e029122922ea1bcc76bc531eabf",
+    "normalization": "CR/LF and ANSI; build-host address and board MAC replaced"
+  },
+  {
+    "file": "reset150-boot1.log",
+    "raw_sha256": "dc63faa7c4bf1e4b58962d7e1fe43836ef43ee1b058ac0518813484d180ec69c",
+    "published_sha256": "543a633d2eb945b3e3776e20e90a1e5a76160c84ee68dda2637c70a344636bce",
+    "normalization": "CR/LF and ANSI; build-host address and board MAC replaced"
+  },
+  {
+    "file": "reset150-boot2.log",
+    "raw_sha256": "f502c5786814344c8ab4570c1e96f5ac08e2c8ac717e8bde6433810a9ae7e4f9",
+    "published_sha256": "abe124adb7490fd7206ac80b0c73cb7a394a90694aac1111407a60be2d277e7a",
+    "normalization": "CR/LF and ANSI; build-host address and board MAC replaced"
+  },
+  {
+    "file": "reset150-boot3.log",
+    "raw_sha256": "43677dd87f048bac0e2ee0ef87fe69c51319978dd40e7d47947ebebb297ca8c6",
+    "published_sha256": "a8052eda0112d9f4bba53c45ff5c128cfe5502cdd101b4a3c8ff6d7be89ba123",
+    "normalization": "CR/LF and ANSI; build-host address and board MAC replaced"
+  },
+  {
+    "file": "matched-reset30.log",
+    "raw_sha256": "9397107b919025bec042f9c6ad120550a21904c7f827061027770e45cbd5bb3a",
+    "published_sha256": "5f0ea98ff979c7abe0104c7d3bed2a870c56e7131379316856d7b02814658735",
+    "normalization": "CR/LF and ANSI; build-host address and board MAC replaced"
+  },
+  {
+    "file": "restored150.log",
+    "raw_sha256": "ad2fa78a8bff5adfebf8e2437de8c01ff217361c67d95b379bac951c3e536402",
+    "published_sha256": "34599dc34c6c4a94e83c7647fc89d028a776fc1937eb56226a7b049fcd1ca402",
+    "normalization": "CR/LF and ANSI; build-host address, MAC addresses and USB serial values replaced"
+  }
+]

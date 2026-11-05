@@ -1,0 +1,35 @@
+if TARGET_DSHANPI_T153_RAM || TARGET_DSHANPI_T153_SOURCE
+
+config SYS_BOARD
+	default "t153"
+
+config SYS_VENDOR
+	default "dshanpi"
+
+config SYS_CONFIG_NAME
+	default "dshanpi_t153_ram"
+
+config T153_DDR_SIZE_MIB
+	int "Physical T153 DDR4 capacity in MiB"
+	depends on TARGET_DSHANPI_T153_SOURCE
+	default 512
+	range 512 1024
+	help
+	  Fixed single-rank x16 geometry. Only 512 (15 rows) and 1024
+	  (16 rows) are implemented. Usable U-Boot/Linux RAM remains capped
+	  at 384 MiB in both bring-up profiles. This is not a size probe.
+
+config T153_PSCI_COLD_SMP
+	bool "Experimental T153 four-core cold boot via PSCI 0.1"
+	depends on TARGET_DSHANPI_T153_SOURCE && T153_DDR_SIZE_MIB = 1024
+	select CPU_V7_HAS_NONSEC
+	select ARCH_SUPPORT_PSCI
+	select ARMV7_SET_CORTEX_SMPEN
+	select HAS_ARMV7_SECURE_BASE
+	help
+	  Source CPU_ON backend for the four Cortex-A7 cores. The monitor
+	  remains in SRAM C; no factory monitor is linked. CPU_OFF,
+	  CPU_SUSPEND, hotplug and multi-core kexec are not implemented.
+	  This is an opt-in bring-up profile; CPU0 default is unchanged.
+
+endif

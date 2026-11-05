@@ -1,0 +1,158 @@
+wget -q -T 8 -O /tmp/phytool http://BUILD_HOST:8878/phytool &
+& chmod +x /tmp/phytool && sha256sum /tmp/phytool
+a09aea85ddb768d23b41c51787ea76ec2b227bb31288e38e94bcd2faa3e8bb8d  /tmp/phytool
+root@OpenWrt:~# echo PHY_SAVE; for r in 0 1 4 5 9 10 31; do echo reg=$r; /tmp/ph
+ytool read eth1/1/$r; done
+PHY_SAVE
+reg=0
+0x1040
+reg=1
+0x79ad
+reg=4
+0x0de1
+reg=5
+0xdde1
+reg=9
+0x0000
+reg=10
+0x0800
+reg=31
+0x0a42
+root@OpenWrt:~# echo FORCE1G_BEGIN; ethtool -s eth1 autoneg off speed 1000 duple
+x full; echo status=$?; /tmp/phytool read eth1/1/0; ethtool eth1
+FORCE1G_BEGIN
+status=0
+[  995.738856] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+0x1040
+Settings for eth1:
+	Supported ports: [ TP MII ]
+	Supported link modes:   10baseT/Half 10baseT/Full 
+	                        100baseT/Half 100baseT/Full 
+	                        1000baseT/Full 
+	Supported pause frame use: Symmetric Receive-only
+	Supports auto-negotiation: Yes
+	Supported FEC modes: Not reported
+	Advertised link modes:  1000baseT/Full 
+	Advertised pause frame use: Symmetric Receive-only
+	Advertised auto-negotiation: No
+	Advertised FEC modes: Not reported
+	Speed: 1000Mb/s
+	Duplex: Half
+	Port: Twisted Pair
+	PHYAD: 1
+	Transceiver: external
+	Auto-negotiation: off
+	MDI-X: Unknown
+	Supports Wake-on: d
+	Wake-on: d
+	Current message level: 0x0000003f (63)
+			       drv probe link timer ifdown ifup
+	Link detected: no
+root@OpenWrt:~# [ 1005.116224] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control off
+[ 1006.153780] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+echo LOOP1G_PROBE; /tmp/phytool write eth1/1/0 0x4140; sleep 3; 
+/tmp/phytool read eth1/1/0; /tmp/phytool read eth1/1/1; /tmp/phytool read eth1/1
+/1; ethtool eth1; /tmp/phytool write eth1/1/0 0x1040; ethtool -s eth1 autoneg on
+ advertise 0x2f; ethtool -r eth1; echo LOOP_RESTORED
+LOOP1G_PROBE
+[ 1008.236266] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control off
+0x4140
+0x798d
+0x798d
+Settings for eth1:
+	Supported ports: [ TP MII ]
+	Supported link modes:   10baseT/Half 10baseT/Full 
+	                        100baseT/Half 100baseT/Full 
+	 [ 1010.634461] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+                       1000baseT/Full 
+	Supported pause frame use: Symmetric Receive-only
+	Supports auto-negotiation: Yes
+	Supported FEC modes: Not reported
+	Advertised link modes:  1000baseT/Full 
+	Advertised pause frame use: Symmetric Receive-only
+	Advertised auto-negotiation: No
+	Advertised FEC modes: Not reported
+	Speed: 1000Mb/s
+	Duplex: Full
+	Port: Twisted Pair
+	PHYAD: 1
+	Transceiver: external
+	Auto-negotiation: off
+	MDI-X: Unknown
+	Supports Wake-on: d
+	Wake-on: d
+	Current message level: 0x0000003f (63)
+			       drv probe link timer ifdown ifup
+	Link detected: yes
+LOOP_RESTORED
+root@OpenWrt:~# [ 1013.756361] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control off
+echo BASELINE_RESTORE_CHECK; cat /sys/class/net/eth1/carrier; ca
+t /sys/class/net/eth1/speed; /tmp/phytool read eth1/1/0; /tmp/phytool read eth1/
+1/9; ip -s link show eth1
+BASELINE_RESTORE_CHECK
+1
+1000
+0x1040
+0x0200
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether WAN_MAC brd ff:ff:ff:ff:ff:ff
+    RX:  bytes packets errors dropped  missed   mcast           
+         24568      88      0       0       0       0 
+    TX:  bytes packets errors dropped carrier collsns           
+         24757     231      0       4       0       0 
+root@OpenWrt:~# echo WAN1G_DATA_BEGIN; date; ethtool eth1; time wget -T 15 -O /t
+mp/wan-16m.bin http://BUILD_HOST:8878/net-test-16m.bin; echo wget_status=$?; 
+sha256sum /tmp/wan-16m.bin; ip -s link show eth1; date; echo WAN1G_DATA_END
+WAN1G_DATA_BEGIN
+Wed Nov  4 01:53:21 GMT 2026
+Settings for eth1:
+	Supported ports: [ TP MII ]
+	Supported link modes:   10baseT/Half 10baseT/Full 
+	                        100baseT/Half 100baseT/Full 
+	                        1000baseT/Full 
+	Supported pause frame use: Symmetric Receive-only
+	Supports auto-negotiation: Yes
+	Supported FEC modes: Not reported
+	Advertised link modes:  10baseT/Half 10baseT/Full 
+	                        100baseT/Half 100baseT/Full 
+	                        1000baseT/Full 
+	Advertised pause frame use: No
+	Advertised auto-negotiation: Yes
+	Advertised FEC modes: Not reported
+	Link partner advertised link modes:  10baseT/Half 10baseT/Full 
+	                                     100baseT/Half 100baseT/Full 
+	                                     1000baseT/Full 
+	Link partner advertised pause frame use: Symmetric Receive-only
+	Link partner advertised auto-negotiation: Yes
+	Link partner advertised FEC modes: Not reported
+	Speed: 1000Mb/s
+	Duplex: Full
+	Port: Twisted Pair
+	PHYAD: 1
+	Transceiver: external
+	Auto-negotiation: on
+	MDI-X: Unknown
+	Supports Wake-on: d
+	Wake-on: d
+	Current message level: 0x0000003f (63)
+			       drv probe link timer ifdown ifup
+	Link detected: yes
+Downloading 'http://BUILD_HOST:8878/net-test-16m.bin'
+Connecting to BUILD_HOST:8878
+Writing to '/tmp/wan-16m.bin'
+/tmp/wan-16m.bin     100% |*******************************| 16384k  0:00:00 ETA
+Download completed (16777216 bytes)
+real	0m 1.01s
+user	0m 0.23s
+sys	0m 0.76s
+wget_status=0
+2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9  /tmp/wan-16m.bin
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether WAN_MAC brd ff:ff:ff:ff:ff:ff
+    RX:  bytes packets errors dropped  missed   mcast           
+      17581554   11844      0       0       0       0 
+    TX:  bytes packets errors dropped carrier collsns           
+        104016    1425      0       4       0       0 
+Wed Nov  4 01:53:24 GMT 2026
+WAN1G_DATA_END
+root@OpenWrt:~# 

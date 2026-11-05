@@ -1,0 +1,12 @@
+{
+  "patch": {
+    "file": "openwrt-25.12.6-t153.patch",
+    "bytes": 474128,
+    "sha256": "338dc6fbc70663a73416e984f1c148b0d5bfd02793294ef13160efd353889690"
+  },
+  "files_verified": 82,
+  "command": "patch -p1 --batch --forward",
+  "exit_code": 0,
+  "executable_modes_match": true,
+  "official_feeds_unchanged": true
+}

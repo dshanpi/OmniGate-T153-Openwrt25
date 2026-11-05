@@ -1,0 +1,20 @@
+{
+  "source_commit": "d9c72efd382ccdbf2f1fdb09d2d4f3cc212edd9d",
+  "files": {
+    "aic_powerlimit_8800d80.txt": "a21645878dd5a065c48eaf4aee36349d214fd43e530a47af23973e5e81b9904a",
+    "aic_userconfig_8800d80.txt": "56c039d10af63c888b18890f508968a143f034de279fd2c4ec7ee65133e3dbdb",
+    "fmacfw_8800d80_h_u02.bin": "6c197eacc6917e253c2085fd3b3da0879005d0ebe37ccde3bd4be38f261f9b4e",
+    "fmacfw_8800d80_h_u02_ipc.bin": "6c197eacc6917e253c2085fd3b3da0879005d0ebe37ccde3bd4be38f261f9b4e",
+    "fmacfw_8800d80_u02.bin": "d2c7b7ac0bf8682c976c0c2da34f204c9b2f1ef8821252c6348a3016bd638f24",
+    "fmacfw_8800d80_u02_ipc.bin": "d2c7b7ac0bf8682c976c0c2da34f204c9b2f1ef8821252c6348a3016bd638f24",
+    "fmacfwbt_8800d80_h_u02.bin": "f7fa0a1a296589568fbea1de89ab8feeb13ef2e6db6c7fafa682a34fb583a1bd",
+    "fmacfwbt_8800d80_u02.bin": "b1533e09be3812aeb4930414a4ef259b49703ff5dc51c69cd9b7cfd534273168",
+    "fw_adid_8800d80_u02.bin": "a526cbd02fcdc495f049f3ad6b5933cb08cd984b16790c716a060d582fee1a56",
+    "fw_patch_8800d80_u02.bin": "f0e2f5bbc17bc327ca7f1574ff55370dfd863d931514347bb4abc18a74f6218f",
+    "fw_patch_8800d80_u02_ext0.bin": "ca738f5ea5aca6021c4f48b60ff35e835dfdaf072a8490e3ba8ba0a42440e3e5",
+    "fw_patch_8800d80_u04.bin": "3e3f966e18610f5cb154a47a884c8a805e9307223df3e17a703582778f162337",
+    "fw_patch_table_8800d80_u02.bin": "9decb77435b7e9713e33e32da483d683b7329ed93b672b2d1b134031d7da5f67",
+    "fw_patch_table_8800d80_u04.bin": "6d7862576f665aa4a73ae4728ff418870c784fc6e2b965ed0417396fd7d5d9e2",
+    "lmacfw_rf_8800d80_u02.bin": "4d43d0707ff85b692e81dbc16d916f42f7807237ef02d5e85e3fe08256b84f3e"
+  }
+}

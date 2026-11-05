@@ -1,0 +1,168 @@
+T153 / OpenWrt 25.12：EC20、ML302 USB 4G 支持
+=============================================
+状态（2026-11-05）
+------------------
+已核对当前实际 Linux 6.12.113 的串口/网卡驱动、OpenWrt包和netifd参数。
+新增独立构建片段和UCI示例；本次准备未向模块发送写命令，不自动切换USB模式。
+实际启用netifd拨号后，会按APN等设置模块连接参数；QMI还可能更新模块profile。
+本文件的“覆盖”指源码匹配和所需软件可构建，不代表本板已完成4G拨号实测。
+最新板测：用户接入的EC20枚举为2c7c:0125，option正确绑定ttyUSB0～3，
+qmi_wwan创建wwan0和cdc-wdm0。QMI只读查询可正常响应，工作模式online，
+能力包含LTE；serving-system返回not_registered，尚未完成运营商注册。
+DMS PIN查询Not supported、UIM SIM状态{}本身不足以判断SIM状态。随后经picocom
+只读查询AT+CPIN?返回+CME ERROR: 10（SIM not inserted），模块当前未检测到SIM；
+AT+CGMM返回EC20F，AT+CGMR返回EC20CEHDLGR08A03M1G。AT响应正确，picocom退出0。
+当前确认EC20枚举/驱动绑定、QMI和AT控制通道，未进行PIN尝试、拨号或数据传输。
+ML302、SIM注册、运营商APN、数据连接、重插恢复仍须分别上板验收。
+
+源码范围：官方OpenWrt 25.12的Linux驱动及用户态工具，不引入厂商QMI/USB
+私有驱动。当前未发现需要增加USB ID的依据，故没有新增内核ID补丁。
+
+型号、USB模式和驱动
+--------------------
+EC20名称跨多个USB布局，必须先看实际VID:PID和接口描述符：
+
+- 旧EC20，05c6:9215：qcserial提供串口，qmi_wwan提供QMI。
+  上游qcserial已有五接口EC20特殊处理：接口0诊断、1 NMEA、2/3调制解调器，
+  保留接口4给网络；qmi_wwan也已有接口4及避开接口0的配套处理。
+  原基础配置未选kmod-usb-serial-qualcomm，新片段补齐它。不要把整个ID强行
+  写入option/new_id，避免串口驱动抢占网络接口。
+- EC20 R2.0/R2.1及部分EC20-CE，常见2c7c:0125：option + qmi_wwan已覆盖，
+  与EC25共享ID。option按接口描述符/端点数量限制绑定，QMI保留网络功能。
+- ML302，常见1782:4d10/1782:4d11：现有option表已覆盖同USB平台，表内注释
+  是Fibocom L610，USB匹配不依赖商品名称。4d10是串口布局；4d11的option匹配
+  仅class 0xff，CDC ECM/RNDIS接口交给对应网卡驱动。PID和模式须以本机为准。
+- ML302 ECM：cdc_ether按CDC 02/06/00接口匹配，通常产生usbN/ethN网络接口。
+  ML302 RNDIS：rndis_host按标准RNDIS描述符匹配，新片段补kmod-usb-net-rndis。
+  不将ML302假定为QMI设备；仅看到ttyUSB并不等于已经具备USB网卡功能。
+- MBIM：仅在实际固件暴露CDC MBIM接口时选cdc_mbim + umbim。本项目已具备
+  通用MBIM支持，但不保证每个EC20/ML302固件有这个模式。
+
+构建片段
+--------
+configs/fragments/4g-ec20-ml302.config
+
+在基础配置之上新增qcserial、RNDIS、comgt/PPP、LuCI 3G和picocom。
+QMI/MBIM/CDC ECM、option、uqmi/umbim、LuCI QMI/MBIM和usbutils原来已选。
+kmod-ppp已包含ppp_async，无单独的kmod-ppp-async包。
+comgt的3g协议名也用于支持串口PPP的LTE模块；优先QMI或ECM，不将PPP吞吐
+等同USB网络模式。未安装ModemManager，避免同一设备同时被两套连接管理占用。
+
+准备好的OpenWrt树内，可按以下方式构建片段（工程仍在远端，不另存本地副本）：
+  cd /home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25
+  sh scripts/apply.sh openwrt
+  sh scripts/prepare-feeds.sh openwrt
+  cd openwrt
+  ./scripts/feeds update -a
+  ./scripts/feeds install luci luci-ssl luci-proto-qmi luci-proto-mbim \
+      luci-proto-3g usbutils canutils picocom
+  cp .config .config.before-4g
+  cat ../configs/t153mx-omnigate.config \
+      ../configs/fragments/4g-ec20-ml302.config > .config
+  make defconfig
+  python3 ../scripts/check-config.py ../configs/fragments/4g-ec20-ml302.config .config
+  make -j4 download
+  make -j4 V=s
+
+上面cat会按基础片段重建选择；有其它需要的附加片段时应一并合并。
+当前集成者已将这些选项合入基础配置，scripts/build.sh也已增加所需feeds安装项。
+因此使用仓库标准scripts/build.sh流程即可包含本片段；上面的独立步骤用于核对
+或在其它相同OpenWrt基线中应用。
+不得在另一构建任务使用同一OpenWrt树时同时运行make。
+镜像重打包仍按仓库完整磁盘/FES流程，不能把新增kmod直接装到ABI不匹配旧镜像。
+
+识别实际设备和接口
+------------------
+上板后先只读检查，不凭ttyUSB编号猜模式：
+  lsusb
+  lsusb -t
+  dmesg | tail -n 100
+  ls -l /dev/cdc-wdm* /dev/ttyUSB* 2>/dev/null
+  readlink -f /sys/class/usbmisc/cdc-wdm*/device
+  readlink -f /sys/class/net/*/device/driver
+
+lsusb -v -d VID:PID可读取具体接口class/subclass/protocol；lsusb -t应分别显示
+option/qcserial和qmi_wwan/cdc_mbim/cdc_ether/rndis_host。两模块同时接入时，
+cdc-wdm0、usb0和ttyUSB2编号可能变化，按USB设备父路径配对控制口和网络口。
+QMI/MBIM的netifd也支持devpath；长期使用可指定实际USB拓扑路径代替易变编号。
+若只有串口，先检查模式和驱动，不先添加盲匹配ID。
+
+手动AT检查（先识别可响应AT的端口）：
+  picocom -b 115200 /dev/ttyUSB2
+  AT
+  ATI
+  AT+CPIN?
+  AT+CSQ
+  AT+CEREG?
+
+这里ttyUSB2仅为示例；不要使用DIAG/NMEA口。退出picocom后再启用拨号，避免
+两个进程竞争串口。PIN/APN按运营商实际参数填写，示例不包含真实凭据。
+
+ML302模式说明
+-------------
+Espressif官方ECM实测列表列出ML302-CNLM_MBRH0S00，参考切换命令为：
+  AT+SYSNV=1,"usbmode",5
+其中5=ECM、3=RNDIS。仅在确认本模块固件手册相符、当前需要切换时由操作者
+手动使用；这类命令可能保存并导致USB重新枚举。本项目启动脚本不会自动发送。
+其它ML302后缀/固件先查其手册，不套用ML307的AT+MDIALUPCFG命令。
+ECM/RNDIS的DHCP只配置主机USB网卡，模块本身仍须已完成SIM注册/APN和蜂窝
+数据会话；如果取得USB私网地址仍不上网，应查模块拨号状态，不能宣称驱动失败。
+未取得匹配版本的一手完整拨号指令前，不在固件中加入猜测的自动AT流程。
+
+OpenWrt UCI配置
+---------------
+configs/examples/4g/目录给出四个互斥起步示例：ec20-qmi.network、
+ec20-mbim.network、ml302-ecm-rndis.network、serial-ppp.network。
+选符合实际USB模式的一个，替换设备路径/APN，保留现有LAN/WAN配置。
+示例auto=0，默认不启动；metric=20只调整路由优先级，不提供链路健康监测或
+自动故障切换。所有示例的接口名cellular相同，不要将四个一起导入。
+
+将选定文件复制到板上/tmp/cellular.network，编辑确认后合并：
+  uci -m import network < /tmp/cellular.network
+  uci commit network
+
+在LuCI“网络→防火墙”的现有WAN区域中添加cellular，保留该区域原有网络；
+这样沿用WAN的NAT和LAN转发策略。不要另建同名WAN区域或把蜂窝口加入LAN桥。
+然后只启动这个接口：
+  ifup cellular
+  ubus call network.interface.cellular status
+  logread -e netifd
+
+验收成功后再设置自动启动：
+  uci set network.cellular.auto='1'
+  uci commit network
+
+QMI工具只读状态例：
+  uqmi -d /dev/cdc-wdm0 -t 3000 --get-pin-status
+  uqmi -d /dev/cdc-wdm0 -t 3000 --get-serving-system
+  uqmi -d /dev/cdc-wdm0 -t 3000 --get-signal-info
+netifd的qmi.sh已处理802.3/raw-IP协商；不要在连接中途强改qmi/raw_ip。
+
+实机验收与限制
+--------------
+分别记录型号/固件、VID:PID、各接口绑定驱动、SIM注册、获得的地址/默认路由、
+DNS和实际数据传输，以及拔插和正常重启恢复。使用ip route get确认测试流量
+确实走蜂窝接口，不能把板载千兆WAN的联网结果记为4G成功。
+USB Host枚举失败应先记录USB日志、供电/模块启动状态；不要据此去改option ID。
+本次没有修改板上4G电源或PWRKEY GPIO逻辑，没有执行模式切换或实际拨号。
+已核对T153MX_MAIN_4G_V11原理图第1/7/8页和实际Tina DTS/DTB/启动脚本：
+两个4G模块的MP1495S供电使能分别经R16/R32直接接5V，未接SoC GPIO；
+模块复位/PWRKEY没有可由SoC操作的连线依据。CH334F的USB1/2下行口分别
+连接两个模块，USB3/4下行口连接Type-A。不能凭只枚举到HUB就认定模块未插，
+也不应凭猜测增加GPIO时序。详见records/2026-11-05-4g-software/board-power-review.txt。
+
+源码核验依据（当前实际Linux 6.12.113）
+---------------------------------------
+- drivers/usb/serial/qcserial.c:199-227、305-307：旧EC20五接口及网络口排除。
+- drivers/usb/serial/option.c:1202-1204：2c7c:0125；2464-2465：1782:4d10/4d11。
+- drivers/net/usb/qmi_wwan.c:1091、1494-1495、1527-1537、1568-1571：EC20各代。
+- drivers/net/usb/cdc_ether.c / cdc_mbim.c / rndis_host.c：标准USB类匹配。
+- OpenWrt package/kernel/linux/modules/usb.mk：现有驱动包及依赖。
+- OpenWrt package/network/utils/{uqmi,umbim,comgt}/：实际netifd参数和拨号工具。
+
+外部一手/实现方资料（2026-11-05查阅）：
+- Quectel WCDMA&LTE Linux USB Driver User Guide：型号与VID/PID参考。
+  https://quectel.com/content/uploads/2024/02/Quectel_WCDMALTE_Linux_USB_Driver_User_Guide_V1.8-4.pdf
+  历史指南面向旧内核；不要照搬替换当前已具备EC20 quirk的qcserial/qmi_wwan。
+- Espressif USB ECM Host Driver：ML302已测固件和USB模式参考。
+  https://docs.espressif.com/projects/esp-iot-solution/en/latest/usb/usb_host/usb_ecm.html

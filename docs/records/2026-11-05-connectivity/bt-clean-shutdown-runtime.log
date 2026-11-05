@@ -1,0 +1,125 @@
+uptime; hciconfig hci0; ls -lh /root/t153-validation.log*; wget 
+
+
+-q -O /tmp/aic8800d80-bt-clean-shutdown http://192.168.1.228:8878/aic8800d80-bt-
+
+
+clean-shutdown; sha256sum /tmp/aic8800d80-bt-clean-shutdown
+
+ 01:48:23 up 8 min,  load average: 0.00, 0.04, 0.03
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 1021:9  SCO MTU: 255:4
+
+	UP RUNNING 
+
+	RX bytes:759 acl:0 sco:0 events:49 errors:0
+
+	TX bytes:2184 acl:0 sco:0 commands:49 errors:0
+
+
+
+-rw-------    1 root     root       51.4K Nov  4 01:42 /root/t153-validation.log
+
+39542ae105e52ca7a91d68401a9846c77fc353e50102035eaee041d18f5e3be4  /tmp/aic8800d80-bt-clean-shutdown
+
+root@OpenWrt:~# bluetoothctl power off; /etc/init.d/aic8800d80-bt stop; cp /usr/
+
+
+sbin/aic8800d80-bt /tmp/aic8800d80-bt-r1; cp /tmp/aic8800d80-bt-clean-shutdown /
+
+
+usr/sbin/aic8800d80-bt; chmod 755 /usr/sbin/aic8800d80-bt; /etc/init.d/aic8800d8
+
+
+0-bt start
+
+[NEW] Media /org/bluez/hci0 
+
+	SupportedUUIDs: 0000110a-0000-1000-8000-00805f9b34fb
+
+	SupportedUUIDs: 0000110b-0000-1000-8000-00805f9b34fb
+
+[CHG] Controller <device-address> PowerState: on-disabling
+
+hci0 new_settings: ssp br/edr le secure-conn cis-central cis-peripheral iso-broadcaster sync-receiver 
+
+Changing power off succeeded
+
+root@OpenWrt:~# [  530.024277] Bluetooth: MGMT ver 1.23
+
+bluetoothctl power on; hciconfig hci0; uptime; /etc/init.d/aic88
+
+
+00d80-bt stop; echo BT_STOP_EXIT=$?; uptime; /etc/init.d/aic8800d80-bt start
+
+[NEW] Media /org/bluez/hci0 
+
+	SupportedUUIDs: 0000110a-0000-1000-8000-00805f9b34fb
+
+	SupportedUUIDs: 0000110b-0000-1000-8000-00805f9b34fb
+
+Changing power on succeeded
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 1021:9  SCO MTU: 255:4
+
+	UP RUNNING 
+
+	RX bytes:759 acl:0 sco:0 events:49 errors:0
+
+	TX bytes:2184 acl:0 sco:0 commands:49 errors:0
+
+
+
+ 01:48:57 up 9 min,  load average: 0.00, 0.03, 0.03
+
+BT_STOP_EXIT=0
+
+ 01:48:57 up 9 min,  load average: 0.00, 0.03, 0.03
+
+root@OpenWrt:~# [  550.804430] Bluetooth: MGMT ver 1.23
+
+for n in 1 2 3; do hciconfig hci0 | grep "UP RUNNING"; /etc/init
+
+
+.d/aic8800d80-bt stop; echo STOP_$n=$?; /etc/init.d/aic8800d80-bt start; sleep 2
+
+
+; done; hciconfig hci0; dmesg | grep -c "Bluetooth: hci0: Opcode.*failed"
+
+	UP RUNNING 
+
+STOP_1=0
+
+[  572.023409] Bluetooth: MGMT ver 1.23
+
+	UP RUNNING 
+
+STOP_2=0
+
+[  574.865653] Bluetooth: MGMT ver 1.23
+
+	UP RUNNING 
+
+STOP_3=0
+
+[  577.623669] Bluetooth: MGMT ver 1.23
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 1021:9  SCO MTU: 255:4
+
+	UP RUNNING 
+
+	RX bytes:759 acl:0 sco:0 events:49 errors:0
+
+	TX bytes:2184 acl:0 sco:0 commands:49 errors:0
+
+
+
+0
+
+root@OpenWrt:~# 

@@ -1,0 +1,3439 @@
+[   34.022746] get_txpwr_max:txpwr_max:18 
+
+
+[   34.032090] get_txpwr_max:txpwr_max:18 
+
+
+[   34.038150] aicwf_sdio mmc2:390b:1 wlan0: Remove Interface
+
+[   34.043864] get_txpwr_max:txpwr_max:18 
+
+
+[   36.807119] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+
+[   38.563456] Bluetooth: hci0: Opcode 0x0c52 failed: -110
+
+ 
+
+
+
+
+
+BusyBox v1.37.0 (2026-11-04 01:33:29 UTC) built-in shell (ash)
+
+
+
+  _______                     ________        __
+
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+
+ |_______||   __|_____|__|__||________||__|  |____|
+
+          |__| W I R E L E S S   F R E E D O M
+
+ -----------------------------------------------------
+
+ OpenWrt 25.12-SNAPSHOT, t153-6c57f7cd04 Dave's Guitar
+
+ -----------------------------------------------------
+
+
+
+ === WARNING! =====================================
+
+ There is no root password defined on this device!
+
+ Use the "passwd" command to set up a new password
+
+ in order to prevent unauthorized SSH logins.
+
+ --------------------------------------------------
+
+
+
+
+
+ OpenWrt recently switched to the "apk" package manager!
+
+
+
+ OPKG Command           APK Equivalent      Description
+
+ ------------------------------------------------------------------
+
+ opkg install <pkg>     apk add <pkg>       Install a package
+
+ opkg remove <pkg>      apk del <pkg>       Remove a package
+
+ opkg upgrade           apk upgrade         Upgrade all packages
+
+ opkg files <pkg>       apk info -L <pkg>   List package contents
+
+ opkg list-installed    apk info            List installed packages
+
+ opkg update            apk update          Update package lists
+
+ opkg search <pkg>      apk search <pkg>    Search for packages
+
+ ------------------------------------------------------------------
+
+
+
+For more information visit:
+
+https://openwrt.org/docs/guide-user/additional-software/opkg-to-apk-cheatsheet
+
+
+
+root@OpenWrt:~# uptime; cat /sys/devices/system/cpu/online; iw dev; hciconfig -a
+
+
+; cat /sys/kernel/debug/mmc2/ios; ethtool eth1; cat /sys/class/net/eth1/carrier_
+
+
+changes; logread | grep -Ei "aic|bluetooth|hci" | tail -65
+
+ 00:05:12 up 5 min,  load average: 0.01, 0.13, 0.08
+
+0-3
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 0:0  SCO MTU: 0:0
+
+	DOWN 
+
+	RX bytes:114 acl:0 sco:0 events:4 errors:0
+
+	TX bytes:261 acl:0 sco:0 commands:5 errors:0
+
+	Features: 0xbf 0x2e 0x4d 0xfe 0xd8 0x3f 0x7b 0x87
+
+	Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV3 
+
+	Link policy: 
+
+	Link mode: PERIPHERAL ACCEPT 
+
+
+
+clock:		25000000 Hz
+
+actual clock:	25000000 Hz
+
+vdd:		21 (3.3 ~ 3.4 V)
+
+bus mode:	2 (push-pull)
+
+chip select:	0 (don't care)
+
+power mode:	2 (on)
+
+bus width:	2 (4 bits)
+
+timing spec:	0 (legacy)
+
+signal voltage:	0 (3.30 V)
+
+driver type:	0 (driver type B)
+
+Settings for eth1:
+
+	Supported ports: [ TP MII ]
+
+	Supported link modes:   10baseT/Half 10baseT/Full 
+
+	                        100baseT/Half 100baseT/Full 
+
+	                        1000baseT/Full 
+
+	Supported pause frame use: Symmetric Receive-only
+
+	Supports auto-negotiation: Yes
+
+	Supported FEC modes: Not reported
+
+	Advertised link modes:  10baseT/Half 10baseT/Full 
+
+	                        100baseT/Half 100baseT/Full 
+
+	                        1000baseT/Full 
+
+	Advertised pause frame use: Symmetric Receive-only
+
+	Advertised auto-negotiation: Yes
+
+	Advertised FEC modes: Not reported
+
+	Link partner advertised link modes:  10baseT/Half 10baseT/Full 
+
+	                                     100baseT/Half 100baseT/Full 
+
+	                                     1000baseT/Full 
+
+	Link partner advertised pause frame use: Symmetric Receive-only
+
+	Link partner advertised auto-negotiation: Yes
+
+	Link partner advertised FEC modes: Not reported
+
+	Speed: 1000Mb/s
+
+	Duplex: Full
+
+	Port: Twisted Pair
+
+	PHYAD: 1
+
+	Transceiver: external
+
+	Auto-negotiation: on
+
+	MDI-X: Unknown
+
+	Supports Wake-on: d
+
+	Wake-on: d
+
+	Current message level: 0x0000003f (63)
+
+			       drv probe link timer ifdown ifup
+
+	Link detected: yes
+
+1
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    1.566657] ehci-platform 4300000.usb: EHCI Host Controller
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    1.566799] ohci-platform 4300400.usb: Generic Platform OHCI controller
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    1.566852] ohci-platform 4300400.usb: new USB bus registered, assigned bus number 1
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    1.567202] ohci-platform 4300400.usb: irq 30, io mem 0x04300400
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    1.573997] ehci-platform 4300000.usb: new USB bus registered, assigned bus number 2
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    1.588571] ehci-platform 4300000.usb: irq 29, io mem 0x04300000
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    1.623439] ehci-platform 4300000.usb: USB 2.0 started, EHCI 1.00
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    1.693836] usb usb1: Product: Generic Platform OHCI controller
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    1.704241] usb usb1: Manufacturer: Linux 6.12.113 ohci_hcd
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    1.752727] usb usb2: Product: EHCI Host Controller
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    1.757691] usb usb2: Manufacturer: Linux 6.12.113 ehci_hcd
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    2.063492] usb 2-1: new high-speed USB device number 2 using ehci-platform
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [    2.583556] usb 2-1.2: new high-speed USB device number 3 using ehci-platform
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.075802] aic8800_bsp: loading out-of-tree module taints kernel.
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.084438] aicbsp_init
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.091299] aicbsp_resv_mem_init
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.150592] Bluetooth: Core ver 2.22
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.154627] NET: Registered PF_BLUETOOTH protocol family
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.159995] Bluetooth: HCI device and connection manager initialized
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.166538] Bluetooth: HCI socket layer initialized
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.171462] Bluetooth: L2CAP socket layer initialized
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.176735] Bluetooth: SCO socket layer initialized
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.185246] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.190632] Bluetooth: BNEP filters: protocol multicast
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.196053] Bluetooth: BNEP socket layer initialized
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.277809] Bluetooth: HCI UART driver ver 2.3
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.282310] Bluetooth: HCI UART protocol H4 registered
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.290921] Bluetooth: HCI UART protocol BCSP registered
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.299016] Bluetooth: HIDP (Human Interface Emulation) ver 1.2
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.305085] Bluetooth: HIDP socket layer initialized
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.372899] Bluetooth: RFCOMM TTY layer initialized
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.378027] Bluetooth: RFCOMM socket layer initialized
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.383247] Bluetooth: RFCOMM ver 1.11
+
+Thu Jan  1 00:00:19 1970 kern.info kernel: [   15.389523] rfkill_gpio bluetooth-rfkill: t153-aic8800d80-bt device registered.
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.739202] aicbsp: aicbsp_set_subsys, subsys: AIC_WIFI, state to: 1
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.745713] aicbsp: aicbsp_set_subsys, power state change to 1 dure to AIC_WIFI
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.753060] aicbsp: aicbsp_platform_power_on
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.774517] aicbsp: aicbsp_sdio_probe:1 vid:0xC8A1  did:0x0082
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.780573] aicbsp: aicbsp_sdio_probe:2 vid:0xC8A1  did:0x0182
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.786476] aicbsp: aicbsp_sdio_probe after replace:1
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.791552] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.798113] aicbsp: aicwf_sdio_reg_init
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.947513] aicbt_patch_table_load bt btmode[3]:5
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.952455] aicbt_patch_table_load bt uart_baud[3]:1500000
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.958212] aicbt_patch_table_load bt uart_flowctrl[3]:1
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.963760] aicbt_patch_table_load bt lpm_enable[3]:0
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   15.969021] aicbt_patch_table_load bt tx_pwr[3]:28463
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   16.107848] aicbsp: bt patch version: - Aug 01 2025 11:05:26 - git a26f071
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   16.397222] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   16.403859] aicsdio: aicwf_sdio_reg_init
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   16.413149] aicwf_prealloc_init enter
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   16.421847] aicbsp: aicbsp_resv_mem_alloc_skb, alloc resv_mem_txdata succuss, id: 0, size: 98304
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   16.431564] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+Thu Jan  1 00:00:19 1970 kern.warn kernel: [   16.442477] rwnx_load_firmware: request firmware = aic_userconfig_8800d80.txt
+
+Thu Jan  1 00:00:33 1970 daemon.info bluetoothd[3070]: Bluetooth daemon 5.83
+
+Thu Jan  1 00:00:33 1970 daemon.info bluetoothd[3070]: Starting SDP server
+
+Thu Jan  1 00:00:33 1970 daemon.info bluetoothd[3070]: Bluetooth management interface 1.23 initialized
+
+Thu Jan  1 00:00:33 1970 kern.info kernel: [   34.038150] aicwf_sdio mmc2:390b:1 wlan0: Remove Interface
+
+Thu Jan  1 00:00:35 1970 daemon.err aic8800d80-bt[3788]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:00:36 1970 daemon.err aic8800d80-bt[3788]: AIC8800D80 attached as hci0 at 1500000 baud, address <device-address>; low power disabled
+
+Thu Jan  1 00:00:38 1970 kern.err kernel: [   38.563456] Bluetooth: hci0: Opcode 0x0c52 failed: -110
+
+root@OpenWrt:~# uci show wireless; iw phy phy0 info | head -45; cat /etc/config/
+
+
+aic8800d80-bt; ps | grep -E "aic|bluetooth"; ls -l /dev/ttyUSB* /dev/cdc-wdm*; u
+
+
+qmi -d /dev/cdc-wdm0 --get-operating-mode; cat /sys/class/rfkill/rfkill*/state
+
+wireless.radio0=wifi-device
+
+wireless.radio0.type='mac80211'
+
+wireless.radio0.path='platform/soc/4023000.mmc/mmc_host/mmc2/mmc2:390b/mmc2:390b:1'
+
+wireless.radio0.band='5g'
+
+wireless.radio0.channel='36'
+
+wireless.radio0.htmode='HE80'
+
+wireless.default_radio0=wifi-iface
+
+wireless.default_radio0.device='radio0'
+
+wireless.default_radio0.network='lan'
+
+wireless.default_radio0.mode='ap'
+
+wireless.default_radio0.ssid='OpenWrt'
+
+wireless.default_radio0.encryption='none'
+
+wireless.default_radio0.disabled='1'
+
+Wiphy phy0
+
+	wiphy index: 0
+
+	max # scan SSIDs: 3
+
+	max scan IEs length: 200 bytes
+
+	max # sched scan SSIDs: 0
+
+	max # match sets: 0
+
+	Retry short limit: 7
+
+	Retry long limit: 4
+
+	Coverage class: 0 (up to 0m)
+
+	Device supports AP-side u-APSD.
+
+	Available Antennas: TX 0 RX 0
+
+	Supported interface modes:
+
+		 * managed
+
+		 * AP
+
+		 * AP/VLAN
+
+		 * monitor
+
+		 * mesh point
+
+		 * P2P-client
+
+		 * P2P-GO
+
+		 * P2P-device
+
+	Band 1:
+
+		Capabilities: 0x963
+
+			RX LDPC
+
+			HT20/HT40
+
+			Static SM Power Save
+
+			RX HT20 SGI
+
+			RX HT40 SGI
+
+			RX STBC 1-stream
+
+			Max AMSDU length: 7935 bytes
+
+			No DSSS/CCK HT40
+
+		Maximum RX AMPDU length 65535 bytes (exponent: 0x003)
+
+		Minimum RX AMPDU time spacing: 16 usec (0x07)
+
+		HT Max RX data rate: 150 Mbps
+
+		HT TX/RX MCS rate indexes supported: 0-7, 32
+
+		VHT Capabilities (0x03987131):
+
+			Max MPDU length: 7991
+
+			Supported Channel Width: neither 160 nor 80+80
+
+			RX LDPC
+
+			short GI (80 MHz)
+
+			SU Beamformee
+
+			MU Beamformer
+
+			MU Beamformee
+
+		VHT RX MCS set:
+
+			1 streams: MCS 0-9
+
+			2 streams: not supported
+
+config bluetooth 'main'
+
+	option enabled '1'
+
+	option device '/dev/ttyS7'
+
+	# Derive from device-tree SoC serial, soc0 serial, MMC CID, or unique machine-id.
+
+	# Set an explicit unique address if the board exposes no stable identifier.
+
+	option address 'auto'
+
+ 1424 root         0 SW   [aicwf_bustx_thr]
+
+ 1425 root         0 SW   [aicwf_busrx_thr]
+
+ 1445 root         0 SW   [aicwf_bustx_thr]
+
+ 1446 root         0 SW   [aicwf_busrx_thr]
+
+ 3070 root      3500 S    /usr/bin/bluetoothd -n
+
+ 3788 root       736 S    /usr/sbin/aic8800d80-bt --device /dev/ttyS7 --rfkill
+
+ 4662 root      1124 R    grep -E aic|bluetooth
+
+crw-------    1 root     root      180, 176 Jan  1 00:00 /dev/cdc-wdm0
+
+crw-rw----    1 root     dialout   188,   0 Jan  1 00:00 /dev/ttyUSB0
+
+crw-rw----    1 root     dialout   188,   1 Jan  1 00:00 /dev/ttyUSB1
+
+crw-rw----    1 root     dialout   188,   2 Jan  1 00:00 /dev/ttyUSB2
+
+crw-rw----    1 root     dialout   188,   3 Jan  1 00:00 /dev/ttyUSB3
+
+uqmi: unrecognized option: get-operating-mode
+
+Usage: uqmi <options|actions>
+
+Options:
+
+  --single, -s:                     Print output as a single line (for scripts)
+
+  --device=NAME, -d NAME:           Set device name to NAME (required)
+
+  --keep-client-id <name>:          Keep Client ID for service <name>
+
+  --release-client-id <name>:       Release Client ID after exiting
+
+  --mbim, -m                        NAME is an MBIM device with EXT_QMUX support
+
+  --timeout, -t                     response timeout in msecs
+
+
+
+Services:                           dms, nas, pds, wds, wms
+
+
+
+Actions:
+
+  --get-versions:                   Get service versions
+
+  --set-client-id <name>,<id>:      Set Client ID for service <name> to <id>
+
+                                    (implies --keep-client-id)
+
+  --get-client-id <name>:           Connect and get Client ID for service <name>
+
+                                    (implies --keep-client-id)
+
+  --sync:                           Release all Client IDs
+
+  --start-network:                  Start network connection (use with options below)
+
+    --apn <apn>:                    Use APN
+
+    --auth-type pap|chap|both|none: Use network authentication type
+
+    --username <name>:              Use network username
+
+    --password <password>:          Use network password
+
+    --ip-family <family>:           Use ip-family for the connection (ipv4, ipv6, unspecified)
+
+    --autoconnect:                  Enable automatic connect/reconnect
+
+    --profile <index>:              Use connection profile
+
+  --stop-network <pdh>:             Stop network connection (use with option below)
+
+    --autoconnect:                  Disable automatic connect/reconnect
+
+  --get-data-status:                Get current data access status
+
+  --set-ip-family <val>:            Set ip-family (ipv4, ipv6, unspecified)
+
+  --set-autoconnect <val>:          Set automatic connect/reconnect (disabled, enabled, paused)
+
+  --get-profile-settings <val,#>:   Get APN profile settings (3gpp, 3gpp2),#
+
+  --set-default-profile <val,#>:    Set default profile number (3gpp, 3gpp2)
+
+  --get-default-profile <val>:      Get default profile number (3gpp, 3gpp2)
+
+  --get-profile-list <val>:         Get List of profiles (3gpp, 3gpp2)
+
+  --create-profile <val>            Create profile (3gpp, 3gpp2)
+
+    --apn <apn>:                    Use APN
+
+    --pdp-type ipv4|ipv6|ipv4v6>:   Use pdp-type for the connection
+
+    --username <name>:              Use network username
+
+    --password <password>:          Use network password
+
+    --auth-type pap|chap|both|none: Use network authentication type
+
+    --no-roaming false|true         To allow roaming, set to false
+
+  --modify-profile <val>,#          Modify profile number (3gpp, 3gpp2)
+
+    --apn <apn>:                    Use APN
+
+    --pdp-type ipv4|ipv6|ipv4v6>:   Use pdp-type for the connection
+
+    --username <name>:              Use network username
+
+    --password <password>:          Use network password
+
+    --auth-type pap|chap|both|none: Use network authentication type
+
+    --no-roaming false|true         To allow roaming, set to false
+
+  --delete-profile <val>,#:         Delete profile number (3gpp, 3gpp2)
+
+  --get-current-settings:           Get current connection settings
+
+  --bind-mux <id>:                  Bind data session to QMAP multiplex (use with options below)
+
+    --endpoint-type <type>:         Set endpoint interface type (hsusb, pcie)
+
+    --endpoint-iface <number>:      Set endpoint interface number
+
+  --set-lte-attach-pdn #,#,...:     Set list of PDN connections used when attaching to LTE/5G
+
+  --get-capabilities:               List device capabilities
+
+  --get-pin-status:                 Get PIN verification status
+
+  --verify-pin1 <pin>:              Verify PIN1
+
+  --verify-pin2 <pin>:              Verify PIN2
+
+  --set-pin1-protection <state>:    Set PIN1 protection state (disabled, enabled)
+
+    --pin <pin>:                    PIN1 needed to change state
+
+  --set-pin2-protection <state>:    Set PIN2 protection state (disabled, enabled)
+
+    --pin <pin2>:                   PIN2 needed to change state
+
+  --change-pin1:                    Change PIN1
+
+    --pin <old pin>:                Current PIN1
+
+    --new-pin <new pin>:            New pin
+
+  --change-pin2:                    Change PIN2
+
+    --pin <old pin>:                Current PIN2
+
+    --new-pin <new pin>:            New pin
+
+  --unblock-pin1:                   Unblock PIN1
+
+    --puk <puk>:                    PUK needed to unblock
+
+    --new-pin <new pin>:            New pin
+
+  --unblock-pin2:                   Unblock PIN2
+
+    --puk <puk>:                    PUK needed to unblock
+
+    --new-pin <new pin>:            New pin
+
+  --get-iccid:                      Get the ICCID
+
+  --get-imsi:                       Get International Mobile Subscriber ID
+
+  --get-imei:                       Get International Mobile Equipment ID
+
+  --get-msisdn:                     Get the MSISDN (telephone number)
+
+  --reset-dms:                      Reset the DMS service
+
+  --get-device-operating-mode       Get the device operating mode
+
+  --set-device-operating-mode <m>   Set the device operating mode
+
+                                    (modes: online, low_power, factory_test, offline
+
+                                     reset, shutting_down, persistent_low_power,
+
+                                     mode_only_low_power)
+
+  --fcc-auth:                       Set FCC authentication
+
+  --uim-verify-pin1 <pin>:          Verify PIN1 (new devices)
+
+  --uim-verify-pin2 <pin>:          Verify PIN2 (new devices)
+
+  --uim-get-sim-state:              Get current SIM state
+
+  --uim-power-off:                  Power off SIM card
+
+    --uim-slot:                     SIM slot [1-2]
+
+  --uim-power-on:                   Power on SIM card
+
+    --uim-slot:                     SIM slot [1-2]
+
+  --uim-channel-open <AID>:         Open channel for AID
+
+    --uim-slot:                     SIM slot [1-2]
+
+  --uim-channel-close:              Close channel
+
+    --uim-slot:                     SIM slot [1-2]
+
+    --uim-channel-id:               Channel-id
+
+  --uim-apdu-send <cmd>:            Send APDU command to ICC
+
+    --uim-slot:                     SIM slot [1-2]
+
+    --uim-channel-id:               Channel-id
+
+  --set-network-modes <modes>:      Set usable network modes (Syntax: <mode1>[,<mode2>,...])
+
+                                    Available modes: all, lte, umts, gsm, cdma, td-scdma, 5gnr
+
+  --set-network-preference <mode>:  Set preferred network mode to <mode>
+
+                                    Available modes: auto, gsm, wcdma
+
+  --set-network-roaming <mode>:     Set roaming preference:
+
+                                    Available modes: any, off, only
+
+  --network-scan:                   Initiate network scan
+
+  --network-register:               Initiate network register
+
+  --set-plmn:                       Register at specified network
+
+    --mcc <mcc>:                    Mobile Country Code (0 - auto)
+
+    --mnc <mnc>:                    Mobile Network Code
+
+  --get-plmn:                       Get preferred network selection info
+
+  --get-signal-info:                Get signal strength info
+
+  --get-serving-system:             Get serving system info
+
+  --get-system-info:                Get system info
+
+  --get-lte-cphy-ca-info:           Get LTE Cphy CA Info
+
+  --get-cell-location-info:         Get Cell Location Info
+
+  --get-tx-rx-info <radio>:         Get TX/RX Info (gsm, umts, lte, 5gnr)
+
+  --list-messages:                  List SMS messages
+
+    --storage <mem>:                Messages storage (sim (default), me)
+
+  --delete-message <id>:            Delete SMS message at index <id>
+
+    --storage <mem>:                Messages storage (sim (default), me)
+
+  --get-message <id>:               Get SMS message at index <id>
+
+    --storage <mem>:                Messages storage (sim (default), me)
+
+  --get-raw-message <id>:           Get SMS raw message contents at index <id>
+
+    --storage <mem>:                Messages storage (sim (default), me)
+
+  --send-message <data>:            Send SMS message (use options below)
+
+    --send-message-smsc <nr>:       SMSC number
+
+    --send-message-target <nr>:     Destination number (required)
+
+    --send-message-flash:           Send as Flash SMS
+
+  --wda-set-data-format <type>:               Set data format (type: 802.3|raw-ip)
+
+    --dl-aggregation-protocol <proto>:        Set downlink aggregation protocol (proto: tlp|qc-cm|mbim|rndis|qmap|qmapv5)
+
+    --dl-datagram-max-count <count>:          Set downlink aggregation max datagrams (number)
+
+    --dl-datagram-max-size <size>:            Set downlink aggregation max datagram size (bytes)
+
+    --ul-aggregation-protocol <proto>:        Set uplink aggregation protocol (proto: tlp|qc-cm|mbim|rndis|qmap|qmapv5)
+
+    --ul-datagram-max-count <count>:          Set uplink aggregation max datagrams (number)
+
+    --ul-datagram-max-size <size>:            Set uplink aggregation max datagram size (bytes)
+
+    --flow-control <state>:                   Enable flow-control (state: 0|1)
+
+  --wda-get-data-format:                      Get data format
+
+
+
+1
+
+1
+
+1
+
+root@OpenWrt:~# iw phy phy0 interface add testwifi type managed; ip link set tes
+
+
+twifi up; iw dev testwifi scan > /tmp/t153-wifi-scan.txt 2>/tmp/t153-wifi-scan.e
+
+
+rr; echo SCAN_EXIT=$?; grep -c "^BSS " /tmp/t153-wifi-scan.txt; cat /tmp/t153-wi
+
+
+fi-scan.err; iw dev testwifi del; uqmi -d /dev/cdc-wdm0 --get-device-operating-m
+
+
+ode; uqmi -d /dev/cdc-wdm0 --get-serving-system
+
+[  353.717609] get_txpwr_max:txpwr_max:18 
+
+
+[  353.721640] get_txpwr_max:txpwr_max:18 
+
+
+SCAN_EXIT=0
+
+7
+
+[  355.487326] aicwf_sdio mmc2:390b:1 testwifi: CLOSE
+
+[  355.493590] ieee80211 phy0: HT supp 1, VHT supp 1, HE supp 1
+
+[  355.500380] aicwf_sdio mmc2:390b:1 testwifi: Remove Interface
+
+[  355.506306] get_txpwr_max:txpwr_max:18 
+
+
+"online"
+
+{
+
+	"registration": "not_registered",
+
+	"radio_interface": [
+
+		"none"
+
+	]
+
+}
+
+root@OpenWrt:~# hciconfig hci0 up; echo HCI_UP_EXIT=$?; hciconfig hci0; cat /pro
+
+
+c/tty/driver/serial | grep "^7:"; dmesg | tail -12
+
+[  366.003442] Bluetooth: hci0: command 0x1003 tx timeout
+
+[  366.003442] Bluetooth: hci0: Opcode 0x1003 failed: -110
+
+Can't init device hci0: Operation timed out (110)
+
+HCI_UP_EXIT=1
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 0:0  SCO MTU: 0:0
+
+	DOWN 
+
+	RX bytes:114 acl:0 sco:0 events:4 errors:0
+
+	TX bytes:265 acl:0 sco:0 commands:6 errors:0
+
+
+
+7: uart:16550A mmio:0x02607000 irq:330 tx:402 rx:156 RTS|CTS|DTR
+
+[   34.038150] aicwf_sdio mmc2:390b:1 wlan0: Remove Interface
+
+[   34.043864] get_txpwr_max:txpwr_max:18 
+
+
+[   36.807119] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+
+[   38.563456] Bluetooth: hci0: Opcode 0x0c52 failed: -110
+
+[  353.717609] get_txpwr_max:txpwr_max:18 
+
+
+[  353.721640] get_txpwr_max:txpwr_max:18 
+
+
+[  355.487326] aicwf_sdio mmc2:390b:1 testwifi: CLOSE
+
+[  355.493590] ieee80211 phy0: HT supp 1, VHT supp 1, HE supp 1
+
+[  355.500380] aicwf_sdio mmc2:390b:1 testwifi: Remove Interface
+
+[  355.506306] get_txpwr_max:txpwr_max:18 
+
+
+[  366.003442] Bluetooth: hci0: command 0x1003 tx timeout
+
+[  366.003442] Bluetooth: hci0: Opcode 0x1003 failed: -110
+
+root@OpenWrt:~# which btmon; /etc/init.d/bluetoothd stop; /etc/init.d/aic8800d80
+
+
+-bt stop; btmon -w /tmp/t153-bt-init.btsnoop >/tmp/t153-bt-init.txt 2>&1 & echo 
+
+
+BTMON_PID=$!; /etc/init.d/aic8800d80-bt start
+
+BTMON_PID=5266
+
+[1]+  Done(127)                  btmon -w /tmp/t153-bt-init.btsnoop 1>/tmp/t153-bt-init.txt 2>&1
+
+root@OpenWrt:~# logread | tail -15; hciconfig hci0; ps | grep aic8800d80-bt; ls 
+
+
+/usr/bin/*hci* /usr/bin/*bt*
+
+Thu Jan  1 00:05:06 1970 auth.info login[4636]: root login on 'ttyS0'
+
+Thu Jan  1 00:05:53 1970 kern.warn kernel: [  353.717609] get_txpwr_max:txpwr_max:18
+
+Thu Jan  1 00:05:53 1970 kern.warn kernel: [  353.721640] get_txpwr_max:txpwr_max:18
+
+Thu Jan  1 00:05:55 1970 kern.info kernel: [  355.487326] aicwf_sdio mmc2:390b:1 testwifi: CLOSE
+
+Thu Jan  1 00:05:55 1970 kern.info kernel: [  355.493590] ieee80211 phy0: HT supp 1, VHT supp 1, HE supp 1
+
+Thu Jan  1 00:05:55 1970 kern.info kernel: [  355.500380] aicwf_sdio mmc2:390b:1 testwifi: Remove Interface
+
+Thu Jan  1 00:05:55 1970 kern.warn kernel: [  355.506306] get_txpwr_max:txpwr_max:18
+
+Thu Jan  1 00:06:05 1970 kern.err kernel: [  366.003442] Bluetooth: hci0: command 0x1003 tx timeout
+
+Thu Jan  1 00:06:05 1970 kern.err kernel: [  366.003442] Bluetooth: hci0: Opcode 0x1003 failed: -110
+
+Thu Jan  1 00:06:28 1970 daemon.info bluetoothd[3070]: Terminating
+
+Thu Jan  1 00:06:28 1970 daemon.info bluetoothd[3070]: Stopping SDP server
+
+Thu Jan  1 00:06:28 1970 daemon.info bluetoothd[3070]: Exit
+
+Thu Jan  1 00:06:29 1970 daemon.err aic8800d80-bt[5300]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:06:32 1970 daemon.err aic8800d80-bt[5300]: AIC8800D80 vendor initialization: Operation timed out
+
+Thu Jan  1 00:06:37 1970 daemon.err aic8800d80-bt[5327]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Can't get device info: No such device
+
+ 5327 root       736 S    /usr/sbin/aic8800d80-bt --device /dev/ttyS7 --rfkill
+
+ 5357 root      1124 S    grep aic8800d80-bt
+
+/usr/bin/btattach   /usr/bin/hciattach  /usr/bin/hcidump
+
+/usr/bin/btmgmt     /usr/bin/hciconfig  /usr/bin/hcitool
+
+root@OpenWrt:~# /etc/init.d/aic8800d80-bt stop; wget -q -O /tmp/btmon http://192
+
+
+.168.1.228:8878/btmon; sha256sum /tmp/btmon; chmod +x /tmp/btmon; /tmp/btmon -w 
+
+
+/tmp/bt-init.btsnoop > /tmp/bt-init.txt 2>&1 & echo BTMON_PID=$!; rmmod aic8800_
+
+
+fdrv; rmmod aic8800_bsp; modprobe aic8800_bsp; modprobe aic8800_fdrv; /etc/init.
+
+
+d/aic8800d80-bt start
+
+cb271cf89a61eea14d04a15d22bc19c8fc7760824f57f7f8ee0740a5fd07bfb5  /tmp/btmon
+
+BTMON_PID=5469
+
+[  429.463448] tcp_ack_deinit 
+
+[  429.554532] aicbsp: aicbsp_resv_mem_kfree_skb, free resv_mem_txdata succuss, id: 0, size: 98304
+
+[  429.563439] aicwf_prealloc_exit enter
+
+[  429.567137] free pre alloc rxbuff list 30
+
+[  429.572113] aicbsp: aicbsp_set_subsys, subsys: AIC_WIFI, state to: 0
+
+[  429.578594] aicbsp: aicbsp_set_subsys, power state change to 0 dure to AIC_WIFI
+
+[  429.586033] aicbsp: aicwf_sdio_release
+
+[  429.589802] aicbsp: aicwf_bus_deinit
+
+[  429.589844] aicbsp: sdio_err:<aicwf_sdio_bustx_thread,1430>: sdio bustx thread stop
+
+[  429.601204] aicbsp: sdio_err:<aicwf_sdio_busrx_thread,1449>: sdio busrx thread stop
+
+[  429.609018] aicbsp: sdio_err:<aicwf_sdio_func_deinit,1979>: aicwf_sdio_func_deinit, bus_if is null
+
+[  429.618043] aicbsp: aicbsp_sdio_remove done
+
+[  429.622454] aicbsp: aicbsp_platform_power_off
+
+[  429.819937] aicbsp_resv_mem_deinit 
+
+[  429.823534] aicbsp_exit
+
+[  430.004676] aicbsp_init
+
+[  430.007184] RELEASE_DATE:2026_0123_5f7be68d
+
+
+[  430.011464] aicbsp_resv_mem_init 
+
+[  430.184014] aicbsp: aicbsp_set_subsys, subsys: AIC_WIFI, state to: 1
+
+[  430.190434] aicbsp: aicbsp_set_subsys, power state change to 1 dure to AIC_WIFI
+
+[  430.197801] aicbsp: aicbsp_platform_power_on
+
+[  430.219097] aicbsp: aicbsp_sdio_probe:1 vid:0xC8A1  did:0x0082
+
+[  430.225175] aicbsp: aicbsp_sdio_probe:2 vid:0xC8A1  did:0x0182
+
+[  430.231033] aicbsp: aicbsp_sdio_probe after replace:1
+
+[  430.236151] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+[  430.242695] aicbsp: aicwf_sdio_reg_init
+
+[  430.248659] rwnx_load_firmware: request firmware = fw_patch_table_8800d80_u02.bin 
+
+[  430.256619] file md5:54b15ce88b3b9ba14bf961e6f90839fc
+
+
+[  430.261999] rwnx_plat_bin_fw_upload_android
+
+[  430.266236] rwnx_load_firmware: request firmware = fw_adid_8800d80_u02.bin 
+
+[  430.273463] file md5:f546881a81b960d89a672578eb45a809
+
+
+[  430.279635] rwnx_plat_bin_fw_upload_android
+
+[  430.283884] rwnx_load_firmware: request firmware = fw_patch_8800d80_u02.bin 
+
+[  430.292081] file md5:f5400db1d64e0150c3232eb53e7f78b6
+
+
+[  430.313844] rwnx_plat_bin_fw_upload_android
+
+[  430.318052] rwnx_load_firmware: request firmware = fw_patch_8800d80_u02_ext0.bin 
+
+[  430.326260] file md5:6fcbe60f7bcf7bc39bdf6e9c3fb7f1d8
+
+
+[  430.384214] aicbt_patch_table_load bt btmode[3]:5 
+
+
+[  430.389120] aicbt_patch_table_load bt uart_baud[3]:1500000 
+
+
+[  430.394828] aicbt_patch_table_load bt uart_flowctrl[3]:1 
+
+
+[  430.400327] aicbt_patch_table_load bt lpm_enable[3]:0 
+
+
+[  430.405601] aicbt_patch_table_load bt tx_pwr[3]:28463 
+
+
+[  430.536722] aicbsp: bt patch version: - Aug 01 2025 11:05:26 - git a26f071
+
+[  430.543763] rwnx_plat_bin_fw_upload_android
+
+[  430.547959] rwnx_load_firmware: request firmware = fmacfw_8800d80_u02.bin 
+
+[  430.565380] file md5:56562779b8c4debfd9b354891418249a
+
+
+[  430.745072] rd_version_val=06090101
+
+[  430.756854] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+[  430.763446] aicsdio: aicwf_sdio_reg_init
+
+[  430.772650] aicwf_prealloc_init enter
+
+[  430.777237] pre alloc rxbuff list len: 30
+
+[  430.781320] aicbsp: aicbsp_resv_mem_alloc_skb, alloc resv_mem_txdata succuss, id: 0, size: 98304
+
+[  430.791153] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+[  430.798199] tcp_ack_init 
+
+[  430.801917] rwnx_load_firmware: request firmware = aic_userconfig_8800d80.txt 
+
+[  430.809712] file md5:4c1619f2ad65562412588a297dfbc86f
+
+
+[  431.911324] ieee80211 phy1: HT supp 1, VHT supp 1, HE supp 1
+
+[  431.917979] rwnx_reg_notifier Enter
+
+
+[  431.922952] ieee80211 phy1: 
+
+[  431.922952] *******************************************************
+
+[  431.922952] ** CAUTION: USING PERMISSIVE CUSTOM REGULATORY RULES **
+
+[  431.922952] *******************************************************
+
+[  431.981057] get_txpwr_max:txpwr_max:18 
+
+
+root@OpenWrt:~# hciconfig hci0; tail -100 /tmp/bt-init.txt; logread | tail -8
+
+Can't get device info: No such device
+
+Bluetooth monitor ver 5.83
+
+Thu Jan  1 00:07:11 1970 kern.err kernel: [  431.922952] ** CAUTION: USING PERMISSIVE CUSTOM REGULATORY RULES **
+
+Thu Jan  1 00:07:11 1970 kern.err kernel: [  431.922952] *******************************************************
+
+Thu Jan  1 00:07:11 1970 kern.warn kernel: [  431.981057] get_txpwr_max:txpwr_max:18
+
+Thu Jan  1 00:07:12 1970 daemon.notice hostapd: Set MLD config: [ ]
+
+Thu Jan  1 00:07:12 1970 daemon.notice hostapd: Reload all interfaces
+
+Thu Jan  1 00:07:12 1970 daemon.notice hostapd: Failed to open phy phy0
+
+Thu Jan  1 00:07:12 1970 daemon.err aic8800d80-bt[5825]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:07:16 1970 daemon.err aic8800d80-bt[5825]: AIC8800D80 vendor initialization: Operation timed out
+
+root@OpenWrt:~# /etc/init.d/aic8800d80-bt stop; rmmod aic8800_fdrv; rmmod aic880
+
+
+0_bsp; readlink /sys/bus/platform/devices/4023000.mmc/driver; ls /sys/bus/platfo
+
+
+rm/drivers/sunxi-mmc
+
+[  468.647141] aicwf_sdio mmc2:390b:1 wlan0: Remove Interface
+
+[  468.652718] get_txpwr_max:txpwr_max:18 
+
+
+[  468.873670] tcp_ack_deinit 
+
+[  468.877728] aicbsp: aicbsp_resv_mem_kfree_skb, free resv_mem_txdata succuss, id: 0, size: 98304
+
+[  468.886671] aicwf_prealloc_exit enter
+
+[  468.890356] free pre alloc rxbuff list 30
+
+[  468.895416] aicbsp: aicbsp_set_subsys, subsys: AIC_WIFI, state to: 0
+
+[  468.901801] aicbsp: aicbsp_set_subsys, power state change to 0 dure to AIC_WIFI
+
+[  468.909270] aicbsp: aicwf_sdio_release
+
+[  468.913043] aicbsp: aicwf_bus_deinit
+
+[  468.913151] aicbsp: sdio_err:<aicwf_sdio_bustx_thread,1430>: sdio bustx thread stop
+
+[  468.924598] aicbsp: sdio_err:<aicwf_sdio_busrx_thread,1449>: sdio busrx thread stop
+
+[  468.932371] aicbsp: sdio_err:<aicwf_sdio_func_deinit,1979>: aicwf_sdio_func_deinit, bus_if is null
+
+[  468.941399] aicbsp: aicbsp_sdio_remove done
+
+[  468.945882] aicbsp: aicbsp_platform_power_off
+
+[  469.110313] aicbsp_resv_mem_deinit 
+
+[  469.113985] aicbsp_exit
+
+../../../../bus/platform/drivers/sunxi-mmc
+
+4020000.mmc  4022000.mmc  4023000.mmc  bind         uevent       unbind
+
+root@OpenWrt:~# echo 4023000.mmc > /sys/bus/platform/drivers/sunxi-mmc/unbind; e
+
+
+cho 4023000.mmc > /sys/bus/platform/drivers/sunxi-mmc/bind; modprobe aic8800_bsp
+
+
+; modprobe aic8800_fdrv; /etc/init.d/aic8800d80-bt st[  477.061731] mmc2: card 390b removed
+
+art
+
+[  477.071792] sunxi-mmc 4023000.mmc: SMHC version 0x50530, DMA address shift 2
+
+[  477.079491] sunxi-mmc 4023000.mmc: allocated mmc-pwrseq
+
+[  477.316468] sunxi-mmc 4023000.mmc: initialized, max. request size: 1024 KB, uses new timings mode
+
+[  477.344497] mmc2: new SDIO card at address 390b
+
+[  477.462613] aicbsp_init
+
+[  477.465157] RELEASE_DATE:2026_0123_5f7be68d
+
+
+[  477.469444] aicbsp_resv_mem_init 
+
+[  477.641961] aicbsp: aicbsp_set_subsys, subsys: AIC_WIFI, state to: 1
+
+[  477.648430] aicbsp: aicbsp_set_subsys, power state change to 1 dure to AIC_WIFI
+
+[  477.655808] aicbsp: aicbsp_platform_power_on
+
+[  477.677679] aicbsp: aicbsp_sdio_probe:1 vid:0xC8A1  did:0x0082
+
+[  477.683761] aicbsp: aicbsp_sdio_probe:2 vid:0xC8A1  did:0x0182
+
+[  477.689619] aicbsp: aicbsp_sdio_probe after replace:1
+
+[  477.694803] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+[  477.701348] aicbsp: aicwf_sdio_reg_init
+
+[  477.706804] rwnx_load_firmware: request firmware = fw_patch_table_8800d80_u02.bin 
+
+[  477.714745] file md5:54b15ce88b3b9ba14bf961e6f90839fc
+
+
+[  477.720120] rwnx_plat_bin_fw_upload_android
+
+[  477.724377] rwnx_load_firmware: request firmware = fw_adid_8800d80_u02.bin 
+
+[  477.731572] file md5:f546881a81b960d89a672578eb45a809
+
+
+[  477.737873] rwnx_plat_bin_fw_upload_android
+
+[  477.742077] rwnx_load_firmware: request firmware = fw_patch_8800d80_u02.bin 
+
+[  477.750331] file md5:f5400db1d64e0150c3232eb53e7f78b6
+
+
+[  477.770944] rwnx_plat_bin_fw_upload_android
+
+[  477.775191] rwnx_load_firmware: request firmware = fw_patch_8800d80_u02_ext0.bin 
+
+[  477.783418] file md5:6fcbe60f7bcf7bc39bdf6e9c3fb7f1d8
+
+
+[  477.823369] aicbt_patch_table_load bt btmode[3]:5 
+
+
+[  477.828317] aicbt_patch_table_load bt uart_baud[3]:1500000 
+
+
+[  477.834019] aicbt_patch_table_load bt uart_flowctrl[3]:1 
+
+
+[  477.839518] aicbt_patch_table_load bt lpm_enable[3]:0 
+
+
+[  477.844785] aicbt_patch_table_load bt tx_pwr[3]:28463 
+
+
+[  477.965409] aicbsp: bt patch version: - Aug 01 2025 11:05:26 - git a26f071
+
+[  477.972433] rwnx_plat_bin_fw_upload_android
+
+[  477.976672] rwnx_load_firmware: request firmware = fmacfw_8800d80_u02.bin 
+
+[  477.994015] file md5:56562779b8c4debfd9b354891418249a
+
+
+[  478.136664] rd_version_val=06090101
+
+[  478.160190] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+[  478.166820] aicsdio: aicwf_sdio_reg_init
+
+[  478.176103] aicwf_prealloc_init enter
+
+[  478.180636] pre alloc rxbuff list len: 30
+
+[  478.184762] aicbsp: aicbsp_resv_mem_alloc_skb, alloc resv_mem_txdata succuss, id: 0, size: 98304
+
+[  478.194242] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+[  478.201168] tcp_ack_init 
+
+[  478.205216] rwnx_load_firmware: request firmware = aic_userconfig_8800d80.txt 
+
+[  478.212804] file md5:4c1619f2ad65562412588a297dfbc86f
+
+
+[  479.309127] ieee80211 phy2: HT supp 1, VHT supp 1, HE supp 1
+
+[  479.315790] rwnx_reg_notifier Enter
+
+
+[  479.320654] ieee80211 phy2: 
+
+[  479.320654] *******************************************************
+
+[  479.320654] ** CAUTION: USING PERMISSIVE CUSTOM REGULATORY RULES **
+
+[  479.320654] *******************************************************
+
+[  479.377615] get_txpwr_max:txpwr_max:18 
+
+
+root@OpenWrt:~# [  482.803446] Bluetooth: hci0: command 0x0c52 tx timeout
+
+[  482.803450] Bluetooth: hci0: Opcode 0x0c52 failed: -110
+
+hciconfig hci0; tail -95 /tmp/bt-init.txt; logread | tail -7; ca
+
+
+t /proc/tty/driver/serial | grep "^7:"
+
+hci0:	Type: Primary  Bus: UART
+
+	BD Address: <device-address>  ACL MTU: 0:0  SCO MTU: 0:0
+
+	DOWN 
+
+	RX bytes:114 acl:0 sco:0 events:4 errors:0
+
+	TX bytes:261 acl:0 sco:0 commands:5 errors:0
+
+
+
+          Write Secure Connections Host Support (Octet 32 - Bit 3)
+
+          Read Authenticated Payload Timeout (Octet 32 - Bit 4)
+
+          Write Authenticated Payload Timeout (Octet 32 - Bit 5)
+
+          Read Local OOB Extended Data (Octet 32 - Bit 6)
+
+          Write Secure Connections Test Mode (Octet 32 - Bit 7)
+
+          Read Extended Page Timeout (Octet 33 - Bit 0)
+
+          Write Extended Page Timeout (Octet 33 - Bit 1)
+
+          Read Extended Inquiry Length (Octet 33 - Bit 2)
+
+          Write Extended Inquiry Length (Octet 33 - Bit 3)
+
+          LE Remote Connection Parameter Request Reply (Octet 33 - Bit 4)
+
+          LE Remote Connection Parameter Request Negative Reply (Octet 33 - Bit 5)
+
+          LE Set Data Length (Octet 33 - Bit 6)
+
+          LE Read Suggested Default Data Length (Octet 33 - Bit 7)
+
+          LE Write Suggested Default Data Length (Octet 34 - Bit 0)
+
+          LE Read Local P-256 Public Key (Octet 34 - Bit 1)
+
+          LE Generate DHKey (Octet 34 - Bit 2)
+
+          LE Add Device To Resolving List (Octet 34 - Bit 3)
+
+          LE Remove Device From Resolving List (Octet 34 - Bit 4)
+
+          LE Clear Resolving List (Octet 34 - Bit 5)
+
+          LE Read Resolving List Size (Octet 34 - Bit 6)
+
+          LE Read Peer Resolvable Address (Octet 34 - Bit 7)
+
+          LE Read Local Resolvable Address (Octet 35 - Bit 0)
+
+          LE Set Address Resolution Enable (Octet 35 - Bit 1)
+
+          LE Set Resolvable Private Address Timeout (Octet 35 - Bit 2)
+
+          LE Read Maximum Data Length (Octet 35 - Bit 3)
+
+          LE Read PHY (Octet 35 - Bit 4)
+
+          LE Set Default PHY (Octet 35 - Bit 5)
+
+          LE Set PHY (Octet 35 - Bit 6)
+
+          LE Enhanced Receiver Test (Octet 35 - Bit 7)
+
+          LE Enhanced Transmitter Test (Octet 36 - Bit 0)
+
+          LE Set Advertising Set Random Address (Octet 36 - Bit 1)
+
+          LE Set Extended Advertising Parameters (Octet 36 - Bit 2)
+
+          LE Set Extended Advertising Data (Octet 36 - Bit 3)
+
+          LE Set Extended Scan Response Data (Octet 36 - Bit 4)
+
+          LE Set Extended Advertising Enable (Octet 36 - Bit 5)
+
+          LE Read Maximum Advertising Data Length (Octet 36 - Bit 6)
+
+          LE Read Number of Supported Advertising Sets (Octet 36 - Bit 7)
+
+          LE Remove Advertising Set (Octet 37 - Bit 0)
+
+          LE Clear Advertising Sets (Octet 37 - Bit 1)
+
+          LE Set Periodic Advertising Parameters (Octet 37 - Bit 2)
+
+          LE Set Periodic Advertising Data (Octet 37 - Bit 3)
+
+          LE Set Periodic Advertising Enable (Octet 37 - Bit 4)
+
+          LE Set Extended Scan Parameters (Octet 37 - Bit 5)
+
+          LE Set Extended Scan Enable (Octet 37 - Bit 6)
+
+          LE Extended Create Connection (Octet 37 - Bit 7)
+
+          LE Periodic Advertising Create Sync (Octet 38 - Bit 0)
+
+          LE Periodic Advertising Create Sync Cancel (Octet 38 - Bit 1)
+
+          LE Periodic Advertising Terminate Sync (Octet 38 - Bit 2)
+
+          LE Add Device To Periodic Advertiser List (Octet 38 - Bit 3)
+
+          LE Remove Device From Periodic Advertiser List (Octet 38 - Bit 4)
+
+          LE Clear Periodic Advertiser List (Octet 38 - Bit 5)
+
+          LE Read Periodic Advertiser List Size (Octet 38 - Bit 6)
+
+          LE Read Transmit Power (Octet 38 - Bit 7)
+
+          LE Read RF Path Compensation (Octet 39 - Bit 0)
+
+          LE Write RF Path Compensation (Octet 39 - Bit 1)
+
+          LE Set Privacy Mode (Octet 39 - Bit 2)
+
+          LE Receiver Test command [v3] (Octet 39 - Bit 3)
+
+          LE Transmitter Test command [v3] (Octet 39 - Bit 4)
+
+          Octet 39 - Bit 5 
+
+          Octet 39 - Bit 6 
+
+          Octet 39 - Bit 7 
+
+          Octet 40 - Bit 0 
+
+          Octet 41 - Bit 2 
+
+          Read Local Simple Pairing Options (Octet 41 - Bit 3)
+
+          Octet 41 - Bit 4 
+
+          LE Remove Isochronous Data Path (Octet 43 - Bit 4)
+
+          LE Isochronous Transmit Test (Octet 43 - Bit 5)
+
+          LE Isochronous Receive Test (Octet 43 - Bit 6)
+
+          LE Isochronous Read Test Counters (Octet 43 - Bit 7)
+
+          LE Isochronous Read Test Counters (Octet 44 - Bit 0)
+
+          Read Local Supported Codec Capabilities (Octet 45 - Bit 3)
+
+          Read Local Supported Controller Delay (Octet 45 - Bit 4)
+
+          Octet 52 - Bit 0 
+
+          Octet 52 - Bit 4 
+
+          Octet 53 - Bit 2 
+
+          Octet 54 - Bit 1 
+
+          Octet 54 - Bit 2 
+
+          Octet 54 - Bit 3 
+
+          Octet 55 - Bit 1 
+
+          Octet 55 - Bit 3 
+
+          Octet 56 - Bit 0 
+
+          Octet 56 - Bit 2 
+
+          Octet 57 - Bit 0 
+
+          Octet 57 - Bit 3 
+
+          Octet 58 - Bit 4 
+
+          Octet 60 - Bit 0 
+
+          Octet 60 - Bit 5 
+
+          Octet 60 - Bit 7 
+
+          Octet 61 - Bit 0 
+
+          Octet 61 - Bit 2 
+
+          Octet 61 - Bit 5 
+
+          Octet 61 - Bit 6 
+
+          Octet 62 - Bit 4 
+
+          Octet 62 - Bit 7 
+
+          Octet 63 - Bit Thu Jan  1 00:07:59 1970 daemon.notice hostapd: Set MLD config: [ ]
+
+Thu Jan  1 00:07:59 1970 daemon.notice hostapd: Reload all interfaces
+
+Thu Jan  1 00:07:59 1970 daemon.notice hostapd: Failed to open phy phy0
+
+Thu Jan  1 00:08:00 1970 daemon.err aic8800d80-bt[6575]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:08:00 1970 daemon.err aic8800d80-bt[6575]: AIC8800D80 attached as hci0 at 1500000 baud, address <device-address>; low power disabled
+
+Thu Jan  1 00:08:02 1970 kern.err kernel: [  482.803446] Bluetooth: hci0: command 0x0c52 tx timeout
+
+Thu Jan  1 00:08:02 1970 kern.err kernel: [  482.803450] Bluetooth: hci0: Opcode 0x0c52 failed: -110
+
+7: uart:16550A mmio:0x02607000 irq:330 tx:1404 rx:1054 RTS|CTS|DTR
+
+root@OpenWrt:~# kill 5469; /tmp/btmon -r /tmp/bt-init.btsnoop > /tmp/bt-decoded.
+
+
+txt; grep -E "HCI Command|HCI Event|Status:|Opcode|New Index|Delete Index|Extend
+
+
+ed Inquiry|plen" /tmp/bt-decoded.txt | tail -32
+
+< HCI Command: Read Local Supporte.. (0x04|0x000b) plen 0  #71 [hci0] 22.110609
+
+> HCI Event: Command Complete (0x0e) plen 6                #72 [hci0] 22.110848
+
+        Status: Success (0x00)
+
+< HCI Command: Read Local Simple P.. (0x04|0x000c) plen 0  #73 [hci0] 22.110969
+
+> HCI Event: Command Complete (0x0e) plen 6                #74 [hci0] 22.111213
+
+        Status: Success (0x00)
+
+< HCI Command: LE Write Suggested... (0x08|0x0024) plen 4  #75 [hci0] 22.111324
+
+> HCI Event: Command Complete (0x0e) plen 4                #76 [hci0] 22.111584
+
+        Status: Success (0x00)
+
+< HCI Command: LE Set Default PHY (0x08|0x0031) plen 3     #77 [hci0] 22.111740
+
+> HCI Event: Command Complete (0x0e) plen 4                #78 [hci0] 22.112001
+
+        Status: Success (0x00)
+
+= Delete Index: <device-address>                              [hci0] 40.111716
+
+= New Index: <device-address> (Primary,UART,hci0)             [hci0] 52.179823
+
+< HCI Command: Read Local Supporte.. (0x04|0x0003) plen 0  #79 [hci0] 52.181266
+
+> HCI Event: Command Complete (0x0e) plen 12               #80 [hci0] 52.182479
+
+        Status: Success (0x00)
+
+          Extended Inquiry Response
+
+< HCI Command: Read Local Version... (0x04|0x0001) plen 0  #81 [hci0] 52.183445
+
+> HCI Event: Command Complete (0x0e) plen 12               #82 [hci0] 52.184328
+
+        Status: Success (0x00)
+
+< HCI Command: Read BD ADDR (0x04|0x0009) plen 0           #83 [hci0] 52.184442
+
+> HCI Event: Command Complete (0x0e) plen 10               #84 [hci0] 52.186160
+
+        Status: Success (0x00)
+
+< HCI Command: Read Local Supporte.. (0x04|0x0002) plen 0  #85 [hci0] 52.186274
+
+> HCI Event: Command Complete (0x0e) plen 68               #86 [hci0] 52.188402
+
+        Status: Success (0x00)
+
+          Read Extended Inquiry Response (Octet 17 - Bit 0)
+
+          Write Extended Inquiry Response (Octet 17 - Bit 1)
+
+          Read Extended Inquiry Length (Octet 33 - Bit 2)
+
+          Write Extended Inquiry Length (Octet 33 - Bit 3)
+
+< HCI Command: Write Extended In.. (0x03|0x0052) plen 241  #87 [hci0] 52.188516
+
+[1]+  Done                       /tmp/btmon -w /tmp/bt-init.btsnoop 1>/tmp/bt-init.txt 2>&1
+
+root@OpenWrt:~# head -12 /tmp/bt-decoded.txt; grep -E "HCI Command|HCI Event|Sta
+
+
+tus:|New Index|Delete Index" /tmp/bt-decoded.txt | head -60; logread | grep "aic
+
+
+8800d80-bt" | tail -18
+
+Bluetooth monitor ver 5.83
+
+= Note: Linux version 6.12.113 (armv7l)                                0.726574
+
+= Note: Bluetooth subsystem version 2.22                               0.726592
+
+@ RAW Open: hciconfig (privileged) version 2.22               {0x0001} 9.719494
+
+@ RAW Close: hciconfig                                        {0x0001} 9.720806
+
+= New Index: <device-address> (Primary,UART,hci0)             [hci0] 22.091417
+
+= Open Index: <device-address>                                [hci0] 22.092400
+
+< HCI Command: Read Local Supported.. (0x04|0x0003) plen 0  #1 [hci0] 22.092673
+
+> HCI Event: Command Complete (0x0e) plen 12                #2 [hci0] 22.093031
+
+      Read Local Supported Features (0x04|0x0003) ncmd 5
+
+        Status: Success (0x00)
+
+        Features: 0xbf 0x2e 0x4d 0xfe 0xd8 0x3f 0x7b 0x87
+
+= New Index: <device-address> (Primary,UART,hci0)             [hci0] 22.091417
+
+< HCI Command: Read Local Supported.. (0x04|0x0003) plen 0  #1 [hci0] 22.092673
+
+> HCI Event: Command Complete (0x0e) plen 12                #2 [hci0] 22.093031
+
+        Status: Success (0x00)
+
+< HCI Command: Read Local Version I.. (0x04|0x0001) plen 0  #3 [hci0] 22.093961
+
+> HCI Event: Command Complete (0x0e) plen 12                #4 [hci0] 22.094264
+
+        Status: Success (0x00)
+
+< HCI Command: Read BD ADDR (0x04|0x0009) plen 0            #5 [hci0] 22.094380
+
+> HCI Event: Command Complete (0x0e) plen 10                #6 [hci0] 22.094650
+
+        Status: Success (0x00)
+
+< HCI Command: Read Local Supported.. (0x04|0x0002) plen 0  #7 [hci0] 22.094854
+
+> HCI Event: Command Complete (0x0e) plen 68                #8 [hci0] 22.095513
+
+        Status: Success (0x00)
+
+< HCI Command: Write Extended Inq.. (0x03|0x0052) plen 241  #9 [hci0] 22.095635
+
+> HCI Event: Command Complete (0x0e) plen 4                #10 [hci0] 22.097678
+
+        Status: Success (0x00)
+
+< HCI Command: Write Inquiry Mode (0x03|0x0045) plen 1     #11 [hci0] 22.097800
+
+> HCI Event: Command Complete (0x0e) plen 4                #12 [hci0] 22.098039
+
+        Status: Success (0x00)
+
+< HCI Command: Read Inquiry Respon.. (0x03|0x0058) plen 0  #13 [hci0] 22.098140
+
+> HCI Event: Command Complete (0x0e) plen 5                #14 [hci0] 22.098371
+
+        Status: Success (0x00)
+
+< HCI Command: Read Local Extended.. (0x04|0x0004) plen 1  #15 [hci0] 22.098471
+
+> HCI Event: Command Complete (0x0e) plen 14               #16 [hci0] 22.098792
+
+        Status: Success (0x00)
+
+< HCI Command: Read Buffer Size (0x04|0x0005) plen 0       #17 [hci0] 22.098896
+
+> HCI Event: Command Complete (0x0e) plen 11               #18 [hci0] 22.099177
+
+        Status: Success (0x00)
+
+< HCI Command: Read Class of Device (0x03|0x0023) plen 0   #19 [hci0] 22.099277
+
+> HCI Event: Command Complete (0x0e) plen 7                #20 [hci0] 22.099523
+
+        Status: Success (0x00)
+
+< HCI Command: Read Local Name (0x03|0x0014) plen 0        #21 [hci0] 22.099631
+
+> HCI Event: Command Complete (0x0e) plen 252              #22 [hci0] 22.101536
+
+        Status: Success (0x00)
+
+< HCI Command: Read Number of Supp.. (0x03|0x0038) plen 0  #23 [hci0] 22.101722
+
+> HCI Event: Command Complete (0x0e) plen 5                #24 [hci0] 22.101966
+
+        Status: Success (0x00)
+
+< HCI Command: Read Current IAC LAP (0x03|0x0039) plen 0   #25 [hci0] 22.102089
+
+> HCI Event: Command Complete (0x0e) plen 8                #26 [hci0] 22.102340
+
+        Status: Success (0x00)
+
+< HCI Command: Write Connection Ac.. (0x03|0x0016) plen 2  #27 [hci0] 22.102452
+
+> HCI Event: Command Complete (0x0e) plen 4                #28 [hci0] 22.102691
+
+        Status: Success (0x00)
+
+< HCI Command: LE Read Local Suppo.. (0x08|0x0003) plen 0  #29 [hci0] 22.102829
+
+> HCI Event: Command Complete (0x0e) plen 12               #30 [hci0] 22.103109
+
+        Status: Success (0x00)
+
+< HCI Command: LE Read Buffer Size (0x08|0x0002) plen 0    #31 [hci0] 22.103220
+
+> HCI Event: Command Complete (0x0e) plen 7                #32 [hci0] 22.103463
+
+        Status: Success (0x00)
+
+< HCI Command: LE Read Supported S.. (0x08|0x001c) plen 0  #33 [hci0] 22.103574
+
+> HCI Event: Command Complete (0x0e) plen 12               #34 [hci0] 22.103861
+
+        Status: Success (0x00)
+
+< HCI Command: Set Event Mask (0x03|0x0001) plen 8         #35 [hci0] 22.103986
+
+> HCI Event: Command Complete (0x0e) plen 4                #36 [hci0] 22.104272
+
+        Status: Success (0x00)
+
+< HCI Command: Write Default Link... (0x02|0x000f) plen 2  #37 [hci0] 22.104382
+
+> HCI Event: Command Complete (0x0e) plen 4                #38 [hci0] 22.104618
+
+        Status: Success (0x00)
+
+< HCI Command: Read Page Scan Acti.. (0x03|0x001b) plen 0  #39 [hci0] 22.104727
+
+> HCI Event: Command Complete (0x0e) plen 8                #40 [hci0] 22.104976
+
+Thu Jan  1 00:06:29 1970 daemon.err aic8800d80-bt[5300]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:06:32 1970 daemon.err aic8800d80-bt[5300]: AIC8800D80 vendor initialization: Operation timed out
+
+Thu Jan  1 00:06:37 1970 daemon.err aic8800d80-bt[5327]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:06:41 1970 daemon.err aic8800d80-bt[5327]: AIC8800D80 vendor initialization: Operation timed out
+
+Thu Jan  1 00:06:46 1970 daemon.err aic8800d80-bt[5360]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:06:50 1970 daemon.err aic8800d80-bt[5360]: AIC8800D80 vendor initialization: Operation timed out
+
+Thu Jan  1 00:06:55 1970 daemon.err aic8800d80-bt[5387]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:06:58 1970 daemon.err aic8800d80-bt[5387]: AIC8800D80 vendor initialization: Operation timed out
+
+Thu Jan  1 00:07:03 1970 daemon.err aic8800d80-bt[5415]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:07:07 1970 daemon.err aic8800d80-bt[5415]: AIC8800D80 vendor initialization: Operation timed out
+
+Thu Jan  1 00:07:12 1970 daemon.err aic8800d80-bt[5825]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:07:16 1970 daemon.err aic8800d80-bt[5825]: AIC8800D80 vendor initialization: Operation timed out
+
+Thu Jan  1 00:07:21 1970 daemon.err aic8800d80-bt[5856]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:07:24 1970 daemon.err aic8800d80-bt[5856]: AIC8800D80 vendor initialization: Operation timed out
+
+Thu Jan  1 00:07:29 1970 daemon.err aic8800d80-bt[5883]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:07:30 1970 daemon.err aic8800d80-bt[5883]: AIC8800D80 attached as hci0 at 1500000 baud, address <device-address>; low power disabled
+
+Thu Jan  1 00:08:00 1970 daemon.err aic8800d80-bt[6575]: Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+Thu Jan  1 00:08:00 1970 daemon.err aic8800d80-bt[6575]: AIC8800D80 attached as hci0 at 1500000 baud, address <device-address>; low power disabled
+
+root@OpenWrt:~# uci set wireless.default_radio0.ssid=T153-validation; uci set wi
+
+
+reless.default_radio0.encryption=psk2; uci set wireless.default_radio0.key=$(hea
+
+
+d -c 18 /dev/urandom | hexdump -v -e "1/1 %02x"); uci set wireless.default_radio
+
+
+0.disabled=0; wifi up; echo WIFI_UP_EXIT=$?
+
+hexdump: bad format {1/1 %02x}
+
+WIFI_UP_EXIT=0
+
+root@OpenWrt:~# [  655.258195] get_txpwr_max:txpwr_max:18 
+
+
+[  655.267522] get_txpwr_max:txpwr_max:18 
+
+
+[  655.273290] aicwf_sdio mmc2:390b:1 wlan0: Remove Interface
+
+[  655.278913] get_txpwr_max:txpwr_max:18 
+
+
+[  655.884647] get_txpwr_max:txpwr_max:18 
+
+
+[  655.888708] get_txpwr_max:txpwr_max:18 
+
+
+[  655.923187] get_txpwr_max:txpwr_max:18 
+
+
+[  655.928713] get_txpwr_max:txpwr_max:18 
+
+
+[  655.935880] get_txpwr_max:txpwr_max:18 
+
+
+[  655.948273] get_txpwr_max:txpwr_max:18 
+
+
+[  656.051898] get_txpwr_max:txpwr_max:18 
+
+
+[  656.060308] br-lan: port 2(phy2-ap0) entered blocking state
+
+[  656.065994] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  656.071659] aicwf_sdio mmc2:390b:1 phy2-ap0: entered allmulticast mode
+
+[  656.078689] aicwf_sdio mmc2:390b:1 phy2-ap0: entered promiscuous mode
+
+[  656.096318] get_txpwr_max:txpwr_max:18 
+
+
+[  656.146448] aicwf_sdio mmc2:390b:1 phy2-ap0: left allmulticast mode
+
+[  656.152802] aicwf_sdio mmc2:390b:1 phy2-ap0: left promiscuous mode
+
+[  656.159355] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  656.173249] br-lan: port 2(phy2-ap0) entered blocking state
+
+[  656.179001] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  656.184790] aicwf_sdio mmc2:390b:1 phy2-ap0: entered allmulticast mode
+
+[  656.191841] aicwf_sdio mmc2:390b:1 phy2-ap0: entered promiscuous mode
+
+[  656.202503] rwnx_cfg80211_del_station_compat: (null)
+
+[  656.210226] get_txpwr_max:txpwr_max:18 
+
+
+[  656.216405] chan.flags 0 
+
+[  656.450064] aicwf_sdio mmc2:390b:1 phy2-ap0: AP started: ch=0, bcmc_idx=32 channel=5180 bw=3
+
+[  656.453725] br-lan: port 2(phy2-ap0) entered blocking state
+
+[  656.464164] br-lan: port 2(phy2-ap0) entered forwarding state
+
+uci set wireless.default_radio0.key=$(head -c 24 /dev/urandom | 
+
+
+base64); wifi up; echo WIFI_UP_EXIT=$?
+
+-ash: base64: not found
+
+head: standard output: Broken pipe
+
+WIFI_UP_EXIT=0
+
+root@OpenWrt:~# [  664.603618] aicwf_sdio mmc2:390b:1 phy2-ap0: left allmulticast mode
+
+[  664.609952] aicwf_sdio mmc2:390b:1 phy2-ap0: left promiscuous mode
+
+[  664.616451] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  664.624658] aicwf_sdio mmc2:390b:1 phy2-ap0: AP Stopped
+
+[  664.673749] get_txpwr_max:txpwr_max:18 
+
+
+[  664.732231] aicwf_sdio mmc2:390b:1 phy2-ap0: CLOSE
+
+[  664.738447] ieee80211 phy2: HT supp 1, VHT supp 1, HE supp 1
+
+[  664.747772] aicwf_sdio mmc2:390b:1 phy2-ap0: Remove Interface
+
+[  664.753684] get_txpwr_max:txpwr_max:18 
+
+
+[  665.870737] get_txpwr_max:txpwr_max:18 
+
+
+[  665.874833] get_txpwr_max:txpwr_max:18 
+
+
+[  665.895962] get_txpwr_max:txpwr_max:18 
+
+
+[  665.900310] get_txpwr_max:txpwr_max:18 
+
+
+[  665.907292] get_txpwr_max:txpwr_max:18 
+
+
+[  665.917034] get_txpwr_max:txpwr_max:18 
+
+
+[  665.965562] get_txpwr_max:txpwr_max:18 
+
+
+[  665.972251] br-lan: port 2(phy2-ap0) entered blocking state
+
+[  665.978018] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  665.983825] aicwf_sdio mmc2:390b:1 phy2-ap0: entered allmulticast mode
+
+[  665.990905] aicwf_sdio mmc2:390b:1 phy2-ap0: entered promiscuous mode
+
+[  665.997725] br-lan: port 2(phy2-ap0) entered blocking state
+
+[  666.003340] br-lan: port 2(phy2-ap0) entered forwarding state
+
+[  666.016205] get_txpwr_max:txpwr_max:18 
+
+
+[  666.158681] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  666.167311] rwnx_cfg80211_del_station_compat: (null)
+
+[  666.173855] get_txpwr_max:txpwr_max:18 
+
+
+[  666.179165] chan.flags 0 
+
+[  666.180806] aicwf_sdio mmc2:390b:1 phy2-ap0: left allmulticast mode
+
+[  666.188197] aicwf_sdio mmc2:390b:1 phy2-ap0: left promiscuous mode
+
+[  666.194637] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  666.217434] br-lan: port 2(phy2-ap0) entered blocking state
+
+[  666.223073] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  666.228795] aicwf_sdio mmc2:390b:1 phy2-ap0: entered allmulticast mode
+
+[  666.235855] aicwf_sdio mmc2:390b:1 phy2-ap0: entered promiscuous mode
+
+[  666.412950] aicwf_sdio mmc2:390b:1 phy2-ap0: AP started: ch=0, bcmc_idx=32 channel=5180 bw=3
+
+[  666.413713] br-lan: port 2(phy2-ap0) entered blocking state
+
+[  666.427060] br-lan: port 2(phy2-ap0) entered forwarding state
+
+wifi down; uci set wireless.default_radio0.key=$(head -c 32 /dev
+
+
+/urandom | sha256sum | cut -c1-32); wifi up
+
+root@OpenWrt:~# [  678.493601] aicwf_sdio mmc2:390b:1 phy2-ap0: left allmulticast mode
+
+[  678.499938] aicwf_sdio mmc2:390b:1 phy2-ap0: left promiscuous mode
+
+[  678.506430] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  678.514515] aicwf_sdio mmc2:390b:1 phy2-ap0: AP Stopped
+
+[  678.553663] get_txpwr_max:txpwr_max:18 
+
+
+[  678.611718] aicwf_sdio mmc2:390b:1 phy2-ap0: CLOSE
+
+[  678.617951] ieee80211 phy2: HT supp 1, VHT supp 1, HE supp 1
+
+[  678.627198] aicwf_sdio mmc2:390b:1 phy2-ap0: Remove Interface
+
+[  678.633020] get_txpwr_max:txpwr_max:18 
+
+
+[  679.755201] get_txpwr_max:txpwr_max:18 
+
+
+[  679.759239] get_txpwr_max:txpwr_max:18 
+
+
+[  679.773641] get_txpwr_max:txpwr_max:18 
+
+
+[  679.778051] get_txpwr_max:txpwr_max:18 
+
+
+[  679.783888] get_txpwr_max:txpwr_max:18 
+
+
+[  679.789937] get_txpwr_max:txpwr_max:18 
+
+
+[  679.837690] get_txpwr_max:txpwr_max:18 
+
+
+[  679.843800] br-lan: port 2(phy2-ap0) entered blocking state
+
+[  679.849445] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  679.855206] aicwf_sdio mmc2:390b:1 phy2-ap0: entered allmulticast mode
+
+[  679.862259] aicwf_sdio mmc2:390b:1 phy2-ap0: entered promiscuous mode
+
+[  679.869094] br-lan: port 2(phy2-ap0) entered blocking state
+
+[  679.874754] br-lan: port 2(phy2-ap0) entered forwarding state
+
+[  679.895326] get_txpwr_max:txpwr_max:18 
+
+
+[  679.977934] rwnx_cfg80211_del_station_compat: (null)
+
+[  680.036709] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  680.059008] aicwf_sdio mmc2:390b:1 phy2-ap0: left allmulticast mode
+
+[  680.065399] aicwf_sdio mmc2:390b:1 phy2-ap0: left promiscuous mode
+
+[  680.071792] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  680.084937] br-lan: port 2(phy2-ap0) entered blocking state
+
+[  680.090578] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  680.096422] aicwf_sdio mmc2:390b:1 phy2-ap0: entered allmulticast mode
+
+[  680.103532] aicwf_sdio mmc2:390b:1 phy2-ap0: entered promiscuous mode
+
+[  680.112919] get_txpwr_max:txpwr_max:18 
+
+
+[  680.118322] chan.flags 0 
+
+[  680.352064] aicwf_sdio mmc2:390b:1 phy2-ap0: AP started: ch=0, bcmc_idx=32 channel=5180 bw=3
+
+[  680.353717] br-lan: port 2(phy2-ap0) entered blocking state
+
+[  680.366187] br-lan: port 2(phy2-ap0) entered forwarding state
+
+iw dev; grep -E "^(wpa=|wpa_key_mgmt=|rsn_pairwise=)" /var/run/h
+
+
+ostapd-phy*.conf; logread | grep -E "AP-ENABLED|AP-DISABLED|Failed" | tail -8; c
+
+
+at /sys/class/net/eth1/carrier_changes; uptime; wifi down; uci revert wireless
+
+[  687.574376] get_txpwr_max:txpwr_max:18 
+
+
+phy#2
+
+	Interface phy2-ap0
+
+		ifindex 14
+
+		wdev 0x200000004
+
+		addr <device-address>
+
+		ssid T153-validation
+
+		type AP
+
+		channel 36 (5180 MHz), width: 80 MHz, center1: 5210 MHz
+
+		txpower 18.00 dBm
+
+/var/run/hostapd-phy2.conf:wpa=2
+
+/var/run/hostapd-phy2.conf:wpa_key_mgmt=WPA-PSK
+
+Thu Jan  1 00:11:04 1970 daemon.notice hostapd: Failed to open phy phy0
+
+Thu Jan  1 00:11:04 1970 daemon.notice hostapd: Failed to open phy phy0
+
+Thu Jan  1 00:11:04 1970 daemon.notice hostapd: phy2-ap0: AP-DISABLED
+
+Thu Jan  1 00:11:06 1970 daemon.notice hostapd: phy2-ap0: AP-ENABLED
+
+Thu Jan  1 00:11:18 1970 daemon.notice hostapd: Failed to open phy phy0
+
+Thu Jan  1 00:11:18 1970 daemon.notice hostapd: Failed to open phy phy0
+
+Thu Jan  1 00:11:18 1970 daemon.notice hostapd: phy2-ap0: AP-DISABLED
+
+Thu Jan  1 00:11:20 1970 daemon.notice hostapd: phy2-ap0: AP-ENABLED
+
+1
+
+ 00:11:27 up 11 min,  load average: 0.18, 0.11, 0.08
+
+root@OpenWrt:~# [  688.073567] aicwf_sdio mmc2:390b:1 phy2-ap0: left allmulticast mode
+
+[  688.079902] aicwf_sdio mmc2:390b:1 phy2-ap0: left promiscuous mode
+
+[  688.086390] br-lan: port 2(phy2-ap0) entered disabled state
+
+[  688.095185] aicwf_sdio mmc2:390b:1 phy2-ap0: AP Stopped
+
+[  688.133651] get_txpwr_max:txpwr_max:18 
+
+
+[  688.191814] aicwf_sdio mmc2:390b:1 phy2-ap0: CLOSE
+
+[  688.198014] ieee80211 phy2: HT supp 1, VHT supp 1, HE supp 1
+
+[  688.206032] aicwf_sdio mmc2:390b:1 phy2-ap0: Remove Interface
+
+[  688.211848] get_txpwr_max:txpwr_max:18 
+
+
+wget -q -O /tmp/net-test-16m.bin http://192.168.1.228:8878/net-t
+
+
+est-16m.bin; sha256sum /tmp/net-test-16m.bin; cat /sys/class/net/eth1/carrier_ch
+
+
+anges; cat /sys/class/net/eth1/statistics/rx_errors /sys/class/net/eth1/statisti
+
+
+cs/tx_errors; uptime
+
+2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9  /tmp/net-test-16m.bin
+
+1
+
+0
+
+0
+
+ 00:12:18 up 12 min,  load average: 0.23, 0.12, 0.09
+
+root@OpenWrt:~# wget -q -O /tmp/t153-tty-status http://192.168.1.228:8878/t153-t
+
+
+ty-status; sha256sum /tmp/t153-tty-status; chmod +x /tmp/t153-tty-status; /tmp/t
+
+
+153-tty-status /dev/ttyS7
+
+96d77e72e0f54ce27bfa9f5c5a4a50bb4579ae4d4ab9cd126e1259e27533123b  /tmp/t153-tty-status
+
+{"device":"/dev/ttyS7","operation":"standard-tty-ioctl-snapshot","open":{"ok":true},"serial":{"ok":true,"type":4,"line":7,"irq":330,"flags":822083584,"xmit_fifo_size":16,"baud_base":1500000,"custom_divisor":0,"io_type":3},"icount":{"ok":true,"cts":43,"dsr":0,"rng":0,"dcd":0,"rx":1054,"tx":1404,"frame":0,"overrun":0,"parity":0,"brk":0,"buf_overrun":0},"termios":{"ok":true,"cflag":2147491002,"iflag":0,"ispeed":1500000,"ospeed":1500000,"rtscts":true,"clocal":true},"modem":{"ok":true,"bits":16422,"cts":true,"rts":true,"dtr":true},"line_discipline":{"ok":true,"value":15},"tx_queued":{"ok":false,"errno":25,"error":"Not a tty"}}
+
+root@OpenWrt:~# /etc/init.d/aic8800d80-bt stop; wget -q -O /tmp/aic8800d80-bt-ei
+
+
+r-probe http://192.168.1.228:8878/aic8800d80-bt-eir-probe; sha256sum /tmp/aic880
+
+
+0d80-bt-eir-probe; chmod +x /tmp/aic8800d80-bt-eir-probe; for node in /sys/class
+
+
+/rfkill/rfkill*; do echo $node:$(cat $node/name); done; rmmod aic8800_fdrv; rmmo
+
+
+d aic8800_bsp; echo 4023000.mmc > /sys/bus/platform/drivers/sunxi-mmc/unbind; ec
+
+
+ho 4023000.mmc > /sys/bus/platform/drivers/sunxi-mmc/bind; modprobe aic8800_bsp;
+
+
+ modprobe aic8800_fdrv
+
+41e8f62f3dba8a3c04ccd346698d5e40a4e9a03d5e2217ffa832bf178d4e11f2  /tmp/aic8800d80-bt-eir-probe
+
+/sys/class/rfkill/rfkill0:t153-aic8800d80-bt
+
+/sys/class/rfkill/rfkill5:phy2
+
+[  888.383461] tcp_ack_deinit 
+
+[  888.434330] aicbsp: aicbsp_resv_mem_kfree_skb, free resv_mem_txdata succuss, id: 0, size: 98304
+
+[  888.443159] aicwf_prealloc_exit enter
+
+[  888.446897] free pre alloc rxbuff list 30
+
+[  888.451859] aicbsp: aicbsp_set_subsys, subsys: AIC_WIFI, state to: 0
+
+[  888.458312] aicbsp: aicbsp_set_subsys, power state change to 0 dure to AIC_WIFI
+
+[  888.465723] aicbsp: aicwf_sdio_release
+
+[  888.469488] aicbsp: aicwf_bus_deinit
+
+[  888.469534] aicbsp: sdio_err:<aicwf_sdio_bustx_thread,1430>: sdio bustx thread stop
+
+[  888.480923] aicbsp: sdio_err:<aicwf_sdio_busrx_thread,1449>: sdio busrx thread stop
+
+[  888.488772] aicbsp: sdio_err:<aicwf_sdio_func_deinit,1979>: aicwf_sdio_func_deinit, bus_if is null
+
+[  888.497800] aicbsp: aicbsp_sdio_remove done
+
+[  888.502206] aicbsp: aicbsp_platform_power_off
+
+[  888.680494] aicbsp_resv_mem_deinit 
+
+[  888.684115] aicbsp_exit
+
+[  888.760546] mmc2: card 390b removed
+
+[  888.768828] sunxi-mmc 4023000.mmc: SMHC version 0x50530, DMA address shift 2
+
+[  888.776875] sunxi-mmc 4023000.mmc: allocated mmc-pwrseq
+
+[  889.016470] sunxi-mmc 4023000.mmc: initialized, max. request size: 1024 KB, uses new timings mode
+
+[  889.044297] mmc2: new SDIO card at address 390b
+
+[  889.162690] aicbsp_init
+
+[  889.165269] RELEASE_DATE:2026_0123_5f7be68d
+
+
+[  889.169556] aicbsp_resv_mem_init 
+
+[  889.342129] aicbsp: aicbsp_set_subsys, subsys: AIC_WIFI, state to: 1
+
+[  889.348597] aicbsp: aicbsp_set_subsys, power state change to 1 dure to AIC_WIFI
+
+[  889.355978] aicbsp: aicbsp_platform_power_on
+
+[  889.377595] aicbsp: aicbsp_sdio_probe:1 vid:0xC8A1  did:0x0082
+
+[  889.383778] aicbsp: aicbsp_sdio_probe:2 vid:0xC8A1  did:0x0182
+
+[  889.389639] aicbsp: aicbsp_sdio_probe after replace:1
+
+[  889.394748] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+[  889.401292] aicbsp: aicwf_sdio_reg_init
+
+[  889.406896] rwnx_load_firmware: request firmware = fw_patch_table_8800d80_u02.bin 
+
+[  889.414849] file md5:54b15ce88b3b9ba14bf961e6f90839fc
+
+
+[  889.420230] rwnx_plat_bin_fw_upload_android
+
+[  889.424480] rwnx_load_firmware: request firmware = fw_adid_8800d80_u02.bin 
+
+[  889.431673] file md5:f546881a81b960d89a672578eb45a809
+
+
+[  889.437962] rwnx_plat_bin_fw_upload_android
+
+[  889.442166] rwnx_load_firmware: request firmware = fw_patch_8800d80_u02.bin 
+
+[  889.450614] file md5:f5400db1d64e0150c3232eb53e7f78b6
+
+
+[  889.471918] rwnx_plat_bin_fw_upload_android
+
+[  889.476160] rwnx_load_firmware: request firmware = fw_patch_8800d80_u02_ext0.bin 
+
+[  889.484366] file md5:6fcbe60f7bcf7bc39bdf6e9c3fb7f1d8
+
+
+[  889.524519] aicbt_patch_table_load bt btmode[3]:5 
+
+
+[  889.529424] aicbt_patch_table_load bt uart_baud[3]:1500000 
+
+
+[  889.535134] aicbt_patch_table_load bt uart_flowctrl[3]:1 
+
+
+[  889.540634] aicbt_patch_table_load bt lpm_enable[3]:0 
+
+
+[  889.545909] aicbt_patch_table_load bt tx_pwr[3]:28463 
+
+
+[  889.667462] aicbsp: bt patch version: - Aug 01 2025 11:05:26 - git a26f071
+
+[  889.674618] rwnx_plat_bin_fw_upload_android
+
+[  889.678818] rwnx_load_firmware: request firmware = fmacfw_8800d80_u02.bin 
+
+[  889.696270] file md5:56562779b8c4debfd9b354891418249a
+
+
+[  889.835727] rd_version_val=06090101
+
+[  889.859261] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+[  889.865859] aicsdio: aicwf_sdio_reg_init
+
+[  889.875066] aicwf_prealloc_init enter
+
+[  889.879614] pre alloc rxbuff list len: 30
+
+[  889.883746] aicbsp: aicbsp_resv_mem_alloc_skb, alloc resv_mem_txdata succuss, id: 0, size: 98304
+
+[  889.893266] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+[  889.900361] tcp_ack_init 
+
+[  889.904099] rwnx_load_firmware: request firmware = aic_userconfig_8800d80.txt 
+
+[  889.911680] file md5:4c1619f2ad65562412588a297dfbc86f
+
+
+[  891.003079] ieee80211 phy3: HT supp 1, VHT supp 1, HE supp 1
+
+[  891.009744] rwnx_reg_notifier Enter
+
+
+[  891.015102] ieee80211 phy3: 
+
+[  891.015102] *******************************************************
+
+[  891.015102] ** CAUTION: USING PERMISSIVE CUSTOM REGULATORY RULES **
+
+[  891.015102] *******************************************************
+
+[  891.072336] get_txpwr_max:txpwr_max:18 
+
+
+root@OpenWrt:~# /tmp/aic8800d80-bt-eir-probe --device /dev/ttyS7 --rfkill-soft /
+
+
+sys/class/rfkill/rfkill0/soft --address auto --eir-mode whole; echo EIR_WHOLE_EX
+
+
+IT=$?; /tmp/t153-tty-status /dev/ttyS7
+
+Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+BEGIN command=1 opcode=0x0c03 params=0 H4_bytes=4 mode=whole
+
+END opcode=0x0c03 result=PASS status=0 errno=0 (none) tx_written=4 rx_read=7 events=1
+
+BEGIN command=2 opcode=0xfc70 params=6 H4_bytes=10 mode=whole
+
+END opcode=0xfc70 result=PASS status=0 errno=0 (none) tx_written=10 rx_read=7 events=1
+
+BEGIN command=3 opcode=0xfc4d params=104 H4_bytes=108 mode=whole
+
+END opcode=0xfc4d result=PASS status=0 errno=0 (none) tx_written=108 rx_read=7 events=1
+
+BEGIN command=4 opcode=0xfc50 params=1 H4_bytes=5 mode=whole
+
+END opcode=0xfc50 result=PASS status=0 errno=0 (none) tx_written=5 rx_read=7 events=1
+
+BEGIN command=5 opcode=0xfc51 params=1 H4_bytes=5 mode=whole
+
+END opcode=0xfc51 result=PASS status=0 errno=0 (none) tx_written=5 rx_read=7 events=1
+
+BEGIN command=6 opcode=0xfc52 params=1 H4_bytes=5 mode=whole
+
+END opcode=0xfc52 result=PASS status=0 errno=0 (none) tx_written=5 rx_read=7 events=1
+
+BEGIN command=7 opcode=0x0c52 params=241 H4_bytes=245 mode=whole
+
+END opcode=0x0c52 result=FAIL status=-1 errno=110 (Operation timed out) tx_written=245 rx_read=0 events=0
+
+EIR probe failed; no retry or attach. Restore MMC3/chip state before another run.
+
+SUMMARY attempted=7 completed=6 host_tx_written=382 host_rx_read=42 events=6 exit=1
+
+EIR_WHOLE_EXIT=1
+
+{"device":"/dev/ttyS7","operation":"standard-tty-ioctl-snapshot","open":{"ok":true},"serial":{"ok":true,"type":4,"line":7,"irq":330,"flags":822083584,"xmit_fifo_size":16,"baud_base":1500000,"custom_divisor":0,"io_type":3},"icount":{"ok":true,"cts":55,"dsr":0,"rng":0,"dcd":0,"rx":1096,"tx":1786,"frame":0,"overrun":0,"parity":0,"brk":0,"buf_overrun":0},"termios":{"ok":true,"cflag":3261,"iflag":1280,"ispeed":9600,"ospeed":9600,"rtscts":false,"clocal":true},"modem":{"ok":true,"bits":16422,"cts":true,"rts":true,"dtr":true},"line_discipline":{"ok":true,"value":0},"tx_queued":{"ok":true,"bytes":0}}
+
+root@OpenWrt:~# rmmod aic8800_fdrv; rmmod aic8800_bsp; echo 4023000.mmc > /sys/b
+
+
+us/platform/drivers/sunxi-mmc/unbind; echo 4023000.mmc > /sys/bus/platform/drive
+
+
+rs/sunxi-mmc/bind; modprobe aic8800_bsp; modprobe aic8800_fdrv; /tmp/aic8800d80-
+
+
+bt-eir-probe --device /dev/ttyS7 --rfkill-soft /sys/class/rfkill/rfkill0/soft --
+
+
+address auto --eir-mode chunked; echo EIR_CHUNKED_EXIT=$?
+
+[  912.839040] aicwf_sdio mmc2:390b:1 wlan0: Remove Interface
+
+[  912.844676] get_txpwr_max:txpwr_max:18 
+
+
+[  913.043663] tcp_ack_deinit 
+
+[  913.047764] aicbsp: aicbsp_resv_mem_kfree_skb, free resv_mem_txdata succuss, id: 0, size: 98304
+
+[  913.056636] aicwf_prealloc_exit enter
+
+[  913.060317] free pre alloc rxbuff list 30
+
+[  913.064941] aicbsp: aicbsp_set_subsys, subsys: AIC_WIFI, state to: 0
+
+[  913.071322] aicbsp: aicbsp_set_subsys, power state change to 0 dure to AIC_WIFI
+
+[  913.078763] aicbsp: aicwf_sdio_release
+
+[  913.082534] aicbsp: aicwf_bus_deinit
+
+[  913.082583] aicbsp: sdio_err:<aicwf_sdio_bustx_thread,1430>: sdio bustx thread stop
+
+[  913.094011] aicbsp: sdio_err:<aicwf_sdio_busrx_thread,1449>: sdio busrx thread stop
+
+[  913.101781] aicbsp: sdio_err:<aicwf_sdio_func_deinit,1979>: aicwf_sdio_func_deinit, bus_if is null
+
+[  913.110798] aicbsp: aicbsp_sdio_remove done
+
+[  913.115226] aicbsp: aicbsp_platform_power_off
+
+[  913.300306] aicbsp_resv_mem_deinit 
+
+[  913.303969] aicbsp_exit
+
+[  913.360520] mmc2: card 390b removed
+
+[  913.369251] sunxi-mmc 4023000.mmc: SMHC version 0x50530, DMA address shift 2
+
+[  913.377256] sunxi-mmc 4023000.mmc: allocated mmc-pwrseq
+
+[  913.616186] sunxi-mmc 4023000.mmc: initialized, max. request size: 1024 KB, uses new timings mode
+
+[  913.644507] mmc2: new SDIO card at address 390b
+
+[  913.762128] aicbsp_init
+
+[  913.764811] RELEASE_DATE:2026_0123_5f7be68d
+
+
+[  913.769100] aicbsp_resv_mem_init 
+
+[  913.942540] aicbsp: aicbsp_set_subsys, subsys: AIC_WIFI, state to: 1
+
+[  913.949132] aicbsp: aicbsp_set_subsys, power state change to 1 dure to AIC_WIFI
+
+[  913.956531] aicbsp: aicbsp_platform_power_on
+
+[  913.978297] aicbsp: aicbsp_sdio_probe:1 vid:0xC8A1  did:0x0082
+
+[  913.984406] aicbsp: aicbsp_sdio_probe:2 vid:0xC8A1  did:0x0182
+
+[  913.990265] aicbsp: aicbsp_sdio_probe after replace:1
+
+[  913.995387] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+[  914.001930] aicbsp: aicwf_sdio_reg_init
+
+[  914.007483] rwnx_load_firmware: request firmware = fw_patch_table_8800d80_u02.bin 
+
+[  914.015442] file md5:54b15ce88b3b9ba14bf961e6f90839fc
+
+
+[  914.020824] rwnx_plat_bin_fw_upload_android
+
+[  914.025096] rwnx_load_firmware: request firmware = fw_adid_8800d80_u02.bin 
+
+[  914.032291] file md5:f546881a81b960d89a672578eb45a809
+
+
+[  914.038579] rwnx_plat_bin_fw_upload_android
+
+[  914.042782] rwnx_load_firmware: request firmware = fw_patch_8800d80_u02.bin 
+
+[  914.051034] file md5:f5400db1d64e0150c3232eb53e7f78b6
+
+
+[  914.071146] rwnx_plat_bin_fw_upload_android
+
+[  914.075392] rwnx_load_firmware: request firmware = fw_patch_8800d80_u02_ext0.bin 
+
+[  914.083611] file md5:6fcbe60f7bcf7bc39bdf6e9c3fb7f1d8
+
+
+[  914.121721] aicbt_patch_table_load bt btmode[3]:5 
+
+
+[  914.126667] aicbt_patch_table_load bt uart_baud[3]:1500000 
+
+
+[  914.132341] aicbt_patch_table_load bt uart_flowctrl[3]:1 
+
+
+[  914.137878] aicbt_patch_table_load bt lpm_enable[3]:0 
+
+
+[  914.143116] aicbt_patch_table_load bt tx_pwr[3]:28463 
+
+
+[  914.263058] aicbsp: bt patch version: - Aug 01 2025 11:05:26 - git a26f071
+
+[  914.270116] rwnx_plat_bin_fw_upload_android
+
+[  914.274365] rwnx_load_firmware: request firmware = fmacfw_8800d80_u02.bin 
+
+[  914.291664] file md5:56562779b8c4debfd9b354891418249a
+
+
+[  914.429684] rd_version_val=06090101
+
+[  914.452687] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+[  914.459278] aicsdio: aicwf_sdio_reg_init
+
+[  914.468539] aicwf_prealloc_init enter
+
+[  914.473080] pre alloc rxbuff list len: 30
+
+[  914.477214] aicbsp: aicbsp_resv_mem_alloc_skb, alloc resv_mem_txdata succuss, id: 0, size: 98304
+
+[  914.486793] aicbsp: aicbsp_get_feature, set FEATURE_SDIO_CLOCK 150 MHz
+
+[  914.493806] tcp_ack_init 
+
+[  914.497533] rwnx_load_firmware: request firmware = aic_userconfig_8800d80.txt 
+
+[  914.505163] file md5:4c1619f2ad65562412588a297dfbc86f
+
+
+[  915.598212] ieee80211 phy4: HT supp 1, VHT supp 1, HE supp 1
+
+[  915.604864] rwnx_reg_notifier Enter
+
+
+[  915.609709] ieee80211 phy4: 
+
+[  915.609709] *******************************************************
+
+[  915.609709] ** CAUTION: USING PERMISSIVE CUSTOM REGULATORY RULES **
+
+[  915.609709] *******************************************************
+
+[  915.666877] get_txpwr_max:txpwr_max:18 
+
+
+Deriving Bluetooth address from /sys/class/block/mmcblk0/device/cid
+
+BEGIN command=1 opcode=0x0c03 params=0 H4_bytes=4 mode=whole
+
+END opcode=0x0c03 result=PASS status=0 errno=0 (none) tx_written=4 rx_read=7 events=1
+
+BEGIN command=2 opcode=0xfc70 params=6 H4_bytes=10 mode=whole
+
+END opcode=0xfc70 result=PASS status=0 errno=0 (none) tx_written=10 rx_read=7 events=1
+
+BEGIN command=3 opcode=0xfc4d params=104 H4_bytes=108 mode=whole
+
+END opcode=0xfc4d result=PASS status=0 errno=0 (none) tx_written=108 rx_read=7 events=1
+
+BEGIN command=4 opcode=0xfc50 params=1 H4_bytes=5 mode=whole
+
+END opcode=0xfc50 result=PASS status=0 errno=0 (none) tx_written=5 rx_read=7 events=1
+
+BEGIN command=5 opcode=0xfc51 params=1 H4_bytes=5 mode=whole
+
+END opcode=0xfc51 result=PASS status=0 errno=0 (none) tx_written=5 rx_read=7 events=1
+
+BEGIN command=6 opcode=0xfc52 params=1 H4_bytes=5 mode=whole
+
+END opcode=0xfc52 result=PASS status=0 errno=0 (none) tx_written=5 rx_read=7 events=1
+
+BEGIN command=7 opcode=0x0c52 params=241 H4_bytes=245 mode=32B/1ms
+
+EIR chunk offset=0 bytes=32 host_tx_written=169
+
+EIR chunk offset=32 bytes=32 host_tx_written=201
+
+EIR chunk offset=64 bytes=32 host_tx_written=233
+
+EIR chunk offset=96 bytes=32 host_tx_written=265
+
+EIR chunk offset=128 bytes=32 host_tx_written=297
+
+EIR chunk offset=160 bytes=32 host_tx_written=329
+
+EIR chunk offset=192 bytes=32 host_tx_written=361
+
+EIR chunk offset=224 bytes=21 host_tx_written=382
+
+END opcode=0x0c52 result=PASS status=0 errno=0 (none) tx_written=245 rx_read=7 events=1
+
+EIR probe passed; leaving N_TTY and blocking Bluetooth on exit
+
+SUMMARY attempted=7 completed=7 host_tx_written=382 host_rx_read=49 events=7 exit=0
+
+EIR_CHUNKED_EXIT=0
+
+root@OpenWrt:~# wc -c /tmp/bt-init.btsnoop; sha256sum /tmp/bt-init.btsnoop; whic
+
+
+h nc; nc -h 2>&1 | head -4; uptime; cat /sys/class/net/eth1/carrier_changes
+
+4029 /tmp/bt-init.btsnoop
+
+bb7dd34416a111bfb0ec3e35c746f462937c2cecc8cec69d2e28a8f659b93f6b  /tmp/bt-init.btsnoop
+
+/usr/bin/nc
+
+BusyBox v1.37.0 (2026-11-04 01:33:29 UTC) multi-call binary.
+
+
+
+Usage: nc [IPADDR PORT]
+
+
+
+ 00:16:06 up 16 min,  load average: 0.00, 0.06, 0.07
+
+1
+
+root@OpenWrt:~# [ 1089.283968] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+
+[ 1101.764780] RTL8211F Gigabit Ethernet stmmac-1:01: Downshift occurred from negotiated speed 1Gbps to actual speed 100Mbps, check cabling!
+
+[ 1101.779220] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 100Mbps/Full - flow control rx/tx
+
+mount | grep mmc; df -h /tmp; uptime; cat /sys/class/net/eth1/ca
+
+
+rrier_changes
+
+Filesystem                Size      Used Available Use% Mounted on
+
+tmpfs                   183.4M     17.6M    165.8M  10% /tmp
+
+ 00:23:31 up 23 min,  load average: 0.00, 0.04, 0.06
+
+3
+
+root@OpenWrt:~# 
+
+U-Boot SPL 2026.07 (Jul 01 2026 - 00:00:00 +0000)
+
+T153 source SPL: no vendor DDR library
+
+DDR4 source init: 1024 MiB physical x16; bootstrap 480 MHz
+
+DDR4: 933 MHz read eye and Vref training
+
+DDR lane 0: read Vref=56 delay=26
+
+DDR lane 1: read Vref=52 delay=28
+
+DDR4: write eye and Vref training
+
+DDR write Vref=20 delays=80,80
+
+DDR4: per-bit read/write deskew
+
+DDR4: geometry and memory checks
+
+DDR4: source initialization and memory checks passed
+
+Trying to boot from MMC2
+
+
+
+
+
+U-Boot 2026.07 (Jul 01 2026 - 00:00:00 +0000)
+
+
+
+Model: DshanPI T153MX OmniGate RAM U-Boot
+
+Board: T153 OmniGate (experimental source SPL/U-Boot)
+
+No vendor DDR/monitor. Four-core PSCI cold-boot profile.
+
+DRAM:  384 MiB
+
+Core:  6 devices, 4 uclasses, devicetree: separate
+
+MMC:   mmc@4020000: 0, mmc@4022000: 1
+
+Loading Environment from <NULL>... OK
+
+In:    serial@2600000
+
+Out:   serial@2600000
+
+Err:   serial@2600000
+
+
+Hit any key to stop autoboot: 3
+Hit any key to stop autoboot: 2
+Hit any key to stop autoboot: 1
+Hit any key to stop autoboot: 0
+
+469 bytes read in 0 ms
+
+## Executing script at 4f100000
+
+4309532 bytes read in 391 ms (10.5 MiB/s)
+
+
+
+## Checking Image at 50000000 ...
+
+   FIT image found
+
+   FIT description: ARM OpenWrt FIT (Flattened Image Tree)
+
+    Image 0 (kernel-1)
+
+     Description:  ARM OpenWrt Linux-6.12.113
+
+     Type:         Kernel Image
+
+     Compression:  gzip compressed
+
+     Data Start:   0x500000e4
+
+     Data Size:    4296157 Bytes = 4.1 MiB
+
+     Architecture: ARM
+
+     OS:           Linux
+
+     Load Address: 0x48008000
+
+     Entry Point:  0x48008000
+
+     Hash algo:    crc32
+
+     Hash value:   6b5fbb60
+
+     Hash algo:    sha1
+
+     Hash value:   f6b5ac62f111621c4796b4c698add8dac5b1c97c
+
+    Image 1 (fdt-1)
+
+     Description:  ARM OpenWrt dshanpi_t153mx-omnigate device tree blob
+
+     Type:         Flat Device Tree
+
+     Compression:  uncompressed
+
+     Data Start:   0x50419008
+
+     Data Size:    11979 Bytes = 11.7 KiB
+
+     Architecture: ARM
+
+     Hash algo:    crc32
+
+     Hash value:   b59c1a82
+
+     Hash algo:    sha1
+
+     Hash value:   aaa902844064ff7f0bdecfe240c4ecc6db286a4c
+
+    Default Configuration: 'config-1'
+
+    Configuration 0 (config-1)
+
+     Description:  OpenWrt dshanpi_t153mx-omnigate
+
+     Kernel:       kernel-1
+
+     FDT:          fdt-1
+
+## Checking hash(es) for FIT Image at 50000000 ...
+
+   Hash(es) for Image 0 (kernel-1): crc32+ sha1+ 
+
+   Hash(es) for Image 1 (fdt-1): crc32+ sha1+ 
+
+## Loading kernel (any) from FIT Image at 50000000 ...
+
+   Using 'config-1' configuration
+
+   Trying 'kernel-1' kernel subimage
+
+     Description:  ARM OpenWrt Linux-6.12.113
+
+     Type:         Kernel Image
+
+     Compression:  gzip compressed
+
+     Data Start:   0x500000e4
+
+     Data Size:    4296157 Bytes = 4.1 MiB
+
+     Architecture: ARM
+
+     OS:           Linux
+
+     Load Address: 0x48008000
+
+     Entry Point:  0x48008000
+
+     Hash algo:    crc32
+
+     Hash value:   6b5fbb60
+
+     Hash algo:    sha1
+
+     Hash value:   f6b5ac62f111621c4796b4c698add8dac5b1c97c
+
+   Verifying Hash Integrity ... crc32+ sha1+ OK
+
+## Loading fdt (any) from FIT Image at 50000000 ...
+
+   Using 'config-1' configuration
+
+   Trying 'fdt-1' fdt subimage
+
+     Description:  ARM OpenWrt dshanpi_t153mx-omnigate device tree blob
+
+     Type:         Flat Device Tree
+
+     Compression:  uncompressed
+
+     Data Start:   0x50419008
+
+     Data Size:    11979 Bytes = 11.7 KiB
+
+     Architecture: ARM
+
+     Hash algo:    crc32
+
+     Hash value:   b59c1a82
+
+     Hash algo:    sha1
+
+     Hash value:   aaa902844064ff7f0bdecfe240c4ecc6db286a4c
+
+   Verifying Hash Integrity ... crc32+ sha1+ OK
+
+   Booting using the fdt blob at 0x50419008
+
+Working FDT set to 50419008
+
+   Uncompressing Kernel Image to 48008000
+
+   Loading Device Tree to 5df87000, end 5df8ceca ... OK
+
+Working FDT set to 5df87000
+
+Source boot: 4 Cortex-A7 CPUs; PSCI 0.1 CPU_ON; SRAM 0x50000..0x57fff.
+
+
+
+Starting kernel ...
+
+
+
+[    0.000000] Booting Linux on physical CPU 0x0
+
+[    0.000000] Linux version 6.12.113 (ubuntu@ubuntu2404) (arm-openwrt-linux-muslgnueabi-gcc (OpenWrt GCC 14.3.0 6c57f7cd04028d370f9360de71f5d59412046194) 14.3.0, GNU ld (GNU Binutils) 2.44) #0 SMP Wed Nov  4 01:33:29 2026
+
+[    0.000000] CPU: ARMv7 Processor [410fc075] revision 5 (ARMv7), cr=30c5387d
+
+[    0.000000] CPU: div instructions available: patching division code
+
+[    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
+
+[    0.000000] OF: fdt: Machine model: DshanPI T153MX OmniGate
+
+[    0.000000] earlycon: uart8250 at MMIO32 0x0000000002600000 (options '115200n8,24000000')
+
+[    0.000000] printk: legacy bootconsole [uart8250] enabled
+
+[    0.000000] Memory policy: Data cache writealloc
+
+[    0.000000] Zone ranges:
+
+[    0.000000]   Normal   [mem 0x0000000048000000-0x000000005fffffff]
+
+[    0.000000]   HighMem  empty
+
+[    0.000000] Movable zone start for each node
+
+[    0.000000] Early memory node ranges
+
+[    0.000000]   node   0: [mem 0x0000000048000000-0x000000005fffffff]
+
+[    0.000000] Initmem setup node 0 [mem 0x0000000048000000-0x000000005fffffff]
+
+[    0.000000] OF: reserved mem: 0x0000000042100000..0x00000000425c4fff (4884 KiB) nomap non-reusable remoteproc@42100000
+
+[    0.000000] OF: reserved mem: 0x0000000042900000..0x00000000429fffff (1024 KiB) nomap non-reusable secure-monitor@42900000
+
+[    0.000000] OF: reserved mem: 0x0000000044000000..0x00000000441fffff (2048 KiB) nomap non-reusable remoteproc@44000000
+
+[    0.000000] psci: probing for conduit method from DT.
+
+[    0.000000] psci: Using PSCI v0.1 Function IDs from DT
+
+[    0.000000] percpu: Embedded 14 pages/cpu s25612 r8192 d23540 u57344
+
+[    0.000000] Kernel command line: console=ttyS0,115200 earlycon=uart8250,mmio32,0x02600000,115200n8,24000000 root=PARTUUID=15302512-02 rootfstype=ext4 rootwait rw clk_ignore_unused
+
+[    0.000000] Dentry cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
+
+[    0.000000] Inode-cache hash table entries: 32768 (order: 5, 131072 bytes, linear)
+
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 98304
+
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+
+[    0.000000] rcu: Hierarchical RCU implementation.
+
+[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
+
+[    0.000000] 	Tracing variant of Tasks RCU enabled.
+
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+
+[    0.000000] RCU Tasks Trace: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+
+[    0.000000] NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
+
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+
+[    0.000000] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+
+[    0.000000] arch_timer: cp15 timer(s) running at 24.00MHz (virt).
+
+[    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0x588fe9dc0, max_idle_ns: 440795202592 ns
+
+[    0.000003] sched_clock: 56 bits at 24MHz, resolution 41ns, wraps every 4398046511097ns
+
+[    0.008812] Switching to timer-based delay loop, resolution 41ns
+
+[    0.015948] Console: colour dummy device 80x25
+
+[    0.020924] Calibrating delay loop (skipped), value calculated using timer frequency.. 48.00 BogoMIPS (lpj=240000)
+
+[    0.032336] CPU: Testing write buffer coherency: ok
+
+[    0.037775] pid_max: default: 32768 minimum: 301
+
+[    0.061140] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+
+[    0.069217] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+
+[    0.086630] /cpus/cpu@0 missing clock-frequency property
+
+[    0.092590] /cpus/cpu@1 missing clock-frequency property
+
+[    0.098461] /cpus/cpu@2 missing clock-frequency property
+
+[    0.104351] /cpus/cpu@3 missing clock-frequency property
+
+[    0.110206] CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+
+[    0.118933] Setting up static identity map for 0x48200000 - 0x48200060
+
+[    0.126427] rcu: Hierarchical SRCU implementation.
+
+[    0.131746] rcu: 	Max phase no-delay instances is 1000.
+
+[    0.138146] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+
+[    0.147346] dyndbg: Ignore empty _ddebug table in a CONFIG_DYNAMIC_DEBUG_CORE build
+
+[    0.156432] smp: Bringing up secondary CPUs ...
+
+[    0.162928] CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+
+[    0.164626] CPU2: thread -1, cpu 2, socket 0, mpidr 80000002
+
+[    0.166335] CPU3: thread -1, cpu 3, socket 0, mpidr 80000003
+
+[    0.166566] smp: Brought up 1 node, 4 CPUs
+
+[    0.189756] SMP: Total of 4 processors activated (192.00 BogoMIPS).
+
+[    0.196652] CPU: All CPU(s) started in SVC mode.
+
+[    0.203121] Memory: 372188K/393216K available (8746K kernel code, 929K rwdata, 2776K rodata, 2048K init, 261K bss, 19692K reserved, 0K cma-reserved, 0K highmem)
+
+[    0.228122] VFP support v0.3: implementor 41 architecture 2 part 30 variant 7 rev 5
+
+[    0.237091] futex hash table entries: 1024 (order: 4, 65536 bytes, linear)
+
+[    0.255854] pinctrl core: initialized pinctrl subsystem
+
+[    0.267707] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+
+[    0.275010] DMA: preallocated 256 KiB pool for atomic coherent allocations
+
+[    0.284703] thermal_sys: Registered thermal governor 'step_wise'
+
+[    0.285016] No ATAGs?
+
+[    0.298309] /soc/interrupt-controller@3401000: Fixed dependency cycle(s) with /soc/interrupt-controller@3401000
+
+[    0.339721] SCSI subsystem initialized
+
+[    0.344822] usbcore: registered new interface driver usbfs
+
+[    0.351022] usbcore: registered new interface driver hub
+
+[    0.356938] usbcore: registered new device driver usb
+
+[    0.363015] pps_core: LinuxPPS API ver. 1 registered
+
+[    0.368479] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+
+[    0.378591] PTP clock support registered
+
+[    0.383431] Advanced Linux Sound Architecture Driver Initialized.
+
+[    0.392926] clocksource: Switched to clocksource arch_sys_counter
+
+[    0.418549] NET: Registered PF_INET protocol family
+
+[    0.424381] IP idents hash table entries: 8192 (order: 4, 65536 bytes, linear)
+
+[    0.434950] tcp_listen_portaddr_hash hash table entries: 512 (order: 0, 4096 bytes, linear)
+
+[    0.444217] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+
+[    0.452752] TCP established hash table entries: 4096 (order: 2, 16384 bytes, linear)
+
+[    0.461381] TCP bind hash table entries: 4096 (order: 4, 65536 bytes, linear)
+
+[    0.469461] TCP: Hash tables configured (established 4096 bind 4096)
+
+[    0.477440] MPTCP token hash table entries: 512 (order: 1, 8192 bytes, linear)
+
+[    0.485987] UDP hash table entries: 256 (order: 1, 8192 bytes, linear)
+
+[    0.493244] UDP-Lite hash table entries: 256 (order: 1, 8192 bytes, linear)
+
+[    0.501897] NET: Registered PF_UNIX/PF_LOCAL protocol family
+
+[    0.511085] workingset: timestamp_bits=14 max_order=17 bucket_order=3
+
+[    0.538913] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+
+[    0.549632] jffs2: version 2.2 (NAND) (SUMMARY) (LZMA) (RTIME) (CMODE_PRIORITY) (c) 2001-2006 Red Hat, Inc.
+
+[    0.595316] Serial: 8250/16550 driver, 10 ports, IRQ sharing disabled
+
+[    0.622836] loop: module loaded
+
+[    0.634065] usbcore: registered new interface driver usb-storage
+
+[    0.641610] mousedev: PS/2 mouse device common for all mice
+
+[    0.648285] i2c_dev: i2c /dev entries driver
+
+[    0.654758] sunxi-wdt 2050000.watchdog: Watchdog enabled (timeout=16 sec, nowayout=0)
+
+[    0.669382] NET: Registered PF_INET6 protocol family
+
+[    0.678552] Segment Routing with IPv6
+
+[    0.682728] In-situ OAM (IOAM) with IPv6
+
+[    0.687311] NET: Registered PF_PACKET protocol family
+
+[    0.693628] can: controller area network core
+
+[    0.700364] NET: Registered PF_CAN protocol family
+
+[    0.705689] 8021q: 802.1Q VLAN Support v1.8
+
+[    0.710623] Registering SWP/SWPB emulation handler
+
+[    0.785937] gpio gpiochip0: Static allocation of GPIO base is deprecated, use dynamic allocation.
+
+[    0.818890] sun8i-t153-pinctrl 3604000.pinctrl: initialized sunXi PIO driver
+
+[    0.830537] printk: legacy console [ttyS0] disabled
+
+[    0.857410] 2600000.serial: ttyS0 at MMIO 0x2600000 (irq = 328, base_baud = 1500000) is a 16550A
+
+[    0.867237] printk: legacy console [ttyS0] enabled
+
+[    0.867237] printk: legacy console [ttyS0] enabled
+
+[    0.877357] printk: legacy bootconsole [uart8250] disabled
+
+[    0.877357] printk: legacy bootconsole [uart8250] disabled
+
+[    0.914629] 2605000.serial: ttyS5 at MMIO 0x2605000 (irq = 329, base_baud = 1500000) is a 16550A
+
+[    0.925380] dwmac-sun8i-t153 4500000.ethernet: IRQ eth_wake_irq not found
+
+[    0.932207] dwmac-sun8i-t153 4500000.ethernet: IRQ sfty not found
+
+[    0.939260] dwmac-sun8i-t153 4500000.ethernet: User ID: 0x20, Synopsys ID: 0x54
+
+[    0.946782] dwmac-sun8i-t153 4500000.ethernet: 	DWMAC4/5
+
+[    0.952123] dwmac-sun8i-t153 4500000.ethernet: DMA HW capability register supported
+
+[    0.959834] dwmac-sun8i-t153 4500000.ethernet: RX Checksum Offload Engine supported
+
+[    0.967562] dwmac-sun8i-t153 4500000.ethernet: TX Checksum insertion supported
+
+[    0.974845] dwmac-sun8i-t153 4500000.ethernet: Enable RX Mitigation via HW Watchdog Timer
+
+[    0.983125] dwmac-sun8i-t153 4500000.ethernet: device MAC address <device-address>
+
+[    0.990803] dwmac-sun8i-t153 4500000.ethernet: Enabled RFS Flow TC (entries=10)
+
+[    0.998169] dwmac-sun8i-t153 4500000.ethernet: Using 32/40 bits DMA host/device width
+
+[    1.081226] dwmac-sun8i-t153 4510000.ethernet: IRQ eth_wake_irq not found
+
+[    1.088170] dwmac-sun8i-t153 4510000.ethernet: IRQ sfty not found
+
+[    1.095174] dwmac-sun8i-t153 4510000.ethernet: User ID: 0x20, Synopsys ID: 0x54
+
+[    1.102536] dwmac-sun8i-t153 4510000.ethernet: 	DWMAC4/5
+
+[    1.107909] dwmac-sun8i-t153 4510000.ethernet: DMA HW capability register supported
+
+[    1.115635] dwmac-sun8i-t153 4510000.ethernet: RX Checksum Offload Engine supported
+
+[    1.123368] dwmac-sun8i-t153 4510000.ethernet: TX Checksum insertion supported
+
+[    1.130639] dwmac-sun8i-t153 4510000.ethernet: Enable RX Mitigation via HW Watchdog Timer
+
+[    1.138898] dwmac-sun8i-t153 4510000.ethernet: device MAC address <device-address>
+
+[    1.146595] dwmac-sun8i-t153 4510000.ethernet: Enabled RFS Flow TC (entries=10)
+
+[    1.153939] dwmac-sun8i-t153 4510000.ethernet: Using 32/40 bits DMA host/device width
+
+[    1.233275] clk: Not disabling unused clocks
+
+[    1.235253] ohci-platform 4300400.usb: Generic Platform OHCI controller
+
+[    1.235400] ehci-platform 4300000.usb: EHCI Host Controller
+
+[    1.235451] ehci-platform 4300000.usb: new USB bus registered, assigned bus number 1
+
+[    1.235741] ehci-platform 4300000.usb: irq 29, io mem 0x04300000
+
+[    1.237605] ALSA device list:
+
+[    1.244311] ohci-platform 4300400.usb: new USB bus registered, assigned bus number 2
+
+[    1.249846]   No soundcards found.
+
+[    1.255427] sunxi-mmc 4020000.mmc: SMHC version 0x50530, DMA address shift 2
+
+[    1.257860] ohci-platform 4300400.usb: irq 30, io mem 0x04300400
+
+[    1.262976] ehci-platform 4300000.usb: USB 2.0 started, EHCI 1.00
+
+[    1.264239] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.12
+
+[    1.264319] sun8i-t153-pinctrl 3604000.pinctrl: supply vcc-pc not found, using dummy regulator
+
+[    1.265037] sunxi-mmc 4023000.mmc: SMHC version 0x50530, DMA address shift 2
+
+[    1.265727] sunxi-mmc 4022000.mmc: SMHC version 0x50530, DMA address shift 2
+
+[    1.266274] sunxi-mmc 4023000.mmc: allocated mmc-pwrseq
+
+[    1.279688] sunxi-mmc 4020000.mmc: initialized, max. request size: 1024 KB, uses new timings mode
+
+[    1.284987] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+
+[    1.292707] sunxi-mmc 4022000.mmc: initialized, max. request size: 1024 KB, uses new timings mode
+
+[    1.297113] usb usb1: Product: EHCI Host Controller
+
+[    1.297133] usb usb1: Manufacturer: Linux 6.12.113 ehci_hcd
+
+[    1.297149] usb usb1: SerialNumber: 4300000.usb
+
+[    1.368002] mmc0: new MMC card at address 0001
+
+[    1.369820] hub 1-0:1.0: USB hub found
+
+[    1.375393] mmcblk0: mmc0:0001 AJTD4R 14.6 GiB
+
+[    1.378157] hub 1-0:1.0: 1 port detected
+
+[    1.383648]  mmcblk0: p1 p2
+
+[    1.393780] usb usb2: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 6.12
+
+[    1.402085] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+
+[    1.409406] usb usb2: Product: Generic Platform OHCI controller
+
+[    1.415371] usb usb2: Manufacturer: Linux 6.12.113 ohci_hcd
+
+[    1.420959] usb usb2: SerialNumber: 4300400.usb
+
+[    1.427600] mmcblk0boot0: mmc0:0001 AJTD4R 4.00 MiB
+
+[    1.433544] hub 2-0:1.0: USB hub found
+
+[    1.434995] mmcblk0boot1: mmc0:0001 AJTD4R 4.00 MiB
+
+[    1.437470] hub 2-0:1.0: 1 port detected
+
+[    1.495985] sunxi-mmc 4023000.mmc: initialized, max. request size: 1024 KB, uses new timings mode
+
+[    1.522808] EXT4-fs (mmcblk0p2): mounted filesystem ff313567-e9f1-5a5d-9895-3ba130b4a864 r/w with ordered data mode. Quota mode: disabled.
+
+[    1.525036] mmc2: new SDIO card at address 390b
+
+[    1.535474] VFS: Mounted root (ext4 filesystem) on device 179:2.
+
+[    1.551593] Freeing unused kernel image (initmem) memory: 2048K
+
+[    1.558076] Run /sbin/init as init process
+
+[    1.636858] init: Console is alive
+
+[    1.640727] init: - watchdog -
+
+[    1.683028] usb 1-1: new high-speed USB device number 2 using ehci-platform
+
+[    1.735001] kmodloader: loading kernel modules from /etc/modules-boot.d/*
+
+[    1.754672] kmodloader: done loading kernel modules from /etc/modules-boot.d/*
+
+[    1.766289] init: - preinit -
+
+[    1.853839] usb 1-1: New USB device found, idVendor=1a86, idProduct=8091, bcdDevice=13.20
+
+[    1.862078] usb 1-1: New USB device strings: Mfr=0, Product=2, SerialNumber=0
+
+[    1.869281] usb 1-1: Product: USB HUB
+
+[    1.874362] hub 1-1:1.0: USB hub found
+
+[    1.878352] hub 1-1:1.0: 4 ports detected
+
+[    2.202968] usb 1-1.2: new high-speed USB device number 3 using ehci-platform
+
+[    2.366448] usb 1-1.2: New USB device found, idVendor=2c7c, idProduct=0125, bcdDevice= 3.18
+
+[    2.374864] usb 1-1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+
+[    2.382191] usb 1-1.2: Product: EC20-CE-HDLG
+
+[    2.386497] usb 1-1.2: Manufacturer: Quectel
+
+[    2.390784] usb 1-1.2: SerialNumber: 0123456789ABCDEF
+
+[    3.632952] random: crng init done
+
+Cannot parse config file '/etc/fw_env.config': No such file or directory
+
+Failed to find NVMEM device
+
+[    4.214718] dwmac-sun8i-t153 4500000.ethernet eth0: Register MEM_TYPE_PAGE_POOL RxQ-0
+
+[    4.252957] dwmac-sun8i-t153 4500000.ethernet eth0: PHY [stmmac-0:01] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+
+[    4.273045] dwmac-sun8i-t153 4500000.ethernet eth0: No Safety Features support found
+
+[    4.290850] dwmac-sun8i-t153 4500000.ethernet eth0: IEEE 1588-2008 Advanced Timestamp supported
+
+[    4.300004] dwmac-sun8i-t153 4500000.ethernet eth0: registered PTP clock
+
+[    4.308432] dwmac-sun8i-t153 4500000.ethernet eth0: configuring for phy/rgmii link mode
+
+[    4.343841] 8021q: adding VLAN 0 to HW filter on device eth0
+
+Press the [f] key and hit [enter] to enter failsafe mode
+
+Press the [1], [2], [3] or [4] key and hit [enter] to select the debug level
+
+[    8.737754] mount_root: mounting /dev/root with options 
+
+[    8.813447] EXT4-fs (mmcblk0p2): re-mounted ff313567-e9f1-5a5d-9895-3ba130b4a864.
+
+[    8.901021] urandom-seed: Seeding with /etc/urandom.seed
+
+[    9.478023] dwmac-sun8i-t153 4500000.ethernet eth0: Timeout accessing MAC_VLAN_Tag_Filter
+
+[    9.486324] dwmac-sun8i-t153 4500000.ethernet eth0: failed to kill vid 0081/0
+
+[    9.503676] procd: - early -
+
+[    9.506837] procd: - watchdog -
+
+[   10.115785] procd: - watchdog -
+
+[   10.120331] procd: - ubus -
+
+[   10.181241] procd: - init -
+
+Please press Enter to activate this console.
+
+[   10.783233] kmodloader: loading kernel modules from /etc/modules.d/*
+
+[   10.809442] CAN device driver interface
+
+[   10.815882] can: raw protocol
+
+[   10.821729] usbcore: registered new interface driver cdc_wdm
+
+[   10.835783] m_can_sun8i_t153 453c800.can: m_can device registered (irq=335, version=33)
+
+[   10.846394] m_can_sun8i_t153 4541800.can: m_can device registered (irq=336, version=33)
+
+[   10.882427] usbcore: registered new interface driver usbserial_generic
+
+[   10.889464] usbserial: USB Serial support registered for generic
+
+[   10.898395] usbcore: registered new interface driver cdc_ether
+
+[   10.908117] usbcore: registered new interface driver cdc_ncm
+
+[   11.009257] PPP generic driver version 2.4.2
+
+[   11.018002] NET: Registered PF_PPPOX protocol family
+
+[   11.031946] qmi_wwan 1-1.2:1.4: cdc-wdm0: USB WDM device
+
+[   11.040752] qmi_wwan 1-1.2:1.4 wwan0: register 'qmi_wwan' at usb-4300000.usb-1.2, WWAN/QMI device, <device-address>
+
+[   11.051863] usbcore: registered new interface driver qmi_wwan
+
+[   11.062866] usbcore: registered new interface driver cdc_mbim
+
+[   11.074333] usbcore: registered new interface driver option
+
+[   11.080100] usbserial: USB Serial support registered for GSM modem (1-port)
+
+[   11.089088] option 1-1.2:1.0: GSM modem (1-port) converter detected
+
+[   11.096513] usb 1-1.2: GSM modem (1-port) converter now attached to ttyUSB0
+
+[   11.104801] option 1-1.2:1.1: GSM modem (1-port) converter detected
+
+[   11.112064] usb 1-1.2: GSM modem (1-port) converter now attached to ttyUSB1
+
+[   11.120248] option 1-1.2:1.2: GSM modem (1-port) converter detected
+
+[   11.127645] usb 1-1.2: GSM modem (1-port) converter now attached to ttyUSB2
+
+[   11.135714] option 1-1.2:1.3: GSM modem (1-port) converter detected
+
+[   11.142950] usb 1-1.2: GSM modem (1-port) converter now attached to ttyUSB3
+
+[   11.161428] kmodloader: done loading kernel modules from /etc/modules.d/*
+
+[   12.095770] urngd: v1.0.2 started.
+
+ethtool --show-eee eth1; ethtool --show-phy-tunable eth1 downshift fast-link-down energy-detect-power-down; cat /sys/class/net/eth1/statistics/rx_errors /sys/class/net/eth1/statistics/tx_errors; dmesg | grep -E "eth1: Link|Downshift"
+
+
+
+
+
+BusyBox v1.37.0 (2026-11-04 01:33:29 UTC) built-in shell (ash)
+
+
+
+  _______                     ________        __
+
+ |       |.-----.-----.-----.|  |  |  |.----.|  |_
+
+ |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+
+ |_______||   __|_____|__|__||________||__|  |____|
+
+          |__| W I R E L E S S   F R E E D O M
+
+ -----------------------------------------------------
+
+ OpenWrt 25.12-SNAPSHOT, t153-6c57f7cd04 Dave's Guitar
+
+ -----------------------------------------------------
+
+
+
+ === WARNING! =====================================
+
+ There is no root password defined on this device!
+
+ Use the "passwd" command to set up a new password
+
+ in order to prevent unauthorized SSH logins.
+
+ --------------------------------------------------
+
+
+
+
+
+ OpenWrt recently switched to the "apk" package manager!
+
+
+
+ OPKG Command           APK Equivalent      Description
+
+ ------------------------------------------------------------------
+
+ opkg install <pkg>     apk add <pkg>       Install a package
+
+ opkg remove <pkg>      apk del <pkg>       Remove a package
+
+ opkg upgrade           apk upgrade         Upgrade all packages
+
+ opkg files <pkg>       apk info -L <pkg>   List package contents
+
+ opkg list-installed    apk info            List installed packages
+
+ opkg update            apk update          Update package lists
+
+ opkg search <pkg>      apk search <pkg>    Search for packages
+
+ ------------------------------------------------------------------
+
+
+
+For more information visit:
+
+https://openwrt.org/docs/guide-user/additional-software/opkg-to-apk-cheatsheet
+
+
+
+root@OpenWrt:~# 

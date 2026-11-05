@@ -1,0 +1,111 @@
+{
+  "scope": "projected file-level patch application for every file touched by T153 patches, official Linux6.12.112 with OpenWrt generic and sunxi order; no compilation or active build tree mutation",
+  "selected_files": [
+    "Documentation/devicetree/bindings/arm/sunxi.yaml",
+    "Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml",
+    "Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml",
+    "Documentation/devicetree/bindings/net/snps,dwmac.yaml",
+    "Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml",
+    "Documentation/devicetree/bindings/power/reset/reboot-mode.yaml",
+    "Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml",
+    "Documentation/devicetree/bindings/usb/generic-ehci.yaml",
+    "Documentation/devicetree/bindings/usb/generic-ohci.yaml",
+    "Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml",
+    "arch/arm/boot/dts/allwinner/Makefile",
+    "arch/arm/mach-sunxi/sunxi.c",
+    "drivers/clk/sunxi-ng/Kconfig",
+    "drivers/clk/sunxi-ng/Makefile",
+    "drivers/mmc/host/sunxi-mmc.c",
+    "drivers/net/can/m_can/Kconfig",
+    "drivers/net/can/m_can/Makefile",
+    "drivers/net/ethernet/stmicro/stmmac/Kconfig",
+    "drivers/net/ethernet/stmicro/stmmac/Makefile",
+    "drivers/phy/allwinner/Kconfig",
+    "drivers/phy/allwinner/Makefile",
+    "drivers/pinctrl/sunxi/Kconfig",
+    "drivers/pinctrl/sunxi/Makefile",
+    "drivers/pinctrl/sunxi/pinctrl-sunxi.c",
+    "drivers/pinctrl/sunxi/pinctrl-sunxi.h",
+    "drivers/power/reset/Kconfig",
+    "drivers/power/reset/Makefile",
+    "drivers/power/reset/reboot-mode.c",
+    "drivers/tty/serial/8250/8250_dw.c",
+    "drivers/tty/serial/8250/8250_dwlib.c",
+    "drivers/tty/serial/8250/8250_dwlib.h",
+    "drivers/watchdog/sunxi_wdt.c"
+  ],
+  "patches": [
+    {
+      "patch": "target/linux/sunxi/patches-6.12/410-sunxi-add-bananapi-p2-zero.patch",
+      "returncode": 0,
+      "output": "patching file arch/arm/boot/dts/allwinner/Makefile\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/461-f1c100s-watchdog-compat.patch",
+      "returncode": 0,
+      "output": "patching file drivers/watchdog/sunxi_wdt.c\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/500-pinctrl-sunxi-add-T153-register-layout.patch",
+      "returncode": 0,
+      "output": "patching file drivers/pinctrl/sunxi/pinctrl-sunxi.h\npatching file drivers/pinctrl/sunxi/pinctrl-sunxi.c\npatching file drivers/pinctrl/sunxi/Kconfig\npatching file drivers/pinctrl/sunxi/Makefile\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/501-clk-sunxi-ng-add-T153-core-and-IO-clocks.patch",
+      "returncode": 0,
+      "output": "patching file drivers/clk/sunxi-ng/Kconfig\npatching file drivers/clk/sunxi-ng/Makefile\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/502-net-stmmac-add-T153-glue.patch",
+      "returncode": 0,
+      "output": "patching file drivers/net/ethernet/stmicro/stmmac/Kconfig\npatching file drivers/net/ethernet/stmicro/stmmac/Makefile\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/503-ARM-add-T153-machine-and-OmniGate-DTB.patch",
+      "returncode": 0,
+      "output": "patching file arch/arm/mach-sunxi/sunxi.c\npatching file arch/arm/boot/dts/allwinner/Makefile\nHunk #1 succeeded at 273 (offset 1 line).\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/504-mmc-sunxi-add-T153-SMHC2.patch",
+      "returncode": 0,
+      "output": "patching file drivers/mmc/host/sunxi-mmc.c\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/505-phy-add-T153-USB2-host-PHY.patch",
+      "returncode": 0,
+      "output": "patching file drivers/phy/allwinner/Kconfig\npatching file drivers/phy/allwinner/Makefile\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/506-can-add-T153-M_CAN-glue.patch",
+      "returncode": 0,
+      "output": "patching file drivers/net/can/m_can/Kconfig\npatching file drivers/net/can/m_can/Makefile\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/507-dt-bindings-add-T153-hardware.patch",
+      "returncode": 0,
+      "output": "patching file Documentation/devicetree/bindings/arm/sunxi.yaml\npatching file Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml\npatching file Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml\npatching file Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml\npatching file Documentation/devicetree/bindings/usb/generic-ehci.yaml\npatching file Documentation/devicetree/bindings/usb/generic-ohci.yaml\npatching file Documentation/devicetree/bindings/net/snps,dwmac.yaml\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/508-watchdog-sunxi-add-T153-reset-output.patch",
+      "returncode": 0,
+      "output": "patching file drivers/watchdog/sunxi_wdt.c\npatching file Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/509-reboot-mode-allow-explicit-zero-value.patch",
+      "returncode": 0,
+      "output": "patching file drivers/power/reset/reboot-mode.c\npatching file Documentation/devicetree/bindings/power/reset/reboot-mode.yaml\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/510-power-reset-add-T153-RTC-reboot-mode.patch",
+      "returncode": 0,
+      "output": "patching file drivers/power/reset/Kconfig\npatching file drivers/power/reset/Makefile\n"
+    },
+    {
+      "patch": "target/linux/sunxi/patches-6.12/511-serial-8250-dw-add-T153-FIFO-and-auto-flow-control.patch",
+      "returncode": 0,
+      "output": "patching file drivers/tty/serial/8250/8250_dw.c\npatching file drivers/tty/serial/8250/8250_dwlib.c\npatching file drivers/tty/serial/8250/8250_dwlib.h\npatching file Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml\n"
+    }
+  ],
+  "passed": true,
+  "work_directory": "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/logs/native-kernel-context-8px1uimw"
+}

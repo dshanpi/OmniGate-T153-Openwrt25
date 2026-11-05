@@ -1,0 +1,78 @@
+PB0 polarity and shared firmware lifetime: static evidence, 2026-11-05
+====================================================================
+
+All paths below are relative to the original T153 Tina SDK. This package does
+not modify those files and does not claim new board validation.
+
+1. Board wiring and legacy DTS
+   device/config/chips/t153/configs/omnigate/linux-5.10-origin/board.dts:1216
+   uses bt_rst_n = <&pio PB 0 GPIO_ACTIVE_HIGH>.
+
+2. This legacy property names the asserted reset level, not generic rfkill's
+   shutdown-gpios logical enable value. The vendor driver computes assert=1
+   from GPIO_ACTIVE_HIGH, drives !assert on power-on, and assert on power-off:
+   bsp/drivers/misc/sunxi-rf/sunxi-bluetooth.c:154-165, 191-218, 352-374.
+   Consequently, SDK Bluetooth unblocked means physical PB0 low.
+
+3. No hidden GPIO inversion changes that result:
+   kernel/linux-5.10-origin/include/dt-bindings/gpio/gpio.h:14 defines HIGH=0.
+   bsp/drivers/pinctrl/pinctrl-sunxi.c:1906-1921 returns the DTS flags unchanged.
+   kernel/linux-5.10-origin/include/asm-generic/gpio.h:100-102 uses
+   gpiod_set_raw_value for the legacy gpio_set_value interface.
+   bsp/drivers/pinctrl/pinctrl-sun8iw22.c:1742 uses atomic GPIO set/clear;
+   bsp/drivers/pinctrl/pinctrl-sunxi.c:1841-1848 writes the raw requested level.
+
+4. CONFIG_OKT153 is a different, optional Forlinx board path that drives on=high.
+   It is not selected: out/t153/kernel/build/.config:32 is
+   '# CONFIG_OKT153 is not set'; include/generated/autoconf.h has no definition.
+   Its declaration in bsp/platform/Kconfig:350-353 has no default selection.
+   This branch must not be used to infer OmniGate polarity.
+
+5. Existing SDK boot evidence agrees with assert=high:
+   acceptance-results/final-software-20260916/serial/flash-and-cold-boot.log:853
+   reports 'bt_rst gpio=32 assert=1'. The SDK's docs/wlan-bluetooth-bringup.md
+   records successful AIC8820 hci0 UP RUNNING in its 2026-07-24 validation.
+   This is historical SDK evidence, not validation of the OpenWrt helper.
+
+6. The provided T153MX_MAIN_4G_V11.pdf still names U8 XR829MQ, not AIC8800D80.
+   It shows PB0 BT_RST_N_SOC through R113 (0 ohm) to U8 pin34 BT_RSTN, with no
+   inverter. The legacy net name alone cannot establish the fitted replacement
+   AIC module's enable polarity. Follow the proven SDK electrical behavior:
+   generic rfkill-gpio shutdown-gpios GPIO_ACTIVE_LOW yields unblocked=low and
+   blocked=high, matching the SDK above. Final board validation is still needed.
+
+Shared firmware and reset order
+-------------------------------
+The SDK startup script is:
+ device/config/chips/t153/configs/omnigate/buildroot/overlay/etc/init.d/
+ S45aic8800-bluetooth
+Lines 48-51 load BSP, FDRV, bring wlan0 up, then load btlpm. Lines 55-58 write
+rfkill state=0, wait one second, then state=1 and wait one second. Lines 60-65
+hold BT_WAKE and run AIC vendor HCI initialization at 1.5M with flow control.
+
+FDRV calls aicbsp_set_subsys(AIC_WIFI,AIC_PWR_ON) during module initialization:
+ bsp/drivers/net/wireless/aic8800/aic8800_fdrv/rwnx_main.c:6644-6653.
+The shared power map only invokes platform-off when the complete map becomes
+zero, and only invokes firmware initialization on an off-to-on transition:
+ bsp/drivers/net/wireless/aic8800/aic8800_bsp/aicsdio.c:126-165.
+The BT firmware upload precedes Wi-Fi initialization:
+ bsp/drivers/net/wireless/aic8800/aic8800_bsp/aic_bsp_8800d80.c:609-615;
+ADID/patch/extended patch/table are uploaded in that file:264-279.
+Toggling the SDK's Bluetooth reference while the FDRV Wi-Fi reference is held
+does not remove the shared power or re-upload the firmware. The board script
+subsequently toggles the PB0 control as described above. This supports the same
+ordering in the helper. Source inspection cannot prove silicon SRAM retention;
+HCI success after the toggle and correct firmware version must be checked on
+hardware. Do not unload FDRV/BSP while Bluetooth is attached.
+
+Hardware acceptance still required
+----------------------------------
+- Verify PB0 physical levels and HCI Reset completion after SDIO firmware load.
+- Verify all six vendor command completions and HCI registration, then read
+  controller local version/address/features and confirm the intended firmware.
+- Repeated service stop/start without reloading FDRV must still initialize.
+- Confirm a stable unique Bluetooth address across a normal reboot.
+- Scan, pair and transfer data to a real Bluetooth peer; exercise Wi-Fi at the
+  same time to test shared SDIO/UART power lifetime and coexistence.
+- UART RTS/CTS behavior and error-free traffic need sustained-load validation.
+- Suspend/hostwake/low-power operation remain unsupported in this initial mode.

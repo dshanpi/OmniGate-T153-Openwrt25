@@ -1,0 +1,47 @@
+{
+  "date": "2026-11-05",
+  "scope": "Read-only source investigation and archived flash API statuses; no startup-chain modification.",
+  "attempts": [
+    {
+      "status_file": "t153_connectivity_r2_20261105_status.json",
+      "result": "FES RAM bootstrap reported DRAM initialization and U-Boot download success, then USB reconnect failed.",
+      "transferred_bytes": 0,
+      "persistent_write_started": false
+    },
+    {
+      "status_file": "t153_connectivity_r2_retry_20261105_status.json",
+      "result": "Diagnostic attempt retaining serial monitor was rejected during raw_metadata preflight: RAW_STORAGE_GEOMETRY_SERIAL_OPEN COM19 access denied.",
+      "persistent_write_started": false
+    },
+    {
+      "status_file": "t153_connectivity_r2_retry2_20261105_status.json",
+      "result": "After closing the serial monitor and confirming the device remained in FEL, the original standard FES flow completed write, verification and reboot.",
+      "committed_bytes": 306184192,
+      "api_verify_state": "success",
+      "post_flash_state": "success"
+    }
+  ],
+  "operator_observations": [
+    "Device remained online in FEL for more than one minute before the successful standard retry.",
+    "The same audited DDR933 RAM loader was used.",
+    "Whole-disk readback is a separate validation step, not inferred from these API statuses."
+  ],
+  "watchdog_analysis": {
+    "source_spl": "RTC/FEL request path does not explicitly stop WDT before entering BootROM. This alone does not demonstrate watchdog retention across reset.",
+    "vendor_ram_uboot": "Actual loader embedded DTB at offset0xd32e8 describes WDT0x02050000, MODE0x14, key0x16aa0000 with no wdt_keep_reg. Matching SDK probe stops the watchdog before the autostart decision.",
+    "fes1": "Only the prebuilt FES1 input was available; its early watchdog behavior was not established.",
+    "conclusion": "Watchdog causation was not established. Sustained FEL residency and the successful unchanged-loader retry do not justify modifying the startup chain for this incident."
+  },
+  "status_sha256": {
+    "t153_connectivity_r2_20261105_status.json": "ab0e60d3f803b49c76d92dd6d82d5891a5cb953ad8094498838e62a3ba33a587",
+    "t153_connectivity_r2_retry_20261105_status.json": "9c6bfd5a9ebfdd1d16f2611c7db1f94c894f8f798cf9c0a1185c7c6127ef3a14",
+    "t153_connectivity_r2_retry2_20261105_status.json": "ae64d55b90a20477222711fc52407236b5f03647b0458fc563f6953d7b9422d9"
+  },
+  "privacy": "Archived status files redact the local Windows username; original files remain in private build logs.",
+  "independent_final_r2_readback": {
+    "sectors": 598016,
+    "bytes": 306184192,
+    "sha256": "7f2485c12409c205255ba64a57f44d26c62084c1be04aa484f582b963e884ea5",
+    "result": "exact match before final boot"
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "generated_at_utc": "2026-11-05T04:45:14.738331+00:00",
+  "workspace": "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25",
+  "scope": "host software tests and standalone ARM cross compile; no board validation",
+  "environment": {
+    "STAGING_DIR": "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt/staging_dir"
+  },
+  "runs": [
+    {
+      "command": [
+        "cc",
+        "--version"
+      ],
+      "exit_code": 0,
+      "output": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+    },
+    {
+      "command": [
+        "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt/staging_dir/toolchain-arm_cortex-a7+neon-vfpv4_gcc-14.3.0_musl_eabi/bin/arm-openwrt-linux-gcc",
+        "--version"
+      ],
+      "exit_code": 0,
+      "output": "arm-openwrt-linux-gcc (OpenWrt GCC 14.3.0 unknown) 14.3.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+    },
+    {
+      "command": [
+        "cc",
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/port/package/utils/aic8800d80-bt/src/aic8800d80-bt.c",
+        "-o",
+        "/tmp/t153-aic8800d80-bt-host"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "cc",
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/port/package/utils/aic8800d80-bt/tests/test-helper.c",
+        "-o",
+        "/tmp/t153-aic8800d80-bt-test"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/tmp/t153-aic8800d80-bt-test"
+      ],
+      "exit_code": 0,
+      "output": "HCI command 0x0c03 failed: status 0x12\nHCI command 0x0c03 rejected: status 0x0c\nPASS: 104-byte AON payload, address validation, full init sequence and HCI complete/mismatch/error/truncation/timeout/framing/status\n"
+    },
+    {
+      "command": [
+        "cc",
+        "-std=c11",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/port/package/utils/aic8800d80-bt/tests/test-helper.c",
+        "-o",
+        "/tmp/t153-aic8800d80-bt-test-sanitize"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "/tmp/t153-aic8800d80-bt-test-sanitize"
+      ],
+      "exit_code": 0,
+      "output": "HCI command 0x0c03 failed: status 0x12\nHCI command 0x0c03 rejected: status 0x0c\nPASS: 104-byte AON payload, address validation, full init sequence and HCI complete/mismatch/error/truncation/timeout/framing/status\n"
+    },
+    {
+      "command": [
+        "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/openwrt/staging_dir/toolchain-arm_cortex-a7+neon-vfpv4_gcc-14.3.0_musl_eabi/bin/arm-openwrt-linux-gcc",
+        "-std=c11",
+        "-Os",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/port/package/utils/aic8800d80-bt/src/aic8800d80-bt.c",
+        "-o",
+        "/tmp/t153-aic8800d80-bt-arm"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "file",
+        "/tmp/t153-aic8800d80-bt-arm"
+      ],
+      "exit_code": 0,
+      "output": "/tmp/t153-aic8800d80-bt-arm: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-musl-armhf.so.1, with debug_info, not stripped\n"
+    },
+    {
+      "command": [
+        "sh",
+        "-n",
+        "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/port/package/utils/aic8800d80-bt/files/aic8800d80-bt.init"
+      ],
+      "exit_code": 0,
+      "output": ""
+    }
+  ],
+  "passed": true,
+  "source": {
+    "path": "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/port/package/utils/aic8800d80-bt/src/aic8800d80-bt.c",
+    "sha256": "775ee2fb3dab622ee8e0792740ad9a3ce0b5ca6c1ef516e82a684e794217c7ba"
+  },
+  "test_source": {
+    "path": "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/port/package/utils/aic8800d80-bt/tests/test-helper.c",
+    "sha256": "b66a5fced15ea1dca7a08f94afc399d7b07896ffa74dc37b512412898799f037"
+  },
+  "arm_binary": {
+    "path": "/tmp/t153-aic8800d80-bt-arm",
+    "sha256": "94d7ba7a07612e0a7f70292e1d2fe672416da8fc84133cfbc37c6a14c4fed5f0"
+  },
+  "log": {
+    "path": "/home/ubuntu/T153MX/T153_Tina_V1.0/openwrt25/logs/peripherals/bt-helper-host-tests.log",
+    "sha256": "9557f5886ccf10a6d4ed6c08c83a9ef1c50d573b6af8d9c1b3512e139b61e15e"
+  }
+}

@@ -179,7 +179,8 @@
 		};
 
 		uart7: serial@2607000 {
-			compatible = "snps,dw-apb-uart";
+			compatible = "allwinner,sun8i-t153-uart", "snps,dw-apb-uart";
+			fifo-size = <64>;
 			reg = <0x02607000 0x400>;
 			interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
 			reg-shift = <2>;

@@ -1,0 +1,10 @@
+# T153 persistent ext4 image. U-Boot selects bootdev=0 (SD) or 1 (eMMC).
+# Use the MBR PARTUUID so Linux MMC probe ordering cannot change the root disk.
+setenv bootargs console=ttyS0,115200 earlycon=uart8250,mmio32,0x02600000,115200n8,24000000 root=PARTUUID=15302512-02 rootfstype=ext4 rootwait rw clk_ignore_unused
+if load mmc ${bootdev}:1 ${loadaddr} openwrt-t153.itb; then
+    if iminfo ${loadaddr}; then
+        bootm ${loadaddr}
+    fi
+fi
+echo T153 persistent boot failed
+false

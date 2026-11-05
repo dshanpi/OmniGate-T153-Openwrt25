@@ -1,0 +1,29 @@
+/* Merge the rfkill node into / and the hog into existing &pio.
+ * Keep both PHY reset-deassert-us = <150000> values unchanged.
+ */
+/ {
+	bluetooth-rfkill {
+		compatible = "rfkill-gpio";
+		label = "t153-aic8800d80-bt";
+		radio-type = "bluetooth";
+		shutdown-gpios = <&pio 1 0 GPIO_ACTIVE_LOW>; /* PB0 low: validated Tina AIC8800D80 enable */
+	};
+};
+
+&pio {
+	bluetooth-device-wake-hog {
+		gpio-hog;
+		gpios = <9 11 GPIO_ACTIVE_HIGH>; /* PJ11: hold controller awake */
+		output-high;
+		line-name = "aic8800d80-bt-wake";
+	};
+};
+
+&uart7 {
+	status = "okay"; /* Existing PB11..PB14 pinctrl + uart-has-rtscts retained. */
+};
+
+/* PB4 BT host-wake and low-power protocol are intentionally not enabled.
+ * aic8800d80-bt programs LP_LEVEL_ACTIVE and disables CPU power-off.
+ * SDIO BSP/FDRV must remain loaded: it uploads and owns shared BT firmware.
+ */

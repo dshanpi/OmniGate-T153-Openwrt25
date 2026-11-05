@@ -1,0 +1,9 @@
+# Use only if the actual module firmware exposes a CDC MBIM interface.
+config interface 'cellular'
+        option proto 'mbim'
+        option device '/dev/cdc-wdm0'
+        option apn 'REPLACE_WITH_CARRIER_APN'
+        option auth 'none'
+        option pdptype 'ipv4'
+        option metric '20'
+        option auto '0'

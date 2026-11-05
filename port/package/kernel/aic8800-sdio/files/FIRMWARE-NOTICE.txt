@@ -1,0 +1,17 @@
+AIC8800D80 controller firmware (opaque binary code)
+
+Source distribution: https://github.com/radxa-pkg/aic8800
+Pinned commit: d9c72efd382ccdbf2f1fdb09d2d4f3cc212edd9d
+Original directory: src/SDIO/driver_fw/fw/aic8800D80
+
+The .bin files are copied unchanged. Their corresponding firmware source is
+not supplied in this project. They run on the AIC wireless controller, not
+on the T153 CPUs, and are unrelated to T153 DDR/SPL initialization.
+
+The upstream Debian copyright metadata labels src/* as GPL-2; its complete
+text is installed as upstream-copyright. No separate per-firmware license
+or corresponding firmware source was found in that directory. This package
+preserves that provenance without claiming the opaque firmware is source-
+built or applying our GPL source-code declaration to it. Package license
+identifier LicenseRef-AIC8800-Firmware refers to this disclosure, not to a
+new grant of rights. Redistribution rights require the upstream terms.

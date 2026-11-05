@@ -1,0 +1,70 @@
+{
+  "scope": "native image packaging only; pre-existing Linux 6.12.113 build inputs; not official-v25.12.6 compile or board validation",
+  "reproducible": true,
+  "images": [
+    {
+      "name": "default.img",
+      "rootfs_mib": 256,
+      "bytes": 306184192,
+      "sha256": "b54cc5016bc8d7245654b4e46c36aeebe5e3dc3fe74913b6d093cc1cc2d44a76",
+      "bootarea": {
+        "spl_bytes": 49152,
+        "proper_bytes": 271808,
+        "spl_offset": 8192,
+        "proper_offset": 131072,
+        "bytes": 394688,
+        "sha256": "61bfc3e776c08f76f401b86a3a7c17b6f5759ec96081c571b3488cac5ea48be4"
+      },
+      "fit": {
+        "bytes": 4316752,
+        "sha256": "e7710f71ea1a68b48a68bf7b2d38cb24d439fc3736528f0c00d0170b36d5c9ca",
+        "zimage_bytes": 4312928,
+        "zimage_sha256": "a371ce0b8e7b3a1c20494fdc8e3051a8b4ee7b19736e441ae2f1bc4bb956ea05",
+        "load": "0x48008000",
+        "console": "ttyS0,115200"
+      }
+    },
+    {
+      "name": "custom.img",
+      "rootfs_mib": 64,
+      "bytes": 104857600,
+      "sha256": "af595d6a5ea3628b174b0303ac07a82f9411868e27611b92b7dbcb90fef0104c",
+      "bootarea": {
+        "spl_bytes": 49152,
+        "proper_bytes": 271808,
+        "spl_offset": 8192,
+        "proper_offset": 131072,
+        "bytes": 394688,
+        "sha256": "61bfc3e776c08f76f401b86a3a7c17b6f5759ec96081c571b3488cac5ea48be4"
+      },
+      "fit": {
+        "bytes": 4316752,
+        "sha256": "e7710f71ea1a68b48a68bf7b2d38cb24d439fc3736528f0c00d0170b36d5c9ca",
+        "zimage_bytes": 4312928,
+        "zimage_sha256": "a371ce0b8e7b3a1c20494fdc8e3051a8b4ee7b19736e441ae2f1bc4bb956ea05",
+        "load": "0x48008000",
+        "console": "ttyS0,115200"
+      }
+    }
+  ],
+  "delayed_repeat_identical": true,
+  "reject_mismatched_root_size_without_output": true,
+  "persistent_kernel_verification": {
+    "bytes": 4316752,
+    "sha256": "e7710f71ea1a68b48a68bf7b2d38cb24d439fc3736528f0c00d0170b36d5c9ca",
+    "zimage_bytes": 4312928,
+    "zimage_sha256": "a371ce0b8e7b3a1c20494fdc8e3051a8b4ee7b19736e441ae2f1bc4bb956ea05",
+    "load": "0x48008000",
+    "console": "ttyS0,115200",
+    "has_init": false,
+    "populated_initramfs": false,
+    "builtin_cpio_bytes": 512,
+    "builtin_cpio_entries": [
+      "dev",
+      "dev/console",
+      "root"
+    ],
+    "decoded_kernel_bytes": 17695936,
+    "decoded_kernel_sha256": "2f4e1aca121f82fd42c2e5673ade29e1f526855a5d0e5f0d122c3a0e914f8f53"
+  }
+}

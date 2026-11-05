@@ -1,0 +1,16 @@
+{
+  "binary_sha256": "c1c864f79cd9fbe37a9dc57fc06ddd3a0b2bb8d2b0c71504580630d300cba4d6",
+  "interpreter": "/lib/ld-musl-armhf.so.1",
+  "needed": [
+    "libgcc_s.so.1",
+    "libc.so"
+  ],
+  "qemu_help_exit": 0,
+  "test": "Isolated host PTY modem simulation, not hardware",
+  "sent_bytes_hex": "41542b4350494e3f0d",
+  "simulated_reply_received": true,
+  "exit_code": 0,
+  "elapsed_seconds": 2.267,
+  "stderr": "",
+  "exit_after_units": "milliseconds; continuous idle timeout, not total wall time"
+}

@@ -1,0 +1,67 @@
+{
+  "date": "2026-11-05",
+  "status": "software build and DT schema passed; board validation recorded separately",
+  "build_command": "make -j6 V=s",
+  "build_exit": 0,
+  "incremental_openwrt_build": true,
+  "kernel_reprepared_with_new_patch": true,
+  "config_settings": {
+    "formal": 58,
+    "aic8800d80": 13,
+    "4g_ec20_ml302": 16
+  },
+  "scope": "Only UART7 switches to the T153 compatible; UART0 stays generic DW. No HCI pacing change.",
+  "schema_validation": {
+    "dt_doc_validate": true,
+    "compiled_board_uart_nodes": true,
+    "fifo64": "accepted",
+    "fifo128": "accepted",
+    "missing_fifo_size": "rejected",
+    "fifo16": "rejected"
+  },
+  "fit_components": [
+    {
+      "component": "kernel-1",
+      "bytes": 11437351,
+      "internal_hashes_verified": {
+        "crc32": "23c96b51",
+        "sha1": "6bac6abd945d71a33a1fe621c2a2823ba0931bad"
+      }
+    },
+    {
+      "component": "fdt-1",
+      "bytes": 12346,
+      "internal_hashes_verified": {
+        "crc32": "32096671",
+        "sha1": "881f6046f6ff0bc4d4e9ca4973fae094db41829e"
+      }
+    }
+  ],
+  "files": {
+    "port/target/linux/sunxi/patches-6.12/511-serial-8250-dw-add-T153-FIFO-and-auto-flow-control.patch": {
+      "bytes": 5730,
+      "sha256": "7c7b10ac5e45d18edd8313b47e7e5fd4e8699f1aac519158fab1059a180e48d2"
+    },
+    "port/target/linux/sunxi/files/arch/arm/boot/dts/allwinner/sun8i-t153.dtsi": {
+      "bytes": 12865,
+      "sha256": "5552edc21095083949963257ec723463fb052783d36278b0e01ae43f5ba6a96a"
+    },
+    "openwrt/.config": {
+      "bytes": 156534,
+      "sha256": "ee6780192aba30aa9074de3846d83e99fe0d56f0b863caf2521f8a7ecb0f88e7"
+    },
+    "artifacts/diagnostics/uart-flow-initramfs.itb": {
+      "bytes": 11451092,
+      "sha256": "6853e52a257a2950865b27daafa95eaa696a0fb394ff438ec09ca31c6a1b1573"
+    },
+    "logs/peripherals/uart-flow-fit.dtb": {
+      "bytes": 12346,
+      "sha256": "224214306aab5f5e73e5532174375ae4c365401be41ceba90daa64e647260ee2"
+    }
+  },
+  "reference_source": {
+    "bsp/configs/linux-5.10-origin/sun8iw22p1.dtsi": "UART7 lines 1002-1015: 64-byte FIFO, fake_tx/fake_rx DMA names",
+    "bsp/drivers/uart/sunxi-uart.c": "lines1302-1308: CRTSCTS selects AUTOCTS/AUTORTS and MCR_AFE"
+  },
+  "hardware_validated_by_this_record": false
+}

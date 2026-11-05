@@ -1,0 +1,21 @@
+{
+  "source_sha256": "ac115bc4b17ddb74fdcffffb667f0f02a73550b8b92fba9d6a56ad7c47e69424",
+  "test_sha256": "deb2253f02c252e5ed353c7e965db3a4fba9995175f81e9ff29956ff501d3be3",
+  "software_record": "docs/records/2026-11-05-bt-shutdown-software/evidence.json",
+  "host_validation": {
+    "strict_helper_compile": "passed",
+    "existing_vendor_protocol_suite": "passed",
+    "shutdown_syscall_wrapper_suite": "passed",
+    "shutdown_ASan_UBSan": "passed",
+    "shutdown_cases": [
+      "hci0/hci7/hci31 identifiers",
+      "Bluetooth raw+CLOEXEC socket arguments",
+      "EINTR retry",
+      "ENODEV already removed",
+      "EPERM and ETIMEDOUT preserved",
+      "close errno does not mask ioctl error",
+      "exact socket/ioctl/close order",
+      "socket failure does not close invalid descriptor"
+    ]
+  }
+}

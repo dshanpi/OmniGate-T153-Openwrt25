@@ -1,0 +1,41 @@
+{
+  "upstream_tag": "v25.12.6",
+  "tag_object": "22dd0e28678a6cd6fbadea2d5aaded3a805ab8a4",
+  "upstream_commit": "64900e756efa667774214f9c6b17c113222e01f7",
+  "commit_time_utc": "2026-10-18T00:11:00Z",
+  "source_date_epoch": 1792282260,
+  "official_version": "25.12.6",
+  "official_version_code": "r33311-981c978eff",
+  "archive_url": "https://codeload.github.com/openwrt/openwrt/tar.gz/refs/tags/v25.12.6",
+  "archive_bytes": 11814371,
+  "archive_sha256_observed": "f5ff8258572a82df960470608ceb025655a42bc94b8e7e2a77a4373db46263d9",
+  "archive_hash_note": "locally computed from the downloaded official GitHub archive, not a separately published upstream checksum",
+  "kernel": "6.12.112",
+  "kernel_archive_sha256": "164dc9d1f6c93c61a15e1f071c48379b467f2b17c469cce7223471968208ed03",
+  "wireless_backports": "6.18.55-r2",
+  "source_checkout": "archive without .git; outside any parent Git repository",
+  "feeds": {
+    "packages": {
+      "url": "https://git.openwrt.org/feed/packages.git",
+      "commit": "093d551675b1119a06ef224d419905e8d6b2af1a"
+    },
+    "luci": {
+      "url": "https://git.openwrt.org/project/luci.git",
+      "commit": "75a306df84a020c57a631ef5b4c02ace56d93387"
+    },
+    "routing": {
+      "url": "https://git.openwrt.org/feed/routing.git",
+      "commit": "48c808034414a2112cf9d5261a20a320e8d0d170"
+    },
+    "telephony": {
+      "url": "https://git.openwrt.org/feed/telephony.git",
+      "commit": "2618106d5846a4a542fdf5809f0d3ed228ce439b"
+    },
+    "video": {
+      "url": "https://github.com/openwrt/video.git",
+      "commit": "094bf58da6682f895255a35a84349a79dab4bf95"
+    }
+  },
+  "build_status": "software build and final native image validation passed; same-image limited hardware acceptance is in ../2026-11-05-native-hardware/validation.json",
+  "build_report": "build-report.json"
+}

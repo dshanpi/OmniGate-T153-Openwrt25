@@ -1,0 +1,203 @@
+From: T153 OpenWrt port
+Subject: [PATCH] Respect SDIO host limits and use namespaced firmware loader
+
+--- a/src/SDIO/driver_fw/driver/aic8800/aic8800_bsp/aic_bsp_driver.c
++++ b/src/SDIO/driver_fw/driver/aic8800/aic8800_bsp/aic_bsp_driver.c
+@@ -11,6 +11,7 @@
+  ******************************************************************************
+  */
+ 
++#include "../aic_firmware.h"
+ #include <linux/list.h>
+ #include <linux/version.h>
+ #include <linux/delay.h>
+@@ -502,7 +503,7 @@
+ 	printk("%s: request firmware = %s \n", __func__ ,name);
+ 
+ 
+-	ret = request_firmware(&fw, name, NULL);
++	ret = aic_request_firmware(&fw, name, NULL);
+ 
+ 	if (ret < 0) {
+ 		printk("Load %s fail\n", name);
+@@ -521,7 +522,8 @@
+ 
+ 
+ 	buffer = vmalloc(size);
+-	memset(buffer, 0, size);
++    if (!buffer) { release_firmware(fw); return -ENOMEM; }
++    memset(buffer, 0, size);
+ 	memcpy(buffer, dst, size);
+ 
+ 	*fw_buf = buffer;
+--- a/src/SDIO/driver_fw/driver/aic8800/aic8800_bsp/aicsdio.c
++++ b/src/SDIO/driver_fw/driver/aic8800/aic8800_bsp/aicsdio.c
+@@ -1825,7 +1825,8 @@
+     udelay(100);
+ #if 1//SDIO CLOCK SETTING
+ 	if (feature.sdio_clock > 0) {
+-		host->ios.clock = feature.sdio_clock;
++		/* Respect the MMC host/board limit; do not force the vendor 150 MHz default. */
++		host->ios.clock = min_t(unsigned int, feature.sdio_clock, host->f_max);
+ 		host->ops->set_ios(host, &host->ios);
+ 		sdio_dbg("Set SDIO Clock %d MHz\n", host->ios.clock/1000000);
+ 	}
+@@ -1945,7 +1946,8 @@
+     msleep(1);
+ #if 1//SDIO CLOCK SETTING
+ 	if ((feature.sdio_clock > 0) && (host->ios.timing != MMC_TIMING_UHS_DDR50)) {
+-		host->ios.clock = feature.sdio_clock;
++		/* Respect the MMC host/board limit; do not force the vendor 150 MHz default. */
++		host->ios.clock = min_t(unsigned int, feature.sdio_clock, host->f_max);
+ 		host->ops->set_ios(host, &host->ios);
+ 		sdio_dbg("Set SDIO Clock %d MHz\n", host->ios.clock/1000000);
+ 	}
+@@ -2091,7 +2093,7 @@
+ 
+ void get_fw_path(char* fw_path){
+ 	if (strlen(aic_fw_path) > 0) {
+-		memcpy(fw_path, aic_fw_path, strlen(aic_fw_path));
++		strscpy(fw_path, aic_fw_path, FW_PATH_MAX);
+ 	}else{
+ 		snprintf(fw_path, FW_PATH_MAX, "%s%s", aic_default_fw_path, aicbsp_chip_fw_subdir());
+ 	}
+--- a/src/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_cfgfile.c
++++ b/src/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_cfgfile.c
+@@ -7,6 +7,7 @@
+  *
+  ****************************************************************************************
+  */
++#include "../aic_firmware.h"
+ #include <linux/firmware.h>
+ #include <linux/if_ether.h>
+ 
+@@ -59,7 +60,7 @@
+ 
+ 	RWNX_DBG(RWNX_FN_ENTRY_STR);
+ 
+-	ret = request_firmware(&config_fw, filename, rwnx_hw->dev);
++	ret = aic_request_firmware(&config_fw, filename, rwnx_hw->dev);
+ 	if (ret) {
+ 		printk(KERN_CRIT "%s: Failed to get %s (%d)\n", __func__, filename, ret);
+ 		return ret;
+@@ -98,7 +99,7 @@
+ 
+ 	RWNX_DBG(RWNX_FN_ENTRY_STR);
+ 
+-	ret = request_firmware(&config_fw, filename, rwnx_hw->dev);
++	ret = aic_request_firmware(&config_fw, filename, rwnx_hw->dev);
+ 	if (ret) {
+ 		printk(KERN_CRIT "%s: Failed to get %s (%d)\n", __func__, filename, ret);
+ 		return ret;
+--- a/src/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_platform.c
++++ b/src/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_platform.c
+@@ -8,6 +8,7 @@
+  ******************************************************************************
+  */
+ 
++#include "../aic_firmware.h"
+ #include <linux/module.h>
+ #include <linux/firmware.h>
+ #include <linux/delay.h>
+@@ -491,7 +492,7 @@
+ 	u32 dat0, dat1;
+ 	int remain;
+ 
+-	err = request_firmware(&fw, filename, dev);
++	err = aic_request_firmware(&fw, filename, dev);
+ 	if (err) {
+ 		return err;
+ 	}
+@@ -574,7 +575,7 @@
+ 	unsigned int i, size;
+ 	u32 *src, *dst;
+ 
+-	err = request_firmware(&fw, filename, dev);
++	err = aic_request_firmware(&fw, filename, dev);
+ 	if (err) {
+ 		return err;
+ 	}
+@@ -613,7 +614,7 @@
+ 
+ 	printk("%s: request firmware = %s \n", __func__ ,name);
+ 
+-	ret = request_firmware(&fw, name, NULL);
++	ret = aic_request_firmware(&fw, name, NULL);
+ 
+ 	if (ret < 0) {
+ 		printk("Load %s fail\n", name);
+@@ -632,7 +633,8 @@
+ 
+ 
+ 	buffer = vmalloc(size);
+-	memset(buffer, 0, size);
++    if (!buffer) { release_firmware(fw); return -ENOMEM; }
++    memset(buffer, 0, size);
+ 	memcpy(buffer, dst, size);
+ 
+ 	*fw_buf = buffer;
+@@ -2175,7 +2177,7 @@
+ 	
+ 	AICWFDBG(LOGINFO, "%s: request firmware = %s \n", __func__ ,name);
+ 	
+-	ret = request_firmware(&fw, name, NULL);
++	ret = aic_request_firmware(&fw, name, NULL);
+ 		
+ 	if (ret < 0) {
+ 		AICWFDBG(LOGERROR, "Load %s fail\n", name);
+@@ -2193,7 +2195,8 @@
+ 	}
+ 	
+ 	buffer = vmalloc(size);
+-	memset(buffer, 0, size);
++    if (!buffer) { release_firmware(fw); return -ENOMEM; }
++    memset(buffer, 0, size);
+ 	memcpy(buffer, dst, size);
+ 		
+ 	*fw_buf = buffer;
+@@ -2254,6 +2257,7 @@
+ 
+     /* start to read from firmware file */
+     buffer = vmalloc(size);
++    if (!buffer) { release_firmware(fw); return -ENOMEM; }
+     memset(buffer, 0, size);
+     if(!buffer){
+             *fw_buf=NULL;
+--- /dev/null
++++ b/src/SDIO/driver_fw/driver/aic8800/aic_firmware.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef AIC_OPENWRT_FIRMWARE_H
++#define AIC_OPENWRT_FIRMWARE_H
++#include <linux/firmware.h>
++#include <linux/errno.h>
++/* This package intentionally targets the board's AIC8800D80, not USB variants. */
++static inline int aic_request_firmware(const struct firmware **fw,
++                                      const char *name, struct device *dev)
++{
++    char path[160];
++    if (snprintf(path, sizeof(path), "aic8800D80/%s", name) >= sizeof(path))
++        return -ENAMETOOLONG;
++    return request_firmware(fw, path, dev);
++}
++#endif
+--- a/src/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/aicwf_sdio.c
++++ b/src/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/aicwf_sdio.c
+@@ -3150,7 +3150,7 @@
+ 
+ #if 1//SDIO CLOCK SETTING
+ 	if (feature.sdio_clock > 0) {
+-		host->ios.clock = feature.sdio_clock;
++		host->ios.clock = min_t(unsigned int, feature.sdio_clock, host->f_max);
+ 		host->ops->set_ios(host, &host->ios);
+ 		AICWFDBG(LOGINFO, "Set SDIO Clock %d MHz\n", host->ios.clock/1000000);
+ 	}
+@@ -3295,7 +3295,7 @@
+     msleep(1);
+ #if 1//SDIO CLOCK SETTING
+ 	if ((feature.sdio_clock > 0) && (host->ios.timing != MMC_TIMING_UHS_DDR50)) {
+-		host->ios.clock = feature.sdio_clock;
++		host->ios.clock = min_t(unsigned int, feature.sdio_clock, host->f_max);
+ 		host->ops->set_ios(host, &host->ios);
+ 		AICWFDBG(LOGINFO, "Set SDIO Clock %d MHz\n", host->ios.clock/1000000);
+ 	}

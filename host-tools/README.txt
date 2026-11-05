@@ -16,12 +16,14 @@ mcp-fes-workflow.example.json 保存本项目1GiB T153/eMMC流程的完整 JSON-
    服务当前能力的替代品。若接口或目标不匹配，停止并更新流程。
 3. 板卡应已进入BootROM FEL；lynx_scan_flash_devices应只找到绑定的目标。
    本板实测raw chip=0x00192200/SoC=0x1922，不能凭旧通道名称判断芯片。
-4. 先在Linux构建机完成打包和verify-only。使用1GiB profile的整盘镜像，
-   不把rootfs、512MiB bootarea或FIT当作完整磁盘。
+4. 在 Linux 构建机完成官方 v25.12.6 + 补丁的正常 make，校验 sha256sums，
+   解压 *-ext4-raw.img.gz，再计算 raw 的 SHA256 和字节数。板卡为 1GiB DDR4；
+   不把 rootfs、bootarea 或 FIT 当作完整磁盘。详见 docs/OPENWRT-25.12.6-NATIVE.txt。
 
 逐步调用
 --------
-把<REMOTE_ROOT>替换为本次Linux源码/产物目录的绝对路径。每条request是
+把 <REMOTE_LOADER_ABSOLUTE_PATH> 和 <REMOTE_DECOMPRESSED_RAW_ABSOLUTE_PATH>
+分别替换为独立 FES 文件、解压后 raw 镜像在服务器上的绝对路径。每条 request 是
 一次tools/call请求；若框架直接提供工具调用，传相同name与arguments即可。
 响应中的任务ID和LYNX本地缓存路径必须来自本轮真实返回值，不手工推测路径。
 只有device-scoped服务且绑定恰好一个SDK项目时可省略projectId；其它情况
@@ -42,8 +44,9 @@ loader固定SHA256：
 board-config、dtb-config、fes1、uboot。禁止包含要持久烧录的厂商内核/根分区。
 组包和六payload的SHA校验见docs/FES-REPRODUCE.txt及对应configs。
 
-整盘SHA必须取本次t153-disk-1g-manifest.json的image.sha256，并与本轮
-download结果核对；不要拿历史成功SHA代替新构建产物。现布局306184192字节，
+整盘 SHA 必须取本次解压 raw 的实际 sha256sum，并与本轮 download 结果核对；
+原生构建无需旧 snapshot 的 t153-disk-1g-manifest.json。不要拿历史成功 SHA
+代替自定义构建产物。默认布局 306184192 字节，
 598016个512字节扇区；若将来布局改变，先同步示例检查值和验收读回范围。
 start_flash的confirmDestructive=true表示调用方已确认将覆盖选定eMMC前292MiB，
 包括原厂分区表；它不是读取/预览参数。
@@ -59,12 +62,13 @@ reboot是现有记录实际跑通的FES后续引导方式，尤其适合外部�
 
 完成判定
 --------
-任务必须同时state=success、exitCode=0、verifyState=success，且writtenBytes
+任务必须同时 state=success、exitCode=0、verifyState=success、
+postFlashState=success，且 writtenBytes
 和committedBytes等于306184192。保存原始最终任务状态和manifest/hash。
 这只完成FES层写入/校验；还必须从源码SPL/U-Boot启动，在主线U-Boot
 读取全部598016扇区并计算SHA256，与该镜像逐字节一致后，再验收Linux、
 ext4根分区、配置持久化、网络和所需外设。不得用FES加法校验代替全盘SHA。
-完整步骤及U-Boot命令见docs/FLASH-SOURCE.txt。
+原生完整步骤及 U-Boot 命令见 docs/OPENWRT-25.12.6-NATIVE.txt。
 
 本例不包含未验证的kexec或私自绕过工具限制的串口命令。Linux的标准
 reboot efex源码实现见docs/T153-LINUX-REBOOT.txt，必须先启动包含该内核、

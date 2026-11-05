@@ -1,0 +1,77 @@
+echo PAUSE_ON_BEGIN; ethtool -s eth1 autoneg on advertise 0x602f
+; ethtool -r eth1; sleep 5; /tmp/phytool read eth1/1/4; /tmp/phytool read eth1/1
+/9; ethtool eth1
+PAUSE_ON_BEGIN
+[ 1242.962718] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Down
+[ 1246.076403] dwmac-sun8i-t153 4510000.ethernet eth1: Link is Up - 1Gbps/Full - flow control rx/tx
+0x0de1
+0x0200
+Settings for eth1:
+	Supported ports: [ TP MII ]
+	Supported link modes:   10baseT/Half 10baseT/Full 
+	                        100baseT/Half 100baseT/Full 
+	                        1000baseT/Full 
+	Supported pause frame use: Symmetric Receive-only
+	Supports auto-negotiation: Yes
+	Supported FEC modes: Not reported
+	Advertised link modes:  10baseT/Half 10baseT/Full 
+	                        100baseT/Half 100baseT/Full 
+	                        1000baseT/Full 
+	Advertised pause frame use: Symmetric Receive-only
+	Advertised auto-negotiation: Yes
+	Advertised FEC modes: Not reported
+	Link partner advertised link modes:  10baseT/Half 10baseT/Full 
+	                                     100baseT/Half 100baseT/Full 
+	                                     1000baseT/Full 
+	Link partner advertised pause frame use: Symmetric Receive-only
+	Link partner advertised auto-negotiation: Yes
+	Link partner advertised FEC modes: Not reported
+	Speed: 1000Mb/s
+	Duplex: Full
+	Port: Twisted Pair
+	PHYAD: 1
+	Transceiver: external
+	Auto-negotiation: on
+	MDI-X: Unknown
+	Supports Wake-on: d
+	Wake-on: d
+	Current message level: 0x0000003f (63)
+			       drv probe link timer ifdown ifup
+	Link detected: yes
+root@OpenWrt:~# echo PAUSE_ON_LOAD; for n in 1 2 3 4 5 6 7 8; do echo round=$n; 
+cat /sys/class/net/eth1/speed; wget -q -T 8 -O /tmp/wan-16m.bin http://192.168.1
+.228:8878/net-test-16m.bin || break; sha256sum /tmp/wan-16m.bin; sleep 3; done; 
+ip -s link show eth1; echo PAUSE_ON_END
+PAUSE_ON_LOAD
+round=1
+1000
+2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9  /tmp/wan-16m.bin
+round=2
+1000
+2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9  /tmp/wan-16m.bin
+round=3
+1000
+2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9  /tmp/wan-16m.bin
+round=4
+1000
+2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9  /tmp/wan-16m.bin
+round=5
+1000
+2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9  /tmp/wan-16m.bin
+round=6
+1000
+2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9  /tmp/wan-16m.bin
+round=7
+1000
+2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9  /tmp/wan-16m.bin
+round=8
+1000
+2f29f58608373d71b1d15c0340dd8128a2e2bff551eb42dc2befce8e059a81e9  /tmp/wan-16m.bin
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether WAN_MAC brd ff:ff:ff:ff:ff:ff
+    RX:  bytes packets errors dropped  missed   mcast           
+     158102589  106797      0       0       0       0 
+    TX:  bytes packets errors dropped carrier collsns           
+        820850   12222      0       6       0       0 
+PAUSE_ON_END
+root@OpenWrt:~# 

@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-05T08:35:25.687737+00:00",
+  "status": "software validation passed",
+  "hardware_verified": false,
+  "hardware_scope": "This report is the software task record, which performed no board operation. Actual same-image board acceptance is separately archived by the coordinator; see hardware_acceptance_record. hardware_verified=false here describes this software-only evidence scope, not a claim that no board record exists.",
+  "upstream": {
+    "tag": "v25.12.6",
+    "commit": "64900e756efa667774214f9c6b17c113222e01f7",
+    "kernel": "6.12.112",
+    "version": "25.12.6",
+    "version_code": "r33311-981c978eff"
+  },
+  "patch": {
+    "file": "openwrt-25.12.6-t153.patch",
+    "bytes": 474128,
+    "sha256": "338dc6fbc70663a73416e984f1c148b0d5bfd02793294ef13160efd353889690"
+  },
+  "workspace": {
+    "source": "<BUILD_WORKSPACE>/source",
+    "fresh_source_tree": true,
+    "fresh_build_reported_by_coordinator": true,
+    "build_dir_is_directory_not_symlink": true,
+    "staging_dir_is_directory_not_symlink": true,
+    "shared_input": "dl symlink to existing downloaded source cache only",
+    "reused_compiled_tools_or_target_objects": false,
+    "clean_start_limit": "No pre-build filesystem inventory was saved; fresh-tree provenance is the coordinator record, supported by logs compiling host tools and the GCC toolchain."
+  },
+  "steps": [
+    {
+      "step": "apply final exported patch to pristine official archive",
+      "command": "patch -p1 --batch --forward",
+      "exit_code": 0,
+      "evidence": "patch-apply.json",
+      "files_verified": 82
+    },
+    {
+      "step": "standard feeds update",
+      "command": "./scripts/feeds update -a",
+      "exit_code": 1,
+      "log": "feeds-update.log.gz",
+      "note": "Only video clone failed with GnuTLS -110; original log retained."
+    },
+    {
+      "step": "same-URL bounded video retry",
+      "command": "timeout 180 ./scripts/feeds update video",
+      "exit_code": 0,
+      "log": "feeds-video-retry.log.gz"
+    },
+    {
+      "step": "standard feed installation",
+      "command": "./scripts/feeds install -a",
+      "exit_code": 0,
+      "log": "feeds-install.log.gz"
+    },
+    {
+      "step": "host tools from source",
+      "make_target": "tools/install",
+      "exact_cli": "not captured; flags are not reconstructed",
+      "exit_code": 0,
+      "log": "tools-build.log.gz"
+    },
+    {
+      "step": "cross toolchain from source",
+      "make_target": "toolchain/install",
+      "exact_cli": "not captured; flags are not reconstructed",
+      "exit_code": 0,
+      "log": "toolchain-build.log.gz",
+      "compiler": "GCC 14.3.0 / musl / arm_cortex-a7+neon-vfpv4"
+    },
+    {
+      "step": "final three-line target/profile seed and defaults",
+      "command": "make defconfig",
+      "exit_code_record": "not separately retained",
+      "log": "final-defconfig.log.gz",
+      "checks": "native-config-validation.json; 49 checks passed"
+    },
+    {
+      "step": "real PTY menuconfig",
+      "command": "make menuconfig",
+      "exit_code": 0,
+      "log": "menuconfig-terminal.log.gz",
+      "t153_profile_visible": true
+    },
+    {
+      "step": "post-menuconfig defaults",
+      "command": "make defconfig",
+      "exit_code_record": "not separately retained",
+      "log": "post-menuconfig-defconfig.log.gz",
+      "result": "No change to .config"
+    },
+    {
+      "step": "first complete top-level make",
+      "command": "make -j8 V=s",
+      "command_source": "coordinator task message",
+      "exit_code": 0,
+      "log": "openwrt-full-build.log.gz",
+      "post_build_verification": "First image failed independent e2fsck -fn with inode-bitmap-padding return 4; not accepted as final image."
+    },
+    {
+      "step": "second top-level make after image recipe fix",
+      "make_target": "default top-level make",
+      "exact_cli": "not captured; flags are not reconstructed",
+      "exit_code": 0,
+      "log": "openwrt-image-fsck-build.log.gz",
+      "incremental": true,
+      "note": "Reused this run’s compiled tools/kernel/packages; not a second clean rebuild."
+    },
+    {
+      "step": "final independent image validation",
+      "status": "passed",
+      "evidence": "../2026-11-05-native-image/validation.json"
+    },
+    {
+      "step": "repeat image generation from same inputs",
+      "status": "byte-identical",
+      "evidence": "../2026-11-05-native-image/repeat-validation.json",
+      "note": "Image recipe only; no toolchain/kernel rebuild."
+    }
+  ],
+  "configuration": {
+    "minimal_seed": "config.buildinfo",
+    "seed_lines": 3,
+    "full_config": "openwrt.config.gz",
+    "full_config_bytes": 280890,
+    "full_config_sha256": "0e32adfe2cbc2dbe15f7e448b2520124c50b21c15075f19609ef7629cb501b4d",
+    "auto_selection_checks": 49,
+    "missing_checks": []
+  },
+  "warnings": [
+    {
+      "scope": "initial tools/feed metadata before feed installation",
+      "detail": "ruby, libev, libpam, libtirpc, liblzma and libnetsnmp were initially absent from package links; links were installed by feeds install."
+    },
+    {
+      "scope": "unmodified official feeds",
+      "detail": "Prosody references missing luafilesystem5.4/luaexpat5.4/luasec5.4/luasocket5.4; left unchanged."
+    },
+    {
+      "scope": "unmodified official feeds Kconfig",
+      "detail": "Final defconfig/menuconfig logs retain the luci-app-weechat -> weechat-full -> weechat-minimal recursive-dependency diagnostic. It did not prevent this selected T153 configuration, the PTY menu exit0 or the successful build; do not describe configuration as warning-free."
+    }
+  ],
+  "package_builds": {
+    "uboot-t153": "compiled from U-Boot 2026.07 source; package-local bootarea validator passed",
+    "aic8800-sdio": "driver and firmware packages built and installed",
+    "aic8800d80-bt": "r2 helper built and installed",
+    "bluez": "5.83 packages built and installed"
+  },
+  "image": {
+    "gzip_file": "openwrt-sunxi-cortexa7-dshanpi_t153mx-omnigate-ext4-raw.img.gz",
+    "gzip_bytes": 16560656,
+    "gzip_sha256": "aafef7198f0c5f68005471c30132b4a57334ae4d7e08c9ea5fcf9df5a68482ed",
+    "raw_bytes": 306184192,
+    "raw_sha256": "cd57d6970329f4a9255e7020ea3f7dfbc2c13040f7154563cbe43ba0d431a32e",
+    "final_filesystem_check": 0,
+    "software_validation": "../2026-11-05-native-image/validation.json"
+  },
+  "publication": "Candidate preparation only; no Release creation, Git commit or push performed by this task.",
+  "step_order_note": "Logical evidence groups, not a complete timestamped command transcript. The coordinator initially populated the new official source tree with scripts/apply-native.sh; the final exported patch was independently applied to another pristine official tree and all 82 resulting files compared. The image fix was built incrementally and incorporated into that final patch.",
+  "hardware_acceptance_record": "../2026-11-05-native-hardware/validation.json"
+}

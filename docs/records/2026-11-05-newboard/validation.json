@@ -1,0 +1,48 @@
+{
+  "board": "second T153 OmniGate, user confirmed 1GiB DDR4 and eMMC",
+  "image": "t153-openwrt25-source-1g-smp-disk.img",
+  "image_sha256": "7f2485c12409c205255ba64a57f44d26c62084c1be04aa484f582b963e884ea5",
+  "version": "25.12-SNAPSHOT / Linux 6.12.113; not v25.12.6",
+  "flash_task": "flash-1793861421759061200",
+  "flash_verify": "passed",
+  "independent_entire_disk_readback": "598016 sectors; SHA256 exact match before first boot",
+  "boot": "eMMC ext4; CPU0-3 online; source DDR4 checks passed; HCI UART UP RUNNING",
+  "network": {
+    "eth0": "LAN 192.168.153.1/24",
+    "eth1": "WAN DHCP, observed 10.0.0.217",
+    "host_usb_adapter": "ASIX AX88179 family; Windows initially CM_PROB_DISABLED code 22",
+    "host_enable": "user enabled in Device Manager after non-admin enable was denied",
+    "final_lan_link": "Windows reports 1 Gbps",
+    "dhcp_client": "192.168.153.169/24",
+    "web_test": "Windows curl direct: root HTTP200; CGI HTTP403 x-luci-login-required with complete login form (normal unauthenticated LuCI)",
+    "board_local_exception": "User authorized persistent WAN LuCI TCP80/443 from 10.0.0.0/24 only; absent from release defaults",
+    "manual_reboot": "user confirmed intermediate reboot was manual",
+    "limits": "No claim of controlled WAN stability, Wi-Fi association, Bluetooth pairing or 4G data validation on this replacement board"
+  },
+  "files": {
+    "newboard-r2-readback-20261105.log.gz": {
+      "bytes": 246,
+      "sha256": "22aebd6102f701e167a36dbaadcd839a07ca7b9dc7a6e38261717384934357b2"
+    },
+    "newboard-r2-boot-20261105.log.gz": {
+      "bytes": 8268,
+      "sha256": "f337f814b761c975fa1104cd01a4fc75bf27630c58e785a9fb2ece168b1ce36e"
+    },
+    "newboard-r2-runtime-20261105.log.gz": {
+      "bytes": 2671,
+      "sha256": "0e7ef0e1bc52344b3f2a42f73f6c8d258ca9b24391e2d55d3f02ba1dc25210d3"
+    },
+    "newboard-r2-network-20261105.log.gz": {
+      "bytes": 12412,
+      "sha256": "dfcd0926405274cb4d3eedb80060dfcb6acc20d92210294d78c36518a3ec1a82"
+    },
+    "t153_newboard_r2_20261105_status.json.gz": {
+      "bytes": 2957,
+      "sha256": "a0aaa787e005155cab4f1735e75d2e525702d348f044c3d602b14dccec6f85a6"
+    },
+    "t153_newboard_r2_20261105_boot.log.gz": {
+      "bytes": 445,
+      "sha256": "19b1e2c115451d9c6380697d53d26425b3e1f9586668d96d2ca413b43dea5abd"
+    }
+  }
+}

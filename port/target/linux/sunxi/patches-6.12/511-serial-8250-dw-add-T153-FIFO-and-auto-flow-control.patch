@@ -1,0 +1,171 @@
+From: T153 OpenWrt port maintainers
+Subject: [PATCH] serial: 8250_dw: describe T153 FIFO and automatic flow control
+
+T153 UART7 is a 64-byte DesignWare integration with automatic CTS/RTS,
+but its component parameter register is unavailable. Generic probing
+therefore selects a 16-byte 16550A without UART_CAP_AFE. At 1.5 Mbaud an
+AIC8800D80 245-byte H4 EIR command then intermittently loses its response;
+the same transaction succeeds when sent in 32-byte chunks with 1ms gaps.
+
+Use the existing CPR fallback path and the standard fifo-size property,
+already parsed by uart_read_port_properties(), to describe FIFO depth
+and AFCE capability. Hardware CPR remains authoritative when nonzero.
+Only the T153 compatible selects this fallback; existing matches and
+UART termios/HCI transmit paths retain their existing behavior.
+
+The T153 BSP sun8iw22p1.dtsi describes UART0 and UART6-9 as 64-byte, UART1-5
+as 128-byte, and sunxi-uart.c enables MCR.AFE for CRTSCTS unconditionally.
+This port enables the new compatible only on UART7 pending wider testing.
+
+---
+--- a/drivers/tty/serial/8250/8250_dw.c
++++ b/drivers/tty/serial/8250/8250_dw.c
+@@ -9,6 +9,7 @@
+  * LCR is written whilst busy.  If it is, then a busy detect interrupt is
+  * raised, the LCR needs to be rewritten and the uart status register read.
+  */
++#include <linux/bitfield.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
+@@ -56,6 +57,7 @@
+ #define DW_UART_QUIRK_IS_DMA_FC		BIT(3)
+ #define DW_UART_QUIRK_APMC0D08		BIT(4)
+ #define DW_UART_QUIRK_CPR_VALUE		BIT(5)
++#define DW_UART_QUIRK_CPR_FIFO_SIZE	BIT(6)
+ 
+ struct dw8250_platform_data {
+ 	u8 usr_reg;
+@@ -457,10 +459,20 @@
+ 	dw8250_writel_ext(up, RZN1_UART_RDMACR, val);
+ }
+ 
+-static void dw8250_quirks(struct uart_port *p, struct dw8250_data *data)
++static int dw8250_quirks(struct uart_port *p, struct dw8250_data *data)
+ {
+ 	unsigned int quirks = data->pdata ? data->pdata->quirks : 0;
+ 	u32 cpr_value = data->pdata ? data->pdata->cpr_value : 0;
++
++	/* Some integrations omit CPR; FIFO depth then comes from firmware. */
++	if (quirks & DW_UART_QUIRK_CPR_FIFO_SIZE) {
++		if (!p->fifosize || p->fifosize % 16 ||
++		    p->fifosize / 16 > FIELD_MAX(DW_UART_CPR_FIFO_MODE))
++			return dev_err_probe(p->dev, -EINVAL,
++					     "invalid or missing fifo-size\n");
++		cpr_value &= ~DW_UART_CPR_FIFO_MODE;
++		cpr_value |= FIELD_PREP(DW_UART_CPR_FIFO_MODE, p->fifosize / 16);
++	}
+ 
+ 	if (quirks & DW_UART_QUIRK_CPR_VALUE)
+ 		data->data.cpr_value = cpr_value;
+@@ -499,6 +511,8 @@
+ 		data->data.dma.tx_param = p->dev->parent;
+ 		data->data.dma.fn = dw8250_idma_filter;
+ 	}
++
++	return 0;
+ }
+ 
+ static void dw8250_reset_control_assert(void *data)
+@@ -628,7 +642,9 @@
+ 	if (err)
+ 		return err;
+ 
+-	dw8250_quirks(p, data);
++	err = dw8250_quirks(p, data);
++	if (err)
++		return err;
+ 
+ 	/* If the Busy Functionality is not implemented, don't handle it */
+ 	if (data->uart_16550_compatible)
+@@ -766,8 +782,16 @@
+ 	.quirks = DW_UART_QUIRK_SKIP_SET_RATE,
+ };
+ 
++/* T153 UARTs have automatic flow control but no readable CPR. */
++static const struct dw8250_platform_data dw8250_t153_data = {
++	.usr_reg = DW_UART_USR,
++	.cpr_value = DW_UART_CPR_AFCE_MODE,
++	.quirks = DW_UART_QUIRK_CPR_VALUE | DW_UART_QUIRK_CPR_FIFO_SIZE,
++};
++
+ static const struct of_device_id dw8250_of_match[] = {
+ 	{ .compatible = "snps,dw-apb-uart", .data = &dw8250_dw_apb },
++	{ .compatible = "allwinner,sun8i-t153-uart", .data = &dw8250_t153_data },
+ 	{ .compatible = "cavium,octeon-3860-uart", .data = &dw8250_octeon_3860_data },
+ 	{ .compatible = "marvell,armada-38x-uart", .data = &dw8250_armada_38x_data },
+ 	{ .compatible = "renesas,rzn1-uart", .data = &dw8250_renesas_rzn1_data },
+--- a/drivers/tty/serial/8250/8250_dwlib.c
++++ b/drivers/tty/serial/8250/8250_dwlib.c
+@@ -47,7 +47,6 @@
+ 
+ /* Component Parameter Register bits */
+ #define DW_UART_CPR_ABP_DATA_WIDTH	GENMASK(1, 0)
+-#define DW_UART_CPR_AFCE_MODE		BIT(4)
+ #define DW_UART_CPR_THRE_MODE		BIT(5)
+ #define DW_UART_CPR_SIR_MODE		BIT(6)
+ #define DW_UART_CPR_SIR_LP_MODE		BIT(7)
+@@ -57,7 +56,6 @@
+ #define DW_UART_CPR_SHADOW		BIT(11)
+ #define DW_UART_CPR_ENCODED_PARMS	BIT(12)
+ #define DW_UART_CPR_DMA_EXTRA		BIT(13)
+-#define DW_UART_CPR_FIFO_MODE		GENMASK(23, 16)
+ 
+ /* Helper for FIFO size calculation */
+ #define DW_UART_CPR_FIFO_SIZE(a)	(FIELD_GET(DW_UART_CPR_FIFO_MODE, (a)) * 16)
+--- a/drivers/tty/serial/8250/8250_dwlib.h
++++ b/drivers/tty/serial/8250/8250_dwlib.h
+@@ -5,6 +5,9 @@
+ #include <linux/types.h>
+ 
+ #include "8250.h"
++
++#define DW_UART_CPR_AFCE_MODE		BIT(4)
++#define DW_UART_CPR_FIFO_MODE		GENMASK(23, 16)
+ 
+ struct dw8250_port_data {
+ 	/* Port properties */
+--- a/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+@@ -27,9 +27,27 @@
+         resets:
+           maxItems: 1
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: allwinner,sun8i-t153-uart
++    then:
++      properties:
++        fifo-size:
++          enum: [64, 128]
++      required:
++        - fifo-size
++    else:
++      properties:
++        fifo-size: false
++
+ properties:
+   compatible:
+     oneOf:
++      - items:
++          - const: allwinner,sun8i-t153-uart
++          - const: snps,dw-apb-uart
+       - items:
+           - enum:
+               - renesas,r9a06g032-uart
+@@ -100,6 +118,13 @@
+     minItems: 1
+     maxItems: 2
+ 
++  fifo-size:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Receive and transmit FIFO depth in bytes for integrations without a
++      readable component parameter register. T153 UART0 and UART6-9 have
++      64-byte FIFOs; UART1-5 have 128-byte FIFOs.
++
+   reg-shift: true
+ 
+   reg-io-width: true

@@ -1,0 +1,241 @@
+T153 OmniGate AIC8800D80 software integration
+============================================
+
+Hardware identification
+-----------------------
+The board reports SDIO function 1 C8A1:0082 and function 2 C8A1:0182.
+This package targets that SDIO AIC8800D80, with Bluetooth on UART7. It does
+not install a USB AIC driver. The existing SDIO host is MMC3, 4-bit, capped
+at 25 MHz, with PJ10 WLAN enable through mmc-pwrseq-simple.
+
+Wiring from the OmniGate board source/schematic:
+  Wi-Fi: PJ10 enable; PB1 host-wake (OOB wake not enabled here).
+  Bluetooth: UART7 PB11..PB14 with RTS/CTS; PB0 reset/enable;
+             PJ11 device-wake held high; PB4 host-wake not enabled.
+The generic rfkill description uses ACTIVE_LOW: unblocked drives PB0 low.
+This matches the actual OmniGate Tina kernel/script and its recorded
+AIC8800D80 HCI + SBC playback success. The old schematic labels XR829 and
+cannot determine the replacement module polarity by its BT_RSTN net name.
+The current mainline-derived path has the RAM-boot results recorded below;
+connection, audio and cold-boot qualification remain separate checks.
+
+Source and binary boundaries
+----------------------------
+The T153 kernel, source DDR initialization, SPL and U-Boot remain separately
+built from source. Wi-Fi uses an external GPL host driver, not a driver
+already merged into upstream Linux:
+  https://github.com/radxa-pkg/aic8800
+  d9c72efd382ccdbf2f1fdb09d2d4f3cc212edd9d
+  archive SHA256 46bf2d2202287479c46adeed07696505a16d84b413bedfd13cb6a73c2f7d07b9
+
+Only the SDIO source is compiled. Patch 100 incorporates the SDIO hunks of
+the pinned repository's Debian maintenance series in series order. Patch
+200 uses the standard firmware loader under /lib/firmware/aic8800D80 and
+caps all four BSP/FDRV host clock writes at the host's DT maximum. Patch
+300 adapts the selected cfg80211 signatures to backports 6.18.55, supplies
+missing shared declarations/file-local static functions, and bases the
+radiotap variable data pointer on the skb allocation for FORTIFY checks.
+It does not falsify the global Linux version or disable Werror/FORTIFY.
+
+The radio .bin files are opaque controller firmware copied unchanged from
+that pinned source distribution. No corresponding radio firmware source
+is provided. The package includes upstream-copyright and a precise notice
+under /usr/share/aic8800d80; it does not represent those binaries as source-
+built firmware or apply this project's source license to them.
+
+Configuration and packages
+--------------------------
+configs/fragments/aic8800d80.config records the required options, including
+CONFIG_USE_RFKILL=y. Selecting only kmod-rfkill without USE_RFKILL is not
+sufficient: OpenWrt defconfig removes that package.
+
+  kmod-aic8800-sdio: aic8800_bsp.ko + aic8800_fdrv.ko
+  aic8800d80-firmware: namespaced unmodified radio firmware
+  kmod-rfkill-gpio: mainline GPIO-controlled rfkill driver
+  kmod-hci-uart: mainline Bluetooth H4 line discipline
+  aic8800d80-bt: source-built UART vendor initialization + procd service
+  iw, wpad-basic-mbedtls, BlueZ daemon and utilities: user configuration
+
+The Wi-Fi module must use OpenWrt's staged mac80211 backport headers and
+symbol versions. The target is Linux 6.12.113 with backports 6.18.55; a
+module built only against the native Linux cfg80211 headers is incorrect.
+CONFIG_PLATFORM_ALLWINNER and the legacy btlpm module are disabled, so the
+host driver does not require Tina sunxi_wlan_* or vendor UART APIs.
+
+Bluetooth startup
+-----------------
+The SDIO BSP/FDRV uploads both Wi-Fi and Bluetooth ADID/patch/table before
+the UART attachment. The table selects 1,500,000 baud. The service loads
+the shared module first, finds the named t153-aic8800d80-bt rfkill switch,
+cycles reset, performs the vendor HCI commands, then attaches N_HCI/H4.
+
+The UART helper is deliberately not equivalent to plain btattach: it sends
+HCI Reset, Write BD_ADDR, the 104-byte LE AON parameters, LP level, slave
+power control and CPU power-off control, and verifies each command's opcode
+and status. Every command has a bounded transaction timeout. The initial
+mode holds PJ11 awake and disables low power/CPU power-off; PB4 low-power
+handshaking and suspend/resume are not claimed.
+
+/etc/config/aic8800d80-bt controls enabled, device (/dev/ttyS7), and address.
+The automatic address derives from a per-device serial/CID/machine ID; it
+is stable and locally administered. Without a unique identifier, the helper
+fails clearly rather than assigning the same default address to all boards.
+An explicit board-specific address can be configured instead.
+
+Do not unload aic8800_fdrv while Bluetooth is running: it owns the shared
+radio power/firmware reference. Stop Bluetooth first before driver unload.
+Normal OpenWrt Wi-Fi interface down does not unload the module.
+
+UART7 hardware flow control
+---------------------------
+Kernel patch 511 adds the local allwinner,sun8i-t153-uart compatible to the
+mainline 8250 DesignWare driver. Only UART7 uses it in this board port, with
+standard fifo-size=<64>; the console retains its previous compatible.
+Tina BSP describes UART7 as a 64-byte FIFO and sets MCR.AFE whenever CRTSCTS
+is requested. T153 UART1-5 have 128-byte FIFOs; do not apply UART7's depth to
+all instances.
+
+With the generic compatible, the driver reported a 16-byte FIFO and lacked
+UART_CAP_AFE when the component parameter register was unavailable. The
+DesignWare termios path already marks CTS as automatic, suppressing software
+CTS stopping; without the capability it also omitted hardware MCR.AFE.
+The result can drop a long H4 transaction despite CRTSCTS appearing enabled.
+A diagnostic comparison reproduced a 245-byte EIR command timeout as one
+frame, while the same command succeeded in 32-byte groups with 1ms gaps.
+
+The fix uses the existing CPR fallback mechanism. fifo-size supplies the
+FIFO field (units of 16 bytes), and the T153 platform data declares automatic
+flow control. A nonzero hardware CPR remains authoritative. Existing 8250
+code then fixes the FIFO type/depth and enables MCR.AFE from CRTSCTS. No HCI
+command is skipped and no artificial pacing is added to normal operation.
+The binding requires fifo-size of 64 or 128 for this compatible. Missing
+or unencodable depth is rejected by the driver.
+
+Diagnostic source and instructions are in tests/diagnostics. Their temporary
+ELFs are not installed into the normal image. Driver FIFO depth and termios
+can be checked through t153-tty-status; those values alone do not prove
+physical transmission. Board acceptance still needs whole-frame EIR, HCI
+initialization, discovery, and repeated restart/cold-boot checks.
+
+Orderly Bluetooth service shutdown (package r2)
+----------------------------------------------
+The first persistent-image reboot exposed a two-second HCI Reset timeout
+during shutdown after Bluetooth had started and scanned successfully. It
+was not a startup failure. Linux 6.12.113 unregisters the N_HCI transport
+before its RESET_ON_CLOSE operation, leaving that reset without a working
+command-completion path. Restoring the UART baud and blocking rfkill happen
+only after this synchronous unregister returns, so delaying those later
+steps would not solve the timeout.
+
+Package 2026.11.05-r2 saves the registered HCI index and synchronously powers
+that device down with HCIDEVDOWN before switching N_HCI to N_TTY. The UART
+remains at 1.5 Mbaud with flow control and radio power during this operation.
+Startup commands, bluetoothd's service and normal discovery behavior are
+unchanged. An already removed device is harmless; other shutdown errors
+remain visible and do not skip the remaining resource cleanup.
+
+Board hot-replacement testing left bluetoothd running. Stopping an UP/RUNNING
+controller exited successfully without the two-second pause. Three further
+UP -> stop -> start cycles all returned stop status 0 and restored hci0
+UP RUNNING; the recorded HCI Opcode-failed count remained zero. This verifies
+the minimal helper cleanup while the daemon remains active. Evidence:
+  docs/records/2026-11-05-bt-shutdown-software/runtime-validation.json
+  docs/records/2026-11-05-bt-shutdown-software/evidence.json
+
+Software verification on 2026-11-05
+-----------------------------------
+The complete package build passed with kernel Werror and FORTIFY enabled.
+BSP/FDRV and rfkill-gpio report ARMv7, Linux 6.12.113 SMP; FDRV depends on
+cfg80211 and BSP, with no vendor sunxi WLAN/MMC symbol dependencies. All
+15 installed firmware files match the pinned source archive byte-for-byte.
+The Bluetooth helper passed host protocol tests, ASan/UBSan, ARM compilation
+and the OpenWrt package build. Formal profile settings retained: 58/58;
+AIC fragment settings: 13/13. Compiled DT has UART7 enabled and PB0 active
+low. Detailed evidence and compressed successful logs are in:
+  docs/records/2026-11-05-aic8800d80-software/evidence.json
+  port/package/utils/aic8800d80-bt/tests/evidence.json
+
+OpenWrt CONFIG_MODULE_STRIPPED=y intentionally removes device aliases from
+module metadata. /etc/modules.d/aic8800-sdio explicitly loads aic8800_bsp
+and aic8800_fdrv. The source SDIO table matches C8A1:0082; BSP handles the
+second function. Missing modinfo aliases alone are not a binding failure.
+
+RAM board verification on 2026-11-05
+------------------------------------
+The UART flow-control image was actually booted on the board:
+  uart-flow-initramfs.itb, 11,451,092 bytes
+  SHA256 6853e52a257a2950865b27daafa95eaa696a0fb394ff438ec09ca31c6a1b1573
+
+The standard TTY query now reports FIFO64 and CRTSCTS enabled. The normal
+Bluetooth service automatically creates hci0 UP RUNNING, ACL MTU 1021:9,
+SCO MTU 255:4, zero RX/TX errors; the controller reports HCI version 5.4.
+Ten consecutive unpaced 245-byte H4 EIR commands returned success. These
+results validate the hardware-flow-control fix without adding chunk delays
+to the production helper or kernel HCI path.
+
+A 10-second legacy LE scan produced 114 advertisement output lines (not
+114 distinct devices). After resetting the controller to clear that scan,
+BlueZ bluetoothctl --timeout 10 scan on reported Discovery started and a
+device. No Bluetooth connection, pairing, audio playback, simultaneous
+Wi-Fi/Bluetooth transfer or suspend/resume result is claimed here.
+
+Do not mix legacy hcitool scan state and BlueZ discovery in an acceptance
+run: the first extended-scan attempt after legacy scanning returned busy
+(opcode 0x2041, -16), then worked after controller reset. Normally use
+bluetoothctl/BlueZ alone. Exiting the timed bluetoothctl client stops its
+discovery session; a later scan off can report no active session, which is
+not a UART transport failure.
+
+Wi-Fi shared firmware upload and a real station scan have succeeded; the
+recorded scan found seven BSS. The default OpenWrt radio is disabled, so
+an initially empty iw dev is expected. Association, authentication, DHCP,
+bidirectional Wi-Fi transfer and AP operation still require their own tests.
+Detailed run evidence is kept with docs/records/2026-11-05-connectivity.
+
+BlueZ 5.83 btmgmt initialization limitation
+-----------------------------------------
+The packaged upstream standalone btmgmt has a management-object initialization
+defect. Both one-shot info/find and a real interactive info command failed;
+a piped info command with a two-second delay also failed. Interactive mode
+is therefore NOT a verified workaround. Use the successfully tested
+bluetoothctl with bluetoothd for normal discovery.
+
+Two source paths explain the failure. tools/btmgmt.c calls bt_shell_attach()
+before bt_shell_run(). In noninteractive mode, attach executes the command
+before any menu pre_run callback. In addition, bt_shell_add_submenu() makes
+the first mgmt menu the main menu instead of adding it to the submenu list;
+bt_shell_run() invokes pre_run only for submenus, omitting the main menu.
+Consequently, even interactive standalone btmgmt does not create its static
+management object. mgmt_send() receives NULL and returns zero, causing
+Unable to send index_list/start_discovery before a controller request is sent.
+
+bluetoothctl sets its own main menu before adding the mgmt submenu, and its
+normal discovery uses bluetoothd. Its successful scan does not depend on
+the broken standalone btmgmt initialization. The relevant BlueZ 5.83 paths
+have no build-configuration branches; this is not evidence of a missing
+UART, HCI or management-protocol kernel option.
+
+This release records the issue without patching the upstream BlueZ package.
+Source hashes, exact locations and the failed invocation modes are recorded
+in docs/records/2026-11-05-connectivity/btmgmt-initialization.json. Do not
+interpret this tool error as another FIFO, firmware or HCI timeout.
+
+Board acceptance checks (record results, do not infer from compilation)
+----------------------------------------------------------------------
+  dmesg | grep -Ei 'aic|sdio|firmware|Bluetooth|rfkill'
+  ls /sys/bus/sdio/devices
+  iw phy
+  iw dev
+  /etc/init.d/aic8800d80-bt restart
+  logread -e aic8800d80-bt
+  bluetoothctl list
+  bluetoothctl show
+
+Wi-Fi acceptance requires a real scan, association/authentication, DHCP,
+and bidirectional transfer, then an OpenWrt reboot/retest. AP capability
+requires a client association and traffic test separately. Bluetooth
+requires HCI registration and a real discovery test; UART command success
+alone is not complete Bluetooth acceptance. Verify that PB0 reset after
+SDIO loading preserves the BT patch and produces the expected HCI response.
+Cold boot, concurrent WLAN/BT traffic and low-power behavior need separate
+records. Build and host protocol tests cannot replace these board checks.

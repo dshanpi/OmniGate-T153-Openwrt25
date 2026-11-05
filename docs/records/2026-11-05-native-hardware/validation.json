@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "recorded_at_utc": "2026-11-05T08:37:52.999370+00:00",
+  "board": "second T153MX OmniGate; physical 1 GiB DDR4, 7.28 GiB eMMC",
+  "image_bytes": 306184192,
+  "image_sha256": "cd57d6970329f4a9255e7020ea3f7dfbc2c13040f7154563cbe43ba0d431a32e",
+  "release": "25.12.6",
+  "revision": "r33311-981c978eff",
+  "kernel": "6.12.112",
+  "flash": {
+    "task_id": "flash-1793867316248792600",
+    "entry": "user physical FEL",
+    "state": "success",
+    "exit_code": 0,
+    "verify_state": "success",
+    "post_action": "reboot",
+    "post_action_state": "success",
+    "committed_bytes": 306184192,
+    "loader_sha256": "0d32d52139bc969f7f90665d32203ff07366ed0a31139bda607d89edbcd12873"
+  },
+  "independent_readback": {
+    "source": "eMMC user area, U-Boot mmc 1",
+    "sectors": 598016,
+    "sha256_matches": true,
+    "before_linux_first_boot": true
+  },
+  "boot": {
+    "source_ddr_training_passed": true,
+    "source_uboot": "2026.07",
+    "root": "/dev/root ext4 rw",
+    "cpus_online": "0-3",
+    "warm_reboot_after_restore": "passed",
+    "physical_power_cycle": "not tested"
+  },
+  "cpu_smoke_test": {
+    "per_cpu_affinity": "taskset -c 0,1,2,3; four concurrent SHA256 processes",
+    "input": "16 MiB zero file in tmpfs",
+    "all_hashes_match": true,
+    "expected_sha256": "080acf35a507ac9849cfcba47dc2ad83e01b75663a516279c8b9d243b719643e",
+    "long_stress": "not tested"
+  },
+  "configuration_restore": {
+    "method": "sysupgrade -r after SHA256-verified serial transfer",
+    "result": "success",
+    "user_archive": "private; deliberately not archived or published"
+  },
+  "network": {
+    "lan_eth0": "no carrier",
+    "lan_ipv4": "192.168.153.1/24",
+    "windows_asix": "not present in current Get-NetAdapter inventory",
+    "wan_eth1_ipv4": "10.0.0.217/24",
+    "wan_speed_mbps": 100,
+    "wan_issue": "1 Gbps downshift observed again; unresolved",
+    "luci_localhost": "HTTP 403 with x-luci-login-required: yes and username/password fields; normal login page",
+    "luci_external_lan": "not retested: no cable link/ASIX adapter in current inventory",
+    "wan_management_exception": "restored user-only rule for 10.0.0.0/24; absent from published image defaults"
+  },
+  "wireless": {
+    "wifi": "restored AP started, channel 40 / 5200 MHz / 80 MHz",
+    "client_association_throughput": "not tested",
+    "bluetooth": "hci0 UP RUNNING, HCI 5.4, RX/TX errors 0",
+    "pairing_audio": "not tested"
+  },
+  "modems": {
+    "drivers": "option, qmi_wwan, cdc_mbim loaded",
+    "attached_modem": "none detected in current /dev/ttyUSB* or /dev/cdc-wdm*",
+    "ec20_ml302_data_call": "not tested"
+  },
+  "earlier_failed_attempt": {
+    "state": "FES reconnect failed before eMMC write",
+    "transferred_bytes": 0,
+    "log": "native25126_previous_status.json.gz"
+  },
+  "limitations": [
+    "Linux-visible RAM remains 384 MiB",
+    "CPU_OFF/hotplug/suspend/multicore kexec unsupported",
+    "WAN negotiation issue unresolved",
+    "sysupgrade firmware flashing disabled; use whole raw/FES",
+    "short runtime checks do not prove long-term stability"
+  ],
+  "evidence": {
+    "native25126_start.json.gz": {
+      "bytes": 304,
+      "sha256": "b65c8c1aae01da7ae46c9cbd05283e4b4a0ed634db3c3f464ad99cf57edf2ef0"
+    },
+    "native25126_status.json.gz": {
+      "bytes": 3005,
+      "sha256": "8d1bf9bc39dd1c5875e3b54c1fbfd6e8dd88bed6dee8b499eda16ac255d60aa3"
+    },
+    "native25126_boot.log.gz": {
+      "bytes": 461,
+      "sha256": "d57e6f8c36ad668ebc9f5465fff5f19b5d69e29b7a29db44b6f69d46704d18ea"
+    },
+    "native25126-readback.log.gz": {
+      "bytes": 246,
+      "sha256": "78f6456df109ce83881091cf47d606a1a11b02c29b196a0a8d0b6207fce551a1"
+    },
+    "native25126-linux-boot.log.gz": {
+      "bytes": 8236,
+      "sha256": "4ea1776fd37e2980eccf81f183a951073d7acd8148c03db5b2303bc6798c449b"
+    },
+    "native25126-runtime.log.gz": {
+      "bytes": 2148,
+      "sha256": "cb1532d99bb9b95ce7cfcc1c5d34f207bd7ae66bfb335c773bd6a07e3240676e"
+    },
+    "native25126-restored-reboot.log.gz": {
+      "bytes": 9542,
+      "sha256": "cba008f8a86222b2cdb9a6440cd80cbb0aedeef72e08887529cb61d5a216ae76"
+    },
+    "native25126-restored-runtime.log.gz": {
+      "bytes": 1423,
+      "sha256": "b873aee404e82cd7cb5fbf75b9861e47617f577ddbe12e16334a846add9540fa"
+    },
+    "native25126-cpu-test.log.gz": {
+      "bytes": 310,
+      "sha256": "2a4fcbcdd9ea5a138ad5e7bac4203bfc2429c6d46cb9eb01984251493689a576"
+    },
+    "native25126-http-test.log.gz": {
+      "bytes": 553,
+      "sha256": "f42b10c95f4c1bf27b45b88c4c57822ff0f3c159d00437f7dbbe6bfd41764161"
+    },
+    "native25126-final-health.log.gz": {
+      "bytes": 652,
+      "sha256": "341f5ad33b5f9fae9bff1150c6a712bcc5b64ba413eb25b4e393d0319054af1f"
+    },
+    "native25126_previous_status.json.gz": {
+      "bytes": 1467,
+      "sha256": "eda60f6f23a4b852b1a884e9f0f4246718a3692210e3f296cb725a2c3864d016"
+    }
+  }
+}
