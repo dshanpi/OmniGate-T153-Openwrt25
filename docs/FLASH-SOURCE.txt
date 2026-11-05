@@ -3,8 +3,8 @@ T153 1GiB：FES烧录主线OpenWrt整盘固件
 
 本板已通过FES写入 → 源码DDR4/SPL → 主线U-Boot → eMMC ext4 OpenWrt。
 已安装镜像6ea18915...的292MiB全盘SHA及100Mbps WAN测试有实机记录。
-新native reboot/rgmii-rxid组合镜像仍待烧录验证；板卡已断开，本轮只整理、
-检查和上传软件。以下是下次板卡可用时的操作说明，不代表本次已执行。
+新native reboot/rgmii-rxid组合镜像的实机状态须看对应hash的后续记录。
+以下给出可复用流程；操作说明本身不构成该轮已经执行成功的证据。
 
 1. 与T113参考工程的对应关系
 --------------------------
@@ -17,7 +17,8 @@ T113的SPI-NAND/UBI分区不适用于本板eMMC；不复用T113的DDR寄存器�
 
 2. 从同一构建取得输入
 --------------------
-在干净源码目录完成：
+可直接从software-20261104 Release下载完整.img.gz、933MHz FES loader及两份
+manifest；下载、解压、SHA和MCP逐步操作见仓库README。也可在干净源码目录完成：
   bash scripts/build-release.sh --jobs 4 --with-fes --factory-image /path/to/factory.img
   python3 scripts/package-disk-image.py --profile 1g --verify-only
 详细依赖、缓存与构建见BUILD-REPRODUCE.txt和REBUILD-CACHE.txt。
@@ -47,7 +48,8 @@ ext4 LBA73728/524288扇区，root PARTUUID=15302512-02。
 verify/reboot支持。历史实测SoC=0x1922，不凭通道旧名称猜芯片。
 下载loader并等任务成功，校验固定大小/SHA；inspect确认仅六个RAM角色。
 下载本轮磁盘并等任务成功，校验306184192字节和对应manifest SHA。
-然后调用lynx_start_flash，关键参数为：
+关闭其它串口终端及自己的MCP串口句柄，让烧录预检独占串口读取eMMC几何信息。
+任务成功之前不要自行open/read；之后调用lynx_start_flash，关键参数为：
   firmwarePath: <本次下载返回的磁盘localPath>
   confirmDestructive: true
   options.mode: command

@@ -42,8 +42,9 @@ SHA256 78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e
 可选临时FES loader的外部二进制输入：
 用户原厂t153_linux_omnigate_uart0-default.img，1223225344字节，
 SHA256 4b990b5dcc2da6424e48502e89696b5f908584d173342389156d702338a3118c。
-FES1 DDR及厂商U-Boot仍为二进制，LicenseRef-NOASSERTION；本仓库不
-分发SDK镜像或payload、不宣称具有其再分发许可。脚本只读取用户拥有的输入。
+FES1 DDR及厂商U-Boot仍为二进制，LicenseRef-NOASSERTION。完整SDK镜像与
+散装payload不纳入Git源码历史；Release另提供指定的933MHz RAM loader。
+此附件不改变厂商许可、不是源码FES实现；复现脚本只读取用户拥有的锁定输入。
 六payload哈希与角色：configs/fes-stock-loader.json；固定DDR参数：
 configs/fes-ddr933-profile.json；非执行容器元数据：fes-imagewty-layout.json。
 脚本复现边界见docs/FES-REPRODUCE.txt；持久SPL/DDR全部源码是另一条链。

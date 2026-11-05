@@ -97,7 +97,8 @@ stock RAM容器；package-fes-ddr933.py再用纯Python修改频率和eGON checks
 无需update_fes1、dragon、T113本地目录或SDK中的主机可执行文件。
 在仅有两脚本和三JSON元数据的隔离目录实跑，与两个原候选逐字节一致。
 详见FES-REPRODUCE.txt和logs/fes-portable-reproduction-audit.json。
-厂商二进制仍由用户供给，许可标LicenseRef-NOASSERTION，不放入源码仓库；
+复现所需厂商输入由用户供给，许可标LicenseRef-NOASSERTION，不放入Git源码历史；
+Release另提供已组包的933MHz RAM loader及manifest供本板直接烧录。
 源码化的是提取、组包、参数修改和验证过程，不能冒充FES1 DDR源码。
 
 raw写盘地址须使用当前OpenixCLI/MCP的stock映射：主机已补偿+40960扇区，

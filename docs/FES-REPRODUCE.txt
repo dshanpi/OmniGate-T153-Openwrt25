@@ -5,11 +5,13 @@ FES RAM loader 纯Python复现
 输入中的FES1/DDR和厂商U-Boot仍是厂商二进制；最终写入eMMC的主线
 SPL/DDR/U-Boot/Linux镜像是另一条全部源码构建链。不能把两层混为一谈。
 
-用户提供原厂SDK镜像，不提交该镜像或提取payload到公开仓库：
+复现时由用户提供原厂SDK镜像；该完整镜像及散装payload不提交Git源码历史：
   文件：T153_Tina_V1.0/out/t153_linux_omnigate_uart0-default.img
   字节：1223225344
   SHA256：4b990b5dcc2da6424e48502e89696b5f908584d173342389156d702338a3118c
-该输入目前标记LicenseRef-NOASSERTION；源码仓库只保存hash、参数和工具代码。
+该输入目前标记LicenseRef-NOASSERTION；Git源码保存hash、参数和工具代码。
+2026-11-05起，software-20261104 Release另提供已组包的933MHz RAM loader及
+manifest，便于直接烧录；其厂商二进制属性/许可标记不变，不宣称FES全源码。
 
 从任意干净源码目录复现：
   python3 scripts/prepare-fes-stock.py --factory-image /path/to/factory.img

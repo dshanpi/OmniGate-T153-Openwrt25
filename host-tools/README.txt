@@ -27,6 +27,9 @@ mcp-fes-workflow.example.json 保存本项目1GiB T153/eMMC流程的完整 JSON-
 只有device-scoped服务且绑定恰好一个SDK项目时可省略projectId；其它情况
 在两次download请求中显式填写正确项目ID。
 
+烧录预检须独占本板串口：关闭其它串口终端及自己创建的MCP句柄，任务成功后
+再open/read采集启动日志。提前占用串口会使存储几何预检失败。
+
 顺序：capabilities → scan → 下载loader → 轮询下载 → 检查loader →
 下载disk → 轮询下载 → start_flash → 轮询flash。
 JSON中的check/require/save是客户端必须执行的检查规则，不是发送给工具的参数。

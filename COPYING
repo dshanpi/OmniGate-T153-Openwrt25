@@ -10,6 +10,8 @@ The persistent source SPL/DDR/U-Boot firmware does not link vendor DDR blobs.
 The optional temporary FES RAM loader is different: its user-supplied factory
 FES1/DDR and vendor U-Boot payloads are external binary inputs, currently marked
 LicenseRef-NOASSERTION. They are not included in this source repository/archive.
-Their availability here does not grant redistribution rights. The repository
+The software-20261104 Release separately provides the specified 933 MHz RAM
+loader binary and its provenance manifest. This does not change its vendor
+license or make the FES implementation open source. The Git source repository
 contains extraction/packaging code, fixed hashes and non-executable container
-metadata only; see docs/FES-REPRODUCE.txt and configs/fes-stock-loader.json.
+metadata; see docs/FES-REPRODUCE.txt and configs/fes-stock-loader.json.

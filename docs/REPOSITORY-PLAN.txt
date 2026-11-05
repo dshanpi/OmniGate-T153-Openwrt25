@@ -17,7 +17,8 @@ OpenWrt/工具链/内核/U-Boot编译、FES组包及17阶段检查，全部exit 
 建议保留当前工作目录为轻量源码仓库，仅跟踪：
 README、COPYING、LICENSES/、configs/、port/、scripts/、tests/、docs/、host-tools/。
 新增FES纯Python提取/组包代码位于scripts/，固定参数、输入hash及
-IMAGEWTY非执行header元数据位于configs/；不复制T113工具或SDK二进制。
+IMAGEWTY非执行header元数据位于configs/；Git不复制T113工具或SDK二进制。
+Release另提供指定933MHz临时FES loader和manifest，保留其厂商二进制/许可边界。
 host-tools/只含无私人数据的标准MCP请求、输入schema和使用说明，不含运行时会话。
 经挑选的机器可读验收记录与必要串口日志放docs/records/，按日期/镜像hash标识。
 
