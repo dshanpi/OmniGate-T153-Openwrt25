@@ -6,6 +6,31 @@
 
 [下载固件](https://github.com/dshanpi/OmniGate-T153-Openwrt25/releases/tag/v25.12.6-t153-preview.1) · [使用指南](docs/USER-GUIDE.md) · [自行编译](docs/USER-GUIDE.md#build) · [硬件资料](https://github.com/dshanpi/T153MX-Tina5SDK_OmniGate)
 
+## 认识 OmniGate 硬件
+
+OmniGate 是基于 **全志 T153 SoC（4 × Cortex-A7）** 的工业网关 / 异构控制板，面向网络连接、工业总线与控制应用。
+
+| 类别 | 板卡硬件配置 |
+| --- | --- |
+| **网络** | 双 4G LTE + 双 RJ45 千兆以太网（RGMII） |
+| **总线** | 2 × CAN-FD + 2 × RS485 |
+| **无线** | Wi-Fi + Bluetooth，AIC8800D80（SDIO + UART） |
+| **音频** | PCM |
+| **显示** | RGB888（MIPI DSI ×4 + SPI1） |
+| **摄像头** | MIPI CSI1/2 ×4 lane |
+
+以上为硬件配置；当前 OpenWrt 的驱动与实机验证进度见 [验证范围](#核对验证范围)。接口连接与复用关系以 [硬件资料仓库](https://github.com/dshanpi/T153MX-Tina5SDK_OmniGate) 为准。
+
+### 硬件实物图 · DshanPI-OminiGate
+
+| 正面：主控与外部接口 | 背面：双 4G 模组位与双 SIM 卡槽 |
+| :---: | :---: |
+| ![DshanPI OmniGate 正面实物与接口展示](docs/assets/hardware/DshanPI-OminiGate-1.png) | ![DshanPI OmniGate 背面双 4G 模组位与双 SIM 卡槽](docs/assets/hardware/DshanPI-OminiGate-2.png) |
+
+[查看正面原图](https://github.com/dshanpi/T153MX-Tina5SDK_OmniGate/blob/main/images/DshanPI-OminiGate-1.png) · [查看背面原图](https://github.com/dshanpi/T153MX-Tina5SDK_OmniGate/blob/main/images/DshanPI-OminiGate-2.png)
+
+图片来自硬件资料仓库。图中标注的 **DDR4 4 GB / eMMC 64 GB** 为展示配置；本仓库当前发布镜像适用于前述 **1 GiB DDR4、eMMC** 板卡，其它内存配置须单独适配。
+
 > [!IMPORTANT]
 > 当前为 **`v25.12.6-t153-preview.1` 开发预览版**，板级适配尚未合入上游。Linux 可见内存为 **384 MiB**；WAN 千兆降至百兆的问题尚未解决，长期稳定性仍需验证。
 
