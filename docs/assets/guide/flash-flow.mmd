@@ -1,0 +1,18 @@
+flowchart TD
+    A["备份数据，完成 raw / FES 校验"] --> B{"FEL / 工具检查通过？"}
+    B -->|否| X["停止，保存状态和日志"]
+    B -->|是| C["预先安排烧后串口接管<br/>准备中断 U-Boot 自动启动"]
+    C --> D["释放串口，提交一次烧录任务"]
+    D --> E["轮询同一 taskId<br/>工具释放串口后及时接管"]
+    E --> F{"任务全部通过？"}
+    F -->|仍在运行| E
+    F -->|失败| X
+    F -->|成功| G{"首次启动前<br/>停在 U-Boot？"}
+    G -->|是| H{"整盘读回<br/>SHA256 一致？"}
+    H -->|否| X
+    H -->|是| I["启动 OpenWrt<br/>检查版本、四核和所需业务"]
+    G -->|已错过| J["记录未做初始整盘读回<br/>继续检查系统，不补记校验通过"]
+    classDef stop fill:#fff4f4,stroke:#b45353,color:#702c2c;
+    classDef note fill:#fffaf0,stroke:#b58a3b,color:#705521;
+    class X stop;
+    class J note;

@@ -1,0 +1,11 @@
+flowchart LR
+    H["烧录主机<br/>LYNX + 匹配后端"] <-->|"USB 数据线"| U["OTG / device 口<br/>FEL / FES"]
+    H <-->|"USB 转串口<br/>3.3 V TTL"| S["UART0<br/>115200 · 8N1 · 无流控"]
+    P["管理电脑<br/>192.168.153.x/24"] <-->|"网线"| L["eth0 / LAN<br/>192.168.153.1"]
+    R["上级路由器 / 交换机<br/>可选连接"] <-->|"网线"| W["eth1 / WAN<br/>DHCP 客户端"]
+    subgraph BOARD["T153MX OmniGate"]
+        U
+        S
+        L
+        W
+    end

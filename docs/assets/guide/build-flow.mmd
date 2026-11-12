@@ -1,0 +1,9 @@
+flowchart TD
+    A["Ubuntu 24.04 · 普通用户<br/>安装依赖，准备独立目录"] --> B["官方 OpenWrt v25.12.6 归档<br/>+ 发布版 T153 补丁"]
+    B --> C["核对两份 SHA256<br/>解压 → dry-run → 应用补丁"]
+    C --> D["feeds update / install<br/>make menuconfig 选择 T153 板型"]
+    D --> E["make defconfig → make<br/>自动构建 SPL / U-Boot / 内核 / rootfs"]
+    E --> F["完整 ext4-raw.img.gz<br/>校验 → 解压 → 记录 raw 摘要与长度"]
+    F --> G["将 raw 传至 LYNX 主机<br/>传输前后核对 SHA256"]
+    H["Release 独立 933 MHz FES<br/>另行下载并校验"] --> I["raw + FES<br/>进入烧录流程"]
+    G --> I

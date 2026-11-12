@@ -1,0 +1,14 @@
+flowchart TB
+    subgraph FLASH["烧录阶段 · 临时执行"]
+        direction LR
+        A["BootROM<br/>FEL"] --> B["独立 FES<br/>仅驻留 RAM"]
+        B -->|"匹配后端写入 raw"| C[("eMMC<br/>完整磁盘镜像")]
+    end
+    subgraph BOOT["正常启动 · 从 eMMC 加载"]
+        direction LR
+        D["BootROM"] --> E["源码<br/>DDR4 / SPL"]
+        E --> F["U-Boot"]
+        F --> G["Linux<br/>CPU0–3"]
+        G --> H["OpenWrt<br/>ext4 根文件系统"]
+    end
+    FLASH -.->|"烧录完成后重启"| BOOT

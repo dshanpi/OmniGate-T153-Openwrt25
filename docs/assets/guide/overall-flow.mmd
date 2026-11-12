@@ -1,0 +1,9 @@
+flowchart TD
+    A["确认板型：T153MX OmniGate<br/>1 GiB DDR4 · eMMC"] --> B{"选择镜像来源"}
+    B -->|直接使用| C["下载当前 Release<br/>完整镜像 + 校验清单"]
+    B -->|自行编译| D["官方 25.12.6 源码 + T153 补丁<br/>feeds → menuconfig → make"]
+    C --> E["校验并解压 raw 镜像<br/>准备同版独立 933 MHz FES"]
+    D --> E
+    E --> F["备份数据，确认 FEL 与工具能力<br/>写入 eMMC 并检查任务结果"]
+    F --> G["首次启动前读回校验<br/>按正文处理错过倒计时的情况"]
+    G --> H["启动 OpenWrt，检查版本与四核<br/>连接 eth0/LAN，设置管理密码"]
