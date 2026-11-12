@@ -38,6 +38,15 @@
 
 **先校验，再烧录。** 发布 raw 解压后为 **306184192 字节（292 MiB）**；FES 为 **1154048 字节**。完整文件名、SHA256 和 Windows 校验命令见 [下载与校验](docs/USER-GUIDE.md#download)。不要混用旧 snapshot 镜像。
 
+<details>
+<summary>查看发布页截图：需要下载哪两个镜像文件</summary>
+
+![发布附件中标出的完整 OpenWrt 镜像和独立 FES 引导文件](docs/assets/forum-10599/release-assets.png)
+
+图中红框分别为完整 `.img.gz` 和独立 FES `.img`。下载后先校验，将完整镜像解压为 `.img`；FES 文件保持原样。
+
+</details>
+
 ## 通过 FEL/FES 烧录
 
 > [!WARNING]
@@ -54,6 +63,56 @@
 **任务通过条件：** `state=success`、`exitCode=0`、`verifyState=success`、`postFlashState=success`，且 `writtenBytes` 与 `committedBytes` 均等于 raw 实际长度。
 
 FES 不拼入 raw，不单独刷入 eMMC，也不自行添加偏移。若已错过 U-Boot 倒计时且 Linux 已启动，记录“未完成初始整盘读回”；系统写盘后不能再用初始整盘 SHA256 判定烧录结果。
+
+### 对照 LYNX 界面操作
+
+以下截图来自 [百问网论坛原帖](https://forums.100ask.net/t/topic/10599)，展示 **LYNX v0.1.1** 的界面位置。文件路径、串口号和设备名称应按本机实际情况选择。
+
+<details>
+<summary>① 新建 Linux 单板，绑定串口与 FEL USB</summary>
+
+进入 **Linux 工作台 → 新建单板**，选择 **Allwinner 全志**，绑定实际调试串口，波特率设为 **115200**。让板卡进入 FEL 后，扫描并绑定 `VID 1f3a / PID efe8` 的 USB 设备。
+
+![LYNX 新建单板、选择厂商、串口和 FEL USB 的操作位置](docs/assets/forum-10599/lynx-board-setup.jpeg)
+
+图中 `COM19` 为示例。此配置页显示的是默认“厂商 IMAGEWTY 完整固件”；烧录本项目镜像时，应在后续烧录页选择 **主线 Linux**。
+
+</details>
+
+<details>
+<summary>② 可选：配置 LYNX Power 电源控制</summary>
+
+![LYNX Power 控制器、供电通道和保存单板配置的操作位置](docs/assets/forum-10599/lynx-power-optional.png)
+
+没有 LYNX Power 配件时跳过此项。图中的 CH347F、GPIO7、继电器拓扑和有效电平仅对应示例接线，不能直接套用；供电控制也不能代替物理 FEL 按键。
+
+</details>
+
+**③ 打开“固件烧录”，选择完整镜像和独立 FES。**
+
+| 界面项目 | 本项目选择 |
+| --- | --- |
+| 系统类型 | **主线 Linux** |
+| 存储类型 | **eMMC** |
+| 固件文件 | 解压后的 `openwrt-…-ext4-raw.img` |
+| FES Loader | `t153-fes-ddr933-ram-loader.img` |
+| 目标设备 | 实际 T153 板卡，已识别为 FEL |
+
+> [!NOTE]
+> 下图用于对照选项位置：图中的单板名称为 **T736**，USB 显示“未检测到”，不是可直接开始的 T153 目标状态。实际操作须确认 T153/FEL 已识别；右侧“最近记录”也不代表本次任务成功。
+
+![LYNX 主线 Linux 烧录页：选择 eMMC、完整 raw 镜像和独立 FES](docs/assets/forum-10599/lynx-mainline-flash.png)
+
+**④ 检查本次任务结果，再观察启动。** 界面方式烧录完成后，若工具未自动重启，可按原帖说明手动复位供电或使用已配置的 LYNX 电源控制。本文 MCP 请求已设置 `postFlashAction=reboot`；首次启动前读回仍须提前安排串口接管。
+
+<details>
+<summary>查看串口终端入口与参数</summary>
+
+![LYNX 串口终端页面，示例参数为 COM19、115200、8N1](docs/assets/forum-10599/lynx-serial-console.png)
+
+此图展示终端入口和参数，空白终端不表示系统已启动。启动时检查实际日志；烧录预检期间须释放其它程序占用的串口。
+
+</details>
 
 ## 连接 LAN 并登录
 
@@ -115,6 +174,34 @@ bin/targets/sunxi/cortexa7/*-dshanpi_t153mx-omnigate-ext4-raw.img.gz
 
 持久 DDR4/SPL/U-Boot/内核由源码构建，不链接厂商 DDR 或 monitor 二进制。临时 FES 和无线固件仍含二进制，AIC 主机驱动为外部 GPL 源码。详见 [FES 来源](docs/FES-REPRODUCE.txt) 和 [四核架构](docs/T153-SMP.txt)。
 
+### 对照启动日志与管理页面
+
+以下为论坛原帖中的运行截图，保留原图内容。Linux 和 LuCI 画面包含早期 **25.12-SNAPSHOT / Linux 6.12.113**，用于识别启动阶段与管理入口；当前发布版应以 **25.12.6 / Linux 6.12.112** 及下节验证记录为准。
+
+**SPL / U-Boot：观察源码 DDR4 初始化与启动加载。**
+
+![串口日志显示 T153 源码 SPL、DDR4 训练、内存检查及 U-Boot 启动](docs/assets/forum-10599/boot-spl-uboot.png)
+
+图中可见 `no vendor DDR library`、DDR4 初始化检查通过和 U-Boot 加载过程。物理 DDR 为 1024 MiB，显示的启动可见窗口为 384 MiB。
+
+<details>
+<summary>查看 Linux 启动日志示例（早期 snapshot）</summary>
+
+![早期 Linux 6.12.113 启动日志，含四核启动配置与 PSCI 信息](docs/assets/forum-10599/boot-linux-snapshot.png)
+
+图中包含 `4 Cortex-A7 CPUs` 启动配置、`Starting kernel` 和 PSCI 0.1 信息。该画面尚未显示所有 CPU 上线结果，实际仍需检查 `/sys/devices/system/cpu/online` 是否为 `0-3`。
+
+</details>
+
+<details>
+<summary>查看 LuCI 状态页示例（早期 snapshot）</summary>
+
+![早期 OpenWrt snapshot 的 LuCI 状态页，显示 T153MX OmniGate 型号与内存信息](docs/assets/forum-10599/luci-status-snapshot.png)
+
+图中显示 `DshanPI T153MX OmniGate`、`sunxi/cortexa7` 及系统状态；顶部“未设置密码”提示应在首次登录后处理。此图不替代当前发布版的外部 LAN 验收。
+
+</details>
+
 ## 核对验证范围
 
 下表对应 **2026-11-05** 的 `v25.12.6-t153-preview.1` 记录。系统版本为 **25.12.6 / r33311-981c978eff**，Linux **6.12.112**，U-Boot **2026.07**。
@@ -138,6 +225,7 @@ bin/targets/sunxi/cortexa7/*-dshanpi_t153mx-omnigate-ext4-raw.img.gz
 | [软件验证](docs/records/2026-11-05-native-image/README.txt) · [硬件验证](docs/records/2026-11-05-native-hardware/README.txt) | 镜像结构、读回、启动和四核短测 |
 | [MCP 请求](host-tools/README.txt) · [FES 地址映射](docs/FES-RAW-MAPPING-CORRECTION.txt) | 烧录参数和偏移处理 |
 | [Wi-Fi / 蓝牙](docs/AIC8800D80.txt) · [4G](docs/4G-EC20-ML302.txt) · [WAN 问题](docs/WAN-RTL8211F-RESET.txt) | 驱动配置和历史验证范围 |
+| [论坛图文教程](https://forums.100ask.net/t/topic/10599) · [截图来源清单](docs/assets/forum-10599/SOURCES.md) | LYNX 操作截图、启动日志和原图出处 |
 | [许可](COPYING) · [来源说明](LICENSES) | 各组件许可与来源 |
 
 [提交问题](https://github.com/dshanpi/OmniGate-T153-Openwrt25/issues) 时附上板型、发布标签、镜像/FES 的 SHA256 与长度、完整启动日志、烧录任务最终状态和复现步骤。不要提交密码、SIM 凭据或私有配置。
